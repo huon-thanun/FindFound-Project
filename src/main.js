@@ -10,7 +10,9 @@ import BaseInput from "./components/base/BaseInput.vue";
 import BaseSelect from "./components/base/BaseSelect.vue";
 import BaseTable from "./components/base/BaseTable.vue";
 import BaseModal from "./components/base/BaseModal.vue";
-
+import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap/dist/js/bootstrap.bundle.min.js";
+import "bootstrap-icons/font/bootstrap-icons.css";
 const app = createApp(App);
 
 app.use(createPinia());

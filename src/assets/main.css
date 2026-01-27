@@ -1,0 +1,29 @@
+:root{
+    --background-color: #eaddf3;
+    --surface-color: #FFFFFF;        
+
+    --text-Primary: #2A2A2A;  
+    --text-Secondary: #6B7280;
+    --textOnPrimary: #FFFFFF;
+
+    /* base btn */
+    --primary-color: #9B7EBD;
+    --primary-color-shadow: rgba(155, 126, 189, 0.3);
+    --secondary-color: #9B7EBD;
+    --secondary-color-shadow: rgba(155, 126, 189, 0.3);
+    --tertiary-color: #D4BEE4;
+    --tertiary-color-shadow: rgba(212, 190, 228, 0.3);
+    --border: #D1D5DB;
+    --danger: rgb(238, 36, 36);
+    --danger-shadow: rgba(238, 36, 36, 0.3);
+    --success: rgb(45, 219, 111);
+    --success-shadow: rgba(45, 219, 111, 0.3);
+    --warning: rgb(255, 184, 78);
+    --warning-shadow: rgba(255, 184, 78, 0.3);
+    --cancel: rgb(210, 210, 210);
+    --cancel-shadow: rgba(210, 210, 210, 0.3);
+    --dark: #111827;
+    --dark-shadow: rgba(17, 24, 39, 0.3);
+    --light: #F3F4F6;
+    --light-shadow: rgba(243, 244, 246, 0.3);
+}

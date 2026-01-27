@@ -39,6 +39,7 @@ const router = createRouter({
       path: "/admin",
       component: AdminLayout,
       meta: { requiresAuth: true },
+      redirect: { name: "admin.dashoard" },
       children: [
         {
           path: "dashboard",
