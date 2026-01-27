@@ -5,7 +5,7 @@
       <div class="my-backdrop"></div>
 
       <!-- modal content -->
-      ,
+
       <div class="row">
         <div class="my-modal col-12 col-md-7 col-xl-6">
           <div
