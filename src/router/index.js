@@ -23,7 +23,7 @@ const router = createRouter({
       ]
     },
     {
-      path: '/admin', component: AdminLayout, meta: { requiresAuth: true }, children: [
+      path: '/admin', component: AdminLayout, meta: { requiresAuth: true }, redirect: { name: "admin.dashoard" }, children: [
         { path: 'dashboard', name: 'admin.dashoard', component: DashboardView, meta: { title: 'Dashboard' } },
         { path: 'profile', name: 'admin.profile', component: ProfileView, meta: { title: 'Profile' } },
         { path: 'profile-edit', name: 'admin.profile.edit', component: EditProfileView, meta: { title: 'Profile-Edit' } },
