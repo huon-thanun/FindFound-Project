@@ -1,75 +1,86 @@
 <template>
-  <table class="table align-middle border base-table">
-    <thead class="table-light">
-      <tr>
-        <th
-          v-for="col in columns"
-          :key="col.key"
-          class="truncate-header"
-        >
-          {{ col.label }}
-        </th>
-        <th class="text-center truncate-header">Actions</th>
-      </tr>
-    </thead>
+  <div class="table-wrapper rounded-3 overflow-hidden">
+    <table class="table align-middle table-hover base-table mb-0">
+      <thead>
+        <tr>
+          <th
+            v-for="col in columns"
+            :key="col.key"
+            class="truncate-header ps-3 py-3 table-top"
+          >
+            {{ col.label }}
+          </th>
+          <th class="text-center py-3 table-top truncate-header">
+            Actions
+          </th>
+        </tr>
+      </thead>
 
-    <tbody>
-      <!-- Loading state -->
-      <template v-if="isLoading">
-        <tr v-for="n in 5" :key="n">
-          <td :colspan="columns.length + 1">
-            <div class="placeholder-glow">
-              <span class="placeholder bg-secondary rounded-1 col-12"></span>
-            </div>
+      <tbody>
+        <!-- Loading state -->
+        <template v-if="isLoading">
+          <tr v-for="n in 5" :key="n">
+            <td :colspan="columns.length + 1">
+              <div class="placeholder-glow px-3">
+                <span class="placeholder bg-secondary rounded-1 col-12"></span>
+              </div>
+            </td>
+          </tr>
+        </template>
+
+        <!-- No data -->
+        <tr v-else-if="!items.length">
+          <td
+            :colspan="columns.length + 1"
+            class="text-center py-5"
+          >
+            <p class="fw-semibold mb-0">No data found</p>
           </td>
         </tr>
-      </template>
 
-      <!-- No data -->
-      <tr v-else-if="!items.length">
-        <td
-          :colspan="columns.length + 1"
-          class="text-center py-5"
+        <!-- Data rows -->
+        <tr
+          v-else
+          v-for="item in items"
+          :key="item.id"
+          class="table-row"
         >
-          <p class="fw-semibold mb-0">No data found</p>
-        </td>
-      </tr>
+          <td
+            v-for="col in columns"
+            :key="col.key"
+            class="truncate-cell ps-3"
+            @click="$emit('rowClick', item)"
+          >
+            <slot :name="`column-${col.key}`" :item="item">
+              <div
+                class="truncate-text"
+                :title="item[col.key]"
+              >
+                {{ item[col.key] }}
+              </div>
+            </slot>
+          </td>
 
-      <!-- Data rows -->
-      <tr v-else v-for="item in items" :key="item.id">
-        <td
-          v-for="col in columns"
-          :key="col.key"
-          class="truncate-cell"
-        >
-          <slot :name="`column-${col.key}`" :item="item">
-            <div
-              class="truncate-text"
-              :title="item[col.key]"
+          <td class="text-center truncate-cell">
+            <base-button
+              variant="warning"
+              class="me-2"
+              @click.stop="$emit('edit', item.id)"
             >
-              {{ item[col.key] }}
-            </div>
-          </slot>
-        </td>
+              <i class="bi bi-pencil-square"></i>
+            </base-button>
 
-        <td class="text-center truncate-cell">
-          <button
-            class="btn border-0 me-2 text-warning"
-            @click="$emit('edit', item.id)"
-          >
-            <i class="bi bi-pencil-square"></i>
-          </button>
-
-          <button
-            class="btn btn-sm border-0 text-danger"
-            @click="$emit('delete', item.id)"
-          >
-            <i class="bi bi-trash3"></i>
-          </button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+            <base-button
+              variant="danger"
+              @click.stop="$emit('delete', item.id)"
+            >
+              <i class="bi bi-trash3"></i>
+            </base-button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </template>
 
 <script setup>
@@ -88,103 +99,51 @@ defineProps({
   },
 });
 
-defineEmits(["edit", "delete"]);
+defineEmits(["edit", "delete", "rowClick"]);
 </script>
 
-<!-- How to use Base Table -->
-<!-- <template>
-  <BaseTable
-    :columns="columns"
-    :items="myArticles"
-    :isLoading="loading"
-    @edit="handleEdit"
-    @delete="handleDelete"
-  >
-    /* Thumbnail column slot */
-    <template #column-thumbnail="{ item }">
-      <img
-        :src="item.thumbnail"
-        alt="thumbnail"
-        class="rounded"
-        width="80"
-        height="50"
-      />
-    </template>
-
-    /* Created date format */
-    <template #column-createdAt="{ item }">
-      {{ formatDate(item.createdAt) }}
-    </template>
-  </BaseTable>
-</template>
-
-<script setup>
-import { ref } from "vue";
-import { formatDate } from "./utils/formatDate.js";
-/* ---------------- STATE ---------------- */
-const loading = ref(false); // ✅ REQUIRED
-
-const columns = [
-  { key: "thumbnail", label: "Thumbnail" },
-  { key: "title", label: "Title" },
-  { key: "category", label: "Category" },
-  { key: "createdAt", label: "Created At" },
-];
-
-const myArticles = ref([
-  {
-    id: 1,
-    thumbnail: "https://picsum.photos/120/80?random=1",
-    title: "Introduction to Vue 3 Composition API",
-    category: "Frontend",
-    createdAt: "2026-01-22T07:28:55.288Z",
-  },
-  {
-    id: 2,
-    thumbnail: "https://picsum.photos/120/80?random=2",
-    title: "Laravel REST API Best Practices",
-    category: "Backend ",
-    createdAt: "2026-01-22T07:28:55.288Z",
-  },
-]);
-
-/* ---------------- METHODS ---------------- */
-const handleEdit = (id) => {
-  console.log("Edit ID:", id);
-};
-
-const handleDelete = (id) => {
-  myArticles.value = myArticles.value.filter(
-    (item) => item.id !== id
-  );
-};
-
-</script> -->
-
 <style scoped>
-/* ---- Table Layout ---- */
+/* ---------- Wrapper (IMPORTANT) ---------- */
+.table-wrapper {
+  border-top: 1px solid var(--primary-color) !important;
+  border-left: 1px solid var(--primary-color) !important;
+  border-right: 1px solid var(--primary-color) !important;
+}
+/* ---------- Table ---------- */
 .base-table {
   width: 100%;
-  table-layout: fixed; /* REQUIRED for truncation */
+  table-layout: fixed;
   border-collapse: collapse;
 }
+.table-row {
+  border-bottom: 1px solid var(--primary-color);
+}
+/* ---------- Header ---------- */
+.table-top {
+  background-color: var(--primary-color);
+  color: var(--surface-color);
+}
 
-/* ---- Header ---- */
 .truncate-header {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-/* ---- Cell ---- */
+/* ---------- Cells ---------- */
 .truncate-cell {
   overflow: hidden;
+  cursor: pointer;
 }
 
-/* ---- Text Ellipsis ---- */
 .truncate-text {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+/* ---------- Row UX ---------- */
+.table-row:hover {
+  background-color: #f8f9fa;
 }
 </style>
