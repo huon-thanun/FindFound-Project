@@ -9,22 +9,17 @@
         <BaseReportCard>
           <div class="row justify-content-center">
             <!-- SEARCH -->
-            <div class="col-12 col-md-6 col-xl-3 center2 mb-2">
+            <div class="col-12 col-md-6 col-xl-4 center2 mb-2">
               <input
                 type="text"
                 class="form-control"
                 placeholder="Search Report..."
                 v-model="search"
               />
-              <!-- <BaseInput
-                type="text"
-                placeholder="Search Report..."
-                v-model="search"
-              /> -->
             </div>
 
             <!-- TYPE -->
-            <div class="col-12 col-md-6 col-xl-3 center2 mb-2">
+            <div class="col-12 col-md-6 col-xl-2 center2 mb-2">
               <select class="form-select" v-model="typeValue">
                 <option value="">All Type</option>
                 <option
@@ -38,7 +33,7 @@
             </div>
 
             <!-- STATUS -->
-            <div class="col-12 col-md-6 col-xl-3 center2 mb-2">
+            <div class="col-12 col-md-6 col-xl-2 center2 mb-2">
               <select class="form-select" v-model="statusValue">
                 <option value="">All Status</option>
                 <option
@@ -52,7 +47,7 @@
             </div>
 
             <!-- CATEGORY -->
-            <div class="col-12 col-md-6 col-xl-3 center2 mb-2">
+            <div class="col-12 col-md-6 col-xl-2 center2 mb-2">
               <select class="form-select" v-model="cateValue">
                 <option value="">All Category</option>
                 <option
@@ -63,6 +58,12 @@
                   {{ category.name }}
                 </option>
               </select>
+            </div>
+            <!-- CLEAR FILTER -->
+            <div class="col-xl-2 pb-2 d-flex justify-content-end">
+              <BaseButton variant="dark" @click="clearFilter">
+                Clear filter
+              </BaseButton>
             </div>
           </div>
         </BaseReportCard>
@@ -75,122 +76,92 @@
       </div>
       <!-- REPORT LIST -->
 
-      <div v-else class="col-12 row">
-        <div
-          v-if="reportStore.allReports.length <= 0"
-          class="my-3 col-12 center2"
-        >
-          <h3>No Report Found</h3>
-        </div>
-        <div
-          v-else
-          class="col-12 col-md-6 col-lg-4 c mb-3"
-          v-for="report in reportStore.allReports"
-          :key="report.id"
-        >
-          <BaseReportCard>
-            <template #image>
-              <div class="image">
-                <img
-                  :src="
-                    report.reportImages && report.reportImages.length > 0
-                      ? report.reportImages[0].name
-                      : defaultImage
-                  "
-                  :alt="report.title || 'Report Image'"
-                />
-              </div>
-            </template>
+      <div v-else class="col-12">
+        <div class="row">
+          <div
+            v-if="reportStore.allReports.length <= 0"
+            class="my-3 col-12 center2"
+          >
+            <h3>No Report Found</h3>
+          </div>
+          <div
+            v-else
+            class="col-12 col-md-6 col-lg-4 col-xl-3 mb-3"
+            v-for="report in reportStore.allReports"
+            :key="report.id"
+          >
+            <BaseReportCard>
+              <template #image>
+                <div class="image">
+                  <img
+                    :src="
+                      report.reportImages && report.reportImages.length > 0
+                        ? report.reportImages[0].name
+                        : defaultImage
+                    "
+                    :alt="report.title || 'Report Image'"
+                  />
+                </div>
+              </template>
 
-            <div>
-              <div class="d-flex gap-2 my-2">
+              <div>
+                <div class="d-flex gap-2 my-2">
+                  <span
+                    class="status"
+                    :class="report.reportType.name.toLowerCase()"
+                  >
+                    {{ report.reportType.name }}
+                  </span>
+                  <span class="status" :class="report.status.toLowerCase()">
+                    {{ report.status }}
+                  </span>
+                </div>
+
+                <h4 class="card-title">{{ report.title }}</h4>
+
+                <span class="text-muted desc fs-5 text-clamp-2">
+                  {{ report.description }}
+                </span>
+
+                <ul class="item-list mt-2">
+                  <li class="fs-6">
+                    <i class="bi bi-file-earmark-text"></i>
+                    {{ report.category.name }}
+                  </li>
+                  <li class="fs-6">
+                    <i class="bi bi-geo-alt-fill"></i>
+                    {{ report.locationText }}
+                  </li>
+                  <li class="fs-6">
+                    <i class="bi bi-calendar2"></i>
+                    {{ formatDate(report.createdAt) }}
+                  </li>
+                </ul>
+
+                <div class="button-group">
+                  <BaseButton
+                    icon="bi-eye"
+                    variant="primary w-100"
+                    @click="fetchReportDetail(report.id)"
+                    :isLoading="isLoading === report.id"
+                  >
+                    View Details
+                  </BaseButton>
+                </div>
+
                 <span
-                  class="status"
-                  :class="report.reportType.name.toLowerCase()"
+                  class="d-block mt-2 py-1"
+                  style="height: 65px; font-size: 18px"
                 >
-                  {{ report.reportType.name }}
-                </span>
-                <span class="status" :class="report.status.toLowerCase()">
-                  {{ report.status }}
+                  Reported by <strong>{{ report.reporter.fullname }}</strong>
                 </span>
               </div>
-
-              <h2 class="card-title">{{ report.title }}</h2>
-
-              <span class="text-muted desc fs-4 text-clamp-2">
-                {{ report.description }}
-              </span>
-
-              <ul class="item-list mt-2">
-                <li class="fs-5">
-                  <i class="bi bi-file-earmark-text"></i>
-                  {{ report.category.name }}
-                </li>
-                <li class="fs-5">
-                  <i class="bi bi-geo-alt-fill"></i>
-                  {{ report.locationText }}
-                </li>
-                <li class="fs-5">
-                  <i class="bi bi-calendar2"></i>
-                  {{ formatDate(report.createdAt) }}
-                </li>
-              </ul>
-
-              <div class="button-group">
-                <BaseButton
-                  icon="bi-eye"
-                  variant="primary w-100"
-                  @click="fetchReportDetail(report.id)"
-                  :isLoading="isLoading === report.id"
-                >
-                  View Details
-                </BaseButton>
-              </div>
-
-              <span
-                class="d-block mt-2 py-1"
-                style="height: 65px; font-size: 20px"
-              >
-                Reported by <strong>{{ report.reporter.fullname }}</strong>
-              </span>
-            </div>
-          </BaseReportCard>
+            </BaseReportCard>
+          </div>
         </div>
       </div>
     </div>
-    <div class="d-flex my-2 gap-2 justify-content-center">
-      <!-- <button
-        class="btn btn-outline-dark"
-        @click="PreviousPage"
-        v-if="reportStore.meta?.hasPreviousPage"
-      >
-        Previous
-      </button> -->
-      <!-- <BaseButton
-        variant="danger"
-        @click="PreviousPage"
-        :isLoading="isLoadingPrevious"
-        v-if="reportStore.meta?.hasPreviousPage"
-      >
-        Previous
-      </BaseButton>
-      <BaseButton
-        variant="primary"
-        @click="nextPage"
-        :isLoading="isLoadingNext"
-        v-if="reportStore.meta?.hasNextPage"
-      >
-        Next
-      </BaseButton> -->
-
-      <!-- <button
-        class="btn btn-outline-dark"
-        @click="nextPage"
-        v-if="reportStore.meta?.hasNextPage"
-      >
-        Next
-      </button> -->
-    </div>
+    <div class="d-flex my-2 gap-2 justify-content-center"></div>
 
     <!-- pagination -->
 
@@ -254,7 +225,7 @@ const page = ref(1);
 const fetchReports = async () => {
   await reportStore.getAllReports({
     _page: page.value,
-    _per_page: 6,
+    _per_page: 8,
     search: search.value,
     status: statusValue.value,
     sortBy: "createdAt",
@@ -276,32 +247,6 @@ onMounted(async () => {
     console.error(err);
   }
 });
-// const isLoadingNext = ref(false);
-// const nextPage = async () => {
-//   isLoadingNext.value = true;
-//   try {
-//     if (!reportStore.meta.hasNextPage) return;
-//     page.value++;
-//     await fetchReports();
-//   } catch (error) {
-//     console.error(error);
-//   } finally {
-//     isLoadingNext.value = false;
-//   }
-// };
-// const isLoadingPrevious = ref(false);
-// const PreviousPage = async () => {
-//   isLoadingPrevious.value = true;
-//   try {
-//     if (!reportStore.meta.hasPreviousPage) return;
-//     page.value--;
-//     await fetchReports();
-//   } catch (error) {
-//     console.error(error);
-//   } finally {
-//     isLoadingPrevious.value = false;
-//   }
-// };
 
 watch([search, cateValue, typeValue, statusValue], () => {
   clearTimeout(timeout);
@@ -384,10 +329,20 @@ const PreviousPage = async () => {
     currentGroup.value--;
   }
 };
+
+// Clear Filter
+const clearFilter = () => {
+  search.value = "";
+  typeValue.value = "";
+  statusValue.value = "";
+  cateValue.value = "";
+};
 </script>
 <style scoped>
+.desc {
+  height: 63px;
+}
 .desc .card-text {
-  font-size: 20px;
   color: rgba(128, 128, 128, 0.679);
 }
 .image {
@@ -398,9 +353,6 @@ const PreviousPage = async () => {
   width: 100%;
   height: 100%;
   object-fit: cover;
-}
-.desc {
-  height: 67px;
 }
 .item-list {
   list-style-type: none;

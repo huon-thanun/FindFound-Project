@@ -17,6 +17,7 @@ import RegisterView from "@/views/user/auth/RegisterView.vue";
 import ResetPasswordView from "@/views/user/auth/ResetPasswordView.vue";
 import UserVerifyOTPView from "@/views/user/auth/UserVerifyOTPView.vue";
 import HomeView from "@/views/user/home/HomeView.vue";
+import ReportViewUser from "@/views/user/reports/ReportView.vue";
 
 // user auth views
 
@@ -112,7 +113,11 @@ const router = createRouter({
         },
       ],
     },
-
+    {
+      path: "/user/reports",
+      name: "report.user",
+      component: ReportViewUser,
+    },
     {
       path: "/:pathMatch(.*)*",
       redirect: "/admin/login",
