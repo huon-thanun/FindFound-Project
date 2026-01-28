@@ -1,30 +1,73 @@
+import { createRouter, createWebHistory } from "vue-router";
+
+/* ===== LAYOUTS ===== */
 import AdminLayout from "@/layouts/admin/AdminLayout.vue";
 import UserLayout from "@/layouts/user/UserLayout.vue";
-// import ForgotpasswordView from "@/views/admin/auth/ForgotpasswordView.vue";
-import AdminLoginView from "@/views/admin/auth/AdminLoginView.vue";
-import VerifyOTPView from "@/views/admin/auth/VerifyOTPView.vue";
-import CategoryView from "@/views/admin/categories/CategoryView.vue";
+
+/* ===== USER VIEWS ===== */
+import HomeView from "@/views/user/home/HomeView.vue";
+import AboutView from "@/views/user/about/AboutView.vue";
+import LoginView from "@/views/user/auth/LoginView.vue";
+import RegisterView from "@/views/user/auth/RegisterView.vue";
+import ForgotPasswordView from "@/views/user/auth/ForgotPasswordView.vue";
+import ResetPasswordView from "@/views/user/auth/ResetPasswordView.vue";
+import OTPView from "@/views/user/auth/OTPView.vue";
+import UserVerifyOTPView from "@/views/user/auth/UserVerifyOTPView.vue";
+
+/* ===== ADMIN VIEWS ===== */
 import DashboardView from "@/views/admin/dashboard/dashboardView.vue";
-import EditProfileView from "@/views/admin/profile/EditProfileView.vue";
 import ProfileView from "@/views/admin/profile/ProfileView.vue";
+import EditProfileView from "@/views/admin/profile/EditProfileView.vue";
+import CategoryView from "@/views/admin/categories/CategoryView.vue";
 import ReportView from "@/views/admin/reports/ReportView.vue";
 import UserView from "@/views/admin/users/UserView.vue";
-import AboutView from "@/views/user/about/AboutView.vue";
-import ForgotPasswordView from "@/views/user/auth/ForgotPasswordView.vue";
-import LoginView from "@/views/user/auth/LoginView.vue";
-import OTPView from "@/views/user/auth/OTPView.vue";
-import RegisterView from "@/views/user/auth/RegisterView.vue";
-import ResetPasswordView from "@/views/user/auth/ResetPasswordView.vue";
-import UserVerifyOTPView from "@/views/user/auth/UserVerifyOTPView.vue";
-import HomeView from "@/views/user/home/HomeView.vue";
+import VerifyOTPView from "@/views/admin/auth/VerifyOTPView.vue";
 
-// user auth views
-
-import { createRouter, createWebHistory } from "vue-router";
+/* ===== STORE ===== */
+import { useAuthStore } from "@/stores/authStore";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
+    /* ================= PUBLIC AUTH ================= */
+    {
+      path: "/login",
+      name: "login",
+      component: LoginView,
+      meta: { public: true },
+    },
+    {
+      path: "/register",
+      name: "register",
+      component: RegisterView,
+      meta: { public: true },
+    },
+    {
+      path: "/forgot-password",
+      name: "forgot-password",
+      component: ForgotPasswordView,
+      meta: { public: true },
+    },
+    {
+      path: "/reset-password",
+      name: "reset-password",
+      component: ResetPasswordView,
+      meta: { public: true },
+    },
+    {
+      path: "/otp",
+      name: "otp",
+      component: OTPView,
+      meta: { public: true },
+    },
+    {
+      path: "/user-verify-otp",
+      name: "user.verify-otp",
+      component: UserVerifyOTPView,
+      meta: { public: true },
+    },
+
+    /* ================= USER AREA ================= */
     {
       path: "/",
       component: UserLayout,
@@ -34,42 +77,16 @@ const router = createRouter({
           path: "",
           name: "home",
           component: HomeView,
-          meta: { requiresAuth: true }, // ✅ user must login
         },
         {
           path: "about",
+          name: "about",
           component: AboutView,
-        },
-
-        // ✅ PUBLIC USER AUTH
-        { path: "login", component: LoginView, meta: { public: true } },
-        { path: "register", component: RegisterView, meta: { public: true } },
-        { path: "otp", component: OTPView, meta: { public: true } },
-        {
-          path: "/user-verify-otp",
-          name: "verify-otp",
-          component: UserVerifyOTPView,
-        },
-        {
-          path: "forgot-password",
-          component: ForgotPasswordView,
-          meta: { public: true },
-        },
-        {
-          path: "reset-password",
-          component: ResetPasswordView,
-          meta: { public: true },
         },
       ],
     },
 
-    {
-      path: "/admin/login",
-      name: "admin.login",
-      component: AdminLoginView,
-      meta: { public: true },
-    },
-
+    /* ================= ADMIN AREA ================= */
     {
       path: "/admin",
       component: AdminLayout,
@@ -107,16 +124,17 @@ const router = createRouter({
           component: UserView,
         },
         {
-          path: "OTP",
-          name: "admin.OTP",
+          path: "otp",
+          name: "admin.otp",
           component: VerifyOTPView,
         },
       ],
     },
 
+    /* ================= FALLBACK ================= */
     {
       path: "/:pathMatch(.*)*",
-      redirect: "/admin/login",
+      redirect: "/login",
     },
   ],
 });

@@ -196,11 +196,11 @@ import bgImage from "@/assets/images/background.jpg";
 const router = useRouter();
 const auth = useAuthStore();
 
+/* ================= FORM ================= */
 const form = reactive({
   email: "",
   password: "",
 });
-
 
 const showPassword = ref(false);
 
@@ -209,6 +209,7 @@ const touched = reactive({
   password: false,
 });
 
+/* ================= VALIDATION ================= */
 const emailError = computed(() => {
   if (!touched.email) return "";
   if (!form.email) return "Email is required";
@@ -222,25 +223,33 @@ const passwordError = computed(() => {
 });
 
 const isFormValid = computed(() => {
-  return form.email && form.password;
+  return !emailError.value && !passwordError.value;
 });
 
-
+/* ================= LOGIN ================= */
 const handleLogin = async () => {
+  touched.email = true;
+  touched.password = true;
+
+  if (!isFormValid.value) return;
+
   try {
     await auth.login(form);
 
-    if (auth.role === "admin") {
-      router.push("/admin/dashboard");
-    } else {
-      router.push("/");
+    /* 🔐 HARD ROLE CHECK */
+    if (!auth.isAdmin) {
+      auth.logout();
+      alert("Admin access only");
+      return;
     }
-  } catch (e) {
-    console.error(e);
+
+    router.replace("/admin/dashboard");
+  } catch (err) {
+    console.error(err);
   }
 };
-
 </script>
+
 
 <style scoped>
 /* RESET */

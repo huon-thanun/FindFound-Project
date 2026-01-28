@@ -115,9 +115,9 @@
 
           <!-- FORGOT PASSWORD -->
           <div class="forgot-password">
-            <router-link to="/forgot-password"
-              >ភ្លេចពាក្យសម្ងាត់របស់អ្នក?</router-link
-            >
+            <router-link v-if="!isAdminLogin" to="/forgot-password">
+              ភ្លេចពាក្យសម្ងាត់របស់អ្នក?
+            </router-link>
           </div>
 
           <!-- LOGIN BUTTON -->
@@ -188,7 +188,7 @@
 </template>
 
 <script setup>
-import { reactive, ref, computed, nextTick } from "vue";
+import { reactive, computed } from "vue";
 import { useRouter } from "vue-router";
 import { useAuthStore } from "@/stores/authStore";
 import logo from "@/assets/images/logo/logo.png";
@@ -202,40 +202,32 @@ const form = reactive({
   password: "",
 });
 
-const showPassword = ref(false);
-
 const touched = reactive({
   email: false,
   password: false,
 });
 
-const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
+/* ================= VALIDATION ================= */
 const emailError = computed(() => {
   if (!touched.email) return "";
   if (!form.email) return "Email is required";
-  if (!emailRegex.test(form.email)) return "Invalid email format";
   return "";
 });
 
 const passwordError = computed(() => {
   if (!touched.password) return "";
   if (!form.password) return "Password is required";
-  if (form.password.length < 6) {
-    return "Password must be at least 6 characters";
-  }
   return "";
 });
 
 const isFormValid = computed(() => {
-  return (
-    form.email &&
-    form.password &&
-    !emailError.value &&
-    !passwordError.value
-  );
+  return !emailError.value && !passwordError.value;
 });
 
+const isAdminLogin = computed(() => {
+  return auth.role === "admin";
+});
+/* ================= LOGIN ================= */
 const handleLogin = async () => {
   touched.email = true;
   touched.password = true;
@@ -245,18 +237,17 @@ const handleLogin = async () => {
   try {
     await auth.login(form);
 
-    // 🔐 wait until Pinia + localStorage are updated
-    await nextTick();
-
-    // ✅ redirect USER to home
-    router.replace("/");
-  } catch (e) {
-    // error already handled in store
-    console.error(e);
+    // 🔐 ROLE-BASED REDIRECT
+    if (auth.isAdmin) {
+     router.push("/admin/dashboard");
+    } else {
+      router.replace("/");
+    }
+  } catch (err) {
+    console.error(err);
   }
 };
 </script>
-
 
 <style scoped>
 /* RESET */
@@ -294,12 +285,10 @@ const handleLogin = async () => {
       transparent 45%
     ),
     linear-gradient(135deg, #e6def0, #cbb7e2); */
-    /* background: url(https://img.freepik.com/free-vector/abstract-background_53876-90704.jpg?t=st=1769501077~exp=1769504677~hmac=580245495c7f65d12d41b459363f617f81b6652545d897b98b3f4e2ed57eb6b5);
+  /* background: url(https://img.freepik.com/free-vector/abstract-background_53876-90704.jpg?t=st=1769501077~exp=1769504677~hmac=580245495c7f65d12d41b459363f617f81b6652545d897b98b3f4e2ed57eb6b5);
   padding: 24px;
   background-repeat: no-repeat;
   background-size: cover; */
-
- 
 }
 
 /* MAIN CARD */
