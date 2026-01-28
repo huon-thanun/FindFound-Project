@@ -21,7 +21,7 @@ import EditProfileView from "@/views/admin/profile/EditProfileView.vue";
 import CategoryView from "@/views/admin/categories/CategoryView.vue";
 import ReportView from "@/views/admin/reports/ReportView.vue";
 import UserView from "@/views/admin/users/UserView.vue";
-import VerifyOTPView from "@/views/admin/auth/VerifyOTPView.vue";
+// import VerifyOTPView from "@/views/admin/auth/VerifyOTPView.vue";
 
 /* ===== STORE ===== */
 import { useAuthStore } from "@/stores/authStore";
@@ -34,7 +34,19 @@ const router = createRouter({
       path: "/login",
       name: "login",
       component: LoginView,
-      meta: { public: true },
+      meta: {
+        public: true,
+        isAdminLogin: false,
+      },
+    },
+    {
+      path: "/admin/login",
+      name: "admin.login",
+      component: LoginView,
+      meta: {
+        public: true,
+        isAdminLogin: true,
+      },
     },
     {
       path: "/register",
@@ -58,8 +70,9 @@ const router = createRouter({
       path: "/otp",
       name: "otp",
       component: OTPView,
-      meta: { public: true },
+      meta: { public: true, role: "user" },
     },
+
     {
       path: "/user-verify-otp",
       name: "user.verify-otp",
@@ -122,11 +135,6 @@ const router = createRouter({
           path: "users",
           name: "admin.users",
           component: UserView,
-        },
-        {
-          path: "otp",
-          name: "admin.otp",
-          component: VerifyOTPView,
         },
       ],
     },

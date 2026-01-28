@@ -190,12 +190,15 @@
 <script setup>
 import { reactive, computed } from "vue";
 import { useRouter } from "vue-router";
+import { useRoute } from "vue-router";
 import { useAuthStore } from "@/stores/authStore";
 import logo from "@/assets/images/logo/logo.png";
 import bgImage from "@/assets/images/background.jpg";
 
 const router = useRouter();
 const auth = useAuthStore();
+const route = useRoute();
+
 
 const form = reactive({
   email: "",
@@ -225,7 +228,7 @@ const isFormValid = computed(() => {
 });
 
 const isAdminLogin = computed(() => {
-  return auth.role === "admin";
+  return route.meta.isAdminLogin === true;
 });
 /* ================= LOGIN ================= */
 const handleLogin = async () => {
@@ -256,39 +259,25 @@ const handleLogin = async () => {
   padding: 0;
   box-sizing: border-box;
 }
+
 .logo img {
   width: 230px;
-  height: auto; /* keeps aspect ratio */
+  height: auto; 
   object-fit: contain;
 }
 .title {
-  padding-top: 20px;
+  line-height: 1.5;
+  max-width: 360px;
 }
 
-/* PAGE BACKGROUND (THIS MAKES GLASS WORK) */
+
 .login-container {
   min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-
-  /* pastel blobs like reference */
-  /* background:
-    radial-gradient(
-      circle at 15% 20%,
-      rgba(180, 165, 210, 0.9) 0%,
-      transparent 42%
-    ),
-    radial-gradient(
-      circle at 85% 80%,
-      rgba(140, 115, 180, 0.85) 0%,
-      transparent 45%
-    ),
-    linear-gradient(135deg, #e6def0, #cbb7e2); */
-  /* background: url(https://img.freepik.com/free-vector/abstract-background_53876-90704.jpg?t=st=1769501077~exp=1769504677~hmac=580245495c7f65d12d41b459363f617f81b6652545d897b98b3f4e2ed57eb6b5);
-  padding: 24px;
-  background-repeat: no-repeat;
-  background-size: cover; */
+  background: #f7f7fb;
+ 
 }
 
 /* MAIN CARD */
@@ -301,19 +290,22 @@ const handleLogin = async () => {
   border-radius: 24px;
   overflow: hidden;
 
-  background: transparent; /* 🔥 REQUIRED */
+  background: transparent; 
   box-shadow: 0 30px 80px rgba(0, 0, 0, 0.15);
 }
 
 /* ================= LEFT SIDE : REAL GLASS ================= */
 .login-left {
-  flex: 1;
+ flex: 1;
   padding: 30px 25px;
   border-radius: 10px;
 
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+
+  display: flex;
+  flex-direction: column;
 }
 
 @keyframes shine {
@@ -324,11 +316,18 @@ const handleLogin = async () => {
     transform: translateX(100%) translateY(100%);
   }
 }
+.brand{
+  margin-bottom: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
 /* ensure text above glass */
 .brand,
 .illustration {
   position: relative;
   z-index: 2;
+ 
 }
 
 /* brand area */
@@ -349,6 +348,8 @@ const handleLogin = async () => {
 .illustration {
   display: flex;
   justify-content: flex-end;
+  opacity: 0.35;
+  margin-top: auto;
   opacity: 0.35;
 }
 
@@ -425,11 +426,12 @@ const handleLogin = async () => {
   background: #f8fafc;
   transition: all 0.2s ease;
   font-family: inherit;
+ 
 }
 
 .form-group input:focus {
   outline: none;
-  border-color: #4988c4;
+  border-color: #693cb2;
   background: white;
   box-shadow: 0 0 0 4px rgba(73, 136, 196, 0.1);
 }
@@ -500,16 +502,17 @@ const handleLogin = async () => {
 /* PRIMARY BUTTON */
 .btn-primary {
   width: 100%;
-  padding: 16px;
   font-size: 16px;
   font-weight: 600;
   color: white;
-  background: linear-gradient(135deg, #874da2 0%, #9b7ebd 100%);
-  border: none;
-  border-radius: 12px;
   cursor: pointer;
+  border: none;;
   transition: all 0.2s ease;
   font-family: inherit;
+  background: linear-gradient(135deg, #6a5af9, #8f6bf6);
+  border-radius: 14px;
+  padding: 14px;
+  box-shadow: 0 10px 25px rgba(106, 90, 249, 0.3);
 }
 
 .btn-primary:hover:not(:disabled) {
