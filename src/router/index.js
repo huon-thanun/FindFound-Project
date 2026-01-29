@@ -13,6 +13,7 @@ import ForgotPasswordView from "@/views/user/auth/ForgotPasswordView.vue";
 import ResetPasswordView from "@/views/user/auth/ResetPasswordView.vue";
 import OTPView from "@/views/user/auth/OTPView.vue";
 import UserVerifyOTPView from "@/views/user/auth/UserVerifyOTPView.vue";
+import ReportViewUser from "@/views/user/reports/ReportView.vue";
 
 /* ===== ADMIN VIEWS ===== */
 import DashboardView from "@/views/admin/dashboard/dashboardView.vue";
