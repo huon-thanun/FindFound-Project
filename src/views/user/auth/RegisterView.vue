@@ -138,8 +138,8 @@
 import { reactive, ref } from "vue";
 import { useRouter } from "vue-router";
 import { registerUser } from "@/api/auth";
+import api from "@/api/api";
 import logo from "@/assets/images/logo/logo.png";
-
 
 const router = useRouter();
 
@@ -156,7 +156,7 @@ const showConfirm = ref(false);
 const loading = ref(false);
 const errors = ref({});
 
-// Frontend validation
+/* ================= VALIDATION ================= */
 const validate = () => {
   errors.value = {};
 
@@ -178,27 +178,35 @@ const validate = () => {
   return Object.keys(errors.value).length === 0;
 };
 
+/* ================= REGISTER ================= */
 async function register() {
   if (!validate()) return;
 
   loading.value = true;
 
   try {
-    console.log("Sending data to API:", form);
-
+    //  REGISTER USER
     const res = await registerUser({
-      fullname: form.first_name + " " + form.last_name,
+      fullname: `${form.first_name} ${form.last_name}`,
       email: form.email,
       password: form.password,
       confirmPassword: form.password_confirmation,
-      role: form.role,
     });
 
-    console.log("API response:", res.data);
-    alert("Register success 🎉");
-    router.push("/otp");
+    console.log("Register response:", res.data);
+
+    // SAVE EMAIL FOR OTP FLOW
+    localStorage.setItem("otp_email", form.email);
+
+    // SEND OTP AUTOMATICALLY
+    await api.post("/otp/send", {
+      email: form.email,
+    });
+
+    //  REDIRECT TO VERIFY OTP PAGE
+    router.replace({ name: "user.verify-otp" });
   } catch (err) {
-    console.log("API error:", err.response);
+    console.error("Register error:", err.response);
 
     if (err.response?.status === 422) {
       errors.value = err.response.data.errors;

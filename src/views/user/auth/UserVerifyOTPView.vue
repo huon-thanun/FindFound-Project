@@ -64,30 +64,42 @@ import axios from "axios";
 
 export default {
   name: "VerifyEmail",
+
   data() {
     return {
       otpDigits: ["", "", "", "", "", ""],
-      email: localStorage.getItem("otp_email") || "",
+      email: "",
       loading: false,
     };
   },
+
+  mounted() {
+    // 🔒 Ensure email exists
+    const savedEmail = localStorage.getItem("otp_email");
+
+    if (!savedEmail) {
+      alert("Session expired. Please register again.");
+      this.$router.replace("/register");
+      return;
+    }
+
+    this.email = savedEmail;
+  },
+
   methods: {
     focusNext(index, event) {
-      const input = event.target;
-      if (input.value.length === 1 && index < 5) {
-        // move to next input
+      if (event.target.value && index < 5) {
         this.$refs[`otp${index + 1}`][0].focus();
       }
     },
 
     async verifyOTP() {
-    const otp = this.otpDigits.join("").replace(/\s/g, "");
-    console.log("Verifying OTP:", otp, "for email:", this.email);
-    if (otp.length !== 6) {
-      alert("Please enter all 6 digits of the OTP correctly");
-      return;
-    }
+      const otp = this.otpDigits.join("");
 
+      if (otp.length !== 6) {
+        alert("Please enter all 6 digits");
+        return;
+      }
 
       try {
         this.loading = true;
@@ -96,25 +108,25 @@ export default {
           "http://ant-g2-landf.tt.linkpc.net/api/v1/otp/verify",
           {
             email: this.email,
-            code:otp,
+            code: otp,
           },
           {
-            headers: {
-              "Content-Type": "application/json",
-            },
+            headers: { "Content-Type": "application/json" },
           }
         );
 
         console.log("Verify response:", res.data);
 
         alert("✅ Account verified successfully!");
-        this.$router.push("/login");
+
+        // 🧹 clear OTP session
+        localStorage.removeItem("otp_email");
+
+        this.$router.replace("/login");
       } catch (err) {
-        console.error("OTP verify error:", err.response?.data);
         alert(
           err.response?.data?.message ||
-            err.response?.data?.error ||
-            "Invalid OTP or expired"
+          "Invalid or expired OTP"
         );
       } finally {
         this.loading = false;
@@ -122,23 +134,22 @@ export default {
     },
 
     async resendOTP() {
+      if (!this.email) return;
+
       try {
         this.loading = true;
 
-        const res = await axios.post(
+        await axios.post(
           "http://ant-g2-landf.tt.linkpc.net/api/v1/otp/send",
           { email: this.email },
           { headers: { "Content-Type": "application/json" } }
         );
 
-        console.log("Resend OTP response:", res.data);
-        alert("OTP resent to your email 📩");
+        alert("📩 OTP resent to " + this.email);
       } catch (err) {
-        console.error("Resend OTP error:", err.response?.data);
         alert(
           err.response?.data?.message ||
-            err.response?.data?.error ||
-            "Failed to resend OTP"
+          "Failed to resend OTP"
         );
       } finally {
         this.loading = false;
@@ -147,6 +158,7 @@ export default {
   },
 };
 </script>
+
 
 <style scoped>
 .verify-wrapper {

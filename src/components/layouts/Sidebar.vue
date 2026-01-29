@@ -10,7 +10,7 @@
     <!-- Navigation Menu -->
     <nav class="nav-menu">
       <router-link
-        :to="{ name: 'admin.dashoard' }"
+        :to="{ name: 'admin.dashboard' }"
         class="nav-item"
       >
         Dashboard
@@ -80,8 +80,6 @@ function isOpen(){
 
 <style scoped>
 body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-    "Helvetica Neue", Arial, sans-serif;
   background-color: #f5f5f5;
 }
 
@@ -103,31 +101,6 @@ body {
 
 .logo-section {
   border-bottom: 1px solid #e5e7eb;
-}
-
-.logo-icon {
-  width: 48px;
-  height: 48px;
-  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  font-size: 24px;
-}
-
-.logo-text h1 {
-  font-size: 16px;
-  font-weight: 600;
-  color: #111827;
-  margin-bottom: 2px;
-}
-
-.logo-text p {
-  font-size: 13px;
-  color: #6b7280;
-  margin-bottom: 0;
 }
 
 .nav-menu {
@@ -155,21 +128,14 @@ body {
 }
 
 .nav-item:hover {
-  background-color: #f3f4f6;
-  color: #111827;
+  background-color: var(--tertiary-color);
+  color: var(--surface-color);
 }
 
 .router-link-active {
-  background-color: #dbeafe;
-  color: #2563eb;
+  background-color: var(--tertiary-color);
+  color: var(--surface-color);
 }
-
-.nav-item svg {
-  width: 20px;
-  height: 20px;
-  flex-shrink: 0;
-}
-
 .user-section {
   position: absolute;
   bottom: 0;
@@ -222,15 +188,6 @@ body {
   transition: all 0.2s;
 }
 
-.logout-btn:hover {
-  background-color: #f9fafb;
-  border-color: #d1d5db;
-}
-
-.logout-btn svg {
-  width: 18px;
-  height: 18px;
-}
 @media (max-width: 992px) {
   .logo-section{
     opacity: 0;

@@ -154,6 +154,7 @@ function isClose(){
 
 .modal {
   display: block;
+  z-index: 1001;
 }
 
 .modal-content {
@@ -163,7 +164,7 @@ function isClose(){
 .modal-backdrop {
   position: fixed;
   inset: 0;
-  z-index: 1040;
+  z-index: 1000;
   width: 100vw;
   height: 100vh;
   background-color: rgba(0, 0, 0, 0.5);

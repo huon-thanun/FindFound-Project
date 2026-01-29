@@ -1,6 +1,8 @@
 <template>
   <div class="mb-3">
-    <label class="form-label"> {{ label }} </label>
+    <label class="form-label" style="display: block; text-align: start">
+      {{ label }}
+    </label>
     <div v-if="type === 'file'">
       <BaseButton
         icon="download"
@@ -17,10 +19,16 @@
         :class="{ 'is-invalid': error }"
         hidden
       />
-      <div class="d-inline ms-2 p-2" v-if="cropFileName">{{ shortFileName }}</div>
-      <div v-if="fileName" class="p-1 border rounded-2 mt-3" style="width: 300px; height: 200px">
+      <div class="d-inline ms-2 p-2" v-if="cropFileName">
+        {{ shortFileName }}
+      </div>
+      <div
+        v-if="fileName"
+        class="p-1 border rounded-2 mt-3"
+        style="width: 300px; height: 200px"
+      >
         <img
-          class=" object-fit-cover"
+          class="object-fit-cover"
           width="100%"
           height="100%"
           :src="fileName"
@@ -41,44 +49,44 @@
       @blur="onBlur"
     />
 
-    <div v-if="error" class="invalid-feedback">{{ error }}</div>
+    <div v-if="error" class="invalid-feedback" style="text-align: start">{{ error }}</div>
   </div>
 </template>
 
 <script setup>
-import { ref } from "vue";
-import BaseButton from "./BaseButton.vue";
-const fileName = ref("");
-const shortFileName = ref("");
+import { ref } from 'vue';
+import BaseButton from './BaseButton.vue';
+const fileName = ref('');
+const shortFileName = ref('');
 const cropFileName = (name, max = 15) => {
-  const dot = name.lastIndexOf(".");
-  const ext = dot !== -1 ? name.slice(dot) : "";
+  const dot = name.lastIndexOf('.');
+  const ext = dot !== -1 ? name.slice(dot) : '';
   const base = dot !== -1 ? name.slice(0, dot) : name;
 
-  return base.length > max ? base.slice(0, max) + "..." + ext : base + ext;
+  return base.length > max ? base.slice(0, max) + '...' + ext : base + ext;
 };
 const onFileChange = (event) => {
   const file = event.target.files[0];
   if (!file) return;
   fileName.value = URL.createObjectURL(file);
   shortFileName.value = cropFileName(file.name, 15);
-  // send the actual file object to parent 
-  emit("update:modelValue", file);
+  // send the actual file object to parent
+  emit('update:modelValue', file);
 };
 
 defineProps({
-  modelValue: { type: [String, Number, Object], default: "" },
+  modelValue: { type: [String, Number, Object], default: '' },
   label: {
     type: String,
-    default: "",
+    default: '',
   },
   type: {
     type: String,
-    default: "text",
+    default: 'text',
   },
   placeholder: {
     type: String,
-    default: "",
+    default: '',
   },
   disabled: {
     type: Boolean,
@@ -86,20 +94,20 @@ defineProps({
   },
   error: {
     type: String,
-    default: "",
+    default: '',
   },
-  btnImage:{
-    type:String,
-    default: "",
-  }
+  btnImage: {
+    type: String,
+    default: '',
+  },
 });
 
-const emit = defineEmits(["update:modelValue", "input", "change"]);
+const emit = defineEmits(['update:modelValue', 'input', 'change']);
 
 const onInput = (event) => {
-  emit("update:modelValue", event.target.value);
-  emit("input");
-  emit("change");
+  emit('update:modelValue', event.target.value);
+  emit('input');
+  emit('change');
 };
 </script>
 
@@ -115,4 +123,5 @@ const onInput = (event) => {
   text-decoration: underline;
   cursor: pointer;
 }
+
 </style>

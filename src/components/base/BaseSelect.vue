@@ -1,43 +1,53 @@
 <template>
-  <div class="dropdown">
-    <!-- Selected value -->
-    <div
-      class="dropdown-selected border-2 rounded-3"
-      @click="toggleDropdown"
+  <div class="mb-3">
+    <label
+      v-if="label"
+      class="form-label"
+      style="display: block; text-align: start"
+      >{{ label }}</label
     >
-      {{ displayText }}
-      <svg class="chevron" :class="{ rotate: open }" viewBox="0 0 24 24">
-        <path
-          d="M6 9l6 6 6-6"
-          stroke="currentColor"
-          stroke-width="3"
-          fill="none"
-        />
-      </svg>
-    </div>
-
-    <!-- Dropdown list -->
-    <ul v-if="open" class="dropdown-list">
-      <li
-        v-for="item in items"
-        :key="item[valueField]"
-        @click.stop="selectItem(item)"
-        :class="{ active: item[valueField] === selected?.[valueField] }"
+    <div class="dropdown">
+      <!-- Selected value -->
+      <div
+        class="dropdown-selected"
+        :class="{ 'is-invalid': error }"
+        @click="toggleDropdown"
       >
-        {{ item[labelField] }}
-        <span
-          v-if="item[valueField] === selected?.[valueField]"
-          class="checkmark"
+        {{ displayText }}
+        <svg class="chevron" :class="{ rotate: open }" viewBox="0 0 24 24">
+          <path
+            d="M6 9l6 6 6-6"
+            stroke="currentColor"
+            stroke-width="3"
+            fill="none"
+          />
+        </svg>
+      </div>
+
+      <!-- Dropdown list -->
+      <ul v-if="open" class="dropdown-list">
+        <li
+          v-for="item in items"
+          :key="item[valueField]"
+          @click.stop="selectItem(item)"
+          :class="{ active: item[valueField] === selected?.[valueField] }"
         >
-          ✔
-        </span>
-      </li>
-    </ul>
+          {{ item[labelField] }}
+          <span
+            v-if="item[valueField] === selected?.[valueField]"
+            class="checkmark"
+          >
+            ✔
+          </span>
+        </li>
+      </ul>
+    </div>
+    <div v-if="error" class="invalid-feedback d-block" style="text-align: start">{{ error }}</div>
   </div>
 </template>
 
 <script setup>
-import { ref, computed, watch } from "vue";
+import { ref, computed, watch } from 'vue';
 
 const open = ref(false);
 const selected = ref(null);
@@ -45,25 +55,27 @@ const selected = ref(null);
 /* ---------------- PROPS ---------------- */
 const props = defineProps({
   modelValue: { type: Object, default: null },
-  items: { type: Array, required: true }, // 👈 items come from parent
-  textField: { type: String, default: "Select an option" },
-  labelField: { type: String, default: "name" },
-  valueField: { type: String, default: "id" },
+  items: { type: Array, required: true },
+  label: { type: String, default: '' },
+  textField: { type: String, default: 'Select an option' },
+  labelField: { type: String, default: 'name' },
+  valueField: { type: String, default: 'id' },
+  error: { type: String, default: '' },
 });
 
 /* ---------------- EMIT ---------------- */
-const emit = defineEmits(["update:modelValue"]);
+const emit = defineEmits(['update:modelValue']);
 
 /* ---------------- COMPUTED ---------------- */
 const displayText = computed(() =>
-  selected.value ? selected.value[props.labelField] : props.textField
+  selected.value ? selected.value[props.labelField] : props.textField,
 );
 
 /* ---------------- WATCH ---------------- */
 watch(
   () => props.modelValue,
   (val) => (selected.value = val),
-  { immediate: true }
+  { immediate: true },
 );
 
 /* ---------------- METHODS ---------------- */
@@ -72,7 +84,7 @@ const toggleDropdown = () => (open.value = !open.value);
 const selectItem = (item) => {
   selected.value = item;
   open.value = false;
-  emit("update:modelValue", item);
+  emit('update:modelValue', item);
 };
 </script>
 
@@ -120,7 +132,7 @@ watch(selectedRole, async (val) => {
 /* same styles as before */
 .dropdown {
   position: relative;
-  width: 200px;
+  width: 100%;
   font-family: sans-serif;
   cursor: pointer;
 }
@@ -128,11 +140,15 @@ watch(selectedRole, async (val) => {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0.5rem 0.75rem;
-  border: 1px solid #e4e4e7;
-  border-radius: 6px;
+  padding: 0.375rem 0.75rem;
+  border: 1px solid #dee2e6;
+  border-radius: 0.375rem;
   background: #fff;
   color: #71717a;
+}
+.dropdown-selected.is-invalid {
+  border-color: #dc3545;
+  background-color: #fff5f5;
 }
 .chevron {
   width: 1rem;
@@ -147,16 +163,17 @@ watch(selectedRole, async (val) => {
   top: 100%;
   left: 0;
   width: 100%;
-  margin-top: 0.25rem;
-  border: 1px solid #e4e4e7;
+  margin-top: 0.375rem;
+  border: 1px solid #dee2e6;
   border-radius: 6px;
   background: #fff;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   list-style: none;
   padding: 0;
+  z-index: 1000;
 }
 .dropdown-list li {
-  padding: 0.5rem 0.75rem;
+  padding: 0.375rem 0.75rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -171,5 +188,10 @@ watch(selectedRole, async (val) => {
 }
 .checkmark {
   color: #18181b;
+}
+.invalid-feedback {
+  color: #dc3545;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
 }
 </style>

@@ -47,7 +47,10 @@
             </form>
 
             <div class="d-flex justify-content-between mt-3 small">
-              <a href="#" class="text-decoration-none">← Back to Login</a>
+              <router-link to="/login" class="text-decoration-none">
+                ← Back to Login
+              </router-link>
+
               <a href="#" class="text-decoration-none">Having trouble?</a>
             </div>
 
@@ -94,13 +97,13 @@ export default {
         localStorage.setItem("otp_email", this.email);
 
         // redirect to verify page
-       this.$router.push({ name: "verify-otp" });
+        this.$router.push({ name: "user.verify-otp" });
       } catch (err) {
         console.error(err);
 
         alert(
           err.response?.data?.message ||
-          "Failed to send OTP. Please try again."
+            "Failed to send OTP. Please try again.",
         );
       } finally {
         this.loading = false;
@@ -109,7 +112,6 @@ export default {
   },
 };
 </script>
-
 
 <style scoped>
 .left-panel {
