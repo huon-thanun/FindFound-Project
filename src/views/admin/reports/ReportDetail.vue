@@ -5,7 +5,7 @@
       <div class="my-backdrop"></div>
 
       <!-- modal content -->
-      ,
+
       <div class="row">
         <div class="my-modal col-12 col-md-7 col-xl-6">
           <div
@@ -16,7 +16,7 @@
           </div>
           <div class="modal-body px-5 py-3">
             <div class="row">
-              <div class="col-12 col-md-6 col-xl-6 px-3">
+              <div class="col-12 col-md-12 col-xl-6 px-3">
                 <div class="d-flex gap-2 mb-3">
                   <span
                     class="status"
@@ -32,7 +32,7 @@
                 <p class="card-text text-muted py-3">{{ data.description }}</p>
                 <ul class="row p-0" style="list-style-type: none">
                   <li
-                    class="col-12 col-lg-12 col-xl-6 d-flex gap-2 mb-2"
+                    class="col-6 col-md-6 col-xl-6 d-flex gap-2 mb-2"
                     v-for="(item, index) in detail"
                     :key="index"
                   >
@@ -47,7 +47,7 @@
                   </li>
                 </ul>
               </div>
-              <div class="col-12 col-md-6 col-xl-6">
+              <div class="col-12 col-md-12 col-xl-6">
                 <div class="row">
                   <div
                     class="col-12 d-flex justify-content-center position-relative"
@@ -67,18 +67,28 @@
                       style="max-height: 500px"
                     />
                     <button
-                      class="btn"
-                      style="position: absolute; left: 0; top: 50%"
+                      class="btn border-0 fs-2"
+                      style="
+                        position: absolute;
+                        left: 0;
+                        top: 50%;
+                        transform: translateY(-50%);
+                      "
                       @click="prevImage"
-                      :isDisabled="!canPrev"
+                      :disabled="!canPrev"
                     >
                       <i class="bi bi-chevron-left"></i>
                     </button>
                     <button
-                      class="btn"
-                      style="position: absolute; right: 0; top: 50%"
+                      class="btn border-0 fs-2"
+                      style="
+                        position: absolute;
+                        right: 0;
+                        top: 50%;
+                        transform: translateY(-50%);
+                      "
                       @click="nextImage"
-                      :isDisabled="!canNext"
+                      :disabled="!canNext"
                     >
                       <i class="bi bi-chevron-right"></i>
                     </button>
@@ -235,7 +245,7 @@ const nextImage = () => {
   inset: 0;
   background: rgba(0, 0, 0, 0.5);
   z-index: 1000;
-  pointer-events: auto; /* blocks clicks */
+  pointer-events: auto;
 }
 
 .my-modal {
@@ -262,12 +272,12 @@ const nextImage = () => {
   font-size: 14px;
 }
 .lost {
-  background: rgb(255, 0, 0);
-  color: rgb(255, 255, 255);
+  background: var(--danger);
+  color: var(--light);
 }
 .found {
-  background: rgb(0, 211, 0);
-  color: rgb(255, 255, 255);
+  background: var(--success);
+  color: var(--light);
 }
 .active {
   background: rgba(0, 0, 255, 0.2);
