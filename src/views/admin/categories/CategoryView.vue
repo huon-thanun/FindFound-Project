@@ -17,7 +17,7 @@ const columns = [
     { key: "name", label: "Category Name" },
     { key: 'description', label: 'Description' },
     { key: 'createdAt', label: 'CreatedAt' },
-    { key: 'updatedAt', label: 'UpdatedAt' }
+    // { key: 'updatedAt', label: 'UpdatedAt' }
 ];
 
 const sortBy = ref(null);
@@ -191,36 +191,44 @@ const openDetailModal = (category) => {
 </script>
 
 <template>
-    <div class="container my-5">
+    <div class="p-3">
         <div class="d-flex justify-content-between align-items-center mb-3">
             <div>
                 <h2 class="fw-bold">Categories</h2>
                 <p class="text-muted">Create and manage categories for different types of Categories</p>
             </div>
-            <BaseButton variant="primary" @click="openCreateModal">
+            <BaseButton variant="primary" @click="openCreateModal" icon="plus-circle">
                 Create category
             </BaseButton>
         </div>
 
-        <div class="card mb-3">
-            <div class="card-body row">
-                <div class="col-8">
-                    <BaseInput v-model="search" placeholder="Search category..." />
-                </div>
-                <div class="col-2">
-                    <BaseSelect v-model="sortBy" :items="SORT_BY_OPTIONS" labelField="name" valueField="id"
-                        textField="Sort By" class="mt-4" />
-                </div>
-                <div class="col-2">
-                    <BaseSelect v-model="sortDir" :items="SORT_DIR_OPTIONS" labelField="name" valueField="id"
-                        textField="Sort Direction" class="mt-4" />
+        <div class="card mb-3 shadow">
+            <div class="card-body">
+                <div class="row g-3 align-items-center">
+
+                    <!-- Search -->
+                    <div class="col-12 col-md-6 col-lg-4 mt-2">
+                        <BaseInput v-model="search" placeholder="Search category..." />
+                    </div>
+
+                    <!-- Sort By -->
+                    <div class="col-12 col-md-6 col-lg-3 d-flex justify-content-center">
+                        <BaseSelect v-model="sortBy" :items="SORT_BY_OPTIONS" labelField="name" valueField="id"
+                            textField="Sort By" />
+                    </div> <!-- Sort Direction -->
+                    <div class="col-12 col-md-6 col-lg-3 d-flex justify-content-end">
+                        <BaseSelect v-model="sortDir" :items="SORT_DIR_OPTIONS" labelField="name" valueField="id"
+                            textField="Sort Direction" />
+                    </div>
+
+
                 </div>
             </div>
 
         </div>
 
         <BaseTable :columns="columns" :items="categories" :isLoading="isLoading" @edit="openEditModal"
-            @delete="openDeleteModal" @rowClick="openDetailModal">
+            @delete="openDeleteModal" @rowClick="openDetailModal" class="shadow mt-4">
             <template #column-id="{ item }">
                 #{{ item.id }}
             </template>
@@ -233,54 +241,57 @@ const openDetailModal = (category) => {
         </BaseTable>
 
         <!-- DELETE MODAL -->
-        <BaseModal :isClose="showDeleteModal" title="Confirm Delete" @closeModal="showDeleteModal = false">
+        <BaseModal :isClose="showDeleteModal" title="Confirm Delete" @closeModal="showDeleteModal = false"
+            icon="exclamation-triangle">
             <template #body>
                 <p>Are you sure you want to delete this category?</p>
             </template>
             <template #btnClose>
-                <BaseButton variant="secondary" @click="showDeleteModal = false">
+                <BaseButton variant="cancel" @click="showDeleteModal = false" icon="x-circle">
                     Cancel
                 </BaseButton>
             </template>
             <template #btnActive>
-                <BaseButton variant="danger" :isLoading="isLoading" @click="confirmDelete">
+                <BaseButton variant="danger" :isLoading="isLoading" @click="confirmDelete" icon="check-circle">
                     Delete
                 </BaseButton>
             </template>
         </BaseModal>
 
         <!-- EDIT MODAL -->
-        <BaseModal :isClose="showEditModal" title="Edit Category" @closeModal="showEditModal = false">
+        <BaseModal :isClose="showEditModal" title="Edit Category" @closeModal="showEditModal = false"
+            icon="pencil-square">
             <template #body>
                 <input v-model="editName" class="form-control mb-3" />
                 <input v-model="editDescription" class="form-control" />
             </template>
             <template #btnClose>
-                <BaseButton variant="secondary" @click="showEditModal = false">
+                <BaseButton variant="cancel" @click="showEditModal = false" icon="x-circle">
                     Cancel
                 </BaseButton>
             </template>
             <template #btnActive>
-                <BaseButton variant="primary" :isLoading="isLoading" @click="confirmEdit">
+                <BaseButton variant="primary" :isLoading="isLoading" @click="confirmEdit" icon="check-circle">
                     Save
                 </BaseButton>
             </template>
         </BaseModal>
 
         <!-- CREATE MODAL -->
-        <BaseModal :isClose="showCreateModal" title="Create Category" @closeModal="showCreateModal = false">
+        <BaseModal :isClose="showCreateModal" title="Create Category" @closeModal="showCreateModal = false"
+            icon="plus-circle">
             <template #body>
                 <input v-model="newCategoryName" class="form-control mb-3" />
                 <input v-model="newCategoryDescription" class="form-control" />
             </template>
 
             <template #btnClose>
-                <BaseButton variant="secondary" @click="showCreateModal = false">
+                <BaseButton variant="cancel" @click="showCreateModal = false" icon="x-circle">
                     Cancel
                 </BaseButton>
             </template>
             <template #btnActive>
-                <BaseButton variant="primary" :isLoading="isLoading" @click="confirmCreate">
+                <BaseButton variant="primary" :isLoading="isLoading" @click="confirmCreate" icon="check-circle">
                     Create
                 </BaseButton>
             </template>
@@ -300,7 +311,7 @@ const openDetailModal = (category) => {
             </template>
 
             <template #btnActive>
-                <BaseButton variant="primary" @click="showDetailModal = false">
+                <BaseButton variant="primary" @click="showDetailModal = false" icon="x-circle">
                     Close
                 </BaseButton>
             </template>
