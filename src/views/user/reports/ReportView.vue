@@ -31,6 +31,13 @@
               {{ category.name }}
             </option>
           </select>
+          <BaseSelect
+            v-model="selectedRole"
+            :items="roles"
+            textField="All Categories"
+            :labelField="categoryStore.name"
+            :valueField="categoryStore.id"
+          />
         </div>
       </div>
     </BaseReportCard>
@@ -175,12 +182,24 @@ watch([search, cateValue, typeValue, statusValue], () => {
   console.log(reportStore.allReports);
   console.log(cateValue.value);
 });
+
+// import useUserStore from ".././../../stores/userStore.js";
+
+// const userStore = useUserStore();
+
+const roles = ref([]);
+const selectedRole = ref(null);
+
+/* Load roles (LIST) */
+onMounted(async () => {
+  roles.value = await categoryStore.fetchCategories();
+});
 </script>
 
 <style scoped>
-.desc {
+/* .desc {
   height: 50px;
-}
+} */
 .bg-btn-group {
   padding: 5px;
   background-color: rgba(226, 226, 226, 0.877);

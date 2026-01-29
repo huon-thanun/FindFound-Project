@@ -1,11 +1,19 @@
 <template>
-  <div class="card p-3">
+  <div class="card p-3" :style="`height:${height}`">
     <slot name="image"></slot>
     <div class="card-body px-0">
       <slot></slot>
     </div>
   </div>
 </template>
+<script setup>
+defineProps({
+  height: {
+    type: String,
+    default: "auto",
+  },
+});
+</script>
 <style scoped>
 .card {
   width: 100%;
