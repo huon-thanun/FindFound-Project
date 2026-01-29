@@ -10,7 +10,7 @@
     <!-- Navigation Menu -->
     <nav class="nav-menu">
       <router-link
-        :to="{ name: 'admin.dashoard' }"
+        :to="{ name: 'admin.dashboard' }"
         class="nav-item"
       >
         Dashboard
