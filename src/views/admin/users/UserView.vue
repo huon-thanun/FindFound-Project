@@ -55,7 +55,7 @@
           />
         </div>
 
-        <div  class=" m-0 p-0" style="flex: 1 ">
+        <div class="m-0 p-0" style="flex: 1">
           <BaseSelect
             :modelValue="
               sortOptions.find((o) => o.value === filters.sortBy) || null
@@ -85,14 +85,10 @@
 
     <!-- Users Table -->
     <div class="card">
-      <BaseTable
+      <BaseTableUserPage
         :columns="tableColumns"
         :items="users"
         :isLoading="loading"
-        editIcon="eye"
-        editVariant="secondary"
-        deleteIcon="pencil"
-        deleteVariant="warning"
         @edit="viewUser"
         @delete="openStatus"
       >
@@ -123,7 +119,7 @@
             {{ item.status }}
           </span>
         </template>
-      </BaseTable>
+      </BaseTableUserPage>
 
       <div class="card-footer text-center">
         <div class="d-flex gap-2 justify-content-center my-3">
@@ -277,12 +273,17 @@
         />
 
         <BaseSelect
-          v-model="newUser.roleId"
+          :modelValue="
+            roleOptions.find((o) => o.id === newUser.roleId?.id) ||
+            newUser.roleId ||
+            null
+          "
           :items="roleOptions"
           label="Role"
           textField="Select a role"
           labelField="name"
           valueField="id"
+          @update:modelValue="(item) => (newUser.roleId = item)"
           :error="errors.roleId"
         />
       </template>
@@ -309,9 +310,9 @@
 <script setup>
 import { reactive, ref, computed, onMounted, watch } from 'vue';
 import { useUserStore } from '../../../stores/userStore';
-import BaseTable from '@/components/base/BaseTable.vue';
 import BaseInput from '@/components/base/BaseInput.vue';
 import BaseSelect from '@/components/base/BaseSelect.vue';
+import BaseTableUserPage from '@/components/base/BaseTableUserPage.vue';
 
 const store = useUserStore();
 
@@ -459,7 +460,7 @@ const createUser = async () => {
       fullname: newUser.fullname.trim(),
       email: newUser.email.trim(),
       password: newUser.password.trim(),
-      roleId: Number(newUser.roleId),
+      roleId: newUser.roleId?.id || newUser.roleId,
     };
 
     // Only add optional fields if they have values
