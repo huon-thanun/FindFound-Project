@@ -43,13 +43,12 @@
           v-else
           v-for="item in items"
           :key="item.id"
-          class="table-row"
+          class="table-row" @click="$emit('rowClick', item)"
         >
           <td
             v-for="col in columns"
             :key="col.key"
             class="truncate-cell ps-3"
-            @click="$emit('rowClick', item)"
           >
             <slot :name="`column-${col.key}`" :item="item">
               <div
@@ -61,18 +60,18 @@
             </slot>
           </td>
 
-          <td class="text-center truncate-cell">
+          <td class="text-center acirons-cell" @click.stop>
             <base-button
               variant="warning"
               class="me-2"
-              @click.stop="$emit('edit', item.id)"
+              @click="$emit('edit', item.id)"
             >
               <i class="bi bi-pencil-square"></i>
             </base-button>
 
             <base-button
               variant="danger"
-              @click.stop="$emit('delete', item.id)"
+              @click="$emit('delete', item.id)"
             >
               <i class="bi bi-trash3"></i>
             </base-button>
@@ -136,6 +135,12 @@ defineEmits(["edit", "delete", "rowClick"]);
   cursor: pointer;
 }
 
+.acirons-cell {
+  overflow: visible;
+  cursor: pointer;
+  padding: 0.5rem !important;
+}
+
 .truncate-text {
   white-space: nowrap;
   overflow: hidden;
@@ -145,5 +150,13 @@ defineEmits(["edit", "delete", "rowClick"]);
 /* ---------- Row UX ---------- */
 .table-row:hover {
   background-color: #f8f9fa;
+}
+
+.table-row {
+  cursor: pointer;
+}
+
+.base-button {
+  cursor: default;
 }
 </style>
