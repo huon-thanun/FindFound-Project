@@ -261,10 +261,10 @@ body {
 .sidebar.closed {
     transform: translateX(-300px);
 }
-.router-link-active {
+/* .router-link-active {
   background-color: var(--tertiary-color);
   color: var(--surface-color);
-}
+} */
 .handle-btn {
   width: 100%;
   display: flex;
