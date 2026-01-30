@@ -38,13 +38,10 @@
           v-else
           v-for="item in items"
           :key="item.id"
-          class="table-row" @click="$emit('rowClick', item)"
+          class="table-row"
+          @click="$emit('rowClick', item)"
         >
-          <td
-            v-for="col in columns"
-            :key="col.key"
-            class="truncate-cell ps-3"
-          >
+          <td v-for="col in columns" :key="col.key" class="truncate-cell ps-3">
             <slot :name="`column-${col.key}`" :item="item">
               <div class="truncate-text" :title="item[col.key]">
                 {{ item[col.key] }}
@@ -52,20 +49,17 @@
             </slot>
           </td>
 
-          <td class="text-center acirons-cell" @click.stop>
+          <td class="text-center actions-cell">
             <base-button
-              variant="warning"
-              class="me-2"
+              variant=""
+              class="me-2 blue"
               @click="$emit('edit', item.id)"
             >
-              <i class="bi bi-pencil-square"></i>
+              <i class="bi bi-eye"></i>
             </base-button>
 
-            <base-button
-              variant="danger"
-              @click="$emit('delete', item.id)"
-            >
-              <i class="bi bi-trash3"></i>
+            <base-button variant="warning" @click="$emit('delete', item.id)">
+              <i class="bi bi-pencil-square"></i>
             </base-button>
           </td>
         </tr>
@@ -90,7 +84,7 @@ defineProps({
   },
 });
 
-defineEmits(["edit", "delete", "rowClick"]);
+defineEmits(['edit', 'delete', 'rowClick']);
 </script>
 
 <style scoped>
@@ -103,21 +97,12 @@ defineEmits(["edit", "delete", "rowClick"]);
 /* ---------- Table ---------- */
 .table-scroll {
   width: 100%;
-  max-height: 550px;   /* 👈 adjust height */
-  overflow-x: auto;
-  overflow-y: auto;    /* 👈 vertical scroll */
+  overflow-x: auto;   /* 👈 enables left-right scroll */
+  overflow-y: hidden;
 }
-
-.base-table {
-  min-width: 1100px;
-  table-layout: auto;
-  /* border-collapse: collapse; */
-}
-
-thead th {
-  position: sticky;
-  top: 0;
-  z-index: 10;
+.base-table {    /* IMPORTANT */
+  table-layout: auto; /* DEFAULT */
+  min-width: 1100px;  /* or any width you want */
 }
 
 .table-row {
@@ -141,9 +126,9 @@ thead th {
   cursor: pointer;
 }
 
-.acirons-cell {
+.actions-cell {
   overflow: visible;
-  cursor: pointer;
+  cursor: auto;
   padding: 0.5rem !important;
 }
 
@@ -157,12 +142,7 @@ thead th {
 .table-row:hover {
   background-color: #f8f9fa;
 }
-
-.table-row {
-  cursor: pointer;
-}
-
-.base-button {
-  cursor: default;
+.blue{
+  background-color: rgb(105, 98, 209) !important;
 }
 </style>

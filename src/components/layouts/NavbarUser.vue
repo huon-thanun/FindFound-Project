@@ -1,35 +1,37 @@
 <template>
-  <div class="sidebar col-lg-3 " :class="!isOpen ? '' : 'closed'">
+  <div class="sidebar col-lg-3" :class="!isOpen ? '' : 'closed'">
     <!-- Logo Section -->
     <div class="logo-section opacity-0">
       <div class="d-flex align-items-center">
-        <img src="../../assets/images/logo/logo.png" class="object-fit-cover" height="79px" width="170px" alt="">
+        <img
+          src="../../assets/images/logo/logo.png"
+          class="object-fit-cover"
+          height="79px"
+          width="170px"
+          alt=""
+        />
       </div>
     </div>
 
     <!-- Navigation Menu -->
     <nav class="nav-menu">
-      <router-link to="/" class="nav-item">
-        Dashboard
-      </router-link>
+      <router-link to="/" class="nav-item"> Dashboard </router-link>
 
-      <router-link to="/about" class="nav-item">
-        Users
-      </router-link>
+      <router-link to="/about" class="nav-item"> Users </router-link>
 
-      <router-link to="/about" class="nav-item">
-        Categories
-      </router-link>
+      <router-link to="/about" class="nav-item"> Categories </router-link>
 
-      <router-link to="/about" class="nav-item">
-        Reports
-      </router-link>
+      <router-link to="/about" class="nav-item"> Reports </router-link>
     </nav>
 
     <!-- User Section -->
     <div class="user-section">
       <div v-if="showAuthButtons">
-        <base-button class="handle-btn mb-3" icon="person-circle" variant="secondary">
+        <base-button
+          class="handle-btn mb-3"
+          icon="person-circle"
+          variant="secondary"
+        >
           Login
         </base-button>
         <base-button class="handle-btn" icon="person-plus-fill">
@@ -37,26 +39,41 @@
         </base-button>
       </div>
       <div v-else>
-        <base-button class="handle-btn mb-3" icon="plus-circle" variant="secondary">
+        <base-button
+          class="handle-btn mb-3"
+          icon="plus-circle"
+          variant="secondary"
+        >
           Lost
         </base-button>
-        <base-button class="handle-btn" icon="plus-circle">
-          Found
-        </base-button>
+        <base-button class="handle-btn" icon="plus-circle"> Found </base-button>
       </div>
     </div>
 
     <!-- SHOW Lost / Found when HAS token -->
-    <BaseModal :title="'Logout'" :icon="'exclamation-triangle'" :theme="'danger'" :isClose="showModal"
-      @closeModal="showModal = true">
+    <BaseModal
+      :title="'Logout'"
+      :icon="'exclamation-triangle'"
+      :theme="'danger'"
+      :isClose="showModal"
+      @closeModal="showModal = true"
+    >
       <template #body>
         <p>Are you sure ?</p>
       </template>
       <template #btnClose>
-        <BaseButton variant="cancel" icon="x-circle" class="col-6" @click="isOpen">Close</BaseButton>
+        <BaseButton
+          variant="cancel"
+          icon="x-circle"
+          class="col-6"
+          @click="isOpen"
+          >Close</BaseButton
+        >
       </template>
       <template #btnActive>
-        <BaseButton variant="danger" icon="check-circle" class="col-6 ">Confirm</BaseButton>
+        <BaseButton variant="danger" icon="check-circle" class="col-6"
+          >Confirm</BaseButton
+        >
       </template>
     </BaseModal>
   </div>
@@ -64,13 +81,20 @@
   <nav class="navbar p-0 navbar-expand-lg navbar-custom">
     <div class="container-fluid px-5">
       <div class="toggle-btn d-none">
-        <base-button @click="toggleSidebar" variant="primary"><i :class="isOpen ? 'bi bi-list' : 'bi bi-x-lg'"></i>
+        <base-button @click="toggleSidebar" variant="primary"
+          ><i :class="isOpen ? 'bi bi-list' : 'bi bi-x-lg'"></i>
         </base-button>
       </div>
       <!-- Logo and Brand -->
       <div>
         <router-link to="/" class="navbar-brand-custom me-auto">
-          <img src="../../assets/images/logo/logo.png" class="object-fit-cover" height="79px" width="170px" alt="">
+          <img
+            src="../../assets/images/logo/logo.png"
+            class="object-fit-cover"
+            height="79px"
+            width="170px"
+            alt=""
+          />
         </router-link>
       </div>
 
@@ -80,46 +104,68 @@
           <!-- Navigation Links -->
           <ul class="navbar-nav navbar-nav-custom">
             <li class="nav-item">
-              <router-link to="/" class="nav-link-custom" :class="{ active: activeLink === 'home' }"
-                @click.prevent="setActive('home')">
+              <router-link
+                to="/"
+                class="nav-link-custom"
+                :class="{ active: activeLink === 'home' }"
+                @click.prevent="setActive('home')"
+              >
                 Home
               </router-link>
             </li>
 
             <li class="nav-item">
-              <router-link to="" class="nav-link-custom" :class="{ active: activeLink === 'reports' }"
-                @click.prevent="setActive('reports')">
+              <router-link
+                to=""
+                class="nav-link-custom"
+                :class="{ active: activeLink === 'reports' }"
+                @click.prevent="setActive('reports')"
+              >
                 Reports
               </router-link>
             </li>
 
             <li class="nav-item">
-              <router-link to="" class="nav-link-custom" :class="{ active: activeLink === 'categories' }"
-                @click.prevent="setActive('categories')">
+              <router-link
+                to=""
+                class="nav-link-custom"
+                :class="{ active: activeLink === 'categories' }"
+                @click.prevent="setActive('categories')"
+              >
                 Categories
               </router-link>
             </li>
 
             <li class="nav-item">
-              <router-link to="" class="nav-link-custom" :class="{ active: activeLink === 'about' }"
-                @click.prevent="setActive('about')">
+              <router-link
+                to=""
+                class="nav-link-custom"
+                :class="{ active: activeLink === 'about' }"
+                @click.prevent="setActive('about')"
+              >
                 About
               </router-link>
             </li>
 
             <li class="nav-item">
-              <router-link to="" class="nav-link-custom" :class="{ active: activeLink === 'contact' }"
-                @click.prevent="setActive('contact')">
+              <router-link
+                to=""
+                class="nav-link-custom"
+                :class="{ active: activeLink === 'contact' }"
+                @click.prevent="setActive('contact')"
+              >
                 Contact
               </router-link>
             </li>
           </ul>
-
         </div>
       </div>
       <!-- Right Side Items -->
       <!-- SHOW Login / Register when NO token -->
-      <div v-if="showAuthButtons" class="btn-active d-flex align-items-center gap-3">
+      <div
+        v-if="showAuthButtons"
+        class="btn-active d-flex align-items-center gap-3"
+      >
         <base-button icon="person-circle" variant="secondary" class="btn-login">
           Login
         </base-button>
@@ -133,21 +179,24 @@
         <base-button icon="plus-circle" variant="secondary" class="btn-lost">
           Lost
         </base-button>
-        <base-button icon="plus-circle" class="btn-found">
-          Found
-        </base-button>
+        <base-button icon="plus-circle" class="btn-found"> Found </base-button>
         <div>
           <!-- User Profile Dropdown -->
           <div class="user-profile">
-            <img src="https://ui-avatars.com/api/?name=John+Doe&background=17a2b8&color=fff&size=128" alt="User Avatar"
-              class="user-avatar" />
+            <img
+              src="https://ui-avatars.com/api/?name=John+Doe&background=17a2b8&color=fff&size=128"
+              alt="User Avatar"
+              class="user-avatar"
+            />
 
             <!-- Dropdown Menu -->
             <div class="dropdown-menu-custom">
               <!-- User Info Header -->
               <div class="dropdown-header-custom">
-                <img src="https://ui-avatars.com/api/?name=John+Doe&background=17a2b8&color=fff&size=128"
-                  alt="User Avatar" />
+                <img
+                  src="https://ui-avatars.com/api/?name=John+Doe&background=17a2b8&color=fff&size=128"
+                  alt="User Avatar"
+                />
                 <div class="user-info">
                   <h6>John Doe</h6>
                   <p>john.doe@email.com</p>
@@ -177,7 +226,11 @@
                 <span>Help & Support</span>
               </router-link>
 
-              <a @click="isClose" href="#" class="dropdown-item-custom dropdown-item-logout">
+              <a
+                @click="isClose"
+                href="#"
+                class="dropdown-item-custom dropdown-item-logout"
+              >
                 <i class="bi bi-box-arrow-right"></i>
                 <span>Logout</span>
               </a>
@@ -186,16 +239,29 @@
         </div>
       </div>
     </div>
-    <BaseModal :title="'Logout'" :icon="'exclamation-triangle'" :theme="'danger'" :isClose="showModal"
-      @closeModal="showModal = true">
+    <BaseModal
+      :title="'Logout'"
+      :icon="'exclamation-triangle'"
+      :theme="'danger'"
+      :isClose="showModal"
+      @closeModal="showModal = true"
+    >
       <template #body>
         <p>Are you sure ?</p>
       </template>
       <template #btnClose>
-        <BaseButton variant="cancel" icon="x-circle" class="col-6" @click="isClose">Close</BaseButton>
+        <BaseButton
+          variant="cancel"
+          icon="x-circle"
+          class="col-6"
+          @click="isClose"
+          >Close</BaseButton
+        >
       </template>
       <template #btnActive>
-        <BaseButton icon="check-circle" variant="danger" class="col-6 ">Confirm</BaseButton>
+        <BaseButton icon="check-circle" variant="danger" class="col-6"
+          >Confirm</BaseButton
+        >
       </template>
     </BaseModal>
   </nav>
@@ -210,12 +276,12 @@ const activeLink = ref("home");
 const token = ref(null);
 const showModal = ref(false);
 function isClose() {
-  showModal.value = !showModal.value
+  showModal.value = !showModal.value;
 }
-const isOpen = ref('true');
+const isOpen = ref("true");
 const toggleSidebar = () => {
-  isOpen.value = !isOpen.value
-}
+  isOpen.value = !isOpen.value;
+};
 // example: get token from localStorage
 onMounted(() => {
   token.value = localStorage.getItem("token");
@@ -229,8 +295,6 @@ const setActive = (link) => {
   activeLink.value = link;
 };
 </script>
-
-
 
 <style scoped>
 * {
@@ -252,19 +316,19 @@ body {
   position: fixed;
   left: 0;
   top: 0;
-  transition: .3s;
+  transition: 0.3s;
   width: 300px;
   flex: 0 0 auto;
   position: fixed;
   z-index: 99;
 }
 .sidebar.closed {
-    transform: translateX(-300px);
+  transform: translateX(-300px);
 }
-.router-link-active {
+/* .router-link-active {
   background-color: var(--tertiary-color);
   color: var(--surface-color);
-}
+} */
 .handle-btn {
   width: 100%;
   display: flex;
@@ -448,7 +512,7 @@ body {
 
 .nav-right {
   display: flex;
-  align-items: center
+  align-items: center;
 }
 
 .btn-register,
@@ -574,7 +638,7 @@ body {
   }
 }
 @media (min-width: 1100px) {
-  .sidebar{
+  .sidebar {
     display: none;
   }
 }

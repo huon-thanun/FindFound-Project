@@ -5,13 +5,15 @@ router.beforeEach((to, from, next) => {
 
   /* ================= PUBLIC ROUTES ================= */
   const PUBLIC_ROUTES = [
-    "/login",
-    "/register",
-    "/forgot-password",
-    "/reset-password",
-    "/otp",
-    "/user-verify-otp",
-  ];
+  "/login",
+  "/admin/login", 
+  "/register",
+  "/forgot-password",
+  "/reset-password",
+  "/otp",
+  "/user-verify-otp",
+];
+
 
   /* ================= NOT LOGGED IN ================= */
   if (!auth.token) {

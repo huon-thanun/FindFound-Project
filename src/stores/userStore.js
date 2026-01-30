@@ -80,7 +80,7 @@ export const useUserStore = defineStore('user', () => {
       const res = await api.post('/users', payload);
       console.log('Create user response:', res.data);
       // Refresh list after creating - use page 1, perPage 10
-      await fetchUsers({ page: 1, perPage: 10 });
+      await fetchUsers({ page: 1, perPage: 5 });
       return res.data.data;
     } catch (err) {
       console.error('Create user error:', err);

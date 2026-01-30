@@ -15,17 +15,18 @@ import OTPView from "@/views/user/auth/OTPView.vue";
 import UserVerifyOTPView from "@/views/user/auth/UserVerifyOTPView.vue";
 import ReportViewUser from "@/views/user/reports/ReportView.vue";
 
+import ReportDetailView from "@/views/user/reports/ReportDetailView.vue";
+import ProfileUserView from "@/views/user/profile/ProfileUserView.vue";
+
 /* ===== ADMIN VIEWS ===== */
+
 import DashboardView from "@/views/admin/dashboard/dashboardView.vue";
 import ProfileView from "@/views/admin/profile/ProfileView.vue";
 import EditProfileView from "@/views/admin/profile/EditProfileView.vue";
 import CategoryView from "@/views/admin/categories/CategoryView.vue";
 import ReportView from "@/views/admin/reports/ReportView.vue";
 import UserView from "@/views/admin/users/UserView.vue";
-// import VerifyOTPView from "@/views/admin/auth/VerifyOTPView.vue";
-
-/* ===== STORE ===== */
-import { useAuthStore } from "@/stores/authStore";
+import AdminLoginView from "@/views/admin/auth/AdminLoginView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -38,17 +39,20 @@ const router = createRouter({
       meta: {
         public: true,
         isAdminLogin: false,
+        lang: "km",
       },
     },
     {
       path: "/admin/login",
       name: "admin.login",
-      component: LoginView,
+      component: AdminLoginView,
       meta: {
         public: true,
-        isAdminLogin: true,
+        role: "admin",
+        lang: "en",
       },
     },
+
     {
       path: "/register",
       name: "register",
@@ -97,6 +101,18 @@ const router = createRouter({
           name: "about",
           component: AboutView,
         },
+        //  /* ===== USER REPORTS ===== */
+        // {
+        //   path: "reports",
+        //   name: "report.user",
+        //   component: ReportViewUser,
+        // },
+        // {
+        //   path: "reports/:id",
+        //   name: "report-detail-user",
+        //   component: ReportDetailView,
+        //   props: true,
+        // },
       ],
     },
 
@@ -139,15 +155,12 @@ const router = createRouter({
         },
       ],
     },
-    {
-      path: "/user/reports",
-      name: "report.user",
-      component: ReportViewUser,
-    },
+
     {
       path: "/:pathMatch(.*)*",
       redirect: "/login",
     },
+    
   ],
 });
 
