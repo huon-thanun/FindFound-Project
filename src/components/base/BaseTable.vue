@@ -10,9 +10,7 @@
           >
             {{ col.label }}
           </th>
-          <th class="text-center py-3 table-top truncate-header">
-            Actions
-          </th>
+          <th class="text-center py-3 table-top truncate-header">Actions</th>
         </tr>
       </thead>
 
@@ -30,21 +28,13 @@
 
         <!-- No data -->
         <tr v-else-if="!items.length">
-          <td
-            :colspan="columns.length + 1"
-            class="text-center py-5"
-          >
+          <td :colspan="columns.length + 1" class="text-center py-5">
             <p class="fw-semibold mb-0">No data found</p>
           </td>
         </tr>
 
         <!-- Data rows -->
-        <tr
-          v-else
-          v-for="item in items"
-          :key="item.id"
-          class="table-row"
-        >
+        <tr v-else v-for="item in items" :key="item.id" class="table-row">
           <td
             v-for="col in columns"
             :key="col.key"
@@ -52,10 +42,7 @@
             @click="$emit('rowClick', item)"
           >
             <slot :name="`column-${col.key}`" :item="item">
-              <div
-                class="truncate-text"
-                :title="item[col.key]"
-              >
+              <div class="truncate-text" :title="item[col.key]">
                 {{ item[col.key] }}
               </div>
             </slot>
