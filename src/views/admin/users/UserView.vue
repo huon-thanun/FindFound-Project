@@ -46,16 +46,17 @@
     <!-- Filters -->
     <div class="card mb-3">
       <div class="card-body d-flex gap-3 align-items-start">
-        <div style="flex: 1">
-          <input
+        <div style="flex: 1" class=" p-0 m-0">
+          <BaseInput
             type="text"
-            class="form-control"
-            placeholder="Search name or email..."
+            placeholder="Search by name or email"
             v-model="filters.search"
+            @keyup.enter="resetAndLoadUsers"
           />
+        
         </div>
 
-        <div class="m-0 p-0" style="flex: 1">
+        <div class="mt-2 p-0" style="flex: 1">
           <BaseSelect
             :modelValue="
               sortOptions.find((o) => o.value === filters.sortBy) || null
@@ -69,7 +70,7 @@
           />
         </div>
 
-        <div style="flex: 1">
+        <div class="mt-2 p-0" style="flex: 1">
           <BaseSelect
             :modelValue="
               statusOptions.find((o) => o.value === filters.status) || null
@@ -124,6 +125,7 @@
       <div class="card-footer text-center">
         <div class="d-flex gap-2 justify-content-center my-3">
           <BaseButton
+          class="pointer"
             variant="danger"
             @click="previousPage"
             :isDisabled="filters.page === 1"
@@ -132,6 +134,7 @@
           </BaseButton>
 
           <BaseButton
+          class="pointer"
             variant="primary"
             @click="nextPage"
             :isDisabled="!meta?.hasNextPage"
@@ -145,6 +148,7 @@
 
     <!-- VIEW USER MODAL -->
     <BaseModal
+    class=" align-items-start"
       title="User Detail"
       icon="person-circle"
       :theme="'primary'"
@@ -162,7 +166,7 @@
       </template>
       <template #btnClose>
         <BaseButton
-          variant="cancel"
+          variant="primary"
           icon="x-circle"
           @click="showViewModal = false"
         >
@@ -326,7 +330,7 @@ const tableColumns = [
 
 const filters = reactive({
   page: 1,
-  perPage: 10,
+  perPage: 5,
   search: '',
   status: '',
   sortBy: 'id',
@@ -597,3 +601,9 @@ const previousPage = async () => {
 // Load first page on mount
 onMounted(() => resetAndLoadUsers());
 </script>
+
+<style scoped>
+.pointer {
+  cursor: pointer;
+}
+</style>

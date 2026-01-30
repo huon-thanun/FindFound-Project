@@ -1,6 +1,6 @@
 <template>
-  <div class="table-wrapper rounded-3 overflow-hidden">
-    <table class="table align-middle table-hover base-table mb-0">
+  <div class="table-wrapper table-scroll rounded-3">
+    <table class="table align-middle table-striped table-hover base-table mb-0">
       <thead>
         <tr>
           <th
@@ -51,15 +51,15 @@
 
           <td class="text-center actions-cell">
             <base-button
-              variant="warning"
-              class="me-2"
+              variant=""
+              class="me-2 blue"
               @click="$emit('edit', item.id)"
             >
-              <i class="bi bi-pencil-square"></i>
+              <i class="bi bi-eye"></i>
             </base-button>
 
-            <base-button variant="danger" @click="$emit('delete', item.id)">
-              <i class="bi bi-trash3"></i>
+            <base-button variant="warning" @click="$emit('delete', item.id)">
+              <i class="bi bi-pencil-square"></i>
             </base-button>
           </td>
         </tr>
@@ -95,11 +95,16 @@ defineEmits(['edit', 'delete', 'rowClick']);
   border-right: 1px solid var(--primary-color) !important;
 }
 /* ---------- Table ---------- */
-.base-table {
+.table-scroll {
   width: 100%;
-  table-layout: fixed;
-  border-collapse: collapse;
+  overflow-x: auto;   /* 👈 enables left-right scroll */
+  overflow-y: hidden;
 }
+.base-table {    /* IMPORTANT */
+  table-layout: auto; /* DEFAULT */
+  min-width: 1100px;  /* or any width you want */
+}
+
 .table-row {
   border-bottom: 1px solid var(--primary-color);
 }
@@ -136,5 +141,8 @@ defineEmits(['edit', 'delete', 'rowClick']);
 /* ---------- Row UX ---------- */
 .table-row:hover {
   background-color: #f8f9fa;
+}
+.blue{
+  background-color: rgb(105, 98, 209) !important;
 }
 </style>
