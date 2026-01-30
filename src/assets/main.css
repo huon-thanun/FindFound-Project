@@ -26,16 +26,21 @@
     --dark-shadow: rgba(17, 24, 39, 0.3);
     --light: #F3F4F6;
     --light-shadow: rgba(243, 244, 246, 0.3);
-
-            --cyan: #6DD5ED;
-            --cyan-dark: #4FB8CC;
-            --blue: #7BA7E8;
-            --blue-dark: #5B8AD4;
-            --pink: #F5A4C7;
-            --pink-dark: #E88BB0;
-            --purple: #B9A4F5;
-            --purple-dark: #9B7FE6;
-            --green: #4ECDC4;
-            --yellow: #FFD166;
-            --orange: #FF9F66;
+  
+    --cyan: #6DD5ED;
+    --cyan-dark: #4FB8CC;
+    --blue: #7BA7E8;
+    --blue-dark: #5B8AD4;
+    --pink: #F5A4C7;
+    --pink-dark: #E88BB0;
+    --purple: #B9A4F5;
+    --purple-dark: #9B7FE6;
+    --green: #4ECDC4;
+    --yellow: #FFD166;
+    --orange: #FF9F66;
+}
+* {
+  font-family: "Hanuman", serif;
+  font-optical-sizing: auto;
+  font-style: normal;
 }
