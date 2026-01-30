@@ -239,7 +239,7 @@ const openDetailModal = (category) => {
             <div class="card-body d-flex gap-3 align-items-start">
 
                 <!-- Search -->
-                <div class="m-0 p-0" style="flex: 1;">
+                <div class="m-0 p-0" style="flex: 1">
                     <BaseInput v-model="search" placeholder="Search category..." />
                 </div>
 
@@ -250,7 +250,7 @@ const openDetailModal = (category) => {
                 </div> <!-- Sort Direction -->
                 <div class="mt-2 p-0" style="flex: 1;">
                     <BaseSelect v-model="sortDir" :items="SORT_DIR_OPTIONS" labelField="name" valueField="id"
-                        textField="Sort Direction" />
+                        textField="Sort Direction" class="text-nowrap"/>
                 </div>
             </div>
             <!-- </div> -->
