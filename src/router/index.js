@@ -14,7 +14,10 @@ import ResetPasswordView from "@/views/user/auth/ResetPasswordView.vue";
 import OTPView from "@/views/user/auth/OTPView.vue";
 import UserVerifyOTPView from "@/views/user/auth/UserVerifyOTPView.vue";
 import ReportViewUser from "@/views/user/reports/ReportView.vue";
+
+import ReportDetailView from "@/views/user/reports/ReportDetailView.vue";
 import ProfileUserView from "@/views/user/profile/ProfileUserView.vue";
+
 /* ===== ADMIN VIEWS ===== */
 import DashboardView from "@/views/admin/dashboard/dashboardView.vue";
 import ProfileView from "@/views/admin/profile/ProfileView.vue";
@@ -144,11 +147,7 @@ const router = createRouter({
         },
       ],
     },
-    {
-      path: "/user/reports",
-      name: "report.user",
-      component: ReportViewUser,
-    },
+
     {
       path: "/:pathMatch(.*)*",
       redirect: "/login",
