@@ -1,6 +1,6 @@
 <template>
-  <div class="table-wrapper rounded-3 overflow-hidden">
-    <table class="table align-middle table-hover base-table mb-0">
+  <div class="table-wrapper table-scroll rounded-3">
+    <table class="table align-middle table-striped table-hover base-table mb-0">
       <thead>
         <tr>
           <th
@@ -109,11 +109,25 @@ defineEmits(["edit", "delete", "rowClick"]);
   border-right: 1px solid var(--primary-color) !important;
 }
 /* ---------- Table ---------- */
-.base-table {
+.table-scroll {
   width: 100%;
-  table-layout: fixed;
-  border-collapse: collapse;
+  max-height: 550px;   /* 👈 adjust height */
+  overflow-x: auto;
+  overflow-y: auto;    /* 👈 vertical scroll */
 }
+
+.base-table {
+  min-width: 1100px;
+  table-layout: auto;
+  /* border-collapse: collapse; */
+}
+
+thead th {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
 .table-row {
   border-bottom: 1px solid var(--primary-color);
 }

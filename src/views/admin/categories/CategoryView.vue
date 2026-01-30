@@ -17,7 +17,7 @@ const columns = [
     { key: "name", label: "Category Name" },
     { key: 'description', label: 'Description' },
     { key: 'createdAt', label: 'CreatedAt' },
-    // { key: 'updatedAt', label: 'UpdatedAt' }
+    { key: 'updatedAt', label: 'UpdatedAt' }
 ];
 
 const sortBy = ref(null);
@@ -271,7 +271,7 @@ const openDetailModal = (category) => {
         </BaseTable>
 
         <!-- DELETE MODAL -->
-        <BaseModal :isClose="showDeleteModal" title="Confirm Delete" @closeModal="showDeleteModal = false"
+        <BaseModal :isClose="showDeleteModal" theme="danger" title="Confirm Delete" @closeModal="showDeleteModal = false"
             icon="exclamation-triangle">
             <template #body>
                 <p>Are you sure you want to delete this category?</p>
