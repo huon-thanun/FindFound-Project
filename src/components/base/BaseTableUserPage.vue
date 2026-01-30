@@ -1,6 +1,6 @@
 <template>
-  <div class="table-wrapper rounded-3 overflow-hidden">
-    <table class="table align-middle table-hover base-table mb-0">
+  <div class="table-wrapper table-scroll rounded-3">
+    <table class="table align-middle table-striped table-hover base-table mb-0">
       <thead>
         <tr>
           <th
@@ -34,13 +34,14 @@
         </tr>
 
         <!-- Data rows -->
-        <tr v-else v-for="item in items" :key="item.id" class="table-row">
-          <td
-            v-for="col in columns"
-            :key="col.key"
-            class="truncate-cell ps-3"
-            @click="$emit('rowClick', item)"
-          >
+        <tr
+          v-else
+          v-for="item in items"
+          :key="item.id"
+          class="table-row"
+          @click="$emit('rowClick', item)"
+        >
+          <td v-for="col in columns" :key="col.key" class="truncate-cell ps-3">
             <slot :name="`column-${col.key}`" :item="item">
               <div class="truncate-text" :title="item[col.key]">
                 {{ item[col.key] }}
@@ -48,20 +49,17 @@
             </slot>
           </td>
 
-          <td class="text-center truncate-cell">
+          <td class="text-center actions-cell">
             <base-button
-              variant="warning"
-              class="me-2"
-              @click.stop="$emit('edit', item.id)"
+              variant=""
+              class="me-2 blue"
+              @click="$emit('edit', item.id)"
             >
-              <i class="bi bi-pencil-square"></i>
+              <i class="bi bi-eye"></i>
             </base-button>
 
-            <base-button
-              variant="danger"
-              @click.stop="$emit('delete', item.id)"
-            >
-              <i class="bi bi-trash3"></i>
+            <base-button variant="warning" @click="$emit('delete', item.id)">
+              <i class="bi bi-pencil-square"></i>
             </base-button>
           </td>
         </tr>
@@ -86,7 +84,7 @@ defineProps({
   },
 });
 
-defineEmits(["edit", "delete", "rowClick"]);
+defineEmits(['edit', 'delete', 'rowClick']);
 </script>
 
 <style scoped>
@@ -97,11 +95,16 @@ defineEmits(["edit", "delete", "rowClick"]);
   border-right: 1px solid var(--primary-color) !important;
 }
 /* ---------- Table ---------- */
-.base-table {
+.table-scroll {
   width: 100%;
-  table-layout: fixed;
-  border-collapse: collapse;
+  overflow-x: auto;   /* 👈 enables left-right scroll */
+  overflow-y: hidden;
 }
+.base-table {    /* IMPORTANT */
+  table-layout: auto; /* DEFAULT */
+  min-width: 1100px;  /* or any width you want */
+}
+
 .table-row {
   border-bottom: 1px solid var(--primary-color);
 }
@@ -123,6 +126,12 @@ defineEmits(["edit", "delete", "rowClick"]);
   cursor: pointer;
 }
 
+.actions-cell {
+  overflow: visible;
+  cursor: auto;
+  padding: 0.5rem !important;
+}
+
 .truncate-text {
   white-space: nowrap;
   overflow: hidden;
@@ -132,5 +141,8 @@ defineEmits(["edit", "delete", "rowClick"]);
 /* ---------- Row UX ---------- */
 .table-row:hover {
   background-color: #f8f9fa;
+}
+.blue{
+  background-color: rgb(105, 98, 209) !important;
 }
 </style>
