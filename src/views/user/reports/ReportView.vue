@@ -1,27 +1,27 @@
 <template>
-  <div class="p-3">
+  <div class="container py-4">
     <div class="d-flex justify-content-between mb-3 align-items-center">
       <div>
-        <h2>All Reports</h2>
-        <p>Browse all lost and found items in the community</p>
+        <h2>ការរាយការណ៍</h2>
+        <p>រុករក និងមើលវត្ថុបាត់បង់ និងវត្ថុដែលបានរកឃើញទាំងអស់នៅក្នុងសហគមន៍</p>
       </div>
 
       <BaseButton variant="primary" @click="" icon="plus-lg">
-        Create Report
+        បង្កើតការរាយការណ៍
       </BaseButton>
     </div>
     <BaseReportCard>
-      <div class="row">
-        <div class="col-9">
-          <input
+      <div class="row align-items-center">
+        <div class="m-0 py-0 px-3" style="flex: 4">
+          <BaseInput
+            v-model="search"
             type="text"
-            placeholder="Search by title or description"
-            class="form-control"
+            placeholder="ស្វែងរក ការរាយការណ៍..."
           />
         </div>
         <!-- CATEGORY -->
-        <div class="col-3">
-          <select class="form-select" v-model="cateValue">
+        <div class="mt-2" style="flex: 2">
+          <!-- <select class="form-select" v-model="cateValue">
             <option value="">All Category</option>
             <option
               v-for="category in categoryStore.categories"
@@ -30,93 +30,136 @@
             >
               {{ category.name }}
             </option>
-          </select>
+          </select> -->
+          <BaseSelect
+            v-model="cateValue"
+            :items="categoryStore.categories"
+            textField="ប្រភេទនៃការរាយការណ៍ទំាងអស់"
+            labelField="name"
+            valueField="id"
+          />
+        </div>
+        <div
+          class="d-flex justify-content-end align-items-center"
+          style="flex: 1"
+        >
+          <BaseButton variant="dark" @click="clearFilter">
+            សម្អាតការចម្រោះ
+          </BaseButton>
         </div>
       </div>
     </BaseReportCard>
 
-    <div class="my-3 btn-group bg-btn-group">
+    <div class="mt-3 mb-5 btn-group bg-btn-group">
       <button
         class="btn-filter"
         :class="{ active: activeFilter === '' }"
-        @click="activeFilter = ''"
+        @click="btnFilterAllReport"
       >
-        All Reports
+        ទាំងអស់
       </button>
 
       <button
         class="btn-filter"
-        :class="{ active: activeFilter === 'lost' }"
-        @click="activeFilter = 'lost'"
+        :class="{ active: activeFilter === 'LOST' }"
+        @click="btnFilterReportType('LOST')"
       >
-        Lost
+        បាត់
       </button>
 
       <button
         class="btn-filter"
-        :class="{ active: activeFilter === 'found' }"
-        @click="activeFilter = 'found'"
+        :class="{ active: activeFilter === 'FOUND' }"
+        @click="btnFilterReportType('FOUND')"
       >
-        Found
+        រកឃើញ
       </button>
 
       <button
         class="btn-filter"
-        :class="{ active: activeFilter === 'resolved' }"
-        @click="activeFilter = 'resolved'"
+        :class="{ active: activeFilter === 'RESOLVED' }"
+        @click="btnFilterReportStatus('RESOLVED')"
       >
-        Resolved
+        បានដោះស្រាយ
       </button>
     </div>
     <div class="row">
+      <!-- Loading -->
+      <div class="col-12 center2 p-3" v-if="reportStore.isLoadingGetAllReport">
+        <div class="spinner-border" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+      </div>
+      <!-- Not found  -->
       <div
-        class="col-12 col-md-6 col-lg-4 col-xl-3 mb-3"
+        v-else-if="reportStore.allReports.length <= 0"
+        class="my-3 col-12 center2"
+      >
+        <div class="w-100 d-flex flex-column align-items-center p-3 text-muted">
+          <i class="bi bi-exclamation-circle" style="font-size: 35px"></i>
+          <h3 class="m-0">មិនមាន​ ការរាយការណ៍</h3>
+        </div>
+      </div>
+      <div
+        v-else
+        class="col-12 col-md-6 col-lg-4 col-xl-3 mb-3 card-hover"
         v-for="report in reportStore.allReports"
         :key="report.id"
       >
-        <BaseReportCard>
-          <template #image>
-            <img
-              class="w-100"
-              style="max-height: 300px; object-fit: cover"
-              :src="
-                report.reportImages && report.reportImages.length > 0
-                  ? report.reportImages[0].name
-                  : defaultImage
-              "
-              :alt="report.title || 'Report Image'"
-            />
-            <span
-              class="tag type-tag"
-              :class="report.reportType.name.toLowerCase()"
-              >{{ report.reportType.name }}</span
-            >
-          </template>
-          <div class="py-2 mb-2">
-            <div class="d-flex gap-2">
-              <span class="tag">{{ report.category.name }}</span>
-              <span class="tag">{{ report.status }}</span>
-            </div>
-          </div>
-          <h4 class="card-title">{{ report.title }}</h4>
-          <p class="card-text text-muted desc text-clamp-2">
+        <router-link
+          :to="{ name: 'report-detail-user', params: { id: report.id } }"
+          class="link-detail"
+        >
+          <BaseReportCard
+            height="400px"
+            padding="p-0"
+            addClass="overflow-hidden"
+          >
+            <template #image>
+              <img
+                class="w-100"
+                style="max-height: 200px; object-fit: cover"
+                :src="
+                  report.reportImages && report.reportImages.length > 0
+                    ? report.reportImages[0].name
+                    : defaultImage
+                "
+                :alt="report.title || 'Report Image'"
+              />
+              <span
+                class="tag type-tag"
+                :class="report.reportType.name.toLowerCase()"
+                >{{ report.reportType.name }}</span
+              >
+            </template>
+            <div class="px-3">
+              <div class="py-2 mb-2">
+                <div class="d-flex gap-2">
+                  <span class="tag">{{ report.category.name }}</span>
+                  <span class="tag">{{ report.status }}</span>
+                </div>
+              </div>
+              <h4 class="card-title">{{ report.title }}</h4>
+              <!-- <p class="card-text text-muted desc text-clamp-2">
             {{ report.description }}
-          </p>
-          <ul class="detail">
-            <li>
-              <span class="icon">
-                <i class="bi bi-geo-alt-fill"></i>
-              </span>
-              <span class="text">{{ report.locationText }}</span>
-            </li>
-            <li>
-              <span class="icon">
-                <i class="bi bi-calendar2"></i>
-              </span>
-              <span class="text">{{ formatDate(report.eventDate) }}</span>
-            </li>
-          </ul>
-        </BaseReportCard>
+          </p> -->
+              <ul class="detail">
+                <li>
+                  <span class="icon">
+                    <i class="bi bi-geo-alt-fill"></i>
+                  </span>
+                  <span class="text">{{ report.locationText }}</span>
+                </li>
+                <li>
+                  <span class="icon">
+                    <i class="bi bi-calendar2"></i>
+                  </span>
+                  <span class="text">{{ formatDate(report.eventDate) }}</span>
+                </li>
+              </ul>
+            </div>
+          </BaseReportCard>
+        </router-link>
       </div>
     </div>
   </div>
@@ -137,7 +180,7 @@ const defaultImage =
 const search = ref("");
 const statusValue = ref("");
 const typeValue = ref("");
-const cateValue = ref("");
+const cateValue = ref(null);
 
 const fetchReports = async () => {
   await reportStore.getAllReports({
@@ -148,7 +191,7 @@ const fetchReports = async () => {
     sortBy: "createdAt",
     sortDir: "desc",
     reportType: typeValue.value,
-    categoryId: cateValue.value,
+    categoryId: cateValue.value?.id,
   });
   // console.log("PAGE:", page.value);
   // console.log("META:", reportStore.meta);
@@ -160,7 +203,7 @@ const activeFilter = ref("");
 onMounted(async () => {
   try {
     await Promise.all([categoryStore.fetchCategories(), fetchReports()]);
-    console.log(reportStore.allReports);
+    // console.log(reportStore.allReports);
 
     // default active
     activeFilter.value = "";
@@ -172,15 +215,59 @@ let timeout = null;
 watch([search, cateValue, typeValue, statusValue], () => {
   clearTimeout(timeout);
   timeout = setTimeout(fetchReports, 500);
-  console.log(reportStore.allReports);
-  console.log(cateValue.value);
+  // console.log(reportStore.allReports);
+  // console.log(cateValue.value);
 });
+const btnFilterAllReport = async () => {
+  try {
+    cateValue.value = null;
+    statusValue.value = "";
+    typeValue.value = "";
+    activeFilter.value = "";
+    await fetchReports();
+  } catch (error) {
+    console.error(error);
+  }
+};
+const btnFilterReportType = async (reportTypeValue) => {
+  try {
+    statusValue.value = "";
+    activeFilter.value = reportTypeValue;
+    typeValue.value = reportTypeValue;
+    await fetchReports();
+    console.log(reportStore.allReports);
+  } catch (error) {
+    console.error(error);
+  }
+};
+const btnFilterReportStatus = async (reportStatusValue) => {
+  try {
+    typeValue.value = "";
+    activeFilter.value = reportStatusValue;
+    statusValue.value = reportStatusValue;
+    await fetchReports();
+  } catch (error) {
+    console.error(error);
+  }
+};
+const clearFilter = () => {
+  search.value = "";
+  typeValue.value = "";
+  statusValue.value = "";
+  cateValue.value = null;
+  activeFilter.value = "";
+};
 </script>
 
 <style scoped>
-.desc {
-  height: 50px;
+.center2 {
+  display: flex !important;
+  justify-content: center;
+  align-items: center;
 }
+/* .desc {
+  height: 50px;
+} */
 .bg-btn-group {
   padding: 5px;
   background-color: rgba(226, 226, 226, 0.877);
@@ -212,6 +299,11 @@ watch([search, cateValue, typeValue, statusValue], () => {
   padding-inline: 15px;
   font-weight: 600;
   right: 15px;
+  top: 10px;
+  right: 10px;
+  box-shadow:
+    rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
+    rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
 }
 .text-clamp-2 {
   overflow: hidden;
@@ -242,5 +334,14 @@ watch([search, cateValue, typeValue, statusValue], () => {
 }
 .detail li .icon {
   font-size: 18px;
+}
+.link-detail {
+  text-decoration: none;
+}
+.card-hover {
+  transition: 0.3s linear;
+}
+.card-hover:hover {
+  transform: translate(-5px, -8px);
 }
 </style>

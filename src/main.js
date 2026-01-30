@@ -15,6 +15,7 @@ import BaseModal from "./components/base/BaseModal.vue";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import "bootstrap-icons/font/bootstrap-icons.css";
+import BaseTableUserPage from "./components/base/BaseTableUserPage.vue";
 
 const app = createApp(App);
 
@@ -31,6 +32,7 @@ app.component("BaseButton", BaseButton);
 app.component("BaseInput", BaseInput);
 app.component("BaseSelect", BaseSelect);
 app.component("BaseTable", BaseTable);
+app.component("BaseTableUserPage", BaseTableUserPage);
 app.component("BaseModal", BaseModal);
 
 app.mount("#app");

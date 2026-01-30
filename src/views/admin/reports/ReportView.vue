@@ -1,72 +1,58 @@
 <template>
   <div class="p-3">
-    <h2>Reports</h2>
+    <h2 class="fw-bold">Reports</h2>
     <p>View and manage all lost and found reports</p>
 
     <div class="row">
       <!-- FILTER CARD -->
-      <div class="col-12 mb-3">
-        <BaseReportCard>
-          <div class="row justify-content-center">
-            <!-- SEARCH -->
-            <div class="col-12 col-md-6 col-xl-4 center2 mb-2">
-              <input
-                type="text"
-                class="form-control"
-                placeholder="Search Report..."
-                v-model="search"
-              />
-            </div>
 
-            <!-- TYPE -->
-            <div class="col-12 col-md-6 col-xl-2 center2 mb-2">
-              <select class="form-select" v-model="typeValue">
-                <option value="">All Type</option>
-                <option
-                  v-for="type in reportStore.allReportType"
-                  :key="type.id"
-                  :value="type.id"
-                >
-                  {{ type.name }}
-                </option>
-              </select>
-            </div>
-
-            <!-- STATUS -->
-            <div class="col-12 col-md-6 col-xl-2 center2 mb-2">
-              <select class="form-select" v-model="statusValue">
-                <option value="">All Status</option>
-                <option
-                  v-for="status in allStatus"
-                  :key="status.value"
-                  :value="status.value"
-                >
-                  {{ status.title }}
-                </option>
-              </select>
-            </div>
-
-            <!-- CATEGORY -->
-            <div class="col-12 col-md-6 col-xl-2 center2 mb-2">
-              <select class="form-select" v-model="cateValue">
-                <option value="">All Category</option>
-                <option
-                  v-for="category in categoryStore.categories"
-                  :key="category.id"
-                  :value="category.id"
-                >
-                  {{ category.name }}
-                </option>
-              </select>
-            </div>
-            <!-- CLEAR FILTER -->
-            <div class="col-xl-2 pb-2 d-flex justify-content-end">
-              <BaseButton variant="dark" @click="clearFilter">
-                Clear filter
-              </BaseButton>
-            </div>
+      <div class="card mb-3 col-12 shadow">
+        <div class="card-body d-flex gap-3 align-items-start">
+          <div class="m-0 p-0" style="flex: 1">
+            <BaseInput
+              class="w-100"
+              v-model="search"
+              type="text"
+              placeholder="Search Report..."
+            />
           </div>
-        </BaseReportCard>
+          <div class="mt-2" style="flex: 1">
+            <BaseSelect
+              class="w-100"
+              v-model="typeValue"
+              :items="reportStore.allReportType"
+              textField="All Type"
+              labelField="name"
+              valueField="id"
+            />
+          </div>
+          <div class="mt-2" style="flex: 1">
+            <BaseSelect
+              class="w-100"
+              v-model="statusValue"
+              :items="allStatus"
+              textField="All Status"
+              labelField="title"
+              valueField="value"
+            />
+          </div>
+          <div class="mt-2" style="flex: 1">
+            <BaseSelect
+              class="w-100"
+              v-model="cateValue"
+              :items="categoryStore.categories"
+              textField="All Category"
+              labelField="name"
+              valueField="id"
+            />
+          </div>
+          <!-- CLEAR FILTER -->
+          <div class="mt-2 col-xl-2 pb-2 d-flex justify-content-end">
+            <BaseButton variant="dark" @click="clearFilter">
+              Clear filter
+            </BaseButton>
+          </div>
+        </div>
       </div>
 
       <div class="col-12 center2" v-if="reportStore.isLoadingGetAllReport">
@@ -74,23 +60,26 @@
           <span class="visually-hidden">Loading...</span>
         </div>
       </div>
+
+      <div
+        v-else-if="reportStore.allReports.length <= 0"
+        class="my-3 col-12 center2"
+      >
+        <div class="w-100 d-flex flex-column align-items-center p-3 text-muted">
+          <i class="bi bi-exclamation-circle" style="font-size: 35px"></i>
+          <h3 class="m-0">No Reports Found</h3>
+        </div>
+      </div>
       <!-- REPORT LIST -->
 
       <div v-else class="col-12">
         <div class="row">
           <div
-            v-if="reportStore.allReports.length <= 0"
-            class="my-3 col-12 center2"
-          >
-            <h3>No Report Found</h3>
-          </div>
-          <div
-            v-else
-            class="col-12 col-md-6 col-lg-4 col-xl-3 mb-3"
+            class="col-12 col-md-6 col-lg-3 mb-3"
             v-for="report in reportStore.allReports"
             :key="report.id"
           >
-            <BaseReportCard>
+            <BaseReportCard height="550px">
               <template #image>
                 <div class="image">
                   <img
@@ -117,11 +106,7 @@
                   </span>
                 </div>
 
-                <h4 class="card-title">{{ report.title }}</h4>
-
-                <span class="text-muted desc fs-5 text-clamp-2">
-                  {{ report.description }}
-                </span>
+                <h5 class="card-title">{{ report.title }}</h5>
 
                 <ul class="item-list mt-2">
                   <li class="fs-6">
@@ -149,10 +134,7 @@
                   </BaseButton>
                 </div>
 
-                <span
-                  class="d-block mt-2 py-1"
-                  style="height: 65px; font-size: 18px"
-                >
+                <span class="d-block mt-2 py-1" style="font-size: 16px">
                   Reported by <strong>{{ report.reporter.fullname }}</strong>
                 </span>
               </div>
@@ -165,7 +147,10 @@
 
     <!-- pagination -->
 
-    <div class="d-flex gap-2 justify-content-center my-3">
+    <div
+      v-if="reportStore.meta?.totalPages > 1"
+      class="d-flex gap-2 justify-content-center my-3"
+    >
       <BaseButton
         variant="danger"
         @click="PreviousPage"
@@ -174,14 +159,14 @@
         Prev
       </BaseButton>
 
-      <BaseButton
+      <!-- <BaseButton
         v-for="p in visiblePages"
         :key="p"
         :variant="p === page ? 'primary' : 'cancel'"
         @click="goToPage(p)"
       >
         {{ p }}
-      </BaseButton>
+      </BaseButton> -->
 
       <BaseButton
         variant="primary"
@@ -201,6 +186,7 @@ import BaseReportCard from "@/components/base/BaseReportCard.vue";
 import { useCategoryStore } from "@/stores/categoryStore";
 import { useReportStore } from "@/stores/reportStore";
 import { formatDate } from "@/utils/formatDate";
+
 import ReportDetail from "./ReportDetail.vue";
 
 const categoryStore = useCategoryStore();
@@ -339,15 +325,15 @@ const clearFilter = () => {
 };
 </script>
 <style scoped>
-.desc {
+/* .desc {
   height: 63px;
-}
+} */
 .desc .card-text {
   color: rgba(128, 128, 128, 0.679);
 }
 .image {
   width: 100%;
-  height: 300px;
+  height: 200px;
 }
 .image img {
   width: 100%;
@@ -389,7 +375,7 @@ const clearFilter = () => {
 }
 
 .center2 {
-  display: flex;
+  display: flex !important;
   justify-content: center;
   align-items: center;
 }
