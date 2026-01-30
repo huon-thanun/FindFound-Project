@@ -1,6 +1,6 @@
 <template>
   <div class="p-3">
-    <h2>Reports</h2>
+    <h2 class="fw-bold">Reports</h2>
     <p>View and manage all lost and found reports</p>
 
     <div class="row">
@@ -60,18 +60,21 @@
           <span class="visually-hidden">Loading...</span>
         </div>
       </div>
+
+      <div
+        v-else-if="reportStore.allReports.length <= 0"
+        class="my-3 col-12 center2"
+      >
+        <div class="w-100 d-flex flex-column align-items-center p-3 text-muted">
+          <i class="bi bi-exclamation-circle" style="font-size: 35px"></i>
+          <h3 class="m-0">No Reports Found</h3>
+        </div>
+      </div>
       <!-- REPORT LIST -->
 
       <div v-else class="col-12">
         <div class="row">
           <div
-            v-if="reportStore.allReports.length <= 0"
-            class="my-3 col-12 center2"
-          >
-            <h3>No Report Found</h3>
-          </div>
-          <div
-            v-else
             class="col-12 col-md-6 col-lg-3 mb-3"
             v-for="report in reportStore.allReports"
             :key="report.id"
@@ -144,7 +147,10 @@
 
     <!-- pagination -->
 
-    <div class="d-flex gap-2 justify-content-center my-3">
+    <div
+      v-if="reportStore.meta?.totalPages > 1"
+      class="d-flex gap-2 justify-content-center my-3"
+    >
       <BaseButton
         variant="danger"
         @click="PreviousPage"
