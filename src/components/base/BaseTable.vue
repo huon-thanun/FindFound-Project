@@ -1,6 +1,6 @@
 <template>
-  <div class="table-wrapper rounded-3 overflow-hidden">
-    <table class="table align-middle table-hover base-table mb-0">
+  <div class="table-wrapper table-scroll rounded-3">
+    <table class="table align-middle table-striped table-hover base-table mb-0">
       <thead>
         <tr>
           <th
@@ -34,12 +34,16 @@
         </tr>
 
         <!-- Data rows -->
-        <tr v-else v-for="item in items" :key="item.id" class="table-row">
+        <tr
+          v-else
+          v-for="item in items"
+          :key="item.id"
+          class="table-row" @click="$emit('rowClick', item)"
+        >
           <td
             v-for="col in columns"
             :key="col.key"
             class="truncate-cell ps-3"
-            @click="$emit('rowClick', item)"
           >
             <slot :name="`column-${col.key}`" :item="item">
               <div class="truncate-text" :title="item[col.key]">
@@ -48,18 +52,18 @@
             </slot>
           </td>
 
-          <td class="text-center truncate-cell">
+          <td class="text-center acirons-cell" @click.stop>
             <base-button
               variant="warning"
               class="me-2"
-              @click.stop="$emit('edit', item.id)"
+              @click="$emit('edit', item.id)"
             >
               <i class="bi bi-pencil-square"></i>
             </base-button>
 
             <base-button
               variant="danger"
-              @click.stop="$emit('delete', item.id)"
+              @click="$emit('delete', item.id)"
             >
               <i class="bi bi-trash3"></i>
             </base-button>
@@ -97,11 +101,25 @@ defineEmits(["edit", "delete", "rowClick"]);
   border-right: 1px solid var(--primary-color) !important;
 }
 /* ---------- Table ---------- */
-.base-table {
+.table-scroll {
   width: 100%;
-  table-layout: fixed;
-  border-collapse: collapse;
+  max-height: 550px;   /* 👈 adjust height */
+  overflow-x: auto;
+  overflow-y: auto;    /* 👈 vertical scroll */
 }
+
+.base-table {
+  min-width: 1100px;
+  table-layout: auto;
+  /* border-collapse: collapse; */
+}
+
+thead th {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
 .table-row {
   border-bottom: 1px solid var(--primary-color);
 }
@@ -123,6 +141,12 @@ defineEmits(["edit", "delete", "rowClick"]);
   cursor: pointer;
 }
 
+.acirons-cell {
+  overflow: visible;
+  cursor: pointer;
+  padding: 0.5rem !important;
+}
+
 .truncate-text {
   white-space: nowrap;
   overflow: hidden;
@@ -132,5 +156,13 @@ defineEmits(["edit", "delete", "rowClick"]);
 /* ---------- Row UX ---------- */
 .table-row:hover {
   background-color: #f8f9fa;
+}
+
+.table-row {
+  cursor: pointer;
+}
+
+.base-button {
+  cursor: default;
 }
 </style>

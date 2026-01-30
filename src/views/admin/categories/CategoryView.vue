@@ -17,7 +17,7 @@ const columns = [
     { key: "name", label: "Category Name" },
     { key: 'description', label: 'Description' },
     { key: 'createdAt', label: 'CreatedAt' },
-    // { key: 'updatedAt', label: 'UpdatedAt' }
+    { key: 'updatedAt', label: 'UpdatedAt' }
 ];
 
 const sortBy = ref(null);
@@ -34,17 +34,48 @@ const SORT_DIR_OPTIONS = [
     { id: "DESC", name: "Descending" },
 ];
 
-// const fetchCategories = async () => {
-//     try {
-//         isLoading.value = true;
-//         await categoryStore.fetchCategories({ search: search.value });
-//         categories.value = categoryStore.categories;
-//     } catch (err) {
-//         throw err;
-//     } finally {
-//         isLoading.value = false;
-//     }
-// };
+// ===== Validation =====
+const errors = ref({
+    create: {
+        name: "",
+        description: "",
+    },
+    edit: {
+        name: "",
+        description: "",
+    },
+});
+
+const validateCreate = () => {
+    errors.value.create.name = "";
+    errors.value.create.description = "";
+
+    if (!newCategoryName.value.trim()) {
+        errors.value.create.name = "Category name is required";
+    }
+
+    if (!newCategoryDescription.value.trim()) {
+        errors.value.create.description = "Description is required";
+    }
+
+    return !errors.value.create.name && !errors.value.create.description;
+};
+
+const validateEdit = () => {
+    errors.value.edit.name = "";
+    errors.value.edit.description = "";
+
+    if (!editName.value.trim()) {
+        errors.value.edit.name = "Category name is required";
+    }
+
+    if (!editDescription.value.trim()) {
+        errors.value.edit.description = "Description is required";
+    }
+
+    return !errors.value.edit.name && !errors.value.edit.description;
+};
+
 
 const fetchCategories = async () => {
     try {
@@ -120,7 +151,8 @@ const openEditModal = (id) => {
 };
 
 const confirmEdit = async () => {
-    if (!selectedCategory.value || !editName.value || !editDescription.value) return;
+    // if (!selectedCategory.value || !editName.value || !editDescription.value) return;
+    if (!validateEdit()) return
 
     try {
         isLoading.value = true;
@@ -154,8 +186,8 @@ const openCreateModal = () => {
 };
 
 const confirmCreate = async () => {
-    if (!newCategoryName.value.trim() || !newCategoryDescription.value.trim()) return;
-
+    // if (!newCategoryName.value.trim() || !newCategoryDescription.value.trim()) return;
+    if (!validateCreate()) return
     try {
         isLoading.value = true;
         // send payload to backend
@@ -203,27 +235,25 @@ const openDetailModal = (category) => {
         </div>
 
         <div class="card mb-3 shadow">
-            <div class="card-body">
-                <div class="row g-3 align-items-center">
+            <!-- <div class=""> -->
+            <div class="card-body d-flex gap-3 align-items-start">
 
-                    <!-- Search -->
-                    <div class="col-12 col-md-6 col-lg-4 mt-2">
-                        <BaseInput v-model="search" placeholder="Search category..." />
-                    </div>
+                <!-- Search -->
+                <div class="m-0 p-0" style="flex: 1">
+                    <BaseInput v-model="search" placeholder="Search category..." />
+                </div>
 
-                    <!-- Sort By -->
-                    <div class="col-12 col-md-6 col-lg-3 d-flex justify-content-center">
-                        <BaseSelect v-model="sortBy" :items="SORT_BY_OPTIONS" labelField="name" valueField="id"
-                            textField="Sort By" />
-                    </div> <!-- Sort Direction -->
-                    <div class="col-12 col-md-6 col-lg-3 d-flex justify-content-end">
-                        <BaseSelect v-model="sortDir" :items="SORT_DIR_OPTIONS" labelField="name" valueField="id"
-                            textField="Sort Direction" />
-                    </div>
-
-
+                <!-- Sort By -->
+                <div class="mt-2 p-0" style="flex: 1;">
+                    <BaseSelect v-model="sortBy" :items="SORT_BY_OPTIONS" labelField="name" valueField="id"
+                        textField="Sort By" />
+                </div> <!-- Sort Direction -->
+                <div class="mt-2 p-0" style="flex: 1;">
+                    <BaseSelect v-model="sortDir" :items="SORT_DIR_OPTIONS" labelField="name" valueField="id"
+                        textField="Sort Direction" class="text-nowrap"/>
                 </div>
             </div>
+            <!-- </div> -->
 
         </div>
 
@@ -241,7 +271,7 @@ const openDetailModal = (category) => {
         </BaseTable>
 
         <!-- DELETE MODAL -->
-        <BaseModal :isClose="showDeleteModal" title="Confirm Delete" @closeModal="showDeleteModal = false"
+        <BaseModal :isClose="showDeleteModal" theme="danger" title="Confirm Delete" @closeModal="showDeleteModal = false"
             icon="exclamation-triangle">
             <template #body>
                 <p>Are you sure you want to delete this category?</p>
@@ -262,8 +292,10 @@ const openDetailModal = (category) => {
         <BaseModal :isClose="showEditModal" title="Edit Category" @closeModal="showEditModal = false"
             icon="pencil-square">
             <template #body>
-                <input v-model="editName" class="form-control mb-3" />
-                <input v-model="editDescription" class="form-control" />
+                <BaseInput v-model="editName" label="Category Name" placeholder="Enter category name"
+                    :error="errors.edit.name" />
+                <BaseInput v-model="editDescription" label="Description" placeholder="Enter description"
+                    :error="errors.edit.description" />
             </template>
             <template #btnClose>
                 <BaseButton variant="cancel" @click="showEditModal = false" icon="x-circle">
@@ -281,8 +313,8 @@ const openDetailModal = (category) => {
         <BaseModal :isClose="showCreateModal" title="Create Category" @closeModal="showCreateModal = false"
             icon="plus-circle">
             <template #body>
-                <input v-model="newCategoryName" class="form-control mb-3" />
-                <input v-model="newCategoryDescription" class="form-control" />
+                <BaseInput v-model="newCategoryName" label="Category Name" placeholder="Enter category name" :error="errors.create.name" />
+                <BaseInput v-model="newCategoryDescription" label="Description" placeholder="Enter description" :error="errors.create.description" />
             </template>
 
             <template #btnClose>
