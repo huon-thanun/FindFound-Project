@@ -154,22 +154,87 @@ const router = createRouter({
         },
         {
           path: "reports",
-          name: "admin.reports",
-          component: ReportView,
+          name: "report.user",
+          component: ReportViewUser,
         },
         {
-          path: "users",
-          name: "admin.users",
-          component: UserView,
+          path: "reports/:id",
+          name: "report-detail-user",
+          component: ReportDetailView,
+          props: true,
         },
       ],
     },
 
+    /* ================= ADMIN AREA ================= */
+    {
+  path: "/admin",
+  component: AdminLayout,
+  meta: {
+    requiresAuth: true,
+    role: "admin",
+  },
+  redirect: { name: "admin.dashboard" },
+  children: [
+    {
+      path: "dashboard",
+      name: "admin.dashboard",
+      component: DashboardView,
+    },
+    {
+      path: "profile",
+      name: "admin.profile",
+      component: ProfileView,
+    },
+    {
+      path: "profile-edit",
+      name: "admin.profile.edit",
+      component: EditProfileView,
+    },
+    {
+      path: "categories",
+      name: "admin.categories",
+      component: CategoryView,
+    },
+    {
+      path: "reports",
+      name: "admin.reports",
+      component: ReportView,
+    },
+    {
+      path: "users",
+      name: "admin.users",
+      component: UserView,
+    },
+  ],
+},
+
+  /* ================= FALLBACK ================= */
     {
       path: "/:pathMatch(.*)*",
       redirect: "/login",
     },
   ],
+});
+
+/* ================= ROUTE GUARD ================= */
+router.beforeEach((to, from, next) => {
+  const token = localStorage.getItem("token");
+  const role = localStorage.getItem("role");
+
+  // Protect admin routes
+  if (to.meta.requiresAuth && to.meta.role === "admin") {
+    if (!token || role !== "admin") {
+      return next({ name: "admin.login" });
+    }
+  }
+
+  // Prevent admin from opening login again
+  if (to.name === "admin.login" && token && role === "admin") {
+    return next({ name: "admin.dashboard" });
+  }
+
+  next();
 });
 
 export default router;

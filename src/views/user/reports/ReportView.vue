@@ -6,7 +6,7 @@
         <p>រុករក និងមើលវត្ថុបាត់បង់ និងវត្ថុដែលបានរកឃើញទាំងអស់នៅក្នុងសហគមន៍</p>
       </div>
 
-      <BaseButton variant="primary" @click="" icon="plus-lg">
+      <BaseButton variant="primary" icon="plus-lg">
         បង្កើតការរាយការណ៍
       </BaseButton>
     </div>
