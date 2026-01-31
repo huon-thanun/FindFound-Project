@@ -17,7 +17,7 @@ const columns = [
     { key: "name", label: "Category Name" },
     { key: 'description', label: 'Description' },
     { key: 'createdAt', label: 'CreatedAt' },
-    { key: 'updatedAt', label: 'UpdatedAt' }
+    // { key: 'updatedAt', label: 'UpdatedAt' }
 ];
 
 const sortBy = ref(null);
@@ -229,28 +229,34 @@ const openDetailModal = (category) => {
                 <h2 class="fw-bold">Categories</h2>
                 <p class="text-muted">Create and manage categories for different types of Categories</p>
             </div>
-            <BaseButton variant="primary" @click="openCreateModal" icon="plus-circle">
+            <BaseButton class="d-none d-md-block" variant="primary" @click="openCreateModal" icon="plus-circle">
                 Create category
+            </BaseButton>
+            <BaseButton class="d-block d-md-none" variant="primary" @click="openCreateModal" icon="plus-circle">
+                create 
             </BaseButton>
         </div>
 
         <div class="card mb-3 shadow">
             <!-- <div class=""> -->
-            <div class="card-body d-flex gap-3 align-items-start">
+            <div class="card-body d-flex gap-3 align-items-start filter-row">
 
                 <!-- Search -->
-                <div class="m-0 p-0" style="flex: 1">
-                    <BaseInput v-model="search" placeholder="Search category..." />
+                <div class="filter-search">
+                    <BaseInput v-model="search" placeholder="Search by name or description..." />
                 </div>
 
-                <!-- Sort By -->
-                <div class="mt-2 p-0" style="flex: 1;">
-                    <BaseSelect v-model="sortBy" :items="SORT_BY_OPTIONS" labelField="name" valueField="id"
-                        textField="Sort By" />
-                </div> <!-- Sort Direction -->
-                <div class="mt-2 p-0" style="flex: 1;">
-                    <BaseSelect v-model="sortDir" :items="SORT_DIR_OPTIONS" labelField="name" valueField="id"
-                        textField="Sort Direction" class="text-nowrap"/>
+                <div class="d-flex gap-3 filter-column w-100">
+                    <!-- Sort By -->
+                    <div class="mt-sm-0 mt-md-2 p-0 filter-sort">
+                        <BaseSelect v-model="sortBy" :items="SORT_BY_OPTIONS" labelField="name" valueField="id"
+                        textField="Sort By" class="text-nowrap"/>
+                    </div>
+                    <!-- Sort Direction -->
+                    <div class="mt-sm-0 mt-md-2 p-0 filter-sort">
+                        <BaseSelect v-model="sortDir" :items="SORT_DIR_OPTIONS" labelField="name" valueField="id"
+                            textField="Sort Direction" class="text-nowrap"/>
+                    </div>
                 </div>
             </div>
             <!-- </div> -->
@@ -289,7 +295,7 @@ const openDetailModal = (category) => {
         </BaseModal>
 
         <!-- EDIT MODAL -->
-        <BaseModal :isClose="showEditModal" title="Edit Category" @closeModal="showEditModal = false"
+        <BaseModal :isClose="showEditModal" theme="warning" title="Edit Category" @closeModal="showEditModal = false"
             icon="pencil-square">
             <template #body>
                 <BaseInput v-model="editName" label="Category Name" placeholder="Enter category name"
@@ -310,7 +316,7 @@ const openDetailModal = (category) => {
         </BaseModal>
 
         <!-- CREATE MODAL -->
-        <BaseModal :isClose="showCreateModal" title="Create Category" @closeModal="showCreateModal = false"
+        <BaseModal :isClose="showCreateModal" theme="primary" title="Create Category" @closeModal="showCreateModal = false"
             icon="plus-circle">
             <template #body>
                 <BaseInput v-model="newCategoryName" label="Category Name" placeholder="Enter category name" :error="errors.create.name" />
@@ -335,7 +341,7 @@ const openDetailModal = (category) => {
             <template #body>
                 <div v-if="selectedCategoryDetail" class="text-start">
                     <p><strong>ID:</strong> {{ selectedCategoryDetail.id }}</p>
-                    <p><strong>Name:</strong> {{ selectedCategoryDetail.name }}</p>
+                    <p><strong>Name:</strong><span class="badge bg-danger ms-2 fw-normal"> {{ selectedCategoryDetail.name }}</span></p>
                     <p><strong>Description:</strong> {{ selectedCategoryDetail.description }}</p>
                     <p><strong>Created At:</strong> {{ formatDate(selectedCategoryDetail.createdAt) }}</p>
                     <p><strong>UpdatedAt At:</strong> {{ formatDate(selectedCategoryDetail.updatedAt) }}</p>
@@ -350,3 +356,34 @@ const openDetailModal = (category) => {
         </BaseModal>
     </div>
 </template>
+
+<style scoped>
+/* Default (LG and up) */
+.filter-row > div {
+  flex: 1;
+}
+
+.filter-column > div {
+    flex: 1;
+}
+
+/* SM screens */
+@media (max-width: 767.98px) {
+  .filter-row {
+    flex-direction: column;
+  }
+
+  .filter-column{
+    flex-direction: row;
+  }
+
+  .filter-search{
+    width: 100%;
+  }
+
+  .filter-sort{
+    width: 50%;
+    flex: 1;
+  }
+}
+</style>
