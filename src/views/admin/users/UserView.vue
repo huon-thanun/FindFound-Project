@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="p-3">
     <!-- Success Alert -->
     <div
       v-if="successMessage"
@@ -31,7 +31,7 @@
     <!-- Header -->
     <div class="d-flex justify-content-between mb-4 align-items-center">
       <div>
-        <h3 class="fw-bold">Users</h3>
+        <h2 class="fw-bold">Users</h2>
         <p class="text-muted">Manage system users</p>
       </div>
       <BaseButton
@@ -44,19 +44,19 @@
     </div>
 
     <!-- Filters -->
-    <div class="card mb-3">
-      <div class="card-body d-flex gap-3 align-items-start">
-        <div style="flex: 1" class=" p-0 m-0">
+    <div class="card mb-3 shadow">
+      <div class="card-body d-flex gap-3 align-items-start filter-row">
+        <div class="filter-search">
           <BaseInput
             type="text"
-            placeholder="Search by name or email"
+            placeholder="Search by name or email..."
             v-model="filters.search"
             @keyup.enter="resetAndLoadUsers"
           />
         
         </div>
-
-        <div class="mt-2 p-0" style="flex: 1">
+        <div class="d-flex gap-3 filter-column w-100">
+          <div class="mt-sm-0 mt-md-2 p-0 filter-sort">
           <BaseSelect
             :modelValue="
               sortOptions.find((o) => o.value === filters.sortBy) || null
@@ -70,7 +70,7 @@
           />
         </div>
 
-        <div class="mt-2 p-0" style="flex: 1">
+        <div class="mt-sm-0 mt-md-2 p-0 filter-sort">
           <BaseSelect
             :modelValue="
               statusOptions.find((o) => o.value === filters.status) || null
@@ -80,6 +80,7 @@
             valueField="value"
             @update:modelValue="(item) => (filters.status = item?.value || '')"
           />
+        </div>
         </div>
       </div>
     </div>
@@ -148,7 +149,6 @@
 
     <!-- VIEW USER MODAL -->
     <BaseModal
-    class=" align-items-start"
       title="User Detail"
       icon="person-circle"
       :theme="'primary'"
@@ -156,13 +156,15 @@
       @closeModal="showViewModal = false"
     >
       <template #body>
-        <p><b>ID:</b> {{ selectedUser?.id }}</p>
-        <p><b>Name:</b> {{ selectedUser?.fullname }}</p>
-        <p><b>Email:</b> {{ selectedUser?.email }}</p>
-        <p><b>Phone:</b> {{ selectedUser?.phoneNumber || '-' }}</p>
-        <p><b>Status:</b> {{ selectedUser?.status }}</p>
-        <p><b>Role:</b> {{ selectedUser?.role?.name }}</p>
-        <p><b>Registered:</b> {{ formatDate(selectedUser?.registeredAt) }}</p>
+        <div v-if="selectedUser" class="text-start">
+          <p><b>ID:</b> {{ selectedUser?.id }}</p>
+          <p><b>Name:</b> {{ selectedUser?.fullname }}</p>
+          <p><b>Email:</b> {{ selectedUser?.email }}</p>
+          <p><b>Phone:</b> {{ selectedUser?.phoneNumber || '-' }}</p>
+          <p><b>Status:</b><span class="badge ms-2 fw-normal" :class="selectedUser.status === 'ACTIVATED' ? 'bg-success' : 'bg-secondary'"> {{ selectedUser?.status }}</span></p>
+          <p><b>Role:</b> {{ selectedUser?.role?.name }}</p>
+          <p><b>Registered:</b> {{ formatDate(selectedUser?.registeredAt) }}</p>
+        </div>
       </template>
       <template #btnClose>
         <BaseButton
@@ -605,5 +607,34 @@ onMounted(() => resetAndLoadUsers());
 <style scoped>
 .pointer {
   cursor: pointer;
+}
+
+/* Default (LG and up) */
+.filter-row > div {
+  flex: 1;
+}
+
+.filter-column > div {
+    flex: 1;
+}
+
+/* SM screens */
+@media (max-width: 767.98px) {
+  .filter-row {
+    flex-direction: column;
+  }
+
+  .filter-column{
+    flex-direction: row;
+  }
+
+  .filter-search{
+    width: 100%;
+  }
+
+  .filter-sort{
+    width: 50%;
+    flex: 1;
+  }
 }
 </style>

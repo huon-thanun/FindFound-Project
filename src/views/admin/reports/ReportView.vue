@@ -1,7 +1,7 @@
 <template>
   <div class="p-3">
     <h2 class="fw-bold">Reports</h2>
-    <p>View and manage all lost and found reports</p>
+    <p class="text-muted">View and manage all lost and found reports</p>
 
     <div class="row">
       <!-- FILTER CARD -->

@@ -9,6 +9,8 @@ const search = ref("");
 let timeout = null;
 const isLoading = ref(false);
 const categories = ref([])
+const successMessage = ref('');
+const errorMessage = ref('');
 
 const gettoken = localStorage.getItem('token')
 
@@ -17,8 +19,15 @@ const columns = [
     { key: "name", label: "Category Name" },
     { key: 'description', label: 'Description' },
     { key: 'createdAt', label: 'CreatedAt' },
-    { key: 'updatedAt', label: 'UpdatedAt' }
+    // { key: 'updatedAt', label: 'UpdatedAt' }
 ];
+
+const showSuccess = (message) => {
+  successMessage.value = message;
+  setTimeout(() => {
+    successMessage.value = '';
+  }, 3000);
+};
 
 const sortBy = ref(null);
 const sortDir = ref(null);
@@ -127,7 +136,10 @@ const confirmDelete = async () => {
 
         showDeleteModal.value = false
         selectedCategoryId.value = null
+        showSuccess(`Deleted category successfully`);
     } catch (err) {
+        let errorMsg = 'Failed to delete category. Please try again.';
+        errorMessage.value = errorMsg;
         throw err
     } finally {
         isLoading.value = false
@@ -167,7 +179,10 @@ const confirmEdit = async () => {
         showEditModal.value = false;
         editName.value = "";
         editDescription.value = "";
+        showSuccess(`Updated category successfully`);
     } catch (err) {
+        let errorMsg = 'Failed to update category. Please try again.';
+        errorMessage.value = errorMsg;
         throw err
     } finally {
         isLoading.value = false;
@@ -201,9 +216,12 @@ const confirmCreate = async () => {
             showCreateModal.value = false;
             newCategoryName.value = "";
             newCategoryDescription.value = "";
+            showSuccess(`Create category successfully`);
         }
 
     } catch (err) {
+        let errorMsg = 'Failed to create category. Please try again.';
+        errorMessage.value = errorMsg;
         throw err
     } finally {
         isLoading.value = false
@@ -224,33 +242,52 @@ const openDetailModal = (category) => {
 
 <template>
     <div class="p-3">
+
+        <!-- Success Alert -->
+        <div v-if="successMessage" class="alert alert-success alert-dismissible fade show mb-4" role="alert">
+            {{ successMessage }}
+            <button type="button" class="btn-close" @click="successMessage = ''"></button>
+        </div>
+
+        <!-- Error Alert -->
+        <div v-if="errorMessage" class="alert alert-danger alert-dismissible fade show mb-4" role="alert">
+            {{ errorMessage }}
+            <button type="button" class="btn-close" @click="errorMessage = ''"></button>
+        </div>
+
         <div class="d-flex justify-content-between align-items-center mb-3">
             <div>
                 <h2 class="fw-bold">Categories</h2>
                 <p class="text-muted">Create and manage categories for different types of Categories</p>
             </div>
-            <BaseButton variant="primary" @click="openCreateModal" icon="plus-circle">
+            <BaseButton class="d-none d-md-block" variant="primary" @click="openCreateModal" icon="plus-circle">
                 Create category
+            </BaseButton>
+            <BaseButton class="d-block d-md-none d-flex" variant="primary" @click="openCreateModal" icon="plus-circle">
+                create 
             </BaseButton>
         </div>
 
         <div class="card mb-3 shadow">
             <!-- <div class=""> -->
-            <div class="card-body d-flex gap-3 align-items-start">
+            <div class="card-body d-flex gap-3 align-items-start filter-row">
 
                 <!-- Search -->
-                <div class="m-0 p-0" style="flex: 1">
-                    <BaseInput v-model="search" placeholder="Search category..." />
+                <div class="filter-search">
+                    <BaseInput v-model="search" placeholder="Search by name or description..." />
                 </div>
 
-                <!-- Sort By -->
-                <div class="mt-2 p-0" style="flex: 1;">
-                    <BaseSelect v-model="sortBy" :items="SORT_BY_OPTIONS" labelField="name" valueField="id"
-                        textField="Sort By" />
-                </div> <!-- Sort Direction -->
-                <div class="mt-2 p-0" style="flex: 1;">
-                    <BaseSelect v-model="sortDir" :items="SORT_DIR_OPTIONS" labelField="name" valueField="id"
-                        textField="Sort Direction" class="text-nowrap"/>
+                <div class="d-flex gap-3 filter-column w-100">
+                    <!-- Sort By -->
+                    <div class="mt-sm-0 mt-md-2 p-0 filter-sort">
+                        <BaseSelect v-model="sortBy" :items="SORT_BY_OPTIONS" labelField="name" valueField="id"
+                        textField="Sort By" class="text-nowrap"/>
+                    </div>
+                    <!-- Sort Direction -->
+                    <div class="mt-sm-0 mt-md-2 p-0 filter-sort">
+                        <BaseSelect v-model="sortDir" :items="SORT_DIR_OPTIONS" labelField="name" valueField="id"
+                            textField="Sort Direction" class="text-nowrap"/>
+                    </div>
                 </div>
             </div>
             <!-- </div> -->
@@ -289,7 +326,7 @@ const openDetailModal = (category) => {
         </BaseModal>
 
         <!-- EDIT MODAL -->
-        <BaseModal :isClose="showEditModal" title="Edit Category" @closeModal="showEditModal = false"
+        <BaseModal :isClose="showEditModal" theme="warning" title="Edit Category" @closeModal="showEditModal = false"
             icon="pencil-square">
             <template #body>
                 <BaseInput v-model="editName" label="Category Name" placeholder="Enter category name"
@@ -310,7 +347,7 @@ const openDetailModal = (category) => {
         </BaseModal>
 
         <!-- CREATE MODAL -->
-        <BaseModal :isClose="showCreateModal" title="Create Category" @closeModal="showCreateModal = false"
+        <BaseModal :isClose="showCreateModal" theme="primary" title="Create Category" @closeModal="showCreateModal = false"
             icon="plus-circle">
             <template #body>
                 <BaseInput v-model="newCategoryName" label="Category Name" placeholder="Enter category name" :error="errors.create.name" />
@@ -335,7 +372,7 @@ const openDetailModal = (category) => {
             <template #body>
                 <div v-if="selectedCategoryDetail" class="text-start">
                     <p><strong>ID:</strong> {{ selectedCategoryDetail.id }}</p>
-                    <p><strong>Name:</strong> {{ selectedCategoryDetail.name }}</p>
+                    <p><strong>Name:</strong><span class="badge bg-success ms-2 fw-normal"> {{ selectedCategoryDetail.name }}</span></p>
                     <p><strong>Description:</strong> {{ selectedCategoryDetail.description }}</p>
                     <p><strong>Created At:</strong> {{ formatDate(selectedCategoryDetail.createdAt) }}</p>
                     <p><strong>UpdatedAt At:</strong> {{ formatDate(selectedCategoryDetail.updatedAt) }}</p>
@@ -350,3 +387,34 @@ const openDetailModal = (category) => {
         </BaseModal>
     </div>
 </template>
+
+<style scoped>
+/* Default (LG and up) */
+.filter-row > div {
+  flex: 1;
+}
+
+.filter-column > div {
+    flex: 1;
+}
+
+/* SM screens */
+@media (max-width: 767.98px) {
+  .filter-row {
+    flex-direction: column;
+  }
+
+  .filter-column{
+    flex-direction: row;
+  }
+
+  .filter-search{
+    width: 100%;
+  }
+
+  .filter-sort{
+    width: 50%;
+    flex: 1;
+  }
+}
+</style>
