@@ -17,11 +17,11 @@
     <nav class="nav-menu">
       <router-link to="/" class="nav-item"> Dashboard </router-link>
 
-      <router-link to="/about" class="nav-item"> Users </router-link>
+      <router-link to="about" class="nav-item"> Users </router-link>
 
       <router-link to="/about" class="nav-item"> Categories </router-link>
 
-      <router-link to="/about" class="nav-item"> Reports </router-link>
+      <router-link to="reports" class="nav-item"> Reports </router-link>
     </nav>
 
     <!-- User Section -->
@@ -44,9 +44,9 @@
           icon="plus-circle"
           variant="secondary"
         >
-          Lost
+          បាត់
         </base-button>
-        <base-button class="handle-btn" icon="plus-circle"> Found </base-button>
+        <base-button class="handle-btn" icon="plus-circle"> រកឃើញ </base-button>
       </div>
     </div>
 
@@ -110,18 +110,18 @@
                 :class="{ active: activeLink === 'home' }"
                 @click.prevent="setActive('home')"
               >
-                Home
+                ទំព័រ​ដើម
               </router-link>
             </li>
 
             <li class="nav-item">
               <router-link
-                to=""
+                to="reports"
                 class="nav-link-custom"
                 :class="{ active: activeLink === 'reports' }"
                 @click.prevent="setActive('reports')"
               >
-                Reports
+                របាយការណ៍
               </router-link>
             </li>
 
@@ -138,12 +138,12 @@
 
             <li class="nav-item">
               <router-link
-                to=""
+                to="about"
                 class="nav-link-custom"
                 :class="{ active: activeLink === 'about' }"
                 @click.prevent="setActive('about')"
               >
-                About
+                អំពី​យើង
               </router-link>
             </li>
 
@@ -154,7 +154,7 @@
                 :class="{ active: activeLink === 'contact' }"
                 @click.prevent="setActive('contact')"
               >
-                Contact
+                ទំនាក់ទំនង
               </router-link>
             </li>
           </ul>
@@ -167,19 +167,19 @@
         class="btn-active d-flex align-items-center gap-3"
       >
         <base-button icon="person-circle" variant="secondary" class="btn-login">
-          Login
+          ចូល
         </base-button>
         <base-button icon="person-plus-fill" class="btn-register">
-          Register
+          ចុះឈ្មោះ
         </base-button>
       </div>
 
       <!-- SHOW Lost / Found when HAS token -->
       <div v-else class="d-flex align-items-center gap-3">
         <base-button icon="plus-circle" variant="secondary" class="btn-lost">
-          Lost
+          បាត់
         </base-button>
-        <base-button icon="plus-circle" class="btn-found"> Found </base-button>
+        <base-button icon="plus-circle" class="btn-found"> រកឃើញ </base-button>
         <div>
           <!-- User Profile Dropdown -->
           <div class="user-profile">
@@ -198,7 +198,7 @@
                   alt="User Avatar"
                 />
                 <div class="user-info">
-                  <h6>John Doe</h6>
+                  <h6>{{ profileStore.fullname }}</h6>
                   <p>john.doe@email.com</p>
                 </div>
               </div>
@@ -206,24 +206,24 @@
               <!-- Menu Items -->
               <router-link to="" class="dropdown-item-custom">
                 <i class="bi bi-person"></i>
-                <span>My Profile</span>
+                <span>ប្រវត្តិរូបរបស់ខ្ញុំ</span>
               </router-link>
 
               <router-link to="" class="dropdown-item-custom">
                 <i class="bi bi-file-earmark-text"></i>
-                <span>My Reports</span>
+                <span>របាយការណ៍របស់ខ្ញុំ</span>
               </router-link>
 
               <router-link to="" class="dropdown-item-custom">
                 <i class="bi bi-gear"></i>
-                <span>Settings</span>
+                <span>ការកំណត់</span>
               </router-link>
 
               <div class="dropdown-divider-custom"></div>
 
               <router-link to="" class="dropdown-item-custom">
                 <i class="bi bi-question-circle"></i>
-                <span>Help & Support</span>
+                <span>ជំនួយ និងការគាំទ្រ</span>
               </router-link>
 
               <a
@@ -232,7 +232,7 @@
                 class="dropdown-item-custom dropdown-item-logout"
               >
                 <i class="bi bi-box-arrow-right"></i>
-                <span>Logout</span>
+                <span>ចាកចាញ</span>
               </a>
             </div>
           </div>
@@ -240,7 +240,7 @@
       </div>
     </div>
     <BaseModal
-      :title="'Logout'"
+      :title="'ចាកចាញ'"
       :icon="'exclamation-triangle'"
       :theme="'danger'"
       :isClose="showModal"
@@ -255,12 +255,12 @@
           icon="x-circle"
           class="col-6"
           @click="isClose"
-          >Close</BaseButton
+          >បិទ</BaseButton
         >
       </template>
       <template #btnActive>
         <BaseButton icon="check-circle" variant="danger" class="col-6"
-          >Confirm</BaseButton
+          >បញ្ជាក់</BaseButton
         >
       </template>
     </BaseModal>
@@ -269,8 +269,11 @@
 
 <script setup>
 import { ref, computed, onMounted } from "vue";
-
+import { useProfileStore } from "@/stores/profileStore";
 const activeLink = ref("home");
+const profileStore = useProfileStore();
+console.log("profile", profileStore.profile);
+
 
 // simulate token (later replace with Pinia / real auth)
 const token = ref(null);

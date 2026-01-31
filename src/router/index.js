@@ -102,17 +102,17 @@ const router = createRouter({
           component: AboutView,
         },
         //  /* ===== USER REPORTS ===== */
-        // {
-        //   path: "reports",
-        //   name: "report.user",
-        //   component: ReportViewUser,
-        // },
-        // {
-        //   path: "reports/:id",
-        //   name: "report-detail-user",
-        //   component: ReportDetailView,
-        //   props: true,
-        // },
+        {
+          path: "reports",
+          name: "report.user",
+          component: ReportViewUser,
+        },
+        {
+          path: "reports/:id",
+          name: "report-detail-user",
+          component: ReportDetailView,
+          props: true,
+        },
       ],
     },
 

@@ -124,4 +124,18 @@ const onInput = (event) => {
   cursor: pointer;
 }
 
+.form-control {
+  outline: none;
+  box-shadow: none;
+  border: 1px solid #d1d5db;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Focus state */
+.form-control:focus {
+  border-color: var(--primary-color); /* primary */
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.25);
+  outline: none;
+}
+
 </style>
