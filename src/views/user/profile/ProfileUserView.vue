@@ -1,224 +1,291 @@
 <template>
-  <div class="container-fluid bg-light min-vh-100 py-5">
-    <div class="container">
+  <div class="profile-layout bg-light py-5">
+    <div class="container mt-4">
       <div class="row g-4">
-        <!-- LEFT PROFILE CARD -->
-        <div class="col-lg-3">
-          <div class="card border-0 shadow rounded-4 text-center p-4">
-            <img
-              :src="previewAvatar || form.avatar || '/default-avatar.png'"
-              class="rounded-circle border mb-3"
-              style="width: 130px; height: 130px; object-fit: cover"
-            />
-            <h5 class="mb-0">{{ form.fullname }}</h5>
-            <small class="text-muted">{{ form.role }}</small>
-            <div class="badge bg-success mt-2">{{ form.status }}</div>
+        <div class="col-lg-4 col-xl-3">
+          <div
+            class="card profile-sidebar border-0 shadow-sm rounded-4 overflow-hidden mb-4"
+          >
+            <div class="profile-header-bg"></div>
+            <div class="card-body pt-0 text-center">
+              <div class="avatar-wrapper">
+                <img
+                  :src="previewAvatar || form.avatar || '/default-avatar.png'"
+                  class="profile-avatar shadow"
+                />
+                <label for="avatarInput" class="avatar-edit-btn">
+                  <i class="fas fa-camera"></i>
+                </label>
+                <input
+                  type="file"
+                  id="avatarInput"
+                  hidden
+                  @change="onAvatarSelected"
+                />
+              </div>
 
-            <hr />
+              <h5 class="fw-bold mt-3 mb-1">{{ form.fullname }}</h5>
+              <p class="text-muted small mb-2">{{ form.role }}</p>
+              <span class="badge status-badge mb-3">{{ form.status }}</span>
 
-            <input
-              type="file"
-              class="form-control form-control-sm mb-2"
-              @change="onAvatarSelected"
-            />
-
-            <div class="d-flex gap-2">
-              <button
-                v-if="previewAvatar"
-                class="btn btn-primary btn-sm w-100"
-                @click="uploadAvatar"
-              >
-                Upload
-              </button>
-              <button
-                class="btn btn-outline-danger btn-sm w-100"
-                @click="deleteAvatar"
-              >
-                Remove
-              </button>
+              <div class="d-flex gap-2 px-3 pb-3" v-if="previewAvatar">
+                <button
+                  class="btn btn-primary btn-sm w-100 rounded-pill"
+                  @click="uploadAvatar"
+                >
+                  Save Photo
+                </button>
+                <button
+                  class="btn btn-light btn-sm w-100 rounded-pill"
+                  @click="previewAvatar = null"
+                >
+                  Cancel
+                </button>
+              </div>
             </div>
 
-            <!-- Static Skills -->
-            <div class="mt-4 text-start">
-              <h6 class="mb-2">Skills</h6>
-              <ul class="list-group list-group-flush">
-                <li class="list-group-item py-1">HTML</li>
-                <li class="list-group-item py-1">CSS</li>
-                <li class="list-group-item py-1">JavaScript</li>
-                <li class="list-group-item py-1">Vue.js</li>
-                <li class="list-group-item py-1">MySQL</li>
-              </ul>
+            <div class="list-group list-group-flush border-top border-light">
+              <button
+                @click="activeTab = 'overview'"
+                :class="[
+                  'list-group-item list-group-item-action border-0 py-3',
+                  { active: activeTab === 'overview' },
+                ]"
+              >
+                <i class="fas fa-user-circle me-3"></i>Overview
+              </button>
+              <button
+                @click="activeTab = 'edit'"
+                :class="[
+                  'list-group-item list-group-item-action border-0 py-3',
+                  { active: activeTab === 'edit' },
+                ]"
+              >
+                <i class="fas fa-user-edit me-3"></i>Edit Profile
+              </button>
+              <button
+                @click="activeTab = 'security'"
+                :class="[
+                  'list-group-item list-group-item-action border-0 py-3',
+                  { active: activeTab === 'security' },
+                ]"
+              >
+                <i class="fas fa-shield-alt me-3"></i>Security
+              </button>
+            </div>
+          </div>
+
+          <div class="card border-0 shadow-sm rounded-4 p-4">
+            <h6 class="fw-bold mb-3">
+              <i class="fas fa-brain me-2 text-primary"></i>Skills
+            </h6>
+            <div class="d-flex flex-wrap gap-2">
+              <span
+                v-for="skill in ['HTML', 'CSS', 'JS', 'Vue', 'MySQL']"
+                :key="skill"
+                class="skill-tag"
+              >
+                {{ skill }}
+              </span>
             </div>
           </div>
         </div>
 
-        <!-- RIGHT CONTENT -->
-        <div class="col-lg-9">
-          <!-- TABS -->
-          <ul class="nav nav-tabs mb-4">
-            <li class="nav-item">
-              <button
-                class="nav-link"
-                :class="{ active: activeTab === 'overview' }"
-                @click="activeTab = 'overview'"
+        <div class="col-lg-8 col-xl-9">
+          <transition name="fade" mode="out-in">
+            <div
+              v-if="activeTab === 'overview'"
+              key="overview"
+              class="card border-0 shadow-sm p-4 rounded-4 h-100"
+            >
+              <div
+                class="d-flex justify-content-between align-items-center mb-4"
               >
-                Overview
-              </button>
-            </li>
-            <li class="nav-item">
-              <button
-                class="nav-link"
-                :class="{ active: activeTab === 'edit' }"
-                @click="activeTab = 'edit'"
-              >
-                Edit Profile
-              </button>
-            </li>
-            <li class="nav-item">
-              <button
-                class="nav-link"
-                :class="{ active: activeTab === 'security' }"
-                @click="activeTab = 'security'"
-              >
-                Security
-              </button>
-            </li>
-          </ul>
-
-          <!-- OVERVIEW -->
-          <div
-            v-if="activeTab === 'overview'"
-            class="card border-0 shadow p-4 rounded-4"
-          >
-            <h5 class="mb-4">Profile Overview</h5>
-            <div class="row">
-              <div class="col-md-6"><b>Name:</b> {{ form.fullname }}</div>
-              <div class="col-md-6"><b>Email:</b> {{ form.email }}</div>
-              <div class="col-md-6 mt-3">
-                <b>Phone:</b> {{ form.phoneNumber ?? "Not provided" }}
-              </div>
-              <div class="col-md-6 mt-3">
-                <b>Telegram:</b> {{ form.telegramLink ?? "Not provided" }}
-              </div>
-              <div class="col-md-6 mt-3"><b>Role:</b> {{ form.role }}</div>
-              <div class="col-md-6 mt-3"><b>Status:</b> {{ form.status }}</div>
-            </div>
-          </div>
-
-          <!-- EDIT PROFILE -->
-          <div
-            v-if="activeTab === 'edit'"
-            class="card border-0 shadow p-4 rounded-4"
-          >
-            <h5 class="mb-4">Edit Profile</h5>
-            <div class="row">
-              <div class="col-md-6 mb-3">
-                <label class="form-label">Full Name</label>
-                <input
-                  v-model="form.fullname"
-                  class="form-control form-control-lg"
-                />
-              </div>
-              <div class="col-md-6 mb-3">
-                <label class="form-label">Phone</label>
-                <input
-                  v-model="form.phoneNumber"
-                  class="form-control form-control-lg"
-                />
-              </div>
-              <div class="col-md-12 mb-4">
-                <label class="form-label">Telegram</label>
-                <input
-                  v-model="form.telegramLink"
-                  class="form-control form-control-lg"
-                />
-              </div>
-            </div>
-            <button class="btn btn-primary btn-lg w-100" @click="updateProfile">
-              Save Changes
-            </button>
-          </div>
-
-          <!-- SECURITY -->
-          <div v-if="activeTab === 'security'" class="row g-4">
-            <div class="col-md-6">
-              <div class="card border-0 shadow p-4 rounded-4 h-100">
-                <h5 class="mb-3">Change Password</h5>
-                <input
-                  type="password"
-                  v-model="currentPassword"
-                  class="form-control form-control-lg mb-3"
-                  placeholder="Current Password"
-                />
-                <input
-                  type="password"
-                  v-model="newPassword"
-                  class="form-control form-control-lg mb-4"
-                  placeholder="New Password"
-                />
+                <h5 class="fw-bold mb-0">General Information</h5>
                 <button
-                  class="btn btn-warning btn-lg w-100"
-                  @click="changePassword"
+                  class="btn btn-light btn-sm rounded-circle"
+                  @click="activeTab = 'edit'"
                 >
-                  Update Password
+                  <i class="fas fa-pen text-muted"></i>
                 </button>
               </div>
+              <div class="row g-4">
+                <div class="col-md-6 info-group">
+                  <label class="small text-muted text-uppercase fw-bold"
+                    >Full Name</label
+                  >
+                  <p class="mb-0 fs-6">{{ form.fullname }}</p>
+                </div>
+                <div class="col-md-6 info-group">
+                  <label class="small text-muted text-uppercase fw-bold"
+                    >Email Address</label
+                  >
+                  <p class="mb-0 fs-6">{{ form.email }}</p>
+                </div>
+                <div class="col-md-6 info-group">
+                  <label class="small text-muted text-uppercase fw-bold"
+                    >Phone Number</label
+                  >
+                  <p class="mb-0 fs-6">{{ form.phoneNumber || "—" }}</p>
+                </div>
+                <div class="col-md-6 info-group">
+                  <label class="small text-muted text-uppercase fw-bold"
+                    >Telegram</label
+                  >
+                  <p class="mb-0 fs-6">{{ form.telegramLink || "—" }}</p>
+                </div>
+              </div>
             </div>
 
-            <div class="col-md-6">
-              <div class="card border-0 shadow p-4 rounded-4 h-100">
-                <h5 class="mb-3">Change Email</h5>
-                <input
-                  v-model="newEmail"
-                  class="form-control form-control-lg mb-3"
-                  placeholder="New Email"
-                />
-                <input
-                  type="password"
-                  v-model="currentPassword"
-                  class="form-control form-control-lg mb-4"
-                  placeholder="Confirm Password"
-                />
-                <button
-                  class="btn btn-primary btn-lg w-100"
-                  @click="requestChangeEmail"
-                >
-                  Send Verification
-                </button>
-
-                <div v-if="showVerifyInput" class="mt-3">
+            <div
+              v-else-if="activeTab === 'edit'"
+              key="edit"
+              class="card border-0 shadow-sm p-4 rounded-4 h-100"
+            >
+              <h5 class="fw-bold mb-4">Personal Settings</h5>
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <label class="form-label small fw-bold">Full Name</label>
                   <input
-                    v-model="emailVerifyToken"
-                    class="form-control form-control-lg mb-2"
-                    placeholder="Verification Code"
+                    v-model="form.fullname"
+                    class="form-control custom-input"
+                    placeholder="John Doe"
                   />
-                  <button class="btn btn-success w-100" @click="verifyNewEmail">
-                    Verify Email
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label small fw-bold">Phone</label>
+                  <input
+                    v-model="form.phoneNumber"
+                    class="form-control custom-input"
+                    placeholder="+855..."
+                  />
+                </div>
+                <div class="col-12 mb-3">
+                  <label class="form-label small fw-bold"
+                    >Telegram Username</label
+                  >
+                  <div class="input-group">
+                    <span class="input-group-text border-0 bg-light text-muted"
+                      >@</span
+                    >
+                    <input
+                      v-model="form.telegramLink"
+                      class="form-control custom-input"
+                      placeholder="username"
+                    />
+                  </div>
+                </div>
+                <div class="col-12 mt-auto">
+                  <button
+                    class="btn btn-primary btn-lg w-100 rounded-3 shadow-sm"
+                    @click="updateProfile"
+                  >
+                    Save Profile Changes
                   </button>
                 </div>
               </div>
             </div>
-          </div>
-        </div>
-      </div>
 
-      <!-- SUCCESS MODAL -->
-      <div v-if="showSuccessModal" class="modal-backdrop">
-        <div class="modal-content">
-          <h5>Success!</h5>
-          <p>{{ successMessage }}</p>
-          <button
-            class="btn btn-primary w-100"
-            @click="showSuccessModal = false"
-          >
-            Close
-          </button>
+            <div
+              v-else-if="activeTab === 'security'"
+              key="security"
+              class="h-100"
+            >
+              <div class="row g-4 h-100">
+                <div class="col-md-6">
+                  <div class="card border-0 shadow-sm p-4 rounded-4 h-100">
+                    <h6 class="fw-bold mb-3">Update Password</h6>
+                    <div class="mb-3">
+                      <input
+                        type="password"
+                        v-model="currentPassword"
+                        class="form-control custom-input"
+                        placeholder="Current Password"
+                      />
+                    </div>
+                    <div class="mb-4">
+                      <input
+                        type="password"
+                        v-model="newPassword"
+                        class="form-control custom-input"
+                        placeholder="New Password"
+                      />
+                    </div>
+                    <button
+                      class="btn btn-dark w-100 mt-auto rounded-3 py-2"
+                      @click="changePassword"
+                    >
+                      Save Password
+                    </button>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="card border-0 shadow-sm p-4 rounded-4 h-100">
+                    <h6 class="fw-bold mb-3">Linked Email</h6>
+                    <div class="mb-3">
+                      <input
+                        v-model="newEmail"
+                        class="form-control custom-input"
+                        placeholder="Enter new email address"
+                      />
+                    </div>
+                    <button
+                      class="btn btn-outline-primary w-100 mt-auto rounded-3 py-2"
+                      @click="requestChangeEmail"
+                    >
+                      Request Change
+                    </button>
+
+                    <div
+                      v-if="showVerifyInput"
+                      class="mt-3 p-3 bg-light rounded-3"
+                    >
+                      <input
+                        v-model="emailVerifyToken"
+                        class="form-control form-control-sm mb-2"
+                        placeholder="Code from email"
+                      />
+                      <button
+                        class="btn btn-success btn-sm w-100"
+                        @click="verifyNewEmail"
+                      >
+                        Confirm Verification
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </transition>
         </div>
       </div>
     </div>
+
+    <transition name="modal-fade">
+      <div
+        v-if="showSuccessModal"
+        class="custom-modal-backdrop"
+        @click.self="showSuccessModal = false"
+      >
+        <div
+          class="custom-modal-content card border-0 shadow-lg text-center p-4"
+        >
+          <div class="success-icon mb-3">
+            <i class="fas fa-check-circle fa-3x text-success"></i>
+          </div>
+          <h4 class="fw-bold">Awesome!</h4>
+          <p class="text-muted">{{ successMessage }}</p>
+          <button
+            class="btn btn-primary w-100 rounded-pill py-2"
+            @click="showSuccessModal = false"
+          >
+            Got it!
+          </button>
+        </div>
+      </div>
+    </transition>
   </div>
 </template>
-
 <script setup>
 import { ref, reactive, onMounted } from "vue";
 
@@ -378,108 +445,153 @@ const verifyNewEmail = async () => {
   }
 };
 </script>
-
 <style scoped>
 @import url("https://fonts.googleapis.com/css2?family=Kantumruy:wght@400;500;700&display=swap");
+@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css");
 
 * {
   font-family: "Kantumruy", sans-serif;
 }
 
-.container-fluid {
-  background-color: #f8f9fa;
+.profile-layout {
+  background-color: #f0f2f5;
   min-height: 100vh;
-  padding: 60px 0;
 }
 
-/* Cards */
-.card {
-  border-radius: 16px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-  transition: all 0.3s;
+/* Sidebar Decorations */
+.profile-sidebar {
+  position: relative;
+}
+.profile-header-bg {
+  height: 80px;
+  background: linear-gradient(135deg, #3b1e54 0%, #5c3976 100%);
+}
+.avatar-wrapper {
+  position: relative;
+  margin-top: -65px;
+  display: inline-block;
+}
+.profile-avatar {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  border: 5px solid white;
+  object-fit: cover;
+}
+.avatar-edit-btn {
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
+  background: #3b1e54;
+  color: white;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border: 2px solid white;
 }
 
-.card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+/* Status Badge */
+.status-badge {
+  background-color: rgba(40, 167, 69, 0.1);
+  color: #28a745;
+  border-radius: 20px;
+  padding: 6px 15px;
+}
+
+/* Custom Menu Styling */
+.list-group-item {
+  cursor: pointer;
+  color: #6c757d;
+  font-weight: 500;
+  transition: 0.2s;
+}
+.list-group-item.active {
+  background-color: #f8f9fa;
+  color: #3b1e54;
+  border-right: 4px solid #3b1e54 !important;
+  font-weight: 700;
+}
+.list-group-item:hover:not(.active) {
+  background-color: #fdfdfd;
+  padding-left: 2rem;
+}
+
+/* Skill Tags */
+.skill-tag {
+  background: #e9ecef;
+  color: #495057;
+  padding: 5px 12px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+/* Form Controls */
+.custom-input {
+  border: 1.5px solid #e9ecef;
+  border-radius: 10px;
+  padding: 12px 15px;
+  transition: all 0.2s;
+  background: #fafafa;
+}
+.custom-input:focus {
+  border-color: #3b1e54;
+  box-shadow: none;
+  background: #fff;
 }
 
 /* Buttons */
-button {
-  font-family: "Kantumruy", sans-serif;
-  border-radius: 8px;
-  transition: all 0.3s;
-}
-
 .btn-primary {
-  background-color: #3b1e54;
-  border-color: #3b1e54;
-  color: #fff;
+  background: #3b1e54;
+  border: none;
 }
-
 .btn-primary:hover {
-  background-color: #5c3976;
-  border-color: #5c3976;
-  color: #fff;
+  background: #2a153d;
 }
 
-.btn-warning {
-  background-color: #f0ad4e;
-  border-color: #f0ad4e;
-  color: #fff;
+/* Animation */
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.2s;
+}
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
 }
 
-.btn-warning:hover {
-  background-color: #ec9c3b;
-  border-color: #ec9c3b;
-  color: #fff;
-}
-
-.btn-success {
-  background-color: #28a745;
-  border-color: #28a745;
-  color: #fff;
-}
-
-.btn-success:hover {
-  background-color: #218838;
-  border-color: #218838;
-  color: #fff;
-}
-
-.btn-outline-danger {
-  border-color: #dc3545;
-  color: #dc3545;
-}
-
-.btn-outline-danger:hover {
-  background-color: #dc3545;
-  color: #fff;
-}
-
-/* Modal */
-.modal-backdrop {
+/* Modern Modal */
+.custom-modal-backdrop {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.4);
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 9999;
 }
-
-.modal-content {
-  background: #fff;
-  padding: 20px;
-  border-radius: 16px;
-  width: 350px;
-  text-align: center;
+.custom-modal-content {
+  width: 90%;
+  max-width: 400px;
+  transform: scale(1);
+  animation: pop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
-.modal-content h5 {
-  margin-bottom: 15px;
+@keyframes pop {
+  from {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
 </style>
