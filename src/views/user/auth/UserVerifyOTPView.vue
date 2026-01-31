@@ -1,72 +1,72 @@
 <template>
-  <div class="verify-wrapper d-flex align-items-center justify-content-center">
-    <div class="card shadow-lg border-0 verify-card">
-      <div class="row g-0 h-100">
-        <!-- Left Image Section -->
-        <div class="col-md-6 d-none d-md-block left-panel">
-          <div class="overlay">
-            <div class="brand">
-              <h5 class="mb-1">Foundit</h5>
-              <p class="small text-light mb-0">
-                The world's most trusted lost and found network.
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <!-- Right Form Section -->
-        <div class="col-md-6 right-panel p-4 p-md-5">
-          <div class="d-flex justify-content-between align-items-center mb-4">
-            <h4 class="fw-bold mb-0">Verify Email</h4>
-          </div>
-
-          <p class="text-muted small mb-3">
-            We have sent a 6-digit verification code to
-            <strong>{{ email }}</strong>
-          </p>
-
-          <!-- OTP Inputs -->
-          <div class="d-flex gap-2 mb-4">
-            <input
-              v-for="(digit, index) in otpDigits"
-              :key="index"
-              type="text"
-              maxlength="1"
-              class="form-control text-center otp-input"
-              v-model="otpDigits[index]"
-              :ref="`otp${index}`"
-              @input="focusNext(index, $event)"
-            />
-          </div>
-
-          <button
-            class="btn btn-primary w-100 mb-3"
-            @click="verifyOTP"
-            :disabled="loading"
-          >
-            {{ loading ? "Verifying..." : "Verify & Activate Account →" }}
-          </button>
-
-          <div class="text-center small">
-            Didn't receive the code?
-            <a href="#" @click.prevent="resendOTP" class="text-decoration-none">
-              Resend OTP
-            </a>
-          </div>
-        </div>
+  <div class="auth-page">
+    <div class="card">
+      
+      <!-- ICON -->
+      <div class="icon-wrapper">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="22"
+          height="22"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <rect x="3" y="5" width="18" height="14" rx="2" />
+          <polyline points="3 7 12 13 21 7" />
+        </svg>
       </div>
+
+      <h2>ផ្ទៀងផ្ទាត់គណនីរបស់អ្នក</h2>
+      <p class="subtitle">
+        យើងបានផ្ញើលេខកូដ ៦ ខ្ទង់ទៅកាន់<br />
+        <strong>{{ email }}</strong>
+      </p>
+
+      <!-- OTP -->
+      <div class="otp-group">
+        <input
+          v-for="(digit, index) in otpDigits"
+          :key="index"
+          maxlength="1"
+          class="otp-input"
+          v-model="otpDigits[index]"
+          :ref="`otp${index}`"
+          @input="focusNext(index, $event)"
+          @paste="handlePaste"
+        />
+      </div>
+
+      <button
+        class="btn"
+        :disabled="loading"
+        @click="verifyOTP"
+      >
+        {{ loading ? "កំពុងផ្ទៀងផ្ទាត់..." : "ផ្ទៀងផ្ទាត់ →" }}
+      </button>
+
+      <p class="resend">
+        មិនទទួលបានលេខកូដ?
+        <a href="#" @click.prevent="resendOTP">ផ្ញើម្តងទៀត</a>
+      </p>
     </div>
   </div>
 </template>
 
+
 <script>
-import axios from "axios";
+import api from "@/api/api";
+
 
 export default {
   name: "VerifyEmail",
 
   data() {
     return {
+      
       otpDigits: ["", "", "", "", "", ""],
       email: "",
       loading: false,
@@ -74,7 +74,6 @@ export default {
   },
 
   mounted() {
-    // 🔒 Ensure email exists
     const savedEmail = localStorage.getItem("otp_email");
 
     if (!savedEmail) {
@@ -88,8 +87,27 @@ export default {
 
   methods: {
     focusNext(index, event) {
-      if (event.target.value && index < 5) {
+      const value = event.target.value.replace(/\D/g, "");
+      this.otpDigits[index] = value;
+
+      if (value && index < 5) {
         this.$refs[`otp${index + 1}`][0].focus();
+      }
+    },
+
+    handlePaste(event) {
+      event.preventDefault();
+      const pasted = event.clipboardData
+        .getData("text")
+        .replace(/\D/g, "")
+        .slice(0, 6);
+
+      pasted.split("").forEach((char, index) => {
+        this.otpDigits[index] = char;
+      });
+
+      if (pasted.length === 6) {
+        this.$refs.otp5[0].focus();
       }
     },
 
@@ -104,53 +122,35 @@ export default {
       try {
         this.loading = true;
 
-        const res = await axios.post(
-          "http://ant-g2-landf.tt.linkpc.net/api/v1/otp/verify",
-          {
-            email: this.email,
-            code: otp,
-          },
-          {
-            headers: { "Content-Type": "application/json" },
-          }
-        );
+        const res = await api.post("/otp/verify", {
+          email: this.email.trim().toLowerCase(),
+          code: otp,
+        });
 
         console.log("Verify response:", res.data);
 
         alert("✅ Account verified successfully!");
 
-        // 🧹 clear OTP session
         localStorage.removeItem("otp_email");
-
         this.$router.replace("/login");
       } catch (err) {
-        alert(
-          err.response?.data?.message ||
-          "Invalid or expired OTP"
-        );
+        alert(err.response?.data?.message || "Invalid or expired OTP");
       } finally {
         this.loading = false;
       }
     },
 
     async resendOTP() {
-      if (!this.email) return;
-
       try {
         this.loading = true;
 
-        await axios.post(
-          "http://ant-g2-landf.tt.linkpc.net/api/v1/otp/send",
-          { email: this.email },
-          { headers: { "Content-Type": "application/json" } }
-        );
+        await api.post("/otp/send", {
+          email: this.email.trim().toLowerCase(),
+        });
 
         alert("📩 OTP resent to " + this.email);
       } catch (err) {
-        alert(
-          err.response?.data?.message ||
-          "Failed to resend OTP"
-        );
+        alert(err.response?.data?.message || "Failed to resend OTP");
       } finally {
         this.loading = false;
       }
@@ -159,56 +159,132 @@ export default {
 };
 </script>
 
-
 <style scoped>
-.verify-wrapper {
+* {
+  box-sizing: border-box;
+  font-family: "Hanuman", serif;
+}
+.brand {
+  margin-bottom: 0.6rem;
+}
+
+
+
+.auth-page {
   min-height: 100vh;
-  background-color: #e9e3e1;
+  background: #eaddf3;
+  display: grid;
+  place-items: center;
+  padding: 1rem;
 }
 
-.verify-card {
-  max-width: 900px;
+.card {
   width: 100%;
-  border-radius: 14px;
-  overflow: hidden;
+  max-width: 380px;
+  background: #ffffff;
+  padding:30px; 
+  border-radius: 18px;
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.08);
+  text-align: center;
 }
 
-.left-panel {
-  background: url("https://images.unsplash.com/photo-1505761671935-60b3a7427bad")
-    center/cover no-repeat;
-  position: relative;
+/* BRAND */
+.brand {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 0.1rem;
+  line-height: 0; 
+  color: #4c1d95;
 }
 
-.left-panel .overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(180deg, rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.6));
+
+
+/* ICON */
+.icon-wrapper {
+  width: 58px;
+  height: 58px;
+  border-radius: 16px;
+  background: #ede9fe;
+  color: #6d28d9;
+  display: grid;
+  place-items: center;
+  margin: 0 auto 1.3rem;
 }
 
-.left-panel .brand {
-  position: absolute;
-  bottom: 30px;
-  left: 30px;
-  color: #fff;
+/* TEXT */
+h2 {
+  font-size: 1.45rem;
+  font-weight: 700;
+  margin-bottom: 0.4rem;
+  color: #0f0e10;
 }
 
-.right-panel {
-  background-color: #ffffff;
+.subtitle {
+  font-size: 0.88rem;
+  color: #6b7280;
+  line-height: 1.6;
+  margin-bottom: 1.6rem;
+}
+
+/* OTP */
+.otp-group {
+  display: flex;
+  justify-content: center;
+  gap: 0.6rem;
+  margin-bottom: 1.6rem;
 }
 
 .otp-input {
-  width: 48px;
-  height: 52px;
-  font-size: 1.25rem;
-  border-radius: 8px;
+  width: 42px;
+  height: 46px;
+  border-radius: 10px;
+  border: 1px solid #d1d5db;
+  font-size: 1.1rem;
+  text-align: center;
+  outline: none;
+  transition: all 0.2s ease;
 }
 
-.btn-primary {
-  background-color: #5b5df0;
+.otp-input:focus {
+  border-color: #7c3aed;
+  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.25);
+}
+
+/* BUTTON */
+.btn{
+  width: 100%;
+  padding: 0.75rem;
+  border-radius: 14px;
   border: none;
+  background: linear-gradient(135deg, #5b21b6, #6d28d9);
+  color: #ffffff;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 10px 28px rgba(109, 40, 217, 0.3);
+  transition: transform 0.15s ease;
 }
 
-.btn-primary:hover {
-  background-color: #4a4ce0;
+.btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* RESEND */
+.resend {
+  margin-top: 1.2rem;
+  font-size: 0.85rem;
+  color: #6b7280;
+}
+
+.resend a {
+  color: #7c3aed;
+  font-weight: 600;
+  text-decoration: none;
 }
 </style>
+

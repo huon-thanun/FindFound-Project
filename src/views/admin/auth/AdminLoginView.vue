@@ -131,7 +131,7 @@
           <!-- LOGIN BUTTON -->
           <button
             type="submit"
-            class="btn-primary"
+            class="btn"
             :disabled="auth.loading || !isFormValid"
           >
             {{ auth.loading ? "Signing in..." : "Sign In" }}
@@ -201,15 +201,18 @@ const handleLogin = async () => {
   try {
     await auth.login(form);
 
-    if (auth.role === "admin") {
-      router.push("/admin/dashboard");
-    } else {
-      router.replace("/");
+    // ❗ HARD ADMIN CHECK
+    if (auth.role !== "admin") {
+      auth.logout(); // clear token
+      throw new Error("You are not authorized as admin");
     }
+
+    router.push("/admin/dashboard");
   } catch (err) {
     console.error(err);
   }
 };
+
 </script>
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
@@ -577,36 +580,60 @@ const handleLogin = async () => {
   color: #0f2854;
 }
 
-/* PRIMARY BUTTON */
-.btn-primary {
+.btn {
   width: 100%;
   font-size: 16px;
   font-weight: 600;
-  color: white;
+  color: #ffffff;
   cursor: pointer;
   border: none;
-  transition: all 0.2s ease;
   font-family: inherit;
-  background-color: #8930e5;
+
+  background: linear-gradient(135deg,#8c31e8, #742adb);
   border-radius: 14px;
-  padding: 14px;
-  box-shadow: 0 10px 25px rgba(106, 90, 249, 0.3);
-  margin-top: 55px;
+  padding: 15px 16px;
+
+  box-shadow:
+    0 10px 24px rgba(116, 38, 195, 0.28),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.18s ease,
+    filter 0.18s ease;
+  margin-top: 50px;
 }
 
-.btn-primary:hover:not(:disabled) {
-  transform: translateY(-2px);
-  box-shadow: 0 12px 24px rgba(135, 77, 162, 0.3);
+
+.btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+
+  box-shadow:
+    0 14px 32px rgba(135, 87, 184, 0.38),
+    inset 0 1px 0 rgba(255, 255, 255, 0.25);
+
+  filter: brightness(1.05);
 }
 
-.btn-primary:active:not(:disabled) {
-  transform: translateY(0);
+
+.btn:active:not(:disabled) {
+  transform: translateY(1px);
+
+  box-shadow:
+    0 8px 18px rgba(142, 76, 208, 0.3),
+    inset 0 2px 6px rgba(0, 0, 0, 0.18);
+
+  filter: brightness(0.98);
 }
 
-.btn-primary:disabled {
-  opacity: 0.6;
+
+.btn:disabled {
+  opacity: 0.55;
   cursor: not-allowed;
+  box-shadow: none;
+  filter: none;
 }
+
 
 /* ALERT ERROR */
 .alert-error {

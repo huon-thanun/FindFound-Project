@@ -1,132 +1,248 @@
 <template>
   <div
-    class="min-vh-100 d-flex align-items-center justify-content-center signup-bg"
+    class="min-vh-100 d-flex align-items-center justify-content-center signup-bg animate-enter"
   >
     <div
       class="card border-0 shadow-lg rounded-4 overflow-hidden"
       style="max-width: 1000px; width: 100%"
     >
       <div class="row g-0">
-        <!-- Left Image Panel -->
-        <div class="col-md-6 bg-white p-4 p-md-5 position-relative">
-          <h3 class="fw-semibold text-center mb-4">ចុះឈ្មោះ</h3>
+        <!-- LEFT FORM SIDE (REWRITTEN) -->
+        <div class="col-md-6 bg-white p-5">
+          <!-- Header -->
+          <div class="mb-4">
+            <h2 class="fw-semibold mb-1">បង្កើតគណនីរបស់អ្នក</h2>
+            <p class="text-muted small">សូមបំពេញព័ត៌មានដើម្បីបង្កើតគណនីថ្មី</p>
+          </div>
 
           <form @submit.prevent="register">
-            <!-- First Name -->
-            <div class="mb-3">
-              <input
-                v-model="form.first_name"
-                class="form-control"
-                :class="{ 'is-invalid': errors.first_name }"
-                placeholder="នាមខ្លួន"
-              />
-              <div v-if="errors.first_name" class="invalid-feedback">
-                {{ errors.first_name }}
+            <!-- Name row -->
+            <div class="row g-3 mb-3">
+              <div class="col">
+                <label class="form-label">នាមខ្លួន</label>
+                <input
+                  v-model="form.first_name"
+                  class="form-control"
+                  placeholder="ឧ. សុខ"
+                />
               </div>
-            </div>
 
-            <!-- Last Name -->
-            <div class="mb-3">
-              <input
-                v-model="form.last_name"
-                class="form-control"
-                :class="{ 'is-invalid': errors.last_name }"
-                placeholder="នាមត្រកូល"
-              />
-              <div v-if="errors.last_name" class="invalid-feedback">
-                {{ errors.last_name }}
+              <div class="col">
+                <label class="form-label">នាមត្រកូល</label>
+                <input
+                  v-model="form.last_name"
+                  class="form-control"
+                  placeholder="ឧ. វីរៈ"
+                />
               </div>
             </div>
 
             <!-- Email -->
-            <div class="mb-3">
+            <div class="form-group">
+              <label class="form-label">អ៊ីមែល</label>
               <input
                 v-model="form.email"
                 type="email"
                 class="form-control"
-                :class="{ 'is-invalid': errors.email }"
-                placeholder="អ៊ីមែល"
+                placeholder="អ៊ីមែលរបស់អ្នក@gmail.com"
               />
-              <div v-if="errors.email" class="invalid-feedback">
-                {{ errors.email }}
+            </div>
+
+            <!-- PASSWORD -->
+            <div class="form-group">
+              <label>ពាក្យសម្ងាត់</label>
+              <div class="password-input">
+                <input
+                  :type="showPassword ? 'text' : 'password'"
+                  placeholder="បញ្ចូលពាក្យសម្ងាត់របស់អ្នក"
+                  v-model="form.password"
+                  @blur="touched.password = true"
+                  :class="{ error: passwordError }"
+                />
+                <button
+                  type="button"
+                  class="eye-btn"
+                  @click="showPassword = !showPassword"
+                  tabindex="-1"
+                >
+                  <!-- OPEN -->
+                  <svg
+                    class="eye"
+                    :class="{ active: !showPassword }"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z" />
+                    <circle cx="12" cy="12" r="3" />
+                  </svg>
+
+                  <!-- CLOSED -->
+                  <svg
+                    class="eye"
+                    :class="{ active: showPassword }"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path d="M9.88 9.88a3 3 0 1 0 4.24 4.24" />
+                    <path
+                      d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7"
+                    />
+                    <path d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7" />
+                    <line x1="2" y1="2" x2="22" y2="22" />
+                  </svg>
+                </button>
+              </div>
+
+              <!-- CONFIRM PASSWORD -->
+              <div class="form-group-confirm">
+                <label>បញ្ជាក់ពាក្យសម្ងាត់</label>
+
+                <div class="password-input">
+                  <input
+                    :type="showConfirm ? 'text' : 'password'"
+                    placeholder="បញ្ចូលពាក្យសម្ងាត់ម្តងទៀត"
+                    v-model="form.password_confirmation"
+                    @blur="touched.password_confirmation = true"
+                    :class="{ error: confirmPasswordError }"
+                  />
+
+                  <button
+                    type="button"
+                    class="eye-btn"
+                    @click="showConfirm = !showConfirm"
+                    tabindex="-1"
+                  >
+                    <!-- OPEN -->
+                    <svg
+                      class="eye"
+                      :class="{ active: !showConfirm }"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="20"
+                      height="20"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z" />
+                      <circle cx="12" cy="12" r="3" />
+                    </svg>
+
+                    <!-- CLOSED -->
+                    <svg
+                      class="eye"
+                      :class="{ active: showConfirm }"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="20"
+                      height="20"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <path d="M9.88 9.88a3 3 0 1 0 4.24 4.24" />
+                      <path
+                        d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7"
+                      />
+                      <path d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7" />
+                      <line x1="2" y1="2" x2="22" y2="22" />
+                    </svg>
+                  </button>
+                </div>
+
+                <span v-if="confirmPasswordError" class="field-error">
+                  {{ confirmPasswordError }}
+                </span>
               </div>
             </div>
 
-            <!-- Password -->
-            <div class="mb-3 position-relative">
-              <input
-                :type="showPassword ? 'text' : 'password'"
-                v-model="form.password"
-                class="form-control pe-5"
-                :class="{ 'is-invalid': errors.password }"
-                placeholder="ពាក្យសម្ងាត់"
-              />
-              <i
-                :class="showPassword ? 'bi bi-eye-slash' : 'bi bi-eye'"
-                class="position-absolute top-50 end-0 translate-middle-y me-3"
-                style="cursor: pointer"
-                @click="showPassword = !showPassword"
-              ></i>
-              <div v-if="errors.password" class="invalid-feedback d-block">
-                {{ errors.password }}
-              </div>
+            <!-- Agreement -->
+            <div class="form-check mb-4">
+              <input class="form-check-input" type="checkbox" id="agree" />
+              <label class="form-check-label small" for="agree">
+                ខ្ញុំយល់ព្រមលក្ខខណ្ឌ និង គោលការណ៍ឯកជនភាព
+              </label>
             </div>
 
-            <!-- Confirm Password -->
-            <div class="mb-3 position-relative">
-              <input
-                :type="showConfirm ? 'text' : 'password'"
-                v-model="form.password_confirmation"
-                class="form-control pe-5"
-                :class="{ 'is-invalid': errors.password_confirmation }"
-                placeholder="បញ្ជាក់ពាក្យសម្ងាត់"
-              />
-              <i
-                :class="showConfirm ? 'bi bi-eye-slash' : 'bi bi-eye'"
-                class="position-absolute top-50 end-0 translate-middle-y me-3"
-                style="cursor: pointer"
-                @click="showConfirm = !showConfirm"
-              ></i>
-              <div
-                v-if="errors.password_confirmation"
-                class="invalid-feedback d-block"
-              >
-                {{ errors.password_confirmation }}
-              </div>
-            </div>
-
-            <!-- Submit Button -->
-            <button
-              type="submit"
-              class="btn btn-primary w-100 rounded-pill"
-              :disabled="loading"
-            >
-              {{ loading ? "កំពុងបង្កើត..." : "ចូលរួមជាមួយយើង →" }}
+            <!-- Submit -->
+            <button type="submit" class="btn w-100" :disabled="loading">
+              {{ loading ? "កំពុងបង្កើត..." : "ចុះឈ្មោះ →" }}
             </button>
           </form>
 
-          <!-- Floating Login Link -->
-          <div class="text-center mt-4">
-            <p class="mb-0">
-              មានគណនីរួចហើយ?
-              <router-link
-                to="/login"
-                class="btn btn-outline-primary btn-sm rounded-pill"
-              >
-                ចូលគណនី
-              </router-link>
-            </p>
+          <!-- Footer -->
+          <div class="text-center mt-4 small">
+            មានគណនីរួចហើយ?
+            <router-link
+              to="/login"
+              class="fw-semibold-login text-decoration-none"
+            >
+              ចូលគណនី
+            </router-link>
           </div>
         </div>
 
-        <!-- Right Form Panel -->
+        <!-- ✅ RIGHT SIDE (UNCHANGED) -->
         <div class="col-md-6 d-none d-md-flex image-panel text-white">
           <div>
             <div class="logo">
               <img :src="logo" alt="Lost & Found logo" />
             </div>
-            <h2 class="fw-semibold mb-2">បង្កើតគណនី<br />របស់អ្នក</h2>
-            <p class="opacity-75">ចែករំលែកស្នាដៃ និងទទួលបានគម្រោងថ្មីៗ</p>
+
+            <h2 class="fw-semibold-left mb-2">
+              ពីរបស់ដែលបាត់បង់ទៅជា<br /><span>ការរកឃើញវិញ</span>
+            </h2>
+
+            <p class="opacity-75">
+              ចូលរួមជាមួយសហគមន៍របស់យើង ដើម្បីស្វែងរក
+              និងប្រគល់របស់របរដែលបានបាត់បង់ទៅកាន់ម្ចាស់ដើមវិញ។
+            </p>
+          </div>
+
+          <!-- DECORATIONS -->
+          <div class="bg-circle circle-1"></div>
+          <div class="bg-circle circle-2"></div>
+
+          <div class="floating-card">
+            <div class="card-icon">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.8"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <rect x="3" y="11" width="18" height="10" rx="2" />
+                <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+              </svg>
+            </div>
+
+            <div class="card-lines">
+              <span></span>
+              <span></span>
+            </div>
           </div>
         </div>
       </div>
@@ -143,6 +259,7 @@ import logo from "@/assets/images/logo/logo.png";
 
 const router = useRouter();
 
+/* ================= STATE ================= */
 const form = reactive({
   first_name: "",
   last_name: "",
@@ -179,98 +296,413 @@ const validate = () => {
 };
 
 /* ================= REGISTER ================= */
-async function register() {
+const register = async () => {
   if (!validate()) return;
 
   loading.value = true;
 
   try {
-    //  REGISTER USER
-    const res = await registerUser({
+    // REGISTER USER
+    await registerUser({
       fullname: `${form.first_name} ${form.last_name}`,
       email: form.email,
       password: form.password,
       confirmPassword: form.password_confirmation,
     });
 
-    console.log("Register response:", res.data);
-
     // SAVE EMAIL FOR OTP FLOW
     localStorage.setItem("otp_email", form.email);
 
-    // SEND OTP AUTOMATICALLY
+    // SEND OTP
     await api.post("/otp/send", {
       email: form.email,
     });
 
-    //  REDIRECT TO VERIFY OTP PAGE
+    // REDIRECT
     router.replace({ name: "user.verify-otp" });
   } catch (err) {
-    console.error("Register error:", err.response);
+    console.error("Register error:", err);
 
     if (err.response?.status === 422) {
-      errors.value = err.response.data.errors;
+      errors.value = err.response.data.errors || {};
     } else {
       alert(err.response?.data?.message || "Register failed");
     }
   } finally {
     loading.value = false;
   }
-}
+};
 </script>
-
 <style scoped>
+/* =========================
+   GLOBAL RESET + FONT
+========================= */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Hanuman", serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
 
+/* =========================
+   BACKGROUND
+========================= */
 .signup-bg {
   min-height: 100vh;
   width: 100%;
-
-  background:
-    radial-gradient(
-      circle at 15% 20%,
-      rgba(149, 137, 174, 0.9) 0%,
-      transparent 42%
-    ),
-    radial-gradient(
-      circle at 85% 80%,
-      rgba(140, 115, 180, 0.85) 0%,
-      transparent 45%
-    );
-}
-.logo img {
-  width: 230px;
-  height: auto; /* keeps aspect ratio */
-  object-fit: contain;
-  margin: 25px;
+  background: #f6f3f9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
+/* =========================
+   CARD
+========================= */
+.card {
+  border-radius: 28px;
+}
+
+/* =========================
+   LEFT PANEL
+========================= */
+.col-md-6.bg-white {
+  padding: 48px 48px 40px;
+}
+
+/* =========================
+   HEADER
+========================= */
+.col-md-6 h3 {
+  font-size: 26px;
+  font-weight: 700;
+  line-height: 1.35;
+  margin-bottom: 6px;
+}
+
+.col-md-6 .text-muted {
+  font-size: 13.5px;
+  line-height: 1.75;
+  margin-bottom: 20px;
+}
+
+/* =========================
+   FORM GROUP
+========================= */
+.form-group {
+  margin-bottom: 14px;
+}
+.form-label {
+  font-size: 13.5px;
+  font-weight: 600;
+  line-height: 1.6;
+  color: #100714;
+  margin-bottom: 5px;
+}
+.form-group label {
+  display: block;
+  font-size: 13.5px;
+  font-weight: 600;
+  line-height: 1.6;
+  color: #100714;
+  margin-bottom: 5px;
+}
+.form-group-confirm {
+  margin-top: 13px;
+}
+
+/* =========================
+   INPUTS
+========================= */
+.form-control,
+.password-input input {
+  width: 100%;
+  padding: 11px 14px;
+  padding-right: 44px;
+  font-size: 14.5px;
+  line-height: 1.55;
+  border-radius: 12px;
+  border: 1.4px solid #e5e7eb;
+  background-color: #f9fafb;
+  transition: all 0.2s ease;
+}
+
+.form-control::placeholder,
+.password-input input::placeholder {
+  color: #9ca3af;
+  font-size: 13px;
+}
+
+.form-control:focus,
+.password-input input:focus {
+  outline: none;
+  background-color: #ffffff;
+  border-color: #7c3aed;
+  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.12);
+}
+
+/* =========================
+   PASSWORD INPUT
+========================= */
+.password-input {
+  position: relative;
+}
+
+/* Eye Button */
+.eye-btn {
+  position: absolute;
+  right: 35px;
+  top: 35%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+/* Eye Icons (KEEP STYLE) */
+.eye {
+  width: 18px;
+  height: 18px;
+  stroke: #9ca3af;
+  stroke-width: 2;
+  position: absolute;
+  opacity: 0;
+  transition:
+    opacity 0.15s ease,
+    stroke 0.2s ease;
+}
+
+.eye.active {
+  opacity: 1;
+}
+
+.eye-btn:hover .eye.active {
+  stroke: #7426c3;
+}
+
+/* =========================
+   ROW SPACING (NAME INPUTS)
+========================= */
+.row.g-3 {
+  --bs-gutter-y: 12px;
+}
+
+/* =========================
+   CHECKBOX
+========================= */
+.form-check-label {
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+/* =========================
+   ERROR MESSAGE
+========================= */
+.field-error {
+  display: block;
+  margin-top: 4px;
+  font-size: 12px;
+  line-height: 1.5;
+  color: #ef4444;
+}
+
+/* =========================
+   PRIMARY BUTTON
+========================= */
+.btn {
+  width: 100%;
+  font-size: 16px;
+  font-weight: 600;
+  color: #ffffff;
+  cursor: pointer;
+  border: none;
+  font-family: inherit;
+
+  background: linear-gradient(135deg, #8c31e8, #742adb);
+  border-radius: 14px;
+  padding: 15px 16px;
+
+  box-shadow:
+    0 10px 24px rgba(116, 38, 195, 0.28),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.18s ease,
+    filter 0.18s ease;
+}
+
+.btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+
+  box-shadow:
+    0 14px 32px rgba(135, 87, 184, 0.38),
+    inset 0 1px 0 rgba(255, 255, 255, 0.25);
+
+  filter: brightness(1.05);
+}
+
+.btn:active:not(:disabled) {
+  transform: translateY(1px);
+
+  box-shadow:
+    0 8px 18px rgba(142, 76, 208, 0.3),
+    inset 0 2px 6px rgba(0, 0, 0, 0.18);
+
+  filter: brightness(0.98);
+}
+
+.btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  box-shadow: none;
+  filter: none;
+}
+/* =========================
+   FOOTER LINK
+========================= */
+.text-center {
+  font-size: 13px;
+  margin-top: 14px;
+}
+
+.text-center a {
+  font-weight: 600;
+  text-decoration: none;
+}
+
+/* =========================
+   RIGHT IMAGE PANEL
+========================= */
 .image-panel {
-  background-image: url("@/assets/images/background.jpg");
-  /* linear-gradient(rgba(11, 19, 43, 0.65), rgba(11, 19, 43, 0.65)),
-    url("https://images.unsplash.com/photo-1541701494587-cb58502866ab"); */
-  background-size: cover;
-  background-position: center;
+  position: relative;
+  padding: 48px 48px 320px;
+  border-radius: 24px;
+  background: linear-gradient(135deg, #f3d4ff 0%, #c18af7 65%, #e9a8ff 100%);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow: hidden;
+}
+.image-panel:after {
+  content: "©2026 FindFound គេហទំព័រ។ រក្សាសិទ្ធិគ្រប់យ៉ាង។";
+  position: absolute;
+  bottom: 20px;
+  left: 40px;
+  font-size: 12px;
+  opacity: 0.75;
+  color: rgba(255, 255, 255, 0.85);
+  z-index: 2;
 }
 
-.form-control {
-  border-radius: 999px;
-  padding: 0.65rem 1.1rem;
-  font-size: 0.9rem;
-  border: 1px solid #d1d5db;
+/* decoration */
+.bg-circle {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.35);
+  z-index: 1;
 }
 
-.form-control:focus {
-  border-color: #3a506b;
-  box-shadow: 0 0 0 0.15rem rgba(58, 80, 107, 0.25);
+.circle-1 {
+  width: 170px;
+  height: 170px;
+  bottom: 120px;
+  right: -80px;
 }
 
-.btn-primary {
-  background-color: #0b132b;
-  border-color: #0b132b;
+.circle-2 {
+  width: 100px;
+  height: 100px;
+  bottom: 45px;
+  left: 40px;
+  opacity: 0.25;
+}
+.floating-card {
+  position: absolute;
+  bottom: 140px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 240px;
+  padding: 18px;
+
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  background: rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(10px);
+  border-radius: 18px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+
+  z-index: 2;
 }
 
-.btn-primary:hover {
-  background-color: #1c2541;
-  border-color: #1c2541;
+.card-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #6b4eff; /* or white */
+}
+
+.card-lines {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.card-lines span {
+  height: 8px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.8);
+}
+
+/* =========================
+   LOGO
+========================= */
+.logo img {
+  width: 250px;
+  height: auto;
+  object-fit: contain;
+  margin-left: -25px;
+  margin-top: -85px;
+}
+/* illustration */
+/* ===== AUTH ENTRY ANIMATION ===== */
+.animate-enter {
+  animation: cardEnter 0.8s ease-out forwards;
+  transform-origin: center;
+  will-change: transform, opacity;
+}
+
+@keyframes cardEnter {
+  0% {
+    opacity: 0;
+    transform: perspective(900px) rotateY(8deg) translateY(16px);
+  }
+  100% {
+    opacity: 1;
+    transform: perspective(900px) rotateY(0deg) translateY(0);
+  }
+}
+.fw-semibold-login {
+  color: #7426c3;
+}
+.fw-semibold-left {
+  margin-top: -55px;
+  color: #100714;
+}
+.fw-semibold-left span {
+  color: #7426c3;
+}
+.opacity-75 {
+  color: #100e13;
 }
 </style>
