@@ -60,15 +60,47 @@ export const useReportStore = defineStore("report", () => {
       isLoadingGetAReport.value = false;
     }
   };
+  const ownReports = ref([]);
+  const isLoadingGetOwnReports = ref(false);
+  const getOwnReports = async () => {
+    try {
+      isLoadingGetOwnReports.value = true;
+      const res = await api.get("/reports/own");
+      ownReports.value = res.data.data.items;
+    } catch (error) {
+      console.error(error);
+    } finally {
+      isLoadingGetOwnReports.value = false;
+    }
+  };
+  const isLoadingDeleteOwnArticle = ref(false);
+  const deleteMessage = ref([]);
+  const deleteOwnReport = async (id) => {
+    try {
+      isLoadingDeleteOwnArticle.value = true;
+      const res = await api.delete(`/reports/${id}`);
+      deleteMessage.value = res.data;
+    } catch (error) {
+      console.error(error);
+    } finally {
+      isLoadingDeleteOwnArticle.value = false;
+    }
+  };
   return {
     isLoadingGetAllReport,
     isLoadingGetAReport,
+    isLoadingGetOwnReports,
+    isLoadingDeleteOwnArticle,
     allReportType,
     allReports,
     report,
+    ownReports,
+    deleteMessage,
     getAllReportType,
     getAllReports,
     getReportById,
+    getOwnReports,
+    deleteOwnReport,
     meta,
   };
 });
