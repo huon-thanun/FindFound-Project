@@ -13,28 +13,28 @@
         :to="{ name: 'admin.dashboard' }"
         class="nav-item"
       >
-        Dashboard
+        <i class="bi bi-speedometer2"></i> ផ្ទាំងគ្រប់គ្រង
       </router-link>
 
       <router-link
         :to="{ name: 'admin.users' }"
         class="nav-item"
       >
-        Users
+        <i class="bi bi-person"></i> អ្នកប្រើប្រាស់
       </router-link>
 
       <router-link
         :to="{ name: 'admin.categories' }"
         class="nav-item"
       >
-        Categories
+        <i class="bi bi-tags"></i> ឧបករណ៍
       </router-link>
 
       <router-link
         :to="{ name: 'admin.reports' }"
         class="nav-item"
       >
-        Reports
+        <i class="bi bi-collection"></i> របាយការណ៍
       </router-link>
     </nav>
 
@@ -42,11 +42,11 @@
     <div class="user-section">
       <base-button icon="person-fill-gear" variant="success" class="security-btn">
         <!-- Logout SVG -->
-        <span>Security</span>
+        <span>សន្តិសុខ</span>
       </base-button><br>
       <base-button @click="isOpen" icon="box-arrow-right" variant="danger" class="logout-btn">
         <!-- Logout SVG -->
-        <span>Logout</span>
+        <span>ចាកចាញ</span>
       </base-button>
     </div>
     <BaseModal
@@ -128,12 +128,12 @@ body {
 }
 
 .nav-item:hover {
-  background-color: var(--tertiary-color);
+  background-color: var(--primary-color);
   color: var(--surface-color);
 }
 
 .router-link-active {
-  background-color: var(--tertiary-color);
+  background-color: var(--primary-color);
   color: var(--surface-color);
 }
 .user-section {
