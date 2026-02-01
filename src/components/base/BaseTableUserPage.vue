@@ -10,7 +10,7 @@
           >
             {{ col.label }}
           </th>
-          <th class="text-center py-3 table-top truncate-header">Actions</th>
+          <th class="text-center py-3 table-top truncate-header">ការកំណត់</th>
         </tr>
       </thead>
 
@@ -29,7 +29,7 @@
         <!-- No data -->
         <tr v-else-if="!items.length">
           <td :colspan="columns.length + 1" class="text-center py-5">
-            <p class="fw-semibold mb-0">No data found</p>
+            <p class="fw-semibold mb-0">រកមិនឃើញទិន្នន័យ</p>
           </td>
         </tr>
 
