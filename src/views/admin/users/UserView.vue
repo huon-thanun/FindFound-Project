@@ -214,7 +214,7 @@ const tableColumns = [
 
 const filters = reactive({
   page: 1,
-  perPage: 50,
+  perPage: 10,
   search: '',
   status: '',
   sortBy: null,
