@@ -29,6 +29,9 @@ import UserView from "@/views/admin/users/UserView.vue";
 /* ===== STORE ===== */
 import { useAuthStore } from "@/stores/authStore";
 import MatchReport from "@/views/user/reports/matchReport.vue";
+import Policy from "@/views/user/other/policy.vue";
+import Faq from "@/views/user/other/faq.vue";
+import Support from "@/views/user/other/support.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -121,6 +124,21 @@ const router = createRouter({
           path: "/reports/match",
           name: "match-reports",
           component: MatchReport,
+        },
+        {
+          path: "/policy",
+          name: "policy",
+          component: Policy
+        },
+        {
+          path: "/faq",
+          name: "faq",
+          component: Faq
+        },
+        {
+          path: "/support",
+          name: "support",
+          component: Support
         },
       ],
     },

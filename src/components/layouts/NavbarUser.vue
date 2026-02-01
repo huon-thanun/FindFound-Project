@@ -198,7 +198,7 @@
                   alt="User Avatar"
                 />
                 <div class="user-info">
-                  <h6>{{ profileStore.fullname }}</h6>
+                  <h6>sal</h6>
                   <p>john.doe@email.com</p>
                 </div>
               </div>
@@ -269,10 +269,7 @@
 
 <script setup>
 import { ref, computed, onMounted } from "vue";
-import { useProfileStore } from "@/stores/profileStore";
 const activeLink = ref("home");
-const profileStore = useProfileStore();
-console.log("profile", profileStore.profile);
 
 
 // simulate token (later replace with Pinia / real auth)

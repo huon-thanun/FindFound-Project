@@ -13,7 +13,7 @@
 
                 <!-- Site -->
                 <div class="col-6 col-md-4 col-lg-2 p-0">
-                    <h3>Site</h3>
+                    <h3>គេហទំព័រ</h3>
                     <ul>
                         <li><router-link to="">Lost</router-link></li>
                         <li><router-link to="">Report Lost</router-link></li>
@@ -24,22 +24,21 @@
 
                 <!-- Help -->
                 <div class="col-6 col-md-4 col-lg-2 p-0">
-                    <h3>Help</h3>
+                    <h3>ផ្តល់ជំនួយ</h3>
                     <ul>
-                        <li><router-link to="">Customer Support</router-link></li>
-                        <li><router-link to="">Terms & Conditions</router-link></li>
-                        <li><router-link to="">Privacy Policy</router-link></li>
+                        <li><router-link to="/support">ការគាំទ្រ</router-link></li>
+                        <li><router-link to="/policy">គោលការណ៍ឯកជនភាព</router-link></li>
+                        <li><router-link to="/faq">សំណួរដែលសួរញឹកញាប់</router-link></li>
                     </ul>
                 </div>
 
                 <!-- Links -->
                 <div class="col-6 col-md-4 col-lg-2 p-0">
-                    <h3>Links</h3>
+                    <h3>តំណភ្ជាប់</h3>
                     <ul>
                         <li><router-link to="">LinkedIn</router-link></li>
                         <li><router-link to="">Facebook</router-link></li>
-                        <li><router-link to="">YouTube</router-link></li>
-                        <li><router-link to="">About Us</router-link></li>
+                        <li><router-link to="">Tik Tok</router-link></li>
                     </ul>
                 </div>
 
@@ -47,7 +46,7 @@
                 <div class="col-6 col-md-4 col-lg-3 p-0">
                     <h3>Contact</h3>
                     <div class="contact-info">
-                        <p><strong>Tel:</strong> +855716320690</p>
+                        <p><strong>Tel:</strong> +855 12 345 678</p>
                         <p><strong>Email:</strong> findfound@gmail.com</p>
                     </div>
                 </div>

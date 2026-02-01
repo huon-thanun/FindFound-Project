@@ -1,4 +1,4 @@
-import {ref} from "vue";
+import { ref } from "vue";
 import { defineStore } from "pinia";
 import api from "@/api/api";
 
@@ -10,6 +10,7 @@ export const useProfileStore = defineStore("profile", () => {
     isLoadingProfile.value = true;
     try {
       const res = await api.get("/auth/profile");
+
       profile.value = res.data.data;
     } catch (err) {
       console.error("Fetch profile error:", err);

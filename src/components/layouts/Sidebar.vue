@@ -27,7 +27,7 @@
         :to="{ name: 'admin.categories' }"
         class="nav-item"
       >
-        <i class="bi bi-tags"></i> ឧបករណ៍
+        <i class="bi bi-tags"></i> ប្រភេទរបាយការណ៍
       </router-link>
 
       <router-link

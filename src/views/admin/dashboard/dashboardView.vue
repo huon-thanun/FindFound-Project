@@ -23,7 +23,7 @@
 
           <div class="transaction-tabs">
             <div class="tab" :class="{ active: activeTab === 'All' }" @click="activeTab = 'All'">
-              របស់សរុប
+              របាយការណ៍សរុប
             </div>
             <div class="tab" :class="{ active: activeTab === 'Lost' }" @click="activeTab = 'Lost'">
               បាត់
@@ -220,7 +220,7 @@ onMounted(() => {
 
 const Cards = computed(() => [
   {
-    title: "របស់សរុប",
+    title: "របាយការណ៍សរុប",
     value: totalItems.value,
     icon: "bi-collection",
   },
