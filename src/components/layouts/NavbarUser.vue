@@ -116,7 +116,7 @@
 
             <li class="nav-item">
               <router-link
-                to="reports"
+                :to="{ name: 'report.user' }"
                 class="nav-link-custom"
                 :class="{ active: activeLink === 'reports' }"
                 @click.prevent="setActive('reports')"
@@ -209,7 +209,10 @@
                 <span>ប្រវត្តិរូបរបស់ខ្ញុំ</span>
               </router-link>
 
-              <router-link to="" class="dropdown-item-custom">
+              <router-link
+                :to="{ name: 'own-reports' }"
+                class="dropdown-item-custom"
+              >
                 <i class="bi bi-file-earmark-text"></i>
                 <span>របាយការណ៍របស់ខ្ញុំ</span>
               </router-link>
@@ -273,7 +276,6 @@ import { useProfileStore } from "@/stores/profileStore";
 const activeLink = ref("home");
 const profileStore = useProfileStore();
 console.log("profile", profileStore.profile);
-
 
 // simulate token (later replace with Pinia / real auth)
 const token = ref(null);

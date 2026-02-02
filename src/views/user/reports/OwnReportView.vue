@@ -8,7 +8,7 @@
     </header>
 
     <div class="row g-4 mb-5">
-      <div v-for="stat in stats" :key="stat.label" class="col-md-3">
+      <div v-for="stat in stats" :key="stat.label" class="col-md-4">
         <div class="card border-0 box-shadow p-4 h-100 position-relative">
           <div :class="['fs-3 mb-2', stat.iconColor]">
             <i :class="['bi', stat.icon]"></i>
@@ -26,9 +26,12 @@
 
     <div class="card border-0 box-shadow p-4">
       <div class="d-flex justify-content-between align-items-center mb-4">
-        <h5 class="fw-bold mb-0">My Reports</h5>
-        <button class="btn btn-dark px-4 py-2 rounded-3 fw-bold shadow-sm">
-          Create New Report
+        <h5 class="fw-bold mb-0">របាយការណ៍</h5>
+        <button
+          class="btn btn-dark px-4 py-2 rounded-3 fw-bold shadow-sm"
+          @click="btnHandleCreateReport"
+        >
+          បង្កើតការរាយការណ៍
         </button>
       </div>
       <div class="w-100 center2" v-if="reportStore.isLoadingGetOwnReports">
@@ -74,14 +77,16 @@
             <div class="d-flex align-items-center gap-2 mb-1">
               <h6 class="fw-bold mb-0">{{ report.title }}</h6>
               <span
-                class="badge bg-danger rounded-pill px-2"
+                class="badge rounded-pill px-2"
                 style="font-size: 0.7rem"
+                :class="report.reportType?.name.toLowerCase()"
               >
                 {{ report.reportType?.name }}
               </span>
               <span
-                class="badge bg-light text-dark border rounded-pill px-2"
+                class="badge border rounded-pill px-2"
                 style="font-size: 0.7rem"
+                :class="report.status?.toLowerCase()"
               >
                 {{ report.status }}
               </span>
@@ -104,22 +109,58 @@
                 class="btn btn-outline-secondary btn-sm px-3"
                 @click="gotoDetailPage(report.id)"
               >
-                <i class="bi bi-eye me-1"></i> View
+                <i class="bi bi-eye me-1"></i> មើល
               </button>
-              <button class="btn btn-outline-secondary btn-sm px-3">
-                <i class="bi bi-pencil-square me-1"></i> Edit
+              <button
+                class="btn btn-outline-secondary btn-sm px-3"
+                @click="btnHandleEditReport(report.id)"
+              >
+                <i class="bi bi-pencil-square me-1"></i> កែសម្រួល
               </button>
               <button
                 class="btn btn-outline-secondary btn-sm px-3"
                 @click="btnHandleDeleteOwnReport(report.id)"
               >
-                <i class="bi bi-trash me-1"></i> Delete
+                <i class="bi bi-trash me-1"></i> លុប
               </button>
             </div>
           </div>
         </div>
       </div>
     </div>
+
+    <!-- pagination -->
+
+    <div
+      v-if="reportStore.ownReportMeta?.totalPages > 1"
+      class="d-flex gap-2 justify-content-center my-3"
+    >
+      <BaseButton
+        variant="danger"
+        @click="PreviousPage"
+        :disabled="!reportStore.ownReportMeta?.hasPreviousPage"
+      >
+        Prev
+      </BaseButton>
+
+      <!-- <BaseButton
+        v-for="p in visiblePages"
+        :key="p"
+        :variant="p === page ? 'primary' : 'cancel'"
+        @click="goToPage(p)"
+      >
+        {{ p }}
+      </BaseButton> -->
+
+      <BaseButton
+        variant="primary"
+        @click="nextPage"
+        :disabled="!reportStore.ownReportMeta?.hasNextPage"
+      >
+        Next
+      </BaseButton>
+    </div>
+
     <!--Confirm Message Modal -->
     <BaseModal :icon="'trash'" :theme="'primary'" :isClose="showModal">
       <template #body>
@@ -140,7 +181,7 @@
           icon="box"
           class="col-6"
           variant="danger"
-          :isLoading="reportStore.isLoadingDeleteOwnArticle"
+          :isLoading="reportStore.isLoadingDeleteOwnReport"
           @click="btnHandleConfirmDelete"
         >
           Delete
@@ -160,7 +201,7 @@
           variant="primary"
           @click="showMessageModal = false"
         >
-          OK
+          យល់ព្រម
         </BaseButton>
       </template>
     </BaseModal>
@@ -178,13 +219,48 @@ const router = useRouter();
 
 const defaultImage =
   "https://tse2.mm.bing.net/th/id/OIP.b8bpZyFwupiioDofQPXo_gAAAA?rs=1&pid=ImgDetMain&o=7&rm=3";
+
+const search = ref("");
+const cateValue = ref("");
+const typeValue = ref("");
+const statusValue = ref("");
+
+const page = ref(1);
+let timeout = ref(null);
+
 const fetchOwnReports = async () => {
-  await reportStore.getOwnReports();
+  const params = {
+    _page: page.value,
+    _per_page: 5,
+    sortBy: "id",
+    sortDir: "desc",
+  };
+
+  // if (search.value) params.search = search.value;
+  // if (statusValue.value) params.status = statusValue.value;
+  // if (typeValue.value) params.reportType = typeValue.value;
+  // if (cateValue.value) params.categoryId = cateValue.value;
+
+  await reportStore.getOwnReports(params);
+
+  console.log("PAGE:", page.value);
+  console.log("META:", reportStore.ownReportMeta);
 };
 onMounted(async () => {
-  await fetchOwnReports();
-  countReports();
-  console.log(reportStore.ownReports);
+  try {
+    await Promise.all([fetchOwnReports(), countReports()]);
+    console.log(reportStore.ownReports);
+    console.log(reportStore.ownReportMeta.totalItems);
+    // just for stats on current page
+    activeCount.value = reportStore.ownReports.filter(
+      (r) => r.status === "ACTIVE",
+    ).length;
+    resolvedCount.value = reportStore.ownReports.filter(
+      (r) => r.status === "RESOLVED",
+    ).length;
+  } catch (error) {
+    console.error(error);
+  }
 });
 const gotoDetailPage = async (id) => {
   router.push({ name: "report-detail-user", params: { id: id } });
@@ -215,13 +291,16 @@ const activeCount = ref(0);
 const resolvedCount = ref(0);
 
 const countReports = () => {
+  if (!reportStore.ownReportMeta) return;
+
+  const total = reportStore.ownReportMeta.totalItems || 0;
   activeCount.value = 0;
   resolvedCount.value = 0;
 
-  for (let i = 0; i < reportStore.ownReports.length; i++) {
+  for (let i = 0; i < total; i++) {
     const report = reportStore.ownReports[i];
-    if (report.status === "ACTIVE") activeCount.value++;
-    if (report.resolvedAt != null) resolvedCount.value++;
+    if (report?.status === "ACTIVE") activeCount.value++;
+    if (report?.status === "RESOLVED") resolvedCount.value++;
   }
 };
 
@@ -246,12 +325,12 @@ const stats = computed(() => [
     icon: "bi-check2-circle",
     iconColor: "text-success",
   },
-  {
-    label: "Potential Matches",
-    value: 0,
-    icon: "bi-file-earmark-medical",
-    iconColor: "text-purple",
-  },
+  // {
+  //   label: "Potential Matches",
+  //   value: 0,
+  //   icon: "bi-file-earmark-medical",
+  //   iconColor: "text-purple",
+  // },
 ]);
 import { watch } from "vue";
 
@@ -262,6 +341,72 @@ watch(
   },
   { immediate: true },
 );
+const btnHandleCreateReport = () => {
+  router.push({ name: "create-report" });
+};
+const btnHandleEditReport = (id) => {
+  router.push({ name: "edit-report", params: { id } });
+};
+
+//pagination
+
+const pagesPerGroup = 4;
+const currentGroup = ref(1);
+
+const totalPages = computed(() => reportStore.ownReportMeta?.totalPages || 1);
+
+const visiblePages = computed(() => {
+  const start = (currentGroup.value - 1) * pagesPerGroup + 1;
+
+  const end = Math.min(start + pagesPerGroup - 1, totalPages.value);
+
+  const pages = [];
+  for (let i = start; i <= end; i++) {
+    pages.push(i);
+  }
+  return pages;
+});
+const goToPage = async (p) => {
+  if (p === page.value) return;
+
+  page.value = p;
+  await fetchOwnReports();
+
+  // If clicked the last page in group → move to next group
+  const groupEnd = currentGroup.value * pagesPerGroup;
+  if (p === groupEnd && p < totalPages.value) {
+    currentGroup.value++;
+  }
+
+  // If clicked the first page in group → move to previous group
+  const groupStart = (currentGroup.value - 1) * pagesPerGroup + 1;
+  if (p === groupStart && p > 1) {
+    currentGroup.value--;
+  }
+};
+const nextPage = async () => {
+  if (!reportStore.ownReportMeta?.hasNextPage) return;
+
+  page.value++;
+  await fetchOwnReports();
+
+  const groupEnd = currentGroup.value * pagesPerGroup;
+  if (page.value > groupEnd) {
+    currentGroup.value++;
+  }
+};
+
+const PreviousPage = async () => {
+  if (!reportStore.ownReportMeta?.hasPreviousPage) return;
+
+  page.value--;
+  await fetchOwnReports();
+
+  const groupStart = (currentGroup.value - 1) * pagesPerGroup + 1;
+  if (page.value < groupStart) {
+    currentGroup.value--;
+  }
+};
 </script>
 
 <style scoped>
@@ -303,5 +448,21 @@ watch(
   display: flex !important;
   justify-content: center;
   align-items: center;
+}
+.lost {
+  background: rgb(255, 0, 0);
+  color: rgb(255, 255, 255);
+}
+.found {
+  background: rgb(0, 211, 0);
+  color: rgb(255, 255, 255);
+}
+.active {
+  background: rgba(0, 0, 255, 0.2);
+  color: rgba(0, 0, 255, 0.8);
+}
+.resolved {
+  background: rgba(92, 92, 92, 0.5);
+  color: rgba(255, 255, 255, 0.8);
 }
 </style>
