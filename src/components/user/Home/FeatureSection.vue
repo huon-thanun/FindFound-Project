@@ -1,23 +1,44 @@
 <template>
-  <section class="features-section py-5 bg-white">
-    <div class="container">
+  <section class="features-section py-5">
+    <div class="container py-4">
       <div class="row g-4 text-center mb-5">
-        <div class="col-md-4" v-for="stat in stats" :key="stat.label">
-          <div class="stat-card p-4 rounded-4 shadow-sm">
-            <h2 class="fw-bold text-primary mb-1">{{ stat.value }}</h2>
-            <p class="text-muted mb-0">{{ stat.label }}</p>
+        <div
+          class="col-md-4"
+          v-for="stat in stats"
+          :key="stat.label"
+          data-aos="zoom-in"
+        >
+          <div class="stat-card">
+            <div class="stat-content">
+              <h2 class="stat-value">{{ stat.value }}</h2>
+              <p class="stat-label">{{ stat.label }}</p>
+            </div>
+            <div class="stat-line"></div>
           </div>
         </div>
       </div>
 
-      <div class="row g-4 pt-4">
-        <div class="col-lg-4" v-for="feature in features" :key="feature.title">
-          <div class="feature-box p-4 rounded-4 h-100 border transition-hover">
-            <div class="icon-circle mb-3" :class="feature.bgClass">
+      <div class="text-center mb-5">
+        <h3 class="khmer-font-title fw-bold">ហេតុអ្វីជ្រើសរើសវេទិការបស់យើង?</h3>
+        <div class="divider mx-auto"></div>
+      </div>
+
+      <div class="row g-4">
+        <div
+          class="col-lg-4"
+          v-for="feature in features"
+          :key="feature.title"
+          data-aos="fade-up"
+        >
+          <div class="feature-card h-100">
+            <div class="feature-icon-wrapper" :class="feature.bgClass">
               <i :class="feature.icon"></i>
             </div>
-            <h5 class="fw-bold mb-3">{{ feature.title }}</h5>
-            <p class="text-muted small">{{ feature.desc }}</p>
+            <h5 class="feature-title khmer-font-title">{{ feature.title }}</h5>
+            <p class="feature-desc khmer-font">{{ feature.desc }}</p>
+            <div class="card-arrow">
+              <i class="bi bi-arrow-right-short"></i>
+            </div>
           </div>
         </div>
       </div>
@@ -27,75 +48,187 @@
 
 <script setup>
 const stats = [
-  { value: "10K+", label: "អ្នកប្រើប្រាស់សកម្ម" },
-  { value: "500+", label: "អត្ថបទប្រចាំថ្ងៃ" },
-  { value: "100%", label: "សុវត្ថិភាពទិន្នន័យ" },
+  { value: "5K+", label: "របស់ដែលបានរកឃើញ" },
+  { value: "12K+", label: "សមាជិកជួយគ្នា" },
+  { value: "25+", label: "ខេត្ត-ក្រុងទូទាំងប្រទេស" },
 ];
 
 const features = [
   {
-    title: "សុវត្ថិភាពខ្ពស់",
-    desc: "ប្រើប្រាស់ប្រព័ន្ធ OTP និងការផ្ទៀងផ្ទាត់ពីរជាន់ ដើម្បីការពារគណនីរបស់អ្នក។",
-    icon: "bi bi-shield-lock",
-    bgClass: "bg-soft-purple",
+    title: "ការផ្ទៀងផ្ទាត់ច្បាស់លាស់",
+    desc: "យើងធានាថាព័ត៌មានដែលបានបង្ហោះត្រូវបានត្រួតពិនិត្យ ដើម្បីជៀសវាងការបោកប្រាស់ផ្សេងៗ។",
+    icon: "bi bi-patch-check-fill",
+    bgClass: "icon-purple",
   },
   {
-    title: "ដំណើរការរហ័ស",
-    desc: "គេហទំព័រត្រូវបានរចនាឡើងជាមួយ Vue 3 ដែលផ្តល់នូវបទពិសោធន៍រលូនបំផុត។",
-    icon: "bi bi-lightning-charge",
-    bgClass: "bg-soft-blue",
+    title: "ស្វែងរករហ័សទាន់ចិត្ត",
+    desc: "ប្រើប្រាស់បច្ចេកវិទ្យា Filter វៃឆ្លាត ជួយឱ្យអ្នករកឃើញរបស់ដែលបាត់តាមប្រភេទ និងទីតាំង។",
+    icon: "bi bi-search-heart-fill",
+    bgClass: "icon-gold",
   },
   {
-    title: "គាំទ្រ ២៤/៧",
-    desc: "ក្រុមការងារបច្ចេកទេសរបស់យើង រង់ចាំជួយអ្នករៀងរាល់ម៉ោង។",
-    icon: "bi bi-headset",
-    bgClass: "bg-soft-green",
+    title: "សហគមន៍ជួយគ្នា",
+    desc: "មិនត្រឹមតែជាគេហទំព័រ ប៉ុន្តែជាសហគមន៍ដែលបងប្អូនខ្មែរជួយគ្នាដោយទឹកចិត្តសប្បុរស។",
+    icon: "bi bi-people-fill",
+    bgClass: "icon-blue",
   },
 ];
 </script>
 
 <style scoped>
-.stat-card {
-  background: #fbfaff;
-  border-bottom: 4px solid #3b1e54;
+@import url("https://fonts.googleapis.com/css2?family=Koh+Santepheap:wght@700&family=Kantumruy+Pro:wght@300;400;600&display=swap");
+
+.features-section {
+  background: linear-gradient(to bottom, #ffffff, #f8fafc);
+  overflow: hidden;
 }
 
-.icon-circle {
-  width: 50px;
-  height: 50px;
-  border-radius: 12px;
+.khmer-font {
+  font-family: "Kantumruy Pro", sans-serif;
+}
+.khmer-font-title {
+  font-family: "Koh Santepheap", sans-serif;
+}
+
+/* Stat Card Styles */
+.stat-card {
+  background: white;
+  padding: 2rem;
+  border-radius: 24px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+  position: relative;
+  overflow: hidden;
+  transition: 0.3s;
+}
+
+.stat-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 35px rgba(59, 30, 84, 0.1);
+}
+
+.stat-value {
+  font-family: "Koh Santepheap", sans-serif;
+  font-size: 2.5rem;
+  background: linear-gradient(135deg, #3b1e54 0%, #d4af37 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 5px;
+}
+
+.stat-label {
+  color: #64748b;
+  font-weight: 500;
+  font-family: "Kantumruy Pro", sans-serif;
+}
+
+.stat-line {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 40px;
+  height: 4px;
+  background: #d4af37;
+  border-radius: 10px 10px 0 0;
+  transition: 0.3s;
+}
+
+.stat-card:hover .stat-line {
+  width: 100%;
+}
+
+/* Feature Card Styles */
+.feature-card {
+  background: white;
+  padding: 2.5rem 2rem;
+  border-radius: 30px;
+  border: 1px solid #f1f5f9;
+  position: relative;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.feature-card:hover {
+  transform: translateY(-12px);
+  background: #3b1e54;
+  border-color: #3b1e54;
+}
+
+.feature-icon-wrapper {
+  width: 60px;
+  height: 60px;
+  border-radius: 18px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.5rem;
+  font-size: 1.8rem;
+  margin-bottom: 1.5rem;
+  transition: 0.4s;
 }
 
-.bg-soft-purple {
+.feature-card:hover .feature-icon-wrapper {
+  background: white !important;
+  color: #3b1e54 !important;
+  transform: rotateY(360deg);
+}
+
+.icon-purple {
   background: #f3e8ff;
   color: #7c3aed;
 }
-.bg-soft-blue {
+.icon-gold {
+  background: #fffbeb;
+  color: #d4af37;
+}
+.icon-blue {
   background: #e0f2fe;
   color: #0284c7;
 }
-.bg-soft-green {
-  background: #dcfce7;
-  color: #16a34a;
+
+.feature-title {
+  font-size: 1.25rem;
+  margin-bottom: 1rem;
+  transition: 0.3s;
 }
 
-.transition-hover {
-  transition: all 0.3s ease;
+.feature-desc {
+  font-size: 0.9rem;
+  color: #64748b;
+  line-height: 1.7;
+  transition: 0.3s;
 }
 
-.transition-hover:hover {
-  transform: translateY(-10px);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-  border-color: #3b1e54 !important;
+.feature-card:hover .feature-title,
+.feature-card:hover .feature-desc {
+  color: white;
 }
 
-h5,
-p,
-h2 {
-  font-family: "Kantumruy Pro", sans-serif;
+/* Decoration */
+.divider {
+  width: 60px;
+  height: 4px;
+  background: #d4af37;
+  border-radius: 2px;
+  margin-top: 15px;
+}
+
+.card-arrow {
+  position: absolute;
+  bottom: 20px;
+  right: 25px;
+  font-size: 1.5rem;
+  color: #d4af37;
+  opacity: 0;
+  transition: 0.3s;
+}
+
+.feature-card:hover .card-arrow {
+  opacity: 1;
+  right: 20px;
+}
+
+@media (max-width: 768px) {
+  .stat-value {
+    font-size: 2rem;
+  }
 }
 </style>

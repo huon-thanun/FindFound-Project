@@ -16,6 +16,7 @@ import UserVerifyOTPView from "@/views/user/auth/UserVerifyOTPView.vue";
 import ReportViewUser from "@/views/user/reports/ReportView.vue";
 import ReportDetailView from "@/views/user/reports/ReportDetailView.vue";
 import OwnReportView from "@/views/user/reports/OwnReportView.vue";
+import ProfileUserView from "@/views/user/profile/ProfileUserView.vue";
 
 /* ===== ADMIN VIEWS ===== */
 import DashboardView from "@/views/admin/dashboard/dashboardView.vue";
@@ -29,6 +30,12 @@ import UserView from "@/views/admin/users/UserView.vue";
 /* ===== STORE ===== */
 import { useAuthStore } from "@/stores/authStore";
 import MatchReport from "@/views/user/reports/matchReport.vue";
+
+// ================= CONTACT US & GALLERY VIEWS =================
+import ContactUsView from "@/views/user/contact_us/ContactUsView.vue";
+import GalleryView from "@/views/user/gallery/GalleryView.vue";
+import ItemDetailsView from "@/views/user/gallery/ItemDetailsView.vue";
+import SuccessStoriesView from "@/views/user/success_stories/SuccessStoriesView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -100,6 +107,32 @@ const router = createRouter({
           name: "about",
           component: AboutView,
         },
+        {
+          path: "contact_us",
+          name: "contact_us",
+          component: ContactUsView,
+        },
+        {
+          path: "gallery",
+          name: "gallery",
+          component: GalleryView,
+        },
+        {
+          path: "gallery/item/:id",
+          name: "item_detail",
+          component: ItemDetailsView,
+        },
+        {
+          path: "profile",
+          name: "user.profile",
+          component: ProfileUserView,
+          meta: { requiresAuth: true, role: "user" }, // <-- Protected
+        },
+        {
+          path: "successstory",
+          name: "successstory",
+          component: SuccessStoriesView,
+        },
         /* ===== USER REPORTS ===== */
         {
           path: "reports",
@@ -168,48 +201,48 @@ const router = createRouter({
 
     /* ================= ADMIN AREA ================= */
     {
-  path: "/admin",
-  component: AdminLayout,
-  meta: {
-    requiresAuth: true,
-    role: "admin",
-  },
-  redirect: { name: "admin.dashboard" },
-  children: [
-    {
-      path: "dashboard",
-      name: "admin.dashboard",
-      component: DashboardView,
+      path: "/admin",
+      component: AdminLayout,
+      meta: {
+        requiresAuth: true,
+        role: "admin",
+      },
+      redirect: { name: "admin.dashboard" },
+      children: [
+        {
+          path: "dashboard",
+          name: "admin.dashboard",
+          component: DashboardView,
+        },
+        {
+          path: "profile",
+          name: "admin.profile",
+          component: ProfileView,
+        },
+        {
+          path: "profile-edit",
+          name: "admin.profile.edit",
+          component: EditProfileView,
+        },
+        {
+          path: "categories",
+          name: "admin.categories",
+          component: CategoryView,
+        },
+        {
+          path: "reports",
+          name: "admin.reports",
+          component: ReportView,
+        },
+        {
+          path: "users",
+          name: "admin.users",
+          component: UserView,
+        },
+      ],
     },
-    {
-      path: "profile",
-      name: "admin.profile",
-      component: ProfileView,
-    },
-    {
-      path: "profile-edit",
-      name: "admin.profile.edit",
-      component: EditProfileView,
-    },
-    {
-      path: "categories",
-      name: "admin.categories",
-      component: CategoryView,
-    },
-    {
-      path: "reports",
-      name: "admin.reports",
-      component: ReportView,
-    },
-    {
-      path: "users",
-      name: "admin.users",
-      component: UserView,
-    },
-  ],
-},
 
-  /* ================= FALLBACK ================= */
+    /* ================= FALLBACK ================= */
     {
       path: "/:pathMatch(.*)*",
       redirect: "/login",

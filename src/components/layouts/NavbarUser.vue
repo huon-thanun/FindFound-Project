@@ -52,28 +52,36 @@
 
     <!-- SHOW Lost / Found when HAS token -->
     <BaseModal
-      :title="'Logout'"
+      :title="'ចាកចេញពីគណនី'"
       :icon="'exclamation-triangle'"
       :theme="'danger'"
       :isClose="showModal"
-      @closeModal="showModal = true"
+      @closeModal="showModal = false"
     >
       <template #body>
-        <p>Are you sure ?</p>
+        <p class="khmer-font">តើអ្នកពិតជាចង់ចាកចេញពីកម្មវិធីមែនទេ?</p>
       </template>
+
       <template #btnClose>
         <BaseButton
           variant="cancel"
           icon="x-circle"
-          class="col-6"
-          @click="isOpen"
-          >Close</BaseButton
+          class="col-6 khmer-font"
+          @click="showModal = false"
         >
+          បោះបង់
+        </BaseButton>
       </template>
+
       <template #btnActive>
-        <BaseButton variant="danger" icon="check-circle" class="col-6"
-          >Confirm</BaseButton
+        <BaseButton
+          icon="check-circle"
+          variant="danger"
+          class="col-6 khmer-font"
+          @click="logout"
         >
+          បញ្ជាក់
+        </BaseButton>
       </template>
     </BaseModal>
   </div>
@@ -149,7 +157,7 @@
 
             <li class="nav-item">
               <router-link
-                to=""
+                to="/contact_us"
                 class="nav-link-custom"
                 :class="{ active: activeLink === 'contact' }"
                 @click.prevent="setActive('contact')"
@@ -204,7 +212,7 @@
               </div>
 
               <!-- Menu Items -->
-              <router-link to="" class="dropdown-item-custom">
+              <router-link to="/profile" class="dropdown-item-custom">
                 <i class="bi bi-person"></i>
                 <span>ប្រវត្តិរូបរបស់ខ្ញុំ</span>
               </router-link>
@@ -227,12 +235,12 @@
               </router-link>
 
               <a
-                @click="isClose"
+                @click.prevent="openLogoutModal"
                 href="#"
                 class="dropdown-item-custom dropdown-item-logout"
               >
                 <i class="bi bi-box-arrow-right"></i>
-                <span>ចាកចាញ</span>
+                <span>ចាកចេញ</span>
               </a>
             </div>
           </div>
@@ -240,63 +248,111 @@
       </div>
     </div>
     <BaseModal
+      v-if="showModal"
       :title="'ចាកចាញ'"
       :icon="'exclamation-triangle'"
       :theme="'danger'"
-      :isClose="showModal"
-      @closeModal="showModal = true"
+      @closeModal="closeLogoutModal"
     >
       <template #body>
-        <p>Are you sure ?</p>
+        <p>Are you sure you want to logout?</p>
       </template>
       <template #btnClose>
         <BaseButton
           variant="cancel"
           icon="x-circle"
           class="col-6"
-          @click="isClose"
-          >បិទ</BaseButton
+          @click="closeLogoutModal"
         >
+          បិទ
+        </BaseButton>
       </template>
       <template #btnActive>
-        <BaseButton icon="check-circle" variant="danger" class="col-6"
-          >បញ្ជាក់</BaseButton
+        <BaseButton
+          icon="check-circle"
+          variant="danger"
+          class="col-6"
+          @click="logout"
         >
+          បញ្ជាក់
+        </BaseButton>
       </template>
     </BaseModal>
   </nav>
 </template>
-
 <script setup>
 import { ref, computed, onMounted } from "vue";
 import { useProfileStore } from "@/stores/profileStore";
+
 const activeLink = ref("home");
 const profileStore = useProfileStore();
-console.log("profile", profileStore.profile);
 
-
-// simulate token (later replace with Pinia / real auth)
+// Token and UI state
 const token = ref(null);
-const showModal = ref(false);
-function isClose() {
-  showModal.value = !showModal.value;
-}
-const isOpen = ref("true");
+const showModal = ref(false); // modal open/close
+const isSidebarOpen = ref(true); // sidebar open/close
+
+// Sidebar toggle
 const toggleSidebar = () => {
-  isOpen.value = !isOpen.value;
+  isSidebarOpen.value = !isSidebarOpen.value;
 };
-// example: get token from localStorage
+
+// Example: get token from localStorage
 onMounted(() => {
   token.value = localStorage.getItem("token");
 });
 
-// true = user NOT logged in
-// false = user logged in
+// Show login buttons if no token
 const showAuthButtons = computed(() => !token.value);
 
+// Active link in navbar
 const setActive = (link) => {
   activeLink.value = link;
 };
+
+// LOGOUT function
+async function logout() {
+  try {
+    if (!token.value) return;
+
+    const response = await fetch(
+      "https://ant-g2-landf.ti.linkpc.net/api/v1/auth/logout",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token.value}`,
+        },
+      },
+    );
+
+    const data = await response.json();
+    console.log("Logout response:", data);
+
+    // Clear token
+    localStorage.removeItem("token");
+    token.value = null;
+
+    // Close modal
+    showModal.value = false;
+
+    // Redirect to login page
+    window.location.href = "/login";
+  } catch (error) {
+    console.error("Logout failed:", error);
+    alert("Logout failed. Please try again.");
+  }
+}
+
+// Open logout modal
+function openLogoutModal() {
+  showModal.value = true;
+}
+
+// Close logout modal
+function closeLogoutModal() {
+  showModal.value = false;
+}
 </script>
 
 <style scoped>

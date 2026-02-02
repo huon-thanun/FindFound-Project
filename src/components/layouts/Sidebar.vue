@@ -3,48 +3,51 @@
     <!-- Logo Section -->
     <div class="logo-section">
       <div class="d-flex align-items-center">
-        <img src="../../assets/images/logo/logo.png" class="object-fit-cover" height="79px" width="170px" alt="">
+        <img
+          src="../../assets/images/logo/logo.png"
+          class="object-fit-cover"
+          height="79px"
+          width="170px"
+          alt=""
+        />
       </div>
     </div>
 
     <!-- Navigation Menu -->
     <nav class="nav-menu">
-      <router-link
-        :to="{ name: 'admin.dashboard' }"
-        class="nav-item"
-      >
+      <router-link :to="{ name: 'admin.dashboard' }" class="nav-item">
         <i class="bi bi-speedometer2"></i> ផ្ទាំងគ្រប់គ្រង
       </router-link>
 
-      <router-link
-        :to="{ name: 'admin.users' }"
-        class="nav-item"
-      >
+      <router-link :to="{ name: 'admin.users' }" class="nav-item">
         <i class="bi bi-person"></i> អ្នកប្រើប្រាស់
       </router-link>
 
-      <router-link
-        :to="{ name: 'admin.categories' }"
-        class="nav-item"
-      >
+      <router-link :to="{ name: 'admin.categories' }" class="nav-item">
         <i class="bi bi-tags"></i> ឧបករណ៍
       </router-link>
 
-      <router-link
-        :to="{ name: 'admin.reports' }"
-        class="nav-item"
-      >
+      <router-link :to="{ name: 'admin.reports' }" class="nav-item">
         <i class="bi bi-collection"></i> របាយការណ៍
       </router-link>
     </nav>
 
     <!-- User Section -->
     <div class="user-section">
-      <base-button icon="person-fill-gear" variant="success" class="security-btn">
+      <base-button
+        icon="person-fill-gear"
+        variant="success"
+        class="security-btn"
+      >
         <!-- Logout SVG -->
-        <span>សន្តិសុខ</span>
-      </base-button><br>
-      <base-button @click="isOpen" icon="box-arrow-right" variant="danger" class="logout-btn">
+        <span>សន្តិសុខ</span> </base-button
+      ><br />
+      <base-button
+        @click="isOpen"
+        icon="box-arrow-right"
+        variant="danger"
+        class="logout-btn"
+      >
         <!-- Logout SVG -->
         <span>ចាកចាញ</span>
       </base-button>
@@ -60,22 +63,29 @@
         <p>Are you sure ?</p>
       </template>
       <template #btnClose>
-        <BaseButton variant="cancel" icon="x-circle" class="col-6" @click="isOpen">Close</BaseButton>
+        <BaseButton
+          variant="cancel"
+          icon="x-circle"
+          class="col-6"
+          @click="isOpen"
+          >Close</BaseButton
+        >
       </template>
       <template #btnActive>
-        <BaseButton variant="danger" icon="check-circle" class="col-6 ">Confirm</BaseButton>
+        <BaseButton variant="danger" icon="check-circle" class="col-6"
+          >Confirm</BaseButton
+        >
       </template>
     </BaseModal>
-    </div>
+  </div>
 </template>
 
 <script setup>
 import { ref } from "vue";
 const showModal = ref(false);
-function isOpen(){
-  showModal.value = !showModal.value
+function isOpen() {
+  showModal.value = !showModal.value;
 }
-
 </script>
 
 <style scoped>
@@ -92,9 +102,9 @@ body {
   position: fixed;
   left: 0;
   top: 0;
-  transition: .3s;
-    width: 21%;
-    flex:0 0 auto;
+  transition: 0.3s;
+  width: 21%;
+  flex: 0 0 auto;
   position: fixed;
   z-index: 99;
 }
@@ -171,7 +181,8 @@ body {
   margin-bottom: 0;
 }
 
-.logout-btn,.security-btn {
+.logout-btn,
+.security-btn {
   width: 100%;
   display: flex;
   align-items: center;
@@ -189,7 +200,7 @@ body {
 }
 
 @media (max-width: 992px) {
-  .logo-section{
+  .logo-section {
     opacity: 0;
   }
 }
