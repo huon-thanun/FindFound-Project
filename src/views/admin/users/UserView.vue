@@ -30,14 +30,16 @@
     <div class="card mb-3 shadow">
       <div class="card-body d-flex gap-3 align-items-start filter-row">
         <div class="filter-search">
-          <BaseInput type="text" placeholder="ស្វែងរកតាមឈ្មោះ​ និងអុីមែល..." v-model="filters.search"
+          <BaseInput class="d-block d-md-none d-xl-block" type="text" placeholder="ស្វែងរកតាមឈ្មោះ​ និងអុីមែល..." v-model="filters.search"
+            @keyup.enter="resetAndLoadUsers" />
+          <BaseInput class="d-none d-md-block d-xl-none" type="text" placeholder="ស្វែងរក..." v-model="filters.search"
             @keyup.enter="resetAndLoadUsers" />
         </div>
 
         <div class="mt-sm-0 mt-md-2 p-0 filter-sort-1">
           <BaseSelect textField="តម្រៀបតាម" :modelValue="sortOptions.find((o) => o.value === filters.sortBy) || null
             " :items="sortOptions" labelField="label" valueField="value" @update:modelValue="(item) => (filters.sortBy = item?.value || '')
-              " class="text-nowrap" />
+            " class="text-nowrap" />
         </div>
 
         <div class="d-flex gap-3 filter-column w-100">
@@ -55,6 +57,16 @@
               @update:modelValue="(item) => (filters.status = item?.value || '')" class="text-nowrap" />
           </div>
 
+        </div>
+
+        <!-- CLEAR FILTER -->
+        <div class="mt-sm-0 mt-md-1 mt-lg-2 p-0 d-flex justify-content-end filter-clear">
+          <BaseButton class="d-none d-md-block" variant="outline_primary" icon="stars" @click="clearFilter">
+            សម្អាត
+          </BaseButton>
+          <BaseButton class="d-block d-md-none d-flex justify-content-between" variant="outline_primary" icon="stars" @click="clearFilter">
+            សម្អាតការតម្រៀប
+          </BaseButton>
         </div>
 
       </div>
@@ -94,7 +106,7 @@
             បន្ទាប់
           </BaseButton>
         </div>
-        <!-- <p class="text-muted">Total: {{ total }} users</p> -->
+        <p class="text-muted">Total: {{ total }} users</p>
       </div>
     </div>
 
@@ -487,6 +499,15 @@ const previousPage = async () => {
   }
 };
 
+// Clear Filter
+const clearFilter = () => {
+  filters.search = '';
+  filters.status = '';
+  filters.sortBy = null;
+  filters.sortDir = null;
+};
+
+
 // Load first page on mount
 onMounted(() => resetAndLoadUsers());
 </script>
@@ -515,7 +536,8 @@ onMounted(() => resetAndLoadUsers());
     flex-direction: row;
   }
 
-  .filter-search {
+  .filter-search,
+  .filter-clear {
     width: 100%;
   }
 

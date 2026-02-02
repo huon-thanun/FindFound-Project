@@ -295,6 +295,13 @@ const openDetailModal = (category) => {
     showDetailModal.value = true;
 };
 
+// Clear Filter
+const clearFilter = () => {
+    search.value = "";
+    sortBy.value = "";
+    sortDir.value = "";
+};
+
 </script>
 
 <template>
@@ -330,8 +337,10 @@ const openDetailModal = (category) => {
             <div class="card-body d-flex gap-3 align-items-start filter-row">
 
                 <!-- Search -->
-                <div class="filter-search">
-                    <BaseInput v-model="search" placeholder="ស្វែងរកតាមប្រភេទ​ និងការពិពណ៌នា..." />
+                <div class="filter-search w-100">
+                    <!-- <BaseInput class="d-block d-lg-none" v-model="search" placeholder="ស្វែងរកតាមប្រភេទ​ និងការពិពណ៌នា..." /> -->
+                    <BaseInput class="d-block d-md-none d-xl-block" v-model="search" placeholder="ស្វែងរកតាមប្រភេទ​ និងការពិពណ៌នា..." />
+                    <BaseInput class="d-none d-md-block d-xl-none" v-model="search" placeholder="ស្វែងរក..." />
                 </div>
 
                 <div class="d-flex gap-3 filter-column w-100">
@@ -345,6 +354,13 @@ const openDetailModal = (category) => {
                         <BaseSelect v-model="sortDir" :items="SORT_DIR_OPTIONS" labelField="name" valueField="id"
                             textField="ទិសដៅតម្រៀប" class="text-nowrap" />
                     </div>
+                </div>
+
+                <!-- CLEAR FILTER -->
+                <div class="mt-sm-0 mt-md-1 mt-lg-2 p-0 d-flex justify-content-end filter-clear">
+                    <BaseButton variant="outline_primary" icon="stars" @click="clearFilter">
+                        សម្អាតការតម្រៀប
+                    </BaseButton>
                 </div>
             </div>
             <!-- </div> -->
@@ -432,7 +448,7 @@ const openDetailModal = (category) => {
                 <div v-if="selectedCategoryDetail" class="text-start">
                     <p><strong class="text-dark">ល.រ:</strong> #{{ selectedCategoryDetail.id }}</p>
                     <p><strong class="text-dark">ប្រភេទ:</strong><span class="badge bg-success ms-2 fw-normal"> {{
-                            selectedCategoryDetail.name }}</span></p>
+                        selectedCategoryDetail.name }}</span></p>
                     <p><strong class="text-dark">ការពិពណ៌នា:</strong> {{ selectedCategoryDetail.description }}</p>
                     <p><strong class="text-dark">បានបង្កើតនៅ:</strong> {{ formatDate(selectedCategoryDetail.createdAt)
                         }}</p>
@@ -456,9 +472,10 @@ const openDetailModal = (category) => {
     flex: 1;
 }
 
-.filter-column>div {
+.filter-col>div {
     flex: 1;
 }
+
 
 /* SM screens */
 @media (max-width: 767.98px) {
@@ -470,7 +487,8 @@ const openDetailModal = (category) => {
         flex-direction: row;
     }
 
-    .filter-search {
+    .filter-search,
+    .filter-clear {
         width: 100%;
     }
 
@@ -478,5 +496,6 @@ const openDetailModal = (category) => {
         width: 50%;
         flex: 1;
     }
+
 }
 </style>

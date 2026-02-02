@@ -58,6 +58,13 @@ defineEmits(["click"]);
     var(--primary-color-shadow) 0px 1px 2px 0px,
     var(--primary-color-shadow) 0px 1px 3px 1px;
 }
+.btn_outline_primary {
+  border-color: var(--primary-color) !important;
+  color: var(--primary-color) !important;
+  box-shadow:
+    var(--primary-color-shadow) 0px 1px 2px 0px,
+    var(--primary-color-shadow) 0px 1px 3px 1px;
+}
 .btn_secondary {
   background: var(--secondary-color) !important;
   box-shadow:
