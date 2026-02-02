@@ -87,6 +87,45 @@ const members = [
       </div>
     </section>
 
+    <!-- our thank-->
+    <section class="py-5">
+      <div class="container">
+        <div class="card-surface p-4 p-lg-5 text-center" data-aos="fade-up" data-aos-duration="1000">
+          <h3 class="fw-bold mb-3">សេចក្ដីថ្លែងអំណរគុណ</h3>
+          <p class="thank-content mb-5">
+            ពួកយើង​ សូមថ្លែងអំណរគុណយ៉ាងជ្រាលជ្រៅដល់
+            <span class="fw-bold">ក្រសួងប្រៃសណីយ៍ និងទូរគមនាគមន៍ មូលនិធិ ស.អ</span>
+            និង
+            <span class="fw-bold">ថ្នាក់បណ្ដុះបណ្ដាលបច្ចេកវិទ្យា ANT</span>
+            <br />
+            ដែលបានផ្តល់អាហារូបករណ៍ និងឱកាសដ៏មានតម្លៃសម្រាប់ការសិក្សាផ្នែក Web
+            Development ដល់ពួកយើង។<br />
+            អរគុណចំពោះការគាំទ្រ និងការយកចិត្តទុកដាក់របស់ស្ថាប័នទាំងអស់
+            ដែលមិនត្រឹមតែផ្ដល់ចំណេះដឹង និងជំនាញបច្ចេកទេសសម្រាប់ក្រុមយើងទេ
+            <br />
+            ប៉ុន្តែថែមទាំងជួយបង្កើនទំនុកចិត្ត និងសមត្ថភាពក្នុងការបង្កើតគេហទំព័រ ដើម្បីរួមចំណែកក្នុងការលើកវិស័យបច្ចេកវិទ្យា
+            និងឌីជីថលនៅកម្ពុជាទៀតផង។<br />
+            យើងសូមសន្យាថា នឹងប្រើប្រាស់ចំណេះដឹង និងជំនាញដែលទទួលបាន
+            ដើម្បីបន្តការបង្កើត និងអភិវឌ្ឍកម្មវិធី ឲ្យមានប្រយោជន៍ចំពោះសង្គម
+            និងសហគមន៍ក្នុងស្រុក។
+          </p>
+          <div class="row" data-aos="zoom-in-up" data-aos-duration="1000">
+            <div class="col-12 col-md-4 align-content-center">
+              <img class="img-fluid w-100 object-fit-contain" src="" alt="ក្រសួងប្រៃសណីយ៍" />
+            </div>
+            <div class="col-12 col-md-4 align-content-center">
+              <img class="img-fluid w-75 object-fit-contain" src="" alt="CBRD Fund"
+                style="transform: scale(0.7)" />
+            </div>
+            <div class="col-12 col-md-4 align-content-center">
+              <img class="img-fluid w-50 object-fit-contain" src="" alt="ANT Technology"
+                style="transform: scale(0.7)" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
   </div>
 </template>
 

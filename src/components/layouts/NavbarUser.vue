@@ -124,7 +124,7 @@
 
             <li class="nav-item">
               <router-link
-                to="reports"
+                :to="{ name: 'report.user' }"
                 class="nav-link-custom"
                 :class="{ active: activeLink === 'reports' }"
                 @click.prevent="setActive('reports')"
@@ -206,7 +206,7 @@
                   alt="User Avatar"
                 />
                 <div class="user-info">
-                  <h6>{{ profileStore.fullname }}</h6>
+                  <h6>sal</h6>
                   <p>john.doe@email.com</p>
                 </div>
               </div>
@@ -217,7 +217,10 @@
                 <span>ប្រវត្តិរូបរបស់ខ្ញុំ</span>
               </router-link>
 
-              <router-link to="" class="dropdown-item-custom">
+              <router-link
+                :to="{ name: 'own-reports' }"
+                class="dropdown-item-custom"
+              >
                 <i class="bi bi-file-earmark-text"></i>
                 <span>របាយការណ៍របស់ខ្ញុំ</span>
               </router-link>
@@ -229,7 +232,7 @@
 
               <div class="dropdown-divider-custom"></div>
 
-              <router-link to="" class="dropdown-item-custom">
+              <router-link to="/support" class="dropdown-item-custom">
                 <i class="bi bi-question-circle"></i>
                 <span>ជំនួយ និងការគាំទ្រ</span>
               </router-link>

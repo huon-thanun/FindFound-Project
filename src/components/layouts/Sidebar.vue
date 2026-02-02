@@ -23,8 +23,11 @@
         <i class="bi bi-person"></i> អ្នកប្រើប្រាស់
       </router-link>
 
-      <router-link :to="{ name: 'admin.categories' }" class="nav-item">
-        <i class="bi bi-tags"></i> ឧបករណ៍
+      <router-link
+        :to="{ name: 'admin.categories' }"
+        class="nav-item"
+      >
+        <i class="bi bi-tags"></i> ប្រភេទរបាយការណ៍
       </router-link>
 
       <router-link :to="{ name: 'admin.reports' }" class="nav-item">

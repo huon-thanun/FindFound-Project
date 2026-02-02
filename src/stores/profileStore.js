@@ -12,6 +12,7 @@ export const useProfileStore = defineStore("profile", () => {
     error.value = null;
     try {
       const res = await api.get("/auth/profile");
+
       profile.value = res.data.data;
     } catch (err) {
       console.error("Fetch profile error:", err);
