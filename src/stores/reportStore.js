@@ -61,46 +61,114 @@ export const useReportStore = defineStore("report", () => {
     }
   };
   const ownReports = ref([]);
+  const ownReportMeta = ref(null);
   const isLoadingGetOwnReports = ref(false);
-  const getOwnReports = async () => {
+  const getOwnReports = async (params = {}) => {
+    isLoadingGetOwnReports.value = true;
     try {
-      isLoadingGetOwnReports.value = true;
-      const res = await api.get("/reports/own");
+      const cleanParams = Object.fromEntries(
+        Object.entries(params).filter(
+          ([_, v]) => v !== "" && v !== null && v !== undefined,
+        ),
+      );
+      const res = await api.get("/reports/own", {
+        params: cleanParams,
+      });
       ownReports.value = res.data.data.items;
+      ownReportMeta.value = res.data.data.meta;
+      if (ownReports.value.length !== 0) {
+        isEmpty.value = false;
+      }
     } catch (error) {
-      console.error(error);
+      console.error("GET REPORTS ERROR:", error);
+      isEmpty.value = false;
     } finally {
       isLoadingGetOwnReports.value = false;
     }
   };
-  const isLoadingDeleteOwnArticle = ref(false);
+  const isLoadingDeleteOwnReport = ref(false);
   const deleteMessage = ref([]);
   const deleteOwnReport = async (id) => {
+    isLoadingDeleteOwnReport.value = true;
     try {
-      isLoadingDeleteOwnArticle.value = true;
       const res = await api.delete(`/reports/${id}`);
       deleteMessage.value = res.data;
     } catch (error) {
       console.error(error);
     } finally {
-      isLoadingDeleteOwnArticle.value = false;
+      isLoadingDeleteOwnReport.value = false;
+    }
+  };
+
+  // --------------------------------------------------------------
+  const isLoadingCreateOwnReport = ref(false);
+  const msgCreateOwnReport = ref([]);
+  const creatOwnReport = async (formData) => {
+    isLoadingCreateOwnReport.value = true;
+    try {
+      const res = await api.post("/reports", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      console.log(res);
+
+      msgCreateOwnReport.value = res.data;
+    } catch (error) {
+      throw error;
+    } finally {
+      isLoadingCreateOwnReport.value = false;
+    }
+  };
+  const isLoadingEditOwnReport = ref(false);
+  const msgEditOwnReport = ref([]);
+  const editOwnReport = async (id, formData) => {
+    isLoadingEditOwnReport.value = true;
+
+    try {
+      const res = await api.put(`/reports/${id}`, formData);
+      msgEditOwnReport.value = res.data;
+      return res.data;
+    } catch (error) {
+      console.error("Edit report error:", error.response?.data || error);
+      throw error;
+    } finally {
+      isLoadingEditOwnReport.value = false;
+    }
+  };
+  const matchReports = ref([]);
+  const getMatchReportByid = async (id) => {
+    try {
+      const res = await api.get(`/matches/reports/${id}`);
+      matchReports.value = res.data.data;
+    } catch (error) {
+      throw error;
     }
   };
   return {
     isLoadingGetAllReport,
     isLoadingGetAReport,
     isLoadingGetOwnReports,
-    isLoadingDeleteOwnArticle,
+    isLoadingDeleteOwnReport,
+    isLoadingCreateOwnReport,
+    isLoadingEditOwnReport,
     allReportType,
     allReports,
     report,
     ownReports,
     deleteMessage,
+    msgCreateOwnReport,
+    msgEditOwnReport,
+    matchReports,
     getAllReportType,
     getAllReports,
     getReportById,
     getOwnReports,
     deleteOwnReport,
+    creatOwnReport,
+    editOwnReport,
+    getMatchReportByid,
     meta,
+    ownReportMeta,
   };
 });

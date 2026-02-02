@@ -14,8 +14,10 @@ import ResetPasswordView from "@/views/user/auth/ResetPasswordView.vue";
 import OTPView from "@/views/user/auth/OTPView.vue";
 import UserVerifyOTPView from "@/views/user/auth/UserVerifyOTPView.vue";
 import ReportViewUser from "@/views/user/reports/ReportView.vue";
-import ReportDetailView from "@/views/user/reports/ReportDetailView.vue";
 import OwnReportView from "@/views/user/reports/OwnReportView.vue";
+import CreateReportView from "@/views/user/reports/CreateReportView.vue";
+import EditReportView from "@/views/user/reports/EditReportView.vue";
+import ReportDetailViewUser from "@/views/user/reports/ReportDetailView.vue";
 
 /* ===== ADMIN VIEWS ===== */
 import DashboardView from "@/views/admin/dashboard/dashboardView.vue";
@@ -105,20 +107,31 @@ const router = createRouter({
         },
         /* ===== USER REPORTS ===== */
         {
-          path: "reports",
+          path: "reports/user",
           name: "report.user",
           component: ReportViewUser,
         },
         {
-          path: "reports/:id",
+          path: "reports/user/:id",
           name: "report-detail-user",
-          component: ReportDetailView,
+          component: ReportDetailViewUser,
           props: true,
         },
         {
-          path: "/reports/own",
+          path: "reports/user/own",
           name: "own-reports",
           component: OwnReportView,
+        },
+        {
+          path: "reports/own/create",
+          name: "create-report",
+          component: CreateReportView,
+        },
+        {
+          path: "reports/own/edit/:id",
+          name: "edit-report",
+          component: EditReportView,
+          props: true,
         },
         {
           path: "/reports/match",
@@ -172,62 +185,62 @@ const router = createRouter({
         },
         {
           path: "reports",
-          name: "report.user",
-          component: ReportViewUser,
+          name: "admin.reports",
+          component: ReportView,
         },
-        {
-          path: "reports/:id",
-          name: "report-detail-user",
-          component: ReportDetailView,
-          props: true,
-        },
+        // {
+        //   path: "/reports/admin/:id",
+        //   name: "report-detail-admin",
+        //   component: ReportDetailView,
+        //   props: true,
+        // },
       ],
     },
 
     /* ================= ADMIN AREA ================= */
     {
-  path: "/admin",
-  component: AdminLayout,
-  meta: {
-    requiresAuth: true,
-    role: "admin",
-  },
-  redirect: { name: "admin.dashboard" },
-  children: [
-    {
-      path: "dashboard",
-      name: "admin.dashboard",
-      component: DashboardView,
+      path: "/admin",
+      component: AdminLayout,
+      meta: {
+        requiresAuth: true,
+        role: "admin",
+      },
+      redirect: { name: "admin.dashboard" },
+      children: [
+        {
+          path: "dashboard",
+          name: "admin.dashboard",
+          component: DashboardView,
+        },
+        {
+          path: "profile",
+          name: "admin.profile",
+          component: ProfileView,
+        },
+        {
+          path: "profile-edit",
+          name: "admin.profile.edit",
+          component: EditProfileView,
+        },
+        {
+          path: "categories",
+          name: "admin.categories",
+          component: CategoryView,
+        },
+        // {
+        //   path: "reports",
+        //   name: "admin.reports",
+        //   component: ReportView,
+        // },
+        {
+          path: "users",
+          name: "admin.users",
+          component: UserView,
+        },
+      ],
     },
-    {
-      path: "profile",
-      name: "admin.profile",
-      component: ProfileView,
-    },
-    {
-      path: "profile-edit",
-      name: "admin.profile.edit",
-      component: EditProfileView,
-    },
-    {
-      path: "categories",
-      name: "admin.categories",
-      component: CategoryView,
-    },
-    {
-      path: "reports",
-      name: "admin.reports",
-      component: ReportView,
-    },
-    {
-      path: "users",
-      name: "admin.users",
-      component: UserView,
-    },
-  ],
-},
 
-  /* ================= FALLBACK ================= */
+    /* ================= FALLBACK ================= */
     {
       path: "/:pathMatch(.*)*",
       redirect: "/login",

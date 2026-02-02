@@ -118,25 +118,25 @@
 
             <div
               class="contact-item d-flex mb-4"
-              v-if="reportStore.report.reporter?.phoneNumber !== null"
+              v-if="reportStore.report.contactInformation?.phoneNumber"
             >
               <i class="bi bi-telephone me-3 text-muted"></i>
               <div>
                 <small class="text-muted d-block">លេខទូរសព្ទ</small>
                 <span class="fw-bold">
-                  {{ reportStore.report.reporter?.phoneNumber }}
+                  {{ reportStore.report.contactInformation?.phoneNumber }}
                 </span>
               </div>
             </div>
             <div
               class="contact-item d-flex mb-4"
-              v-if="reportStore.report.reporter?.telegramLink !== null"
+              v-if="reportStore.report.contactInformation?.telegramLink"
             >
               <i class="bi bi-telegram me-3 fs-4 text-muted"></i>
               <div>
                 <small class="text-muted d-block">Telegram</small>
                 <span class="fw-bold">
-                  {{ reportStore.report.reporter?.telegramLink }}
+                  {{ reportStore.report.contactInformation?.telegramLink }}
                 </span>
               </div>
             </div>
@@ -144,6 +144,79 @@
             <!-- <button class="btn btn-dark w-100 py-2 fw-bold mt-2 rounded-3">
               Contact Reporter
             </button> -->
+          </div>
+        </div>
+        <div class="col-12 py-3">
+          <h2 class="fw-bold pb-2">របាយការណ៍ស្រដៀងគ្នា</h2>
+          <div class="row">
+            <div
+              class="col-12 col-md-6 col-lg-3 mb-4"
+              v-for="item in reportStore.matchReports.matchedReports"
+              :key="item.id"
+            >
+              <BaseReportCard class="match-card h-100">
+                <!-- Image -->
+                <template #image>
+                  <div class="match-image position-relative">
+                    <img
+                      :src="
+                        item.matchedReport.reportImages?.[0]?.name ||
+                        defaultImage
+                      "
+                      :alt="item.matchedReport.title || 'Report Image'"
+                    />
+
+                    <!-- Confidence badge -->
+                    <span class="confidence-badge">
+                      {{ Math.round(item.confidenceScore * 100) }}% match
+                    </span>
+                  </div>
+                </template>
+
+                <!-- Content -->
+                <div class="p-3">
+                  <!-- Status row -->
+                  <div class="d-flex gap-2 mb-2 flex-wrap">
+                    <span
+                      class="badge-pill"
+                      :class="item.matchedReport.reportType.name.toLowerCase()"
+                    >
+                      {{ item.matchedReport.reportType.name }}
+                    </span>
+
+                    <span
+                      class="badge-pill"
+                      :class="item.matchedReport.status.toLowerCase()"
+                    >
+                      {{ item.matchedReport.status }}
+                    </span>
+                  </div>
+
+                  <!-- Title -->
+                  <h5 class="fw-bold mb-2 text-truncate">
+                    {{ item.matchedReport.title }}
+                  </h5>
+
+                  <!-- Info -->
+                  <ul class="item-list small text-muted m-0 p-0">
+                    <li>
+                      <i class="bi bi-tag"></i>
+                      {{ item.matchedReport.category.name }}
+                    </li>
+
+                    <li>
+                      <i class="bi bi-geo-alt"></i>
+                      {{ item.matchedReport.locationText }}
+                    </li>
+
+                    <li>
+                      <i class="bi bi-calendar3"></i>
+                      {{ formatDate(item.matchedReport.createdAt) }}
+                    </li>
+                  </ul>
+                </div>
+              </BaseReportCard>
+            </div>
           </div>
         </div>
       </div>
@@ -157,6 +230,7 @@ import { computed } from "vue";
 import { useRoute } from "vue-router";
 
 import { formatDate } from "@/utils/formatDate";
+import BaseReportCard from "@/components/base/BaseReportCard.vue";
 
 const route = useRoute();
 const id = ref(route.params.id);
@@ -165,8 +239,12 @@ const defaultImage =
 const reportStore = useReportStore();
 onMounted(async () => {
   try {
-    await reportStore.getReportById(id.value);
+    await Promise.all([
+      reportStore.getReportById(id.value),
+      reportStore.getMatchReportByid(id.value),
+    ]);
     console.log(reportStore.report);
+    console.log(reportStore.matchReports);
   } catch (error) {
     console.error();
   }
@@ -243,5 +321,57 @@ const goBack = () => {
   display: flex !important;
   justify-content: center;
   align-items: center;
+}
+.match-card {
+  border-radius: 14px;
+  overflow: hidden;
+  background: #fff;
+  transition: 0.25s ease;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.05);
+}
+
+.match-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08);
+}
+
+/* Image */
+.match-image {
+  height: 200px;
+  overflow: hidden;
+}
+
+.match-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Confidence badge */
+.confidence-badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: #111;
+  color: white;
+  font-size: 12px;
+  padding: 4px 8px;
+  border-radius: 20px;
+}
+
+/* Pills */
+.badge-pill {
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* List style */
+.item-list li {
+  list-style: none;
+  display: flex;
+  gap: 6px;
+  margin-bottom: 4px;
 }
 </style>
