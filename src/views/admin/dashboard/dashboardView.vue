@@ -23,7 +23,7 @@
 
           <div class="transaction-tabs">
             <div class="tab" :class="{ active: activeTab === 'All' }" @click="activeTab = 'All'">
-              របស់សរុប
+              របាយការណ៍សរុប
             </div>
             <div class="tab" :class="{ active: activeTab === 'Lost' }" @click="activeTab = 'Lost'">
               បាត់
@@ -106,37 +106,47 @@ import { ref, computed, onMounted } from "vue";
 import api from "@/api/api.js";
 import dayjs from "dayjs";
 
+// -----------------------
+// Reactive State
+// -----------------------
 const totalItems = ref(0);
 const totalUsers = ref(0);
 const lostReports = ref(0);
 const foundReports = ref(0);
+
+// Items for transaction list (10 only)
 const items = ref([]);
+
+// All items for cards & donut
+const allItems = ref([]);
+
+// Category stats for donut chart
 const categoryStats = ref([]);
-const activeTab = ref("All"); // default tab is "All"
+
+// Active tab in transactions
+const activeTab = ref("All");
+
+// -----------------------
+// Computed Properties
+// -----------------------
+
+// Filtered items for transaction list
 const filteredItems = computed(() => {
   if (activeTab.value === "All") return items.value;
-  return items.value.filter(item => item.reportType?.name === activeTab.value.toUpperCase());
+  return items.value.filter(
+    i => i.reportType?.name === activeTab.value.toUpperCase()
+  );
 });
 
-
-const todayItems = computed(() => items.value);
-
-
+// Donut chart background style
 const donutStyle = computed(() => {
   if (!categoryStats.value.length) return {};
 
   let current = 0;
   const colors = [
-    "#fbf8cc", // indigo
-    "#fde4cf", // green
-    "#ffcfd2", // amber
-    "#f1c0e8", // red
-    "#cfbaf0", // cyan
-    "#a3c4f3", // violet
-    "#90dbf4",
-    "#8eecf5", // orange
-    "#98f5e1", // emerald
-    "#b9fbc0", // emerald
+    "#fbf8cc", "#fde4cf", "#ffcfd2", "#f1c0e8",
+    "#cfbaf0", "#a3c4f3", "#90dbf4", "#8eecf5",
+    "#98f5e1", "#b9fbc0"
   ];
 
   const gradient = categoryStats.value
@@ -153,74 +163,78 @@ const donutStyle = computed(() => {
   };
 });
 
-const getTotalItems = async () => {
+// -----------------------
+// API Calls
+// -----------------------
+
+// Fetch stats for cards & donut chart (ALL items)
+const fetchStats = async () => {
   try {
     const res = await api.get("/reports", {
       params: {
         sortDir: "DESC",
+        _per_page: 100, // ALL items for stats
       },
     });
 
+    allItems.value = res.data.data.items;
     totalItems.value = res.data.data.meta.totalItems;
-    items.value = res.data.data.items;
 
-    lostReports.value = items.value.filter(
-      (item) => item.reportType?.name === "LOST"
-    ).length;
+    lostReports.value = allItems.value.filter(i => i.reportType?.name === "LOST").length;
+    foundReports.value = allItems.value.filter(i => i.reportType?.name === "FOUND").length;
 
-    foundReports.value = items.value.filter(
-      (item) => item.reportType?.name === "FOUND"
-    ).length;
-
-    // 👉 Build category stats
+    // Build category stats
     const categoryMap = {};
+    allItems.value.forEach(item => {
+      const name = item.category?.name;
+      if (!name) return;
 
-    items.value.forEach((item) => {
-      const catName = item.category?.name;
-      if (!catName) return;
-
-      if (!categoryMap[catName]) {
-        categoryMap[catName] = {
-          category: { name: catName },
-          count: 0,
-        };
-      }
-
-      categoryMap[catName].count++;
+      categoryMap[name] ??= { category: { name }, count: 0 };
+      categoryMap[name].count++;
     });
 
-    categoryStats.value = Object.values(categoryMap).map((cat) => ({
+    categoryStats.value = Object.values(categoryMap).map(cat => ({
       category: cat.category,
-      percent: ((cat.count / items.value.length) * 100).toFixed(1),
+      percent: ((cat.count / allItems.value.length) * 100).toFixed(1),
     }));
 
-    console.log("CATEGORY STATS:", categoryStats.value);
-    console.log("TOTAL ITEMS:", totalItems.value);
-    console.log("LOST REPORTS:", lostReports.value);
-    console.log("FOUND REPORTS:", foundReports.value);
   } catch (error) {
-    console.error(error);
+    console.error("Error fetching stats:", error);
   }
 };
+
+// Fetch recent 10 reports for transaction list
+const fetchRecentItems = async () => {
+  try {
+    const res = await api.get("/reports", {
+      params: {
+        sortDir: "DESC",
+        _per_page: 10, // only 10 items
+      },
+    });
+
+    items.value = res.data.data.items;
+  } catch (error) {
+    console.error("Error fetching recent items:", error);
+  }
+};
+
+// Fetch total users
 const getAllUsers = async () => {
   try {
     const res = await api.get("/users");
-
     totalUsers.value = res.data.data.meta.totalItems;
-    console.log("TOTAL USERS:", totalUsers.value);
   } catch (error) {
-    console.error(error);
+    console.error("Error fetching users:", error);
   }
 };
 
-onMounted(() => {
-  getTotalItems();
-  getAllUsers();
-});
-
+// -----------------------
+// Dashboard Cards
+// -----------------------
 const Cards = computed(() => [
   {
-    title: "របស់សរុប",
+    title: "របាយការណ៍សរុប",
     value: totalItems.value,
     icon: "bi-collection",
   },
@@ -240,7 +254,17 @@ const Cards = computed(() => [
     icon: "bi-people",
   },
 ]);
+
+// -----------------------
+// Lifecycle
+// -----------------------
+onMounted(() => {
+  fetchStats();        // ALL items for cards + donut
+  fetchRecentItems();  // Only 10 items for transaction list
+  getAllUsers();       // total users
+});
 </script>
+
 
 <style scoped>
 * {

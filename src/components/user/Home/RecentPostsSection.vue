@@ -105,7 +105,7 @@
     </div>
   </section>
 </template>
-<style scope>
+<style scoped>
 .main-feed {
   padding: 60px 0;
 }
