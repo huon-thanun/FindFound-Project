@@ -97,12 +97,19 @@ defineEmits(['edit', 'delete', 'rowClick']);
 /* ---------- Table ---------- */
 .table-scroll {
   width: 100%;
+  max-height: 550px;
   overflow-x: auto;   /* 👈 enables left-right scroll */
-  overflow-y: hidden;
+  overflow-y: auto;
 }
 .base-table {    /* IMPORTANT */
   table-layout: auto; /* DEFAULT */
   min-width: 1100px;  /* or any width you want */
+}
+
+thead th {
+  position: sticky;
+  top: 0;
+  z-index: 10;
 }
 
 .table-row {

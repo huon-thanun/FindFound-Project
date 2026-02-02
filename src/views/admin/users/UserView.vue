@@ -61,10 +61,10 @@
 
         <!-- CLEAR FILTER -->
         <div class="mt-sm-0 mt-md-1 mt-lg-2 p-0 d-flex justify-content-end filter-clear">
-          <BaseButton class="d-none d-md-block" variant="outline_primary" icon="stars" @click="clearFilter">
+          <BaseButton class="d-none d-md-block d-xl-none" variant="outline_primary" icon="stars" @click="clearFilter">
             សម្អាត
           </BaseButton>
-          <BaseButton class="d-block d-md-none d-flex justify-content-between" variant="outline_primary" icon="stars" @click="clearFilter">
+          <BaseButton class="d-block d-md-none d-xl-block d-flex" variant="outline_primary" icon="stars" @click="clearFilter">
             សម្អាតការតម្រៀប
           </BaseButton>
         </div>
@@ -96,7 +96,7 @@
         </template>
       </BaseTableUserPage>
 
-      <div class="card-footer text-center">
+      <!-- <div class="card-footer text-center">
         <div class="d-flex gap-2 justify-content-center my-3">
           <BaseButton class="pointer" variant="danger" @click="previousPage" :isDisabled="filters.page === 1">
             មុន
@@ -107,7 +107,7 @@
           </BaseButton>
         </div>
         <p class="text-muted">Total: {{ total }} users</p>
-      </div>
+      </div> -->
     </div>
 
     <!-- VIEW USER MODAL -->
@@ -226,7 +226,7 @@ const tableColumns = [
 
 const filters = reactive({
   page: 1,
-  perPage: 10,
+  perPage: 100,
   search: '',
   status: '',
   sortBy: null,
