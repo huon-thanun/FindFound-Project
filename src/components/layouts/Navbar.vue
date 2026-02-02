@@ -8,12 +8,8 @@
                 <base-button @click="toggleSidebar" class="d-lg-none" variant="primary"><i
                         :class="isOpen ? 'bi bi-list' : 'bi bi-x-lg'"></i>
                 </base-button>
-                <div class="search-box d-none d-lg-block">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <circle cx="11" cy="11" r="8" />
-                        <path d="m21 21-4.35-4.35" />
-                    </svg>
-                    <input type="text" placeholder="ស្វែងរក..." />
+                <div class="search-box d-none pt-2 d-lg-block">
+                    <h1><i class="bi-house-door"></i> សូមស្វាគមន៍</h1>
                 </div>
             </div>
             <div class="logo-section">

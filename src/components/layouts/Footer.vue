@@ -26,7 +26,7 @@
                 <div class="col-6 col-md-4 col-lg-2 p-0">
                     <h3>ផ្តល់ជំនួយ</h3>
                     <ul>
-                        <li><router-link to="/support">ការគាំទ្រ</router-link></li>
+                        <li><router-link to="/support">ជំនួយ និងការគាំទ្រ</router-link></li>
                         <li><router-link to="/policy">គោលការណ៍ឯកជនភាព</router-link></li>
                         <li><router-link to="/faq">សំណួរដែលសួរញឹកញាប់</router-link></li>
                     </ul>

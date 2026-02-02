@@ -201,13 +201,13 @@
     </div>
   </main>
 </template>
+
     <style scoped>
 body {
   background-color: #f8f9fa;
   color: #333;
   line-height: 1.6;
 }
-
 .header-bg {
   background: linear-gradient(
     to right,
@@ -246,6 +246,16 @@ body {
 .text-primary{
     color: var(--secondary-color) !important;
 }
+/* Anchor scroll offset for sticky header */
+#intro,
+#data-collection,
+#data-use,
+#data-protection,
+#user-rights,
+#contact {
+  scroll-margin-top: 110px;
+}
+
 @media (max-width: 768px) {
   .header-bg h1 {
     font-size: 1.8rem;

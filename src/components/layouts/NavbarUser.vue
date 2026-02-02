@@ -221,7 +221,7 @@
 
               <div class="dropdown-divider-custom"></div>
 
-              <router-link to="" class="dropdown-item-custom">
+              <router-link to="/support" class="dropdown-item-custom">
                 <i class="bi bi-question-circle"></i>
                 <span>ជំនួយ និងការគាំទ្រ</span>
               </router-link>
