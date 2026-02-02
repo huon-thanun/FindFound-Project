@@ -15,6 +15,7 @@ import OTPView from "@/views/user/auth/OTPView.vue";
 import UserVerifyOTPView from "@/views/user/auth/UserVerifyOTPView.vue";
 import ReportViewUser from "@/views/user/reports/ReportView.vue";
 import OwnReportView from "@/views/user/reports/OwnReportView.vue";
+import ProfileUserView from "@/views/user/profile/ProfileUserView.vue";
 import CreateReportView from "@/views/user/reports/CreateReportView.vue";
 import EditReportView from "@/views/user/reports/EditReportView.vue";
 import ReportDetailViewUser from "@/views/user/reports/ReportDetailView.vue";
@@ -34,6 +35,12 @@ import MatchReport from "@/views/user/reports/matchReport.vue";
 import Policy from "@/views/user/other/policy.vue";
 import Faq from "@/views/user/other/faq.vue";
 import Support from "@/views/user/other/support.vue";
+
+// ================= CONTACT US & GALLERY VIEWS =================
+import ContactUsView from "@/views/user/contact_us/ContactUsView.vue";
+import GalleryView from "@/views/user/gallery/GalleryView.vue";
+import ItemDetailsView from "@/views/user/gallery/ItemDetailsView.vue";
+import SuccessStoriesView from "@/views/user/success_stories/SuccessStoriesView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -104,6 +111,32 @@ const router = createRouter({
           path: "about",
           name: "about",
           component: AboutView,
+        },
+        {
+          path: "contact_us",
+          name: "contact_us",
+          component: ContactUsView,
+        },
+        {
+          path: "gallery",
+          name: "gallery",
+          component: GalleryView,
+        },
+        {
+          path: "gallery/item/:id",
+          name: "item_detail",
+          component: ItemDetailsView,
+        },
+        {
+          path: "profile",
+          name: "user.profile",
+          component: ProfileUserView,
+          meta: { requiresAuth: true, role: "user" }, // <-- Protected
+        },
+        {
+          path: "successstory",
+          name: "successstory",
+          component: SuccessStoriesView,
         },
         /* ===== USER REPORTS ===== */
         {
@@ -227,11 +260,11 @@ const router = createRouter({
           name: "admin.categories",
           component: CategoryView,
         },
-        // {
-        //   path: "reports",
-        //   name: "admin.reports",
-        //   component: ReportView,
-        // },
+        {
+          path: "reports",
+          name: "admin.reports",
+          component: ReportView,
+        },
         {
           path: "users",
           name: "admin.users",

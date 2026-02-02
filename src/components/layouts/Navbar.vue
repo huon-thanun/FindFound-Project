@@ -1,154 +1,311 @@
 <template>
-    <!-- Top Navbar -->
-    <SidebarAdmin class="sidebar" :class="{ 'closed': isOpen }"></SidebarAdmin>
-    <nav class="navbar-top ms-auto col-12">
-        <div class="d-flex justify-content-between align-items-center h-100">
-            <!-- Search Box -->
-            <div class="d-flex gap-3">
-                <base-button @click="toggleSidebar" class="d-lg-none" variant="primary"><i
-                        :class="isOpen ? 'bi bi-list' : 'bi bi-x-lg'"></i>
-                </base-button>
-                <div class="search-box d-none pt-2 d-lg-block">
-                    <h1><i class="bi-house-door"></i> សូមស្វាគមន៍</h1>
-                </div>
-            </div>
-            <div class="logo-section">
-                <div class="d-flex d-lg-none align-items-center gap-3">
-                    <img src="../../assets/images/logo/logo.png" class="object-fit-cover" height="79px" width="170px" alt="">
-                </div>
-            </div>
-            <!-- User Section -->
-            <div class="navbar-user">
-                <!-- User Profile -->
-                <div class="user-profile">
-                    <div class="user-profile-avatar">👤</div>
-                    <span class="user-profile-name">Admin User</span>
-                </div>
-            </div>
-        </div>
-    </nav>
-</template>
+  <SidebarAdmin class="sidebar" :class="{ closed: isOpen }" />
 
+  <nav class="navbar-top shadow-sm">
+    <div
+      class="container-fluid d-flex justify-content-between align-items-center h-100"
+    >
+      <div class="d-flex align-items-center gap-3">
+        <button
+          @click="toggleSidebar"
+          class="btn btn-light d-lg-none rounded-circle"
+        >
+          <i :class="isOpen ? 'bi bi-list' : 'bi bi-x-lg'"></i>
+        </button>
+
+        <div class="navbar-brand-container">
+          <img
+            src="../../assets/images/logo/logo.png"
+            height="150px"
+            alt="Logo"
+            class="navbar-logo"
+          />
+        </div>
+
+        <div class="search-box d-none d-lg-block ms-2">
+          <i class="bi bi-search search-icon"></i>
+          <input type="text" placeholder="ស្វែងរក..." class="khmer-font" />
+        </div>
+      </div>
+
+      <div class="navbar-user">
+        <div class="dropdown hover-dropdown">
+          <div class="user-profile shadow-sm">
+            <div class="user-profile-avatar">
+              <img
+                :src="
+                  admin.avatar ||
+                  `https://ui-avatars.com/api/?name=${admin.fullname}&background=3b1e54&color=fff`
+                "
+                class="avatar-img"
+                alt="avatar"
+              />
+            </div>
+            <div class="user-info d-none d-md-block">
+              <span class="user-profile-name">{{ admin.fullname }}</span>
+            </div>
+            <i class="bi bi-chevron-down chevron-icon ms-1"></i>
+          </div>
+
+          <ul
+            class="dropdown-menu dropdown-menu-end shadow-lg animated-dropdown"
+          >
+            <li>
+              <router-link class="dropdown-item khmer-font" to="/admin/profile">
+                <i class="bi bi-person-circle"></i> គណនីផ្ទាល់ខ្លួន
+              </router-link>
+            </li>
+            <li>
+              <a class="dropdown-item khmer-font" href="#">
+                <i class="bi bi-gear"></i> ការកំណត់
+              </a>
+            </li>
+            <li><hr class="dropdown-divider" /></li>
+            <li>
+              <a
+                class="dropdown-item khmer-font text-danger"
+                href="javascript:void(0)"
+                @click.prevent="openLogoutModal"
+              >
+                <i class="bi bi-box-arrow-right"></i> ចាកចេញ
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <BaseModal
+    v-if="showLogoutModal"
+    :title="'ចាកចេញ'"
+    icon="exclamation-triangle"
+    theme="danger"
+    :isClose="showLogoutModal"
+    @closeModal="closeLogoutModal"
+  >
+    <template #body>
+      <p class="khmer-font text-center mb-0">តើអ្នកពិតជាចង់ចាកចេញមែនទេ?</p>
+    </template>
+    <template #btnClose>
+      <BaseButton variant="cancel" class="col-6" @click="closeLogoutModal"
+        >បិទ</BaseButton
+      >
+    </template>
+    <template #btnActive>
+      <BaseButton variant="danger" class="col-6" @click="logout"
+        >បញ្ជាក់</BaseButton
+      >
+    </template>
+  </BaseModal>
+</template>
 <script setup>
-import { ref } from 'vue';
-import SidebarAdmin from './Sidebar.vue';
-const isOpen = ref('true');
-const toggleSidebar = () => {
-    isOpen.value = !isOpen.value
-}
+import { ref, computed } from "vue";
+import { useRouter } from "vue-router";
+import { useAuthStore } from "@/stores/authStore";
+
+const auth = useAuthStore();
+const router = useRouter();
+const showLogoutModal = ref(false);
+
+const admin = computed(() => ({
+  fullname: auth.user?.fullname || "Admin User",
+  avatar: auth.user?.avatar || "",
+}));
+
+const openLogoutModal = () => (showLogoutModal.value = true);
+const closeLogoutModal = () => (showLogoutModal.value = false);
+
+const logout = () => {
+  localStorage.clear();
+  auth.logout();
+  router.push("/admin/login");
+};
 </script>
 
 <style scoped>
-body {
-    background-color: #f5f5f5;
-    margin: 0;
-    padding: 0;
+.navbar-brand-container {
+  display: flex;
+  align-items: center;
+  transition: transform 0.3s ease;
 }
 
-.sidebar {
-    width: 300px;
-    display: block !important;
-    position: fixed;
-    top: 0;
+.navbar-brand-container:hover {
+  transform: scale(1.05); /* Slight pop when hovering logo */
 }
 
-.sidebar.closed {
-    transform: translateX(-300px);
+.navbar-logo {
+  object-fit: contain;
+  max-width: 150px; /* Adjust based on your logo width */
 }
 
+/* Ensure the navbar items don't feel cramped */
+.gap-4 {
+  gap: 1.5rem !important;
+}
+
+/* 1. Navbar Container */
 .navbar-top {
-    background-color: #ffffff;
-    border-bottom: 1px solid #e5e7eb;
-    padding: 16px 24px;
-    height: 80px;
-    width: 79%;
-    flex: 0 0 auto;
-    position: sticky;
-    top: 0;
-    z-index: 100;
+  background-color: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(15px);
+  border-bottom: 1px solid #eef2f6;
+  height: 75px;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  padding: 0 1rem;
 }
 
-.search-box {
-    position: relative;
-    max-width: 400px;
-    width: 100%;
+/* 2. Hover Bridge Strategy */
+.hover-dropdown {
+  position: relative;
+  padding: 10px 0; /* Creates invisible hover area */
 }
 
-.search-box input {
-    width: 400px;
-    padding: 10px 16px 10px 40px;
-    border: 1px solid #e5e7eb;
-    border-radius: 8px;
-    background-color: #f9fafb;
-    font-size: 14px;
-    transition: all 0.2s;
-}
-
-.search-box input:focus {
-    outline: none;
-    border-color: var(--primary-color);
-    background-color: #ffffff;
-    box-shadow: 0 0 0 3px rgba(--primary-color-shadow);
-}
-
-.search-box svg {
-    position: absolute;
-    left: 12px;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 18px;
-    height: 18px;
-    color: #6b7280;
-}
-
-.navbar-user {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-}
-
+/* 3. User Profile Trigger */
 .user-profile {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 6px 12px;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background-color 0.2s;
-    text-decoration: none;
-}
-
-.user-profile:hover {
-    background-color: #f9fafb;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 5px 15px 5px 6px;
+  border-radius: 50px;
+  background: #ffffff;
+  border: 1px solid #f1f5f9;
+  cursor: pointer;
+  transition: all 0.3s ease;
 }
 
 .user-profile-avatar {
-    width: 36px;
-    height: 36px;
-    border-radius: 8px;
-    background-color: #e5e7eb;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 16px;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 2px solid #fff;
+}
+
+.avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
 }
 
 .user-profile-name {
-    font-size: 14px;
-    font-weight: 500;
-    color: #111827;
-    margin: 0;
+  font-size: 14px;
+  font-weight: 700;
+  color: #1e293b;
+  line-height: 1.2;
 }
 
+.admin-label {
+  font-size: 10px;
+  color: #94a3b8;
+  text-transform: uppercase;
+}
+
+.chevron-icon {
+  font-size: 12px;
+  color: #cbd5e1;
+  transition: transform 0.3s ease;
+}
+
+/* 4. Dropdown Menu (The 'Show' Logic) */
+.animated-dropdown {
+  display: block;
+  visibility: hidden;
+  opacity: 0;
+  top: 100%;
+  right: 0;
+  min-width: 220px;
+  border: none;
+  border-radius: 15px !important;
+  padding: 10px !important;
+  transform: translateY(15px);
+  transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+  pointer-events: none;
+}
+
+/* Hover Action */
 @media (min-width: 992px) {
-    .sidebar {
-        display: none !important;
-    }
+  .hover-dropdown:hover .animated-dropdown {
+    visibility: visible;
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+
+  .hover-dropdown:hover .user-profile {
+    background-color: #f8fafc;
+    border-color: #cbd5e1;
+  }
+
+  .hover-dropdown:hover .chevron-icon {
+    transform: rotate(180deg);
+  }
 }
 
-@media (max-width: 992px) {
-    .navbar-top {
-        width: 100% !important;
-    }
+/* 5. Menu Items */
+.dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 15px;
+  font-size: 14px;
+  color: #475569;
+  border-radius: 10px !important;
+  transition: 0.2s;
+}
+
+.dropdown-item i {
+  font-size: 18px;
+  color: #94a3b8;
+}
+
+.dropdown-item:hover {
+  background-color: #f1f0ff;
+  color: #3b1e54;
+  padding-left: 18px; /* Slight slide effect */
+}
+
+.dropdown-item:hover i {
+  color: #3b1e54;
+}
+
+/* 6. Utility Styles */
+.search-box {
+  position: relative;
+}
+
+.search-box input {
+  height: 40px;
+  width: 280px;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  background-color: #f8fafc;
+  padding-left: 40px;
+  transition: 0.3s;
+}
+
+.search-box input:focus {
+  width: 320px;
+  background: #fff;
+  outline: none;
+  border-color: #3b1e54;
+}
+
+.search-icon {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #94a3b8;
+}
+
+.khmer-font {
+  font-family: "Noto Sans Khmer", sans-serif;
 }
 </style>
