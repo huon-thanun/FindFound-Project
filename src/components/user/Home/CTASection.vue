@@ -1,56 +1,65 @@
 <template>
   <section class="cta-section py-5">
     <div class="container">
-      <div
-        class="cta-gradient-card shadow-lg position-relative overflow-hidden"
-      >
-        <div class="khmer-pattern"></div>
+      <div class="cta-main-card shadow-lg position-relative overflow-hidden">
+        <div class="glass-mesh"></div>
+        <div class="glow-orb orb-1"></div>
+        <div class="glow-orb orb-2"></div>
 
-        <div class="row align-items-center position-relative z-1">
+        <div class="row align-items-center position-relative z-2">
           <div
-            class="col-lg-8 p-4 p-md-5 text-center text-lg-start"
+            class="col-lg-7 p-4 p-md-5 text-center text-lg-start"
             data-aos="fade-right"
           >
-            <span
-              class="badge bg-gold-soft text-gold mb-3 px-3 py-2 rounded-pill khmer-font"
-            >
-              ចូលរួមជាមួយសហគមន៍យើង
-            </span>
+            <div class="cta-badge mb-3 khmer-font">
+              <i class="bi bi-shield-check me-2"></i> សហគមន៍ជឿទុកចិត្ត
+            </div>
+
             <h2 class="display-5 fw-bold text-white khmer-font-title mb-3">
               តើអ្នកបានរកឃើញរបស់អ្វីមួយមែនទេ?
             </h2>
-            <p class="text-white-50 khmer-font fs-5 mb-4">
+
+            <p class="cta-subtitle khmer-font fs-5 mb-4">
               រាល់សកម្មភាពតូចមួយរបស់អ្នក
               គឺជាកម្លាំងចិត្តដ៏ធំធេងសម្រាប់ម្ចាស់ដែលបានបាត់បង់របស់។
-              មករួមគ្នាបង្កើតស្នាមញញឹមដល់បងប្អូនខ្មែរយើង!
+              ចូលរួមបង្កើតសង្គមដែលមានការចែករំលែកជាមួយយើង!
             </p>
+
             <div
               class="d-flex gap-3 justify-content-center justify-content-lg-start flex-wrap"
             >
-              <button
-                class="btn btn-premium-gold px-5 py-3 rounded-pill khmer-font"
-              >
+              <button class="btn-cta-primary px-5 py-3 rounded-pill khmer-font">
                 <i class="bi bi-plus-circle-fill me-2"></i> បង្ហោះរបស់រើសបាន
               </button>
-              <button
-                class="btn btn-outline-light-custom px-5 py-3 rounded-pill khmer-font"
-              >
+              <button class="btn-cta-outline px-5 py-3 rounded-pill khmer-font">
                 ស្វែងរករបស់បាត់
               </button>
             </div>
           </div>
 
-          <div
-            class="col-lg-4 d-none d-lg-block text-center"
-            data-aos="zoom-in"
-          >
-            <div class="floating-icon-wrapper">
-              <div class="icon-circle shadow-lg">
-                <i class="bi bi-megaphone-fill"></i>
+          <div class="col-lg-5 d-none d-lg-block text-center position-relative">
+            <div class="visual-wrapper">
+              <div class="main-glass-icon">
+                <i class="bi bi-megaphone"></i>
               </div>
-              <div class="dot dot-1"></div>
-              <div class="dot dot-2"></div>
-              <div class="dot dot-3"></div>
+              <div class="mini-card card-1 animate-float">
+                <div class="icon-box bg-primary">
+                  <i class="bi bi-wallet2"></i>
+                </div>
+                <div class="text-start">
+                  <div class="tiny-text">Found Wallet</div>
+                  <div class="tiny-status">Just Now</div>
+                </div>
+              </div>
+              <div class="mini-card card-2 animate-float-delayed">
+                <div class="icon-box bg-info">
+                  <i class="bi bi-key-fill"></i>
+                </div>
+                <div class="text-start">
+                  <div class="tiny-text">Keys Found</div>
+                  <div class="tiny-status">2m ago</div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -64,14 +73,14 @@
 
 .cta-section {
   background-color: #ffffff;
-  padding-bottom: 80px !important;
+  padding: 60px 0 100px !important;
 }
 
-.cta-gradient-card {
-  background: linear-gradient(135deg, #3b1e54 0%, #1e1b4b 100%);
-  border-radius: 40px;
-  min-height: 400px;
-  border: 1px solid rgba(212, 175, 55, 0.2);
+.cta-main-card {
+  background: #1e1b4b; /* Deep Indigo Base */
+  border-radius: 45px;
+  min-height: 420px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .khmer-font {
@@ -82,133 +91,178 @@
   line-height: 1.3;
 }
 
-/* Gold Elements */
-.text-gold {
-  color: #d4af37;
-}
-.bg-gold-soft {
-  background: rgba(212, 175, 55, 0.15);
-  border: 1px solid rgba(212, 175, 55, 0.3);
+/* New Colors: Indigo, Violet, and White */
+.cta-badge {
+  display: inline-flex;
+  align-items: center;
+  background: rgba(124, 58, 237, 0.2);
+  color: #a78bfa;
+  padding: 8px 20px;
+  border-radius: 50px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  border: 1px solid rgba(167, 139, 250, 0.3);
 }
 
-/* Buttons */
-.btn-premium-gold {
-  background: #d4af37;
-  color: #1e1b4b;
+.cta-subtitle {
+  color: #cbd5e1; /* Soft Grey-Blue */
+  max-width: 600px;
+}
+
+/* Buttons (No Yellow) */
+.btn-cta-primary {
+  background: #7c3aed; /* Electric Violet */
+  color: #ffffff;
   font-weight: 700;
   border: none;
   transition: all 0.3s ease;
-  box-shadow: 0 10px 20px rgba(212, 175, 55, 0.2);
+  box-shadow: 0 10px 25px rgba(124, 58, 237, 0.3);
 }
 
-.btn-premium-gold:hover {
-  background: #f1c40f;
+.btn-cta-primary:hover {
+  background: #8b5cf6;
   transform: translateY(-5px);
-  box-shadow: 0 15px 30px rgba(212, 175, 55, 0.4);
+  box-shadow: 0 15px 35px rgba(124, 58, 237, 0.4);
 }
 
-.btn-outline-light-custom {
+.btn-cta-outline {
+  background: rgba(255, 255, 255, 0.05);
   border: 2px solid rgba(255, 255, 255, 0.2);
   color: #fff;
   font-weight: 600;
   transition: 0.3s;
+  backdrop-filter: blur(5px);
 }
 
-.btn-outline-light-custom:hover {
+.btn-cta-outline:hover {
   background: rgba(255, 255, 255, 0.1);
   border-color: #fff;
   transform: translateY(-5px);
 }
 
-/* Floating Icon Animation */
-.floating-icon-wrapper {
-  position: relative;
-  width: 200px;
-  height: 200px;
-  margin: 0 auto;
+/* Background Effects */
+.glass-mesh {
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(
+    circle at 1px 1px,
+    rgba(255, 255, 255, 0.05) 1px,
+    transparent 0
+  );
+  background-size: 30px 30px;
 }
 
-.icon-circle {
-  width: 120px;
-  height: 120px;
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(10px);
+.glow-orb {
+  position: absolute;
   border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.4;
+  z-index: 1;
+}
+.orb-1 {
+  width: 300px;
+  height: 300px;
+  background: #4f46e5;
+  top: -100px;
+  right: -50px;
+}
+.orb-2 {
+  width: 250px;
+  height: 250px;
+  background: #7c3aed;
+  bottom: -50px;
+  left: 10%;
+}
+
+/* Visual Side Elements */
+.visual-wrapper {
+  position: relative;
+  height: 300px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 4rem;
-  color: #d4af37;
-  border: 1px solid rgba(212, 175, 55, 0.3);
-  animation: float 4s ease-in-out infinite;
 }
 
-.khmer-pattern {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-image: radial-gradient(
-    circle at 2px 2px,
-    rgba(212, 175, 55, 0.05) 1px,
-    transparent 0
-  );
-  background-size: 40px 40px;
-  opacity: 0.5;
+.main-glass-icon {
+  width: 140px;
+  height: 140px;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 4.5rem;
+  color: #fff;
+  transform: rotate(-10deg);
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
 }
 
-/* Dots Animation */
-.dot {
+.mini-card {
   position: absolute;
-  background: #d4af37;
-  border-radius: 50%;
-  opacity: 0.5;
+  background: white;
+  padding: 10px 15px;
+  border-radius: 15px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  z-index: 5;
 }
-.dot-1 {
-  width: 15px;
-  height: 15px;
-  top: 20%;
+.card-1 {
+  top: 15%;
   right: 10%;
-  animation: pulse 2s infinite;
 }
-.dot-2 {
-  width: 10px;
-  height: 10px;
+.card-2 {
   bottom: 20%;
   left: 10%;
-  animation: pulse 3s infinite;
 }
-.dot-3 {
-  width: 20px;
-  height: 20px;
-  top: 50%;
-  left: -10%;
-  animation: pulse 4s infinite;
+
+.icon-box {
+  width: 35px;
+  height: 35px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
+.tiny-text {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #1e1b4b;
+}
+.tiny-status {
+  font-size: 0.65rem;
+  color: #64748b;
+}
+
+/* Animations */
+.animate-float {
+  animation: float 5s ease-in-out infinite;
+}
+.animate-float-delayed {
+  animation: float 5s ease-in-out infinite 2.5s;
 }
 
 @keyframes float {
   0%,
   100% {
-    transform: translateY(0);
+    transform: translateY(0) rotate(0);
   }
   50% {
-    transform: translateY(-20px);
+    transform: translateY(-20px) rotate(5deg);
   }
 }
 
-@keyframes pulse {
-  0% {
-    transform: scale(1);
-    opacity: 0.5;
+@media (max-width: 991px) {
+  .cta-main-card {
+    border-radius: 30px;
+    text-align: center;
   }
-  50% {
-    transform: scale(1.5);
-    opacity: 0.2;
-  }
-  100% {
-    transform: scale(1);
-    opacity: 0.5;
+  .cta-subtitle {
+    margin-inline: auto;
   }
 }
 </style>

@@ -1,47 +1,32 @@
 <template>
-  <SidebarAdmin class="sidebar" :class="{ closed: isOpen }" />
+  <SidebarAdmin class="sidebar d-lg-none" :class="{ closed: isOpen }" />
 
-  <nav class="navbar-top shadow-sm">
+  <nav class="navbar-top shadow-sm p-2 ms-auto">
     <div
       class="container-fluid d-flex justify-content-between align-items-center h-100"
     >
-      <div class="d-flex align-items-center gap-3">
-        <button
+    <h1 class="pt-2 d-none d-lg-block"><i class="bi-person-gear"></i> សូមស្វាគមន៍អ្នកគ្រប់គ្រង</h1>
+      <div class="d-flex align-items-center d-lg-none gap-3">
+        <base-button
           @click="toggleSidebar"
-          class="btn btn-light d-lg-none rounded-circle"
         >
           <i :class="isOpen ? 'bi bi-list' : 'bi bi-x-lg'"></i>
-        </button>
-
-        <div class="navbar-brand-container">
-          <img
-            src="../../assets/images/logo/logo.png"
-            height="150px"
-            alt="Logo"
-            class="navbar-logo"
-          />
-        </div>
-
-        <div class="search-box d-none d-lg-block ms-2">
-          <i class="bi bi-search search-icon"></i>
-          <input type="text" placeholder="ស្វែងរក..." class="khmer-font" />
-        </div>
+        </base-button>
       </div>
+
+      <div class="logo-section d-lg-none ">
+      <div class="d-flex align-items-center">
+        <img src="../../assets/images/logo/logo.png" class="object-fit-cover" height="79px" width="170px" alt="" />
+      </div>
+    </div>
 
       <div class="navbar-user">
         <div class="dropdown hover-dropdown">
           <div class="user-profile shadow-sm">
             <div class="user-profile-avatar">
-              <img
-                :src="
-                  admin.avatar ||
-                  `https://ui-avatars.com/api/?name=${admin.fullname}&background=3b1e54&color=fff`
-                "
-                class="avatar-img"
-                alt="avatar"
-              />
+              <img :src="admin.avatar" class="avatar-img" alt="avatar" />
             </div>
-            <div class="user-info d-none d-md-block">
+            <div class="user-info d-none d-lg-block">
               <span class="user-profile-name">{{ admin.fullname }}</span>
             </div>
             <i class="bi bi-chevron-down chevron-icon ms-1"></i>
@@ -100,19 +85,39 @@
   </BaseModal>
 </template>
 <script setup>
-import { ref, computed } from "vue";
+import { ref, computed, onMounted ,onUnmounted } from "vue";
 import { useRouter } from "vue-router";
 import { useAuthStore } from "@/stores/authStore";
+import SidebarAdmin from "./Sidebar.vue";
 
 const auth = useAuthStore();
 const router = useRouter();
 const showLogoutModal = ref(false);
+const isOpen = ref(true)
+const handleResize = () => {
+  if (window.innerWidth <= 992) {
+    isOpen.value = true;
+  } else {
+    isOpen.value = false;
+  }
+};
+
+onMounted(() => {
+  handleResize(); // run once on load
+  window.addEventListener("resize", handleResize);
+});
+
+onUnmounted(() => {
+  window.removeEventListener("resize", handleResize);
+});
 
 const admin = computed(() => ({
   fullname: auth.user?.fullname || "Admin User",
   avatar: auth.user?.avatar || "",
 }));
-
+const toggleSidebar = () => {
+  isOpen.value = !isOpen.value
+}
 const openLogoutModal = () => (showLogoutModal.value = true);
 const closeLogoutModal = () => (showLogoutModal.value = false);
 
@@ -124,6 +129,13 @@ const logout = () => {
 </script>
 
 <style scoped>
+.sidebar{
+  display: block !important;
+  width: 300px !important;
+}
+.sidebar.closed {
+  transform: translateX(-300px);
+}
 .navbar-brand-container {
   display: flex;
   align-items: center;
@@ -152,6 +164,8 @@ const logout = () => {
   height: 75px;
   position: sticky;
   top: 0;
+  width: 79%;
+  height: 79px;
   z-index: 1000;
   padding: 0 1rem;
 }
@@ -228,9 +242,17 @@ const logout = () => {
   transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
   pointer-events: none;
 }
-
-/* Hover Action */
+@media (max-width: 992px) {
+  .navbar-top{
+    width: 100% !important;
+  }
+}
 @media (min-width: 992px) {
+  .sidebar{
+    display: none !important;
+  }
+}
+/* Hover Action */
   .hover-dropdown:hover .animated-dropdown {
     visibility: visible;
     opacity: 1;
@@ -246,7 +268,7 @@ const logout = () => {
   .hover-dropdown:hover .chevron-icon {
     transform: rotate(180deg);
   }
-}
+
 
 /* 5. Menu Items */
 .dropdown-item {
@@ -305,7 +327,4 @@ const logout = () => {
   color: #94a3b8;
 }
 
-.khmer-font {
-  font-family: "Noto Sans Khmer", sans-serif;
-}
 </style>

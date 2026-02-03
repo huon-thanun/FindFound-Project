@@ -1,6 +1,8 @@
 import { ref } from "vue";
 import { defineStore } from "pinia";
 import api from "@/api/api";
+import reportApi from "@/api/reportApi";
+import { publicApi } from "@/api/publicApi";
 
 export const useReportStore = defineStore("report", () => {
   const allReportType = ref([]);
@@ -106,7 +108,7 @@ export const useReportStore = defineStore("report", () => {
   const creatOwnReport = async (formData) => {
     isLoadingCreateOwnReport.value = true;
     try {
-      const res = await api.post("/reports", formData, {
+      const res = await reportApi.post("/reports", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -126,9 +128,12 @@ export const useReportStore = defineStore("report", () => {
     isLoadingEditOwnReport.value = true;
 
     try {
-      const res = await api.put(`/reports/${id}`, formData);
+      const res = await reportApi.put(`/reports/${id}`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
       msgEditOwnReport.value = res.data;
-      return res.data;
     } catch (error) {
       console.error("Edit report error:", error.response?.data || error);
       throw error;
@@ -145,6 +150,40 @@ export const useReportStore = defineStore("report", () => {
       throw error;
     }
   };
+  const publicReports = ref([]);
+  const isLoadingPublicReports = ref(false);
+  const getAllPublicReports = async () => {
+    isLoadingPublicReports.value = true;
+    try {
+      const res = await api.get("/reports/public");
+
+      publicReports.value = res.data.data.items;
+    } catch (error) {
+      console.error(error);
+    } finally {
+      isLoadingPublicReports.value = false;
+    }
+  };
+  // const getAllPublicReports = async () => {
+  //   isLoadingPublicReports.value = true;
+
+  //   try {
+  //     const res = await fetch(
+  //       `${import.meta.env.VITE_API_BASE_URL}/reports/public`,
+  //     );
+
+  //     const data = await res.json();
+
+  //     console.log(data);
+
+  //     publicReports.value = data;
+  //   } catch (error) {
+  //     console.error(error);
+  //   } finally {
+  //     isLoadingPublicReports.value = false;
+  //   }
+  // };
+
   return {
     isLoadingGetAllReport,
     isLoadingGetAReport,
@@ -160,6 +199,7 @@ export const useReportStore = defineStore("report", () => {
     msgCreateOwnReport,
     msgEditOwnReport,
     matchReports,
+    publicReports,
     getAllReportType,
     getAllReports,
     getReportById,
@@ -168,6 +208,7 @@ export const useReportStore = defineStore("report", () => {
     creatOwnReport,
     editOwnReport,
     getMatchReportByid,
+    getAllPublicReports,
     meta,
     ownReportMeta,
   };

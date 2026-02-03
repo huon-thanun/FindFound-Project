@@ -1,87 +1,52 @@
 <template>
-  <div class="sidebar col-lg-3" :class="!isOpen ? '' : 'closed'">
+  <div class="sidebar col-lg-3" :class="!isSidebarOpen ? '' : 'closed'">
     <!-- Logo Section -->
     <div class="logo-section opacity-0">
       <div class="d-flex align-items-center">
-        <img
-          src="../../assets/images/logo/logo.png"
-          class="object-fit-cover"
-          height="79px"
-          width="170px"
-          alt=""
-        />
+        <img src="../../assets/images/logo/logo.png" class="object-fit-cover" height="79px" width="170px" alt="" />
       </div>
     </div>
 
     <!-- Navigation Menu -->
     <nav class="nav-menu">
-      <router-link to="/" class="nav-item"> Dashboard </router-link>
+      <router-link :to="{name: 'home'}" class="nav-item"> ទំព័រ​ដើម </router-link>
 
-      <router-link to="/about" class="nav-item"> Users </router-link>
+      <router-link :to="{name: 'report.user'}" class="nav-item"> របាយការណ៍ </router-link>
 
-      <router-link to="/categories" class="nav-item"> Categories </router-link>
+      <router-link to="" class="nav-item"> ប្រភេទរបាយការណ៍ </router-link>
 
-      <router-link to="/reports" class="nav-item"> Reports </router-link>
+      <router-link :to="{name: 'about'}" class="nav-item"> អំពី​យើង </router-link>
+
+      <router-link :to="{name: 'contact_us'}" class="nav-item"> ទំនាក់ទំនង </router-link>
     </nav>
 
     <!-- User Section -->
-    <div class="user-section">
-      <div v-if="showAuthButtons">
-        <base-button
-          class="handle-btn mb-3"
-          icon="person-circle"
-          variant="secondary"
-          @click="goLogin"
-        >
-          Login
+    <div v-if="showAuthButtons" class="user-section">
+      <div >
+        <base-button class="handle-btn mb-3" icon="person-circle" variant="secondary">
+          ចូល
         </base-button>
-        <base-button class="handle-btn" icon="person-plus-fill" @click="goRegister">
-          Register
+        <base-button class="handle-btn" icon="person-plus-fill">
+          ចុះឈ្មោះ
         </base-button>
-      </div>
-      <div v-else>
-        <base-button
-          class="handle-btn mb-3"
-          icon="plus-circle"
-          variant="secondary"
-          @click="goRegister"
-        >
-          បាត់
-        </base-button>
-        <base-button class="handle-btn" icon="plus-circle"> រកឃើញ </base-button>
       </div>
     </div>
 
     <!-- SHOW Lost / Found when HAS token -->
-    <BaseModal
-      :title="'ចាកចេញពីគណនី'"
-      :icon="'exclamation-triangle'"
-      :theme="'danger'"
-      :isClose="showModal"
-      @closeModal="showModal = false"
-    >
+    <BaseModal :title="'ចាកចេញពីគណនី'" :icon="'exclamation-triangle'" :theme="'danger'" :isClose="showModal"
+      @closeModal="showModal = false">
       <template #body>
         <p class="khmer-font">តើអ្នកពិតជាចង់ចាកចេញពីកម្មវិធីមែនទេ?</p>
       </template>
 
       <template #btnClose>
-        <BaseButton
-          variant="cancel"
-          icon="x-circle"
-          class="col-6 khmer-font"
-          @click="showModal = false"
-        >
+        <BaseButton variant="cancel" icon="x-circle" class="col-6 khmer-font" @click="showModal = false">
           បោះបង់
         </BaseButton>
       </template>
 
       <template #btnActive>
-        <BaseButton
-          icon="check-circle"
-          variant="danger"
-          class="col-6 khmer-font"
-          @click="logout"
-        >
+        <BaseButton icon="check-circle" variant="danger" class="col-6 khmer-font" @click="logout">
           បញ្ជាក់
         </BaseButton>
       </template>
@@ -91,20 +56,14 @@
   <nav class="navbar p-0 navbar-expand-lg navbar-custom">
     <div class="container-fluid px-5">
       <div class="toggle-btn d-none">
-        <base-button @click="toggleSidebar" variant="primary"
-          ><i :class="isOpen ? 'bi bi-list' : 'bi bi-x-lg'"></i>
+        <base-button @click="toggleSidebar" variant="primary"><i
+            :class="isSidebarOpen ? 'bi bi-list' : 'bi bi-x-lg'"></i>
         </base-button>
       </div>
       <!-- Logo and Brand -->
       <div>
         <router-link to="/" class="navbar-brand-custom me-auto">
-          <img
-            src="../../assets/images/logo/logo.png"
-            class="object-fit-cover"
-            height="79px"
-            width="170px"
-            alt=""
-          />
+          <img src="../../assets/images/logo/logo.png" class="object-fit-cover" height="79px" width="170px" alt="" />
         </router-link>
       </div>
 
@@ -114,56 +73,36 @@
           <!-- Navigation Links -->
           <ul class="navbar-nav navbar-nav-custom">
             <li class="nav-item">
-              <router-link
-                to="/"
-                class="nav-link-custom"
-                :class="{ active: activeLink === 'home' }"
-                @click.prevent="setActive('home')"
-              >
+              <router-link to="/" class="nav-link-custom" :class="{ active: activeLink === 'home' }"
+                @click.prevent="setActive('home')">
                 ទំព័រ​ដើម
               </router-link>
             </li>
 
             <li class="nav-item">
-              <router-link
-                :to="{ name: 'report.user' }"
-                class="nav-link-custom"
-                :class="{ active: activeLink === 'reports' }"
-                @click.prevent="setActive('reports')"
-              >
+              <router-link :to="{ name: 'report.user' }" class="nav-link-custom"
+                :class="{ active: activeLink === 'reports' }" @click.prevent="setActive('reports')">
                 របាយការណ៍
               </router-link>
             </li>
 
             <li class="nav-item">
-              <router-link
-                to=""
-                class="nav-link-custom"
-                :class="{ active: activeLink === 'categories' }"
-                @click.prevent="setActive('categories')"
-              >
-                Categories
+              <router-link to="" class="nav-link-custom" :class="{ active: activeLink === 'categories' }"
+                @click.prevent="setActive('categories')">
+                ប្រភេទរបាយការណ៍
               </router-link>
             </li>
 
             <li class="nav-item">
-              <router-link
-                to="/about"
-                class="nav-link-custom"
-                :class="{ active: activeLink === 'about' }"
-                @click.prevent="setActive('about')"
-              >
+              <router-link to="about" class="nav-link-custom" :class="{ active: activeLink === 'about' }"
+                @click.prevent="setActive('about')">
                 អំពី​យើង
               </router-link>
             </li>
 
             <li class="nav-item">
-              <router-link
-                to="/contact_us"
-                class="nav-link-custom"
-                :class="{ active: activeLink === 'contact' }"
-                @click.prevent="setActive('contact')"
-              >
+              <router-link to="/contact_us" class="nav-link-custom" :class="{ active: activeLink === 'contact' }"
+                @click.prevent="setActive('contact')">
                 ទំនាក់ទំនង
               </router-link>
             </li>
@@ -171,79 +110,60 @@
         </div>
       </div>
       <!-- Right Side Items -->
-      <!-- SHOW Login / Register when NO token -->
-      <div
-        v-if="showAuthButtons"
-        class="btn-active d-flex align-items-center gap-3"
-      >
-        <base-button icon="person-circle" variant="secondary" class="btn-login"  @click="goLogin">
-          ចូល
-        </base-button>
-        <base-button icon="person-plus-fill" class="btn-register" @click="goRegister ">
-          ចុះឈ្មោះ
-        </base-button>
-      </div>
-
+       <!-- ⏳ Loading -->
+<div v-if="isLoadingProfile" class="d-flex align-items-center ms-lg-5 ms-0  gap-2">
+  <div class="skeleton avatar"></div>
+  <div class="skeleton text"></div>
+</div>
       <!-- SHOW Lost / Found when HAS token -->
-      <div v-else class="d-flex align-items-center gap-3">
-        <base-button icon="plus-circle" variant="secondary" class="btn-lost">
-          បាត់
-        </base-button>
-        <base-button icon="plus-circle" class="btn-found"> រកឃើញ </base-button>
+      <div v-else-if="!showAuthButtons" class="d-flex align-items-center gap-3">
         <div>
           <!-- User Profile Dropdown -->
           <div class="user-profile">
-            <img
-              src="https://ui-avatars.com/api/?name=John+Doe&background=17a2b8&color=fff&size=128"
-              alt="User Avatar"
-              class="user-avatar"
-            />
+            <div class="d-flex profile ms-lg-5 ms-0 gap-2 align-items-center profile-toggle" @click="toggleDropdown">
+              <img :src="profile.avatar" alt="User Avatar" class="user-avatar" />
+              <span class="user-name text-white pt-1">{{ profile.fullname }}</span>
+            </div>
 
             <!-- Dropdown Menu -->
             <div class="dropdown-menu-custom">
               <!-- User Info Header -->
               <div class="dropdown-header-custom">
-                <img
-                  src="https://ui-avatars.com/api/?name=John+Doe&background=17a2b8&color=fff&size=128"
-                  alt="User Avatar"
-                />
+                <img :src="profile.avatar" alt="User Avatar" />
                 <div class="user-info">
-                  <h6>sal</h6>
-                  <p>john.doe@email.com</p>
+                  <h6>{{ profile.fullname }}</h6>
+                  <p>{{ profile.email }}</p>
                 </div>
               </div>
 
               <!-- Menu Items -->
-              <router-link to="/profile" class="dropdown-item-custom">
+              <router-link to="/profile" class="dropdown-item-custom" :class="{ active: activeLink === 'profile' }"
+                @click.prevent="setActive('profile')">
                 <i class="bi bi-person"></i>
                 <span>ប្រវត្តិរូបរបស់ខ្ញុំ</span>
               </router-link>
 
-              <router-link
-                :to="{ name: 'own-reports' }"
-                class="dropdown-item-custom"
-              >
+              <router-link :to="{ name: 'own-reports' }" class="dropdown-item-custom"
+                :class="{ active: activeLink === 'reports' }" @click.prevent="setActive('reports')">
                 <i class="bi bi-file-earmark-text"></i>
                 <span>របាយការណ៍របស់ខ្ញុំ</span>
               </router-link>
 
-              <router-link to="" class="dropdown-item-custom">
+              <router-link to="" class="dropdown-item-custom" :class="{ active: activeLink === 'setting' }"
+                @click.prevent="setActive('setting')">
                 <i class="bi bi-gear"></i>
                 <span>ការកំណត់</span>
               </router-link>
 
               <div class="dropdown-divider-custom"></div>
 
-              <router-link to="/support" class="dropdown-item-custom">
+              <router-link to="/support" class="dropdown-item-custom" :class="{ active: activeLink === 'support' }"
+                @click.prevent="setActive('setting')">
                 <i class="bi bi-question-circle"></i>
                 <span>ជំនួយ និងការគាំទ្រ</span>
               </router-link>
 
-              <a
-                @click.prevent="openLogoutModal"
-                href="#"
-                class="dropdown-item-custom dropdown-item-logout"
-              >
+              <a @click.prevent="openLogoutModal" href="#" class="dropdown-item-custom dropdown-item-logout">
                 <i class="bi bi-box-arrow-right"></i>
                 <span>ចាកចេញ</span>
               </a>
@@ -251,34 +171,29 @@
           </div>
         </div>
       </div>
+      <!-- SHOW Login / Register when NO token -->
+      <div v-else class="btn-active d-flex align-items-center gap-3">
+        <base-button icon="person-circle" variant="secondary" class="btn-login">
+          ចូល
+        </base-button>
+        <base-button icon="person-plus-fill" class="btn-register">
+          ចុះឈ្មោះ
+        </base-button>
+      </div>
+
     </div>
-    <BaseModal
-      v-if="showModal"
-      :title="'ចាកចាញ'"
-      :icon="'exclamation-triangle'"
-      :theme="'danger'"
-      @closeModal="closeLogoutModal"
-    >
+    <BaseModal v-if="showModal" :title="'ចាកចាញ'" :icon="'exclamation-triangle'" :theme="'danger'"
+      @closeModal="closeLogoutModal">
       <template #body>
         <p>Are you sure you want to logout?</p>
       </template>
       <template #btnClose>
-        <BaseButton
-          variant="cancel"
-          icon="x-circle"
-          class="col-6"
-          @click="closeLogoutModal"
-        >
+        <BaseButton variant="cancel" icon="x-circle" class="col-6" @click="closeLogoutModal">
           បិទ
         </BaseButton>
       </template>
       <template #btnActive>
-        <BaseButton
-          icon="check-circle"
-          variant="danger"
-          class="col-6"
-          @click="logout"
-        >
+        <BaseButton icon="check-circle" variant="danger" class="col-6" @click="logout">
           បញ្ជាក់
         </BaseButton>
       </template>
@@ -286,7 +201,7 @@
   </nav>
 </template>
 <script setup>
-import { ref, computed, onMounted } from "vue";
+import { ref, computed, onMounted, onUnmounted } from "vue";
 import { useProfileStore } from "@/stores/profileStore";
 import { useRouter } from "vue-router";
 import { useAuthStore } from "@/stores/authStore";
@@ -307,9 +222,19 @@ const goRegister = () => {
   router.push({ name: "register" });
   // or: router.push("/register")
 };
+import { storeToRefs } from "pinia";
 
 const activeLink = ref("home");
 const profileStore = useProfileStore();
+
+// ✅ keep reactivity
+const { profile, isLoadingProfile, error } = storeToRefs(profileStore);
+
+console.log("123", profileStore.fetchProfile());
+
+onMounted(() => {
+  profileStore.fetchProfile();
+});
 
 // Token and UI state
 const token = ref(null);
@@ -318,10 +243,29 @@ const isSidebarOpen = ref(true); // sidebar open/close
 
 // Sidebar toggle
 const toggleSidebar = () => {
-  isSidebarOpen.value = !isSidebarOpen.value;
+  if (window.innerWidth < 1100) {
+    isSidebarOpen.value = !isSidebarOpen.value;
+  }
 };
 
-// Example: get token from localStorage
+/* Auto control by screen size */
+const handleResize = () => {
+  if (window.innerWidth >= 1100) {
+    isSidebarOpen.value = true;   // FORCE OPEN
+  }
+};
+
+onMounted(() => {
+  // run once on load
+  handleResize();
+
+  // listen resize
+  window.addEventListener("resize", handleResize);
+});
+
+onUnmounted(() => {
+  window.removeEventListener("resize", handleResize);
+});
 onMounted(() => {
   token.value = localStorage.getItem("token");
 });
@@ -390,6 +334,39 @@ body {
   background-color: #f5f5f5;
 }
 
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    #e0e0e0 25%,
+    #f5f5f5 37%,
+    #e0e0e0 63%
+  );
+  background-size: 400% 100%;
+  animation: skeleton 1.4s ease infinite;
+}
+
+.skeleton.avatar {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+}
+
+.skeleton.text {
+  width: 70px;
+  height: 14px;
+  border-radius: 6px;
+}
+
+@keyframes skeleton {
+  0% {
+    background-position: 100% 0;
+  }
+  100% {
+    background-position: 0 0;
+  }
+}
+
+
 .sidebar {
   height: 100vh;
   background-color: #ffffff;
@@ -405,9 +382,11 @@ body {
   position: fixed;
   z-index: 99;
 }
+
 .sidebar.closed {
   transform: translateX(-300px);
 }
+
 /* .router-link-active {
   background-color: var(--tertiary-color);
   color: var(--surface-color);
@@ -593,6 +572,10 @@ body {
   right: 0;
 }
 
+.profile {
+  cursor: pointer;
+}
+
 .nav-right {
   display: flex;
   align-items: center;
@@ -689,6 +672,7 @@ body {
   border-left: 3px solid transparent;
 }
 
+.dropdown-item-custom.active,
 .dropdown-item-custom:hover {
   background-color: #f8f9fa;
   border-left-color: var(--primary-color);
@@ -715,16 +699,19 @@ body {
   border-left-color: var(--danger);
   color: var(--danger);
 }
+
 @media (max-width: 992px) {
   .sidebar .logo-section {
     opacity: 0;
   }
 }
+
 @media (min-width: 1100px) {
   .sidebar {
     display: none;
   }
 }
+
 /* Mobile responsive */
 @media (max-width: 1100px) {
   #navbarContent {

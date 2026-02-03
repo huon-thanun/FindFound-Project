@@ -15,10 +15,10 @@
                 <div class="col-6 col-md-4 col-lg-2 p-0">
                     <h3>គេហទំព័រ</h3>
                     <ul>
-                        <li><router-link to="">Lost</router-link></li>
-                        <li><router-link to="">Report Lost</router-link></li>
-                        <li><router-link to="">Found</router-link></li>
-                        <li><router-link to="">Report Found</router-link></li>
+                        <li><router-link :to="{name: 'home'}">ទំព័រ​ដើម</router-link></li>
+                        <li><router-link :to="{name: 'report.user'}">របាយការណ៍</router-link></li>
+                        <li><router-link :to="{name: 'about'}">អំពី​យើង</router-link></li>
+                        <li><router-link :to="{name: 'contact_us'}">ទំនាក់ទំនង</router-link></li>
                     </ul>
                 </div>
 
@@ -61,6 +61,7 @@
         </div>
     </footer>
 </template>
+
 
 
 <style scoped>

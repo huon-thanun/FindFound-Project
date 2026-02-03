@@ -32,7 +32,6 @@ import UserView from "@/views/admin/users/UserView.vue";
 
 /* ===== STORE ===== */
 import { useAuthStore } from "@/stores/authStore";
-import MatchReport from "@/views/user/reports/matchReport.vue";
 import Policy from "@/views/user/other/policy.vue";
 import Faq from "@/views/user/other/faq.vue";
 import Support from "@/views/user/other/support.vue";
@@ -166,27 +165,23 @@ const router = createRouter({
           path: "reports/own/edit/:id",
           name: "edit-report",
           component: EditReportView,
+
           props: true,
-        },
-        {
-          path: "/reports/match",
-          name: "match-reports",
-          component: MatchReport,
         },
         {
           path: "/policy",
           name: "policy",
-          component: Policy
+          component: Policy,
         },
         {
           path: "/faq",
           name: "faq",
-          component: Faq
+          component: Faq,
         },
         {
           path: "/support",
           name: "support",
-          component: Support
+          component: Support,
         },
       ],
     },
@@ -240,6 +235,10 @@ const router = createRouter({
       redirect: "/login",
     },
   ],
+  scrollBehavior(to, from, savedPosition) {
+    // Always scroll to top when route changes
+    return { top: 0 };
+  },
 });
 
 /* ================= ROUTE GUARD ================= */

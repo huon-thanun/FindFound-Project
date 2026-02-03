@@ -22,7 +22,7 @@
         <div class="col-lg-6" data-aos="fade-right">
           <div class="image-wrapper shadow-lg rounded-4 overflow-hidden">
             <img
-              src="https://images.unsplash.com/photo-1593113598332-cd288d649433?auto=format&fit=crop&q=80&w=1000"
+              src="https://i.pinimg.com/1200x/c0/76/f5/c076f5e99914587b7b33d4c81dd463cb.jpg"
               class="img-fluid"
               alt="Community Helping"
             />
@@ -62,7 +62,7 @@
         <div class="col-lg-6" data-aos="fade-left">
           <div class="image-wrapper shadow-lg rounded-4 overflow-hidden">
             <img
-              src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&q=80&w=1000"
+              src="https://i.pinimg.com/1200x/09/bc/c1/09bcc1e78bdcbead19d7a409bede246d.jpg"
               class="img-fluid"
               alt="Technology Tracking"
             />

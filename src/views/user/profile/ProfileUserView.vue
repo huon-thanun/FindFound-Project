@@ -49,7 +49,7 @@
               </div>
             </div>
 
-            <div class="list-group list-group-flush border-top border-light">
+            <div class="list-group list-group-flush border-top border-1">
               <button
                 @click="activeTab = 'overview'"
                 :class="[
@@ -80,7 +80,7 @@
             </div>
           </div>
 
-          <div class="card border-0 shadow-sm rounded-4 p-4">
+          <div class="card border-1 shadow-sm rounded-4 p-4">
             <h6 class="fw-bold mb-3">
               <i class="bi bi-lightbulb me-2 text-primary"></i>ជំនាញ
             </h6>
@@ -96,12 +96,14 @@
           </div>
         </div>
 
-        <div class="col-lg-8 col-xl-9">
+        <div
+          class="col-lg-8 col-xl-9 border-2 shadow-sm rounded-4 p-4 bg-white h-100"
+        >
           <transition name="fade" mode="out-in">
             <div
               v-if="activeTab === 'overview'"
               key="overview"
-              class="card border-0 shadow-sm p-4 rounded-4 h-100"
+              class="card border-2 shadow-sm p-4 rounded-4 h-100"
             >
               <div
                 class="d-flex justify-content-between align-items-center mb-4"
@@ -114,7 +116,7 @@
                   <i class="bi bi-pencil text-muted"></i>
                 </button>
               </div>
-              <div class="row g-4">
+              <div class="row g-4 border-2">
                 <div class="col-md-6 info-group">
                   <label class="small text-muted text-uppercase fw-bold"
                     >ឈ្មោះពេញ</label
@@ -155,7 +157,7 @@
             <div
               v-else-if="activeTab === 'edit'"
               key="edit"
-              class="card border-0 shadow-sm p-4 rounded-4 h-100"
+              class="card border-2 shadow-sm p-4 rounded-4 h-100"
             >
               <h5 class="fw-bold mb-4">ការកំណត់ព័ត៌មានផ្ទាល់ខ្លួន</h5>
               <div class="row g-3">
@@ -205,11 +207,11 @@
             <div
               v-else-if="activeTab === 'security'"
               key="security"
-              class="h-100"
+              class="h-100 border-1"
             >
               <div class="row g-4 h-100">
                 <div class="col-md-6">
-                  <div class="card border-0 shadow-sm p-4 rounded-4 h-100">
+                  <div class="card border-1 shadow-sm p-4 rounded-4 h-100">
                     <h6 class="fw-bold mb-3 text-dark">
                       <i class="bi bi-lock me-2"></i>ប្តូរពាក្យសម្ងាត់
                     </h6>
@@ -238,7 +240,7 @@
                   </div>
                 </div>
                 <div class="col-md-6">
-                  <div class="card border-0 shadow-sm p-4 rounded-4 h-100">
+                  <div class="card border-1 shadow-sm p-4 rounded-4 h-100">
                     <h6 class="fw-bold mb-3 text-dark">
                       <i class="bi bi-envelope-at me-2"></i
                       >ប្តូរអ៊ីមែលភ្ជាប់គណនី
@@ -248,6 +250,14 @@
                         v-model="newEmail"
                         class="form-control custom-input"
                         placeholder="បញ្ចូលអ៊ីមែលថ្មី"
+                      />
+                    </div>
+                    <div class="mb-3">
+                      <input
+                        type="password"
+                        v-model="currentPassword"
+                        class="form-control custom-input"
+                        placeholder="ពាក្យសម្ងាត់បច្ចុប្បន្ន"
                       />
                     </div>
                     <button

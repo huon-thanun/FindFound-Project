@@ -1,83 +1,322 @@
 <script setup>
+import { ref, onMounted } from "vue";
+
 const leader = {
-  name: "Team Leader",
-  role: "Project Lead",
-  desc: "Responsible for system architecture, team coordination, and final delivery.",
+  name: "ហេង ល័ងឈ័រ",
+  role: "ប្រធានគម្រោង",
+  desc: "ទទួលខុសត្រូវលើស្ថាបត្យកម្មប្រព័ន្ធ ការសម្របសម្រួលក្រុម និងការប្រគល់ផលិតផលចុងក្រោយ។",
   avatar: "https://i.pravatar.cc/300?img=12",
 };
 
 const members = [
   {
-    name: "Member One",
-    role: "Frontend Developer",
-    avatar: "https://i.pravatar.cc/300?img=32",
+    name: "អុី វិសាល",
+    role: "អ្នកបង្កើត Video",
+    avatar: "https://i.pravatar.cc/300?img=32"
   },
   {
-    name: "Member Two",
-    role: "Backend Developer",
+    name: "ហួន ថានុន",
+    role: "អ្នកបង្កើត UI/UX",
     avatar: "https://i.pravatar.cc/300?img=45",
   },
   {
-    name: "Member Three",
-    role: "UI/UX Designer",
+    name: "អាន ម៉េងហួ",
+    role: "អ្នករចនា Frontend",
     avatar: "https://i.pravatar.cc/300?img=56",
   },
   {
-    name: "Member Four",
-    role: "Database Engineer",
+    name: "អន សម្បត្តិ",
+    role: "អ្នកបង្កើត Slide",
     avatar: "https://i.pravatar.cc/300?img=67",
   },
   {
-    name: "Member Five",
-    role: "QA & Documentation",
+    name: "ប៊ូ លក្ខិណា",
+    role: "ធ្វើតេស្តប្រព័ន្ធ",
     avatar: "https://i.pravatar.cc/300?img=68",
   },
 ];
+
+const features = [
+  {
+    icon: "bi-geo",
+    title: "គោលដៅ",
+    desc: "បង្កើតវេទិកាដែលងាយស្រួលប្រើប្រាស់សម្រាប់ការស្វែងរកវត្ថុបាត់បង់។",
+  },
+  {
+    icon: "bi-lock",
+    title: "សុវត្ថិភាព",
+    desc: "ការពារទិន្នន័យរបស់អ្នកប្រើប្រាស់ជាមួយប្រព័ន្ធសុវត្ថិភាពខ្ពស់។",
+  },
+  {
+    icon: "bi-lightning-charge",
+    title: "លឿន",
+    desc: "ប្រព័ន្ធឆ្លើយតបរហ័ស និងអាចប្រើបានគ្រប់ពេលវេលា។",
+  },
+  {
+    icon: "bi-person-raised-hand",
+    title: "សហគមន៍",
+    desc: "បង្កើតសហគមន៍ដែលជួយគ្នាទៅវិញទៅមក។",
+  },
+];
+
+const stats = ref([
+  { number: "0", target: 500, label: "អ្នកប្រើប្រាស់", suffix: "+" },
+  { number: "0", target: 300, label: "វត្ថុបានរកឃើញ", suffix: "+" },
+  { number: "0", target: 95, label: "អត្រាជោគជ័យ", suffix: "%" },
+  { number: "0", target: 24, label: "សេវាកម្ម", suffix: "/7" },
+]);
+
+// Testimonials
+const testimonials = [
+  {
+    name: "សុខ ចាន់ថា",
+    role: "អ្នកប្រើប្រាស់",
+    avatar: "https://i.pravatar.cc/150?img=1",
+    text: "FindFound ជួយខ្ញុំរកកាបូបដែលបាត់បង់មកវិញបានយ៉ាងរហ័ស។ សេវាកម្មល្អណាស់!",
+  },
+  {
+    name: "ពេជ្រ សុភា",
+    role: "អ្នកប្រើប្រាស់",
+    avatar: "https://i.pravatar.cc/150?img=5",
+    text: "ប្រព័ន្ធងាយស្រួលប្រើប្រាស់ និងមានប្រសិទ្ធភាព។ សូមអរគុណក្រុមការងារ!",
+  },
+  {
+    name: "វិចិត្រា មករា",
+    role: "អ្នកប្រើប្រាស់",
+    avatar: "https://i.pravatar.cc/150?img=9",
+    text: "គេហទំព័រដ៏ល្អមួយសម្រាប់ការស្វែងរកវត្ថុបាត់បង់។ ខ្ញុំពេញចិត្តណាស់!",
+  },
+  {
+    name: "លី សុវណ្ណ",
+    role: "អ្នកប្រើប្រាស់",
+    avatar: "https://i.pravatar.cc/150?img=12",
+    text: "ខ្ញុំអាចប្រកាសវត្ថុបាត់បង់បានយ៉ាងងាយស្រួល ហើយទទួលបានការឆ្លើយតបលឿន។",
+  },
+  {
+    name: "ចាន់ ដារ៉ា",
+    role: "អ្នកប្រើប្រាស់",
+    avatar: "https://i.pravatar.cc/150?img=15",
+    text: "FindFound ជួយភ្ជាប់អ្នកបាត់វត្ថុ និងអ្នកឃើញវត្ថុបានល្អណាស់។",
+  },
+  {
+    name: "មុំ ស្រីនាង",
+    role: "អ្នកប្រើប្រាស់",
+    avatar: "https://i.pravatar.cc/150?img=20",
+    text: "UI ស្អាត ប្រើងាយ និងមានប្រយោជន៍ខ្លាំងសម្រាប់សង្គម។",
+  },
+  {
+    name: "ហេង វិសាល",
+    role: "អ្នកប្រើប្រាស់",
+    avatar: "https://i.pravatar.cc/150?img=25",
+    text: "សេវាកម្មនេះជួយសន្សំពេលវេលា និងកាត់បន្ថយការព្រួយបារម្ភបានច្រើន។",
+  },
+];
+
+
+// Core values
+const values = [
+  {
+    icon: "bi-lightbulb",
+    title: "ភាពច្នៃប្រឌិត",
+    desc: "យើងតែងតែស្វែងរកដំណោះស្រាយថ្មីៗ និងច្នៃប្រឌិត",
+  },
+  {
+    icon: "bi-mortarboard",
+    title: "ការរៀនសូត្រ",
+    desc: "យើងជឿជាក់លើការរៀនសូត្រ និងការអភិវឌ្ឍន៍ជាបន្ត",
+  },
+  {
+    icon: "bi-star",
+    title: "គុណភាព",
+    desc: "យើងប្តេជ្ញាផ្តល់សេវាកម្មដែលមានគុណភាពខ្ពស់",
+  },
+  {
+    icon: "bi-heart",
+    title: "ការយកចិត្តទុកដាក់",
+    desc: "យើងយកចិត្តទុកដាក់ចំពោះអ្នកប្រើប្រាស់គ្រប់រូប",
+  },
+];
+
+// Technologies used
+const technologies = [
+  {
+    name: "Javascript",
+    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg",
+  },
+  {
+    name: "Vue.js",
+    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vuejs/vuejs-original.svg",
+  },
+  {
+    name: "Bootstrap",
+    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/bootstrap/bootstrap-original.svg",
+  },
+  {
+    name: "Github",
+    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg",
+  },
+  {
+    name: "Figma",
+    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/figma/figma-original.svg",
+  },
+];
+
+// Animated counter
+const animateCounter = () => {
+  stats.value.forEach((stat, index) => {
+    let current = 0;
+    const increment = stat.target / 50;
+    const timer = setInterval(() => {
+      current += increment;
+      if (current >= stat.target) {
+        stat.number = stat.target;
+        clearInterval(timer);
+      } else {
+        stat.number = Math.floor(current);
+      }
+    }, 30);
+  });
+};
+
+onMounted(() => {
+  animateCounter();
+});
+
+// Active testimonial
+const activeTestimonial = ref(0);
+const nextTestimonial = () => {
+  activeTestimonial.value = (activeTestimonial.value + 1) % testimonials.length;
+};
+const prevTestimonial = () => {
+  activeTestimonial.value =
+    (activeTestimonial.value - 1 + testimonials.length) % testimonials.length;
+};
 </script>
 
 <template>
   <div class="about-page">
-
     <!-- HERO -->
     <section class="hero">
       <div class="container text-center">
-        <h1 class="hero-title">About <span>FindFound</span></h1>
-        <p class="hero-subtitle">
-          A smart Lost & Found platform that reconnects people with what they’ve lost.
+        <div class="hero-badge" data-aos="fade-down">
+          <i class="bi bi-stars"></i> វេទិកាស្វែងរកវត្ថុបាត់បង់ល្អបំផុតនៅកម្ពុជា
+        </div>
+        <h1 class="hero-title" data-aos="fade-down" data-aos-delay="100">
+          អំពី <span>FindFound</span>
+        </h1>
+        <p class="hero-subtitle" data-aos="fade-up" data-aos-delay="200">
+          វេទិកាឆ្លាតវៃសម្រាប់ការស្វែងរក និងប្រគល់វត្ថុបាត់បង់<br />
+          ដែលតភ្ជាប់មនុស្សជាមួយអ្វីដែលពួកគេបានបាត់បង់
         </p>
+
+        <!-- Stats Section -->
+        <div class="stats-row" data-aos="zoom-in" data-aos-delay="400">
+          <div v-for="(stat, i) in stats" :key="i" class="stat-item">
+            <div class="stat-number">{{ stat.number }}{{ stat.suffix }}</div>
+            <div class="stat-label">{{ stat.label }}</div>
+          </div>
+        </div>
       </div>
     </section>
 
     <!-- MISSION -->
     <section class="section">
       <div class="container">
-        <div class="glass-card text-center">
-          <h2 class="section-title">Our Mission</h2>
+        <div class="glass-card text-center mission-card" data-aos="fade-up">
+          <div class="mission-icon"><i class="bi-compass"></i></div>
+          <h2 class="section-title">បេសកកម្មរបស់យើង</h2>
           <p class="section-text">
-            FindFound helps individuals recover lost items efficiently by using
-            a centralized, digital, and user-friendly system.
+            FindFound
+            ជួយបុគ្គលម្នាក់ៗឱ្យរកវត្ថុបាត់បង់របស់ពួកគេមកវិញបានយ៉ាងមានប្រសិទ្ធភាព
+            តាមរយៈប្រព័ន្ធកណ្តាល ឌីជីថល និងងាយស្រួលប្រើប្រាស់។
+            យើងជឿជាក់ថាបច្ចេកវិទ្យាអាចបង្កើតសហគមន៍ដ៏រឹងមាំ
+            ដែលមនុស្សជួយគ្នាទៅវិញទៅមក។
           </p>
         </div>
       </div>
     </section>
 
-    <!-- MEMBERS -->
-    <section class="section section-about">
+    <!-- CORE VALUES -->
+    <section class="section bg-light">
       <div class="container">
-        <h2 class="section-title text-white text-center mb-5">Our Team</h2>
+        <h2 class="section-title text-center mb-5" data-aos="fade-up">
+          គុណតម្លៃរបស់យើង
+        </h2>
+        <div class="row g-4">
+          <div
+            v-for="(value, i) in values"
+            :key="i"
+            class="col-12 col-sm-6 col-lg-3"
+          >
+            <div
+              class="value-card glass-card"
+              data-aos="fade-up"
+              :data-aos-delay="i * 100"
+            >
+              <div class="value-icon"><i :class="value.icon"></i></div>
+              <h4 class="value-title">{{ value.title }}</h4>
+              <p class="value-desc">{{ value.desc }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
 
-        <div class="leader-card glass-card mb-4">
+    <!-- FEATURES -->
+    <section class="section">
+      <div class="container">
+        <h2 class="section-title text-center mb-5" data-aos="fade-up">
+          លក្ខណៈពិសេស
+        </h2>
+        <div class="row g-4">
+          <div
+            v-for="(feature, i) in features"
+            :key="i"
+            class="col-12 col-sm-6 col-lg-3"
+          >
+            <div
+              class="feature-card glass-card"
+              data-aos="flip-left"
+              :data-aos-delay="i * 100"
+            >
+              <div class="feature-icon"><i :class="feature.icon"></i></div>
+              <h4 class="feature-title">{{ feature.title }}</h4>
+              <p class="feature-desc">{{ feature.desc }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- MEMBERS -->
+    <section class="section">
+      <div class="container">
+        <h2 class="section-title text-center mb-5" data-aos="fade-up">
+          ក្រុមការងាររបស់យើង
+        </h2>
+
+        <!-- Leader -->
+        <div class="leader-card glass-card mb-5" data-aos="fade-right">
           <img :src="leader.avatar" class="leader-avatar" />
-          <div>
+          <div class="leader-info">
             <h3>{{ leader.name }}</h3>
             <span class="role">{{ leader.role }}</span>
             <p class="mt-3">{{ leader.desc }}</p>
           </div>
         </div>
 
+        <!-- Team Members -->
         <div class="row justify-content-center g-4">
-          <div v-for="(m, i) in members" :key="i" class="col-12 col-sm-6 col-lg-4">
-            <div class="member-card glass-card">
+          <div
+            v-for="(m, i) in members"
+            :key="i"
+            class="col-12 col-sm-6 col-lg-4"
+          >
+            <div
+              class="member-card glass-card"
+              data-aos="fade-up"
+              :data-aos-delay="i * 100"
+            >
               <img :src="m.avatar" />
               <h5 class="mt-3">{{ m.name }}</h5>
               <span class="role">{{ m.role }}</span>
@@ -87,45 +326,134 @@ const members = [
       </div>
     </section>
 
-    <!-- our thank-->
-    <section class="py-5">
+    <!-- TESTIMONIALS -->
+    <section class="section">
       <div class="container">
-        <div class="card-surface p-4 p-lg-5 text-center" data-aos="fade-up" data-aos-duration="1000">
-          <h3 class="fw-bold mb-3">សេចក្ដីថ្លែងអំណរគុណ</h3>
-          <p class="thank-content mb-5">
-            ពួកយើង​ សូមថ្លែងអំណរគុណយ៉ាងជ្រាលជ្រៅដល់
-            <span class="fw-bold">ក្រសួងប្រៃសណីយ៍ និងទូរគមនាគមន៍ មូលនិធិ ស.អ</span>
-            និង
-            <span class="fw-bold">ថ្នាក់បណ្ដុះបណ្ដាលបច្ចេកវិទ្យា ANT</span>
-            <br />
-            ដែលបានផ្តល់អាហារូបករណ៍ និងឱកាសដ៏មានតម្លៃសម្រាប់ការសិក្សាផ្នែក Web
-            Development ដល់ពួកយើង។<br />
-            អរគុណចំពោះការគាំទ្រ និងការយកចិត្តទុកដាក់របស់ស្ថាប័នទាំងអស់
-            ដែលមិនត្រឹមតែផ្ដល់ចំណេះដឹង និងជំនាញបច្ចេកទេសសម្រាប់ក្រុមយើងទេ
-            <br />
-            ប៉ុន្តែថែមទាំងជួយបង្កើនទំនុកចិត្ត និងសមត្ថភាពក្នុងការបង្កើតគេហទំព័រ ដើម្បីរួមចំណែកក្នុងការលើកវិស័យបច្ចេកវិទ្យា
-            និងឌីជីថលនៅកម្ពុជាទៀតផង។<br />
-            យើងសូមសន្យាថា នឹងប្រើប្រាស់ចំណេះដឹង និងជំនាញដែលទទួលបាន
-            ដើម្បីបន្តការបង្កើត និងអភិវឌ្ឍកម្មវិធី ឲ្យមានប្រយោជន៍ចំពោះសង្គម
-            និងសហគមន៍ក្នុងស្រុក។
-          </p>
-          <div class="row" data-aos="zoom-in-up" data-aos-duration="1000">
-            <div class="col-12 col-md-4 align-content-center">
-              <img class="img-fluid w-100 object-fit-contain" src="" alt="ក្រសួងប្រៃសណីយ៍" />
+        <h2 class="section-title text-center mb-5" data-aos="fade-up">
+          មតិពីអ្នកប្រើប្រាស់
+        </h2>
+        <div class="testimonial-container" data-aos="fade-up">
+          <button
+            @click="prevTestimonial"
+            class="testimonial-nav testimonial-prev"
+          >
+            ‹
+          </button>
+          <div class="testimonial-card glass-card">
+            <div class="testimonial-avatar">
+              <img :src="testimonials[activeTestimonial].avatar" alt="avatar" />
             </div>
-            <div class="col-12 col-md-4 align-content-center">
-              <img class="img-fluid w-75 object-fit-contain" src="" alt="CBRD Fund"
-                style="transform: scale(0.7)" />
+            <div class="stars">
+              <span v-for="n in testimonials[activeTestimonial].rating" :key="n"
+                >⭐</span
+              >
             </div>
-            <div class="col-12 col-md-4 align-content-center">
-              <img class="img-fluid w-50 object-fit-contain" src="" alt="ANT Technology"
-                style="transform: scale(0.7)" />
-            </div>
+            <p class="testimonial-text">
+              "{{ testimonials[activeTestimonial].text }}"
+            </p>
+            <h5 class="testimonial-name">
+              {{ testimonials[activeTestimonial].name }}
+            </h5>
+            <p class="testimonial-role">
+              {{ testimonials[activeTestimonial].role }}
+            </p>
+          </div>
+          <button
+            @click="nextTestimonial"
+            class="testimonial-nav testimonial-next"
+          >
+            ›
+          </button>
+        </div>
+        <div class="testimonial-dots">
+          <span
+            v-for="(t, i) in testimonials"
+            :key="i"
+            class="dot"
+            :class="{ active: i === activeTestimonial }"
+            @click="activeTestimonial = i"
+          ></span>
+        </div>
+      </div>
+    </section>
+
+    <!-- TECHNOLOGIES -->
+    <section class="section bg-light">
+      <div class="container">
+        <h2 class="section-title text-center mb-5" data-aos="fade-up">
+          បច្ចេកវិទ្យាដែលយើងប្រើ
+        </h2>
+        <div class="tech-grid" data-aos="zoom-in">
+          <div
+            v-for="(tech, i) in technologies"
+            :key="i"
+            class="tech-item"
+            :data-aos-delay="i * 50"
+          >
+            <img :src="tech.icon" :alt="tech.name" class="tech-icon" />
+            <p class="tech-name">{{ tech.name }}</p>
           </div>
         </div>
       </div>
     </section>
 
+    <!-- THANK YOU -->
+    <section class="section">
+      <div class="container">
+        <div
+          class="glass-card p-4 p-lg-5 text-center"
+          data-aos="fade-up"
+          data-aos-duration="1000"
+        >
+          <h3 class="fw-bold mb-4">
+            <span class="thank-icon">🙏</span>
+            សេចក្ដីថ្លែងអំណរគុណ
+          </h3>
+          <p class="thank-content mb-5">
+            ពួកយើង​ សូមថ្លែងអំណរគុណយ៉ាងជ្រាលជ្រៅដល់
+            <span class="fw-bold highlight"
+              >ក្រសួងប្រៃសណីយ៍ និងទូរគមនាគមន៍ មូលនិធិ ស.អ</span
+            >
+            និង
+            <span class="fw-bold highlight"
+              >ថ្នាក់បណ្ដុះបណ្ដាលបច្ចេកវិទ្យា ANT</span
+            >
+            ដែលបានផ្តល់អាហារូបករណ៍ និងឱកាសដ៏មានតម្លៃសម្រាប់ការសិក្សាផ្នែក Web
+            Development ដល់ពួកយើង។
+            អរគុណចំពោះការគាំទ្រ និងការយកចិត្តទុកដាក់របស់ស្ថាប័នទាំងអស់
+            ដែលមិនត្រឹមតែផ្ដល់ចំណេះដឹង និងជំនាញបច្ចេកទេសសម្រាប់ក្រុមយើងទេ
+            ប៉ុន្តែថែមទាំងជួយបង្កើនទំនុកចិត្ត និងសមត្ថភាពក្នុងការបង្កើតគេហទំព័រ
+            ដើម្បីរួមចំណែកក្នុងការលើកវិស័យបច្ចេកវិទ្យា និងឌីជីថលនៅកម្ពុជាទៀតផង។
+            យើងសូមសន្យាថា នឹងប្រើប្រាស់ចំណេះដឹង និងជំនាញដែលទទួលបាន
+            ដើម្បីបន្តការបង្កើត និងអភិវឌ្ឍកម្មវិធី ឲ្យមានប្រយោជន៍ចំពោះសង្គម
+            និងសហគមន៍ក្នុងស្រុក។
+          </p>
+          <div class="row g-4" data-aos="zoom-in-up" data-aos-duration="1000">
+            <div
+            class="col-12 col-md-4 d-flex align-items-center justify-content-center"
+            >
+            <div class="sponsor-box">
+              <div class="sponsor-placeholder"><img class="object-fit-cover" src="@/assets/images/logo/CBRD Fund.png" alt=""></div>
+            </div>
+          </div>
+          <div
+            class="col-12 col-md-4 d-flex align-items-center justify-content-center"
+          >
+            <div class="sponsor-box">
+              <div class="sponsor-placeholder"><img class="object-fit-cover" src="@/assets/images/logo/MPTC.png" alt=""></div>
+            </div>
+          </div>
+            <div
+              class="col-12 col-md-4 d-flex align-items-center justify-content-center"
+            >
+              <div class="sponsor-box">
+                <div class="sponsor-placeholder"><img class="object-fit-cover" src="@/assets/images/logo/ANT.png" alt=""></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
   </div>
 </template>
 
@@ -138,25 +466,100 @@ const members = [
 
 /* ===== HERO ===== */
 .hero {
-  padding: 120px 20px;
-  background: linear-gradient(var(--primary-color), #c0acee);
+  padding: 80px 20px;
+  background: linear-gradient(135deg, var(--primary-color, #6366f1), #8b5cf6);
   color: white;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(
+      circle at 20% 50%,
+      rgba(255, 255, 255, 0.1) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      circle at 80% 80%,
+      rgba(255, 255, 255, 0.1) 0%,
+      transparent 50%
+    );
+  pointer-events: none;
+}
+
+.hero-badge {
+  display: inline-block;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  padding: 8px 20px;
+  border-radius: 25px;
+  font-size: 0.9rem;
+  margin-bottom: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
 .hero-title {
-  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-size: clamp(2.5rem, 5vw, 4.5rem);
   font-weight: 800;
+  position: relative;
+  margin-bottom: 20px;
 }
 
 .hero-title span {
-  color: #fde68a;
+  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2);
 }
 
 .hero-subtitle {
   max-width: 700px;
-  margin: 20px auto 0;
-  font-size: 1.1rem;
-  opacity: 0.9;
+  margin: 0 auto;
+  font-size: 1.2rem;
+  opacity: 0.95;
+  line-height: 1.8;
+  position: relative;
+}
+
+/* ===== STATS ===== */
+.stats-row {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  margin-top: 60px;
+  flex-wrap: wrap;
+}
+
+.stat-item {
+  text-align: center;
+  padding: 25px;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  min-width: 140px;
+  transition: all 0.3s ease;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.stat-item:hover {
+  transform: translateY(-8px) scale(1.05);
+  background: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.stat-number {
+  font-size: 3rem;
+  font-weight: 800;
+  margin-bottom: 8px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.stat-label {
+  font-size: 0.95rem;
+  opacity: 0.95;
 }
 
 /* ===== SECTIONS ===== */
@@ -164,31 +567,37 @@ const members = [
   padding: 80px 20px;
 }
 
+.bg-light {
+  background: #f9fafb;
+}
+
+.bg-gradient {
+  background: linear-gradient(135deg, var(--primary-color, #6366f1), #8b5cf6);
+}
+
 .section-title {
   font-weight: 700;
-  font-size: 2rem;
+  font-size: 2.2rem;
+  color: #1f2937;
 }
 
 .section-text {
   max-width: 800px;
-  margin: auto;
+  margin: 20px auto 0;
   color: #555;
-  line-height: 1.7;
-}
-
-.section-about {
-  background: linear-gradient(360deg, var(--primary-color), #c0acee);
+  line-height: 1.8;
+  font-size: 1.1rem;
 }
 
 /* ===== GLASS CARD ===== */
 .glass-card {
-  /* background: rgba(255, 255, 255, 0.75); */
-  background: var(--tertiary-color);
+  background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(12px);
   border-radius: 20px;
   padding: 30px;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
   transition: all 0.3s ease;
+  border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
 .glass-card:hover {
@@ -196,47 +605,404 @@ const members = [
   box-shadow: 0 30px 60px rgba(0, 0, 0, 0.12);
 }
 
+/* ===== MISSION ===== */
+.mission-card {
+  padding: 50px 40px;
+}
+
+.mission-icon {
+  font-size: 4rem;
+  margin-bottom: 20px;
+}
+
+/* ===== VALUES ===== */
+.value-card {
+  text-align: center;
+  height: 100%;
+  padding: 40px 30px;
+}
+
+.value-icon {
+  font-size: 4rem;
+  margin-bottom: 20px;
+}
+
+.value-title {
+  font-weight: 700;
+  color: #1f2937;
+  margin-bottom: 15px;
+  font-size: 1.4rem;
+}
+
+.value-desc {
+  color: #6b7280;
+  line-height: 1.7;
+}
+
+/* ===== FEATURES ===== */
+.feature-card {
+  text-align: center;
+  height: 100%;
+  padding: 35px 25px;
+}
+
+.feature-icon {
+  font-size: 3.5rem;
+  margin-bottom: 20px;
+}
+
+.feature-title {
+  font-weight: 700;
+  color: #1f2937;
+  margin-bottom: 15px;
+  font-size: 1.3rem;
+}
+
+.feature-desc {
+  color: #6b7280;
+  line-height: 1.6;
+  font-size: 0.95rem;
+}
+
 /* ===== LEADER ===== */
 .leader-card {
   display: flex;
-  gap: 30px;
+  gap: 35px;
   align-items: center;
   max-width: 900px;
   margin: auto;
+  padding: 40px;
 }
 
 .leader-avatar {
-  width: 140px;
-  height: 140px;
+  width: 160px;
+  height: 160px;
   border-radius: 50%;
   object-fit: cover;
-  border: 4px solid #6366f1;
+  border: 6px solid var(--primary-color, #6366f1);
+  box-shadow: 0 15px 40px rgba(99, 102, 241, 0.3);
 }
 
+.leader-info h3 {
+  font-size: 1.8rem;
+  margin-bottom: 8px;
+}
 /* ===== MEMBERS ===== */
 .member-card {
   text-align: center;
+  height: 100%;
+  padding: 35px 25px;
 }
 
 .member-card img {
-  width: 110px;
-  height: 110px;
+  width: 120px;
+  height: 120px;
   border-radius: 50%;
   object-fit: cover;
-  border: 3px solid #6366f1;
+  border: 4px solid var(--primary-color, #6366f1);
+  transition: all 0.3s ease;
+}
+
+.member-card:hover img {
+  transform: scale(1.1);
+  box-shadow: 0 10px 30px rgba(99, 102, 241, 0.3);
 }
 
 .role {
   font-size: 0.9rem;
-  color: #6366f1;
+  color: var(--primary-color, #6366f1);
   font-weight: 600;
+  display: inline-block;
+  background: rgba(99, 102, 241, 0.1);
+  padding: 5px 15px;
+  border-radius: 20px;
+  margin-top: 8px;
+}
+
+/* ===== ACHIEVEMENTS ===== */
+.achievement-card {
+  text-align: center;
+  padding: 35px 25px;
+  height: 100%;
+}
+
+.achievement-icon {
+  font-size: 3.5rem;
+  margin-bottom: 15px;
+}
+
+.achievement-title {
+  font-weight: 700;
+  color: #1f2937;
+  margin-bottom: 10px;
+  font-size: 1.1rem;
+}
+
+.achievement-desc {
+  color: #6b7280;
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+/* ===== TESTIMONIALS ===== */
+.testimonial-container {
+  position: relative;
+  max-width: 800px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.testimonial-card {
+  text-align: center;
+  padding: 50px 40px;
+  flex: 1;
+}
+
+.testimonial-avatar {
+  width: 100px;
+  height: 100px;
+  margin: 0 auto 20px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 4px solid var(--primary-color, #6366f1);
+}
+
+.testimonial-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.stars {
+  font-size: 1.3rem;
+  margin-bottom: 20px;
+}
+
+.testimonial-text {
+  font-size: 1.1rem;
+  line-height: 1.8;
+  color: #374151;
+  margin-bottom: 25px;
+}
+
+.testimonial-name {
+  font-weight: 700;
+  color: #1f2937;
+  margin-bottom: 5px;
+}
+
+.testimonial-role {
+  color: #6b7280;
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+.testimonial-nav {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: var(--primary-color, #6366f1);
+  color: white;
+  border: none;
+  font-size: 2rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+}
+
+.testimonial-nav:hover {
+  transform: scale(1.1);
+  box-shadow: 0 5px 15px rgba(99, 102, 241, 0.4);
+}
+
+.testimonial-dots {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 30px;
+}
+
+.dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #d1d5db;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.dot.active {
+  background: var(--primary-color, #6366f1);
+  transform: scale(1.3);
+}
+
+/* ===== TECHNOLOGIES ===== */
+.tech-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 30px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.tech-item {
+  text-align: center;
+  padding: 25px;
+  background: white;
+  border-radius: 15px;
+  transition: all 0.3s ease;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+}
+
+.tech-item:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+}
+
+.tech-icon {
+  width: 60px;
+  height: 60px;
+  margin-bottom: 15px;
+  filter: drop-shadow(0 5px 10px rgba(0, 0, 0, 0.1));
+}
+
+.tech-name {
+  font-weight: 600;
+  color: #1f2937;
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+/* ===== THANK YOU ===== */
+.thank-icon {
+  font-size: 3.5rem;
+  display: block;
+  margin-bottom: 10px;
+}
+
+.thank-content {
+  line-height: 2;
+  color: #374151;
+  font-size: 1.05rem;
+  max-width: 900px;
+  margin: 0 auto 40px;
+}
+
+.highlight {
+  color: var(--primary-color, #6366f1);
+  background: linear-gradient(
+    120deg,
+    rgba(99, 102, 241, 0.1) 0%,
+    rgba(99, 102, 241, 0.2) 100%
+  );
+  padding: 2px 3px;
+  border-radius: 4px;
+}
+
+.sponsor-box img {
+  background: white;
+  padding: 40px 30px;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  width: 100%;
+  max-width: 400px;
+  height: 150px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sponsor-box img:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.12);
+}
+
+.sponsor-placeholder {
+  color: #9ca3af;
+  font-weight: 600;
+  text-align: center;
 }
 
 /* ===== RESPONSIVE ===== */
+@media (max-width: 992px) {
+  .timeline::before {
+    left: 30px;
+  }
+
+  .timeline-item {
+    width: 100%;
+    padding-left: 80px;
+    padding-right: 20px;
+  }
+
+  .timeline-item-right {
+    left: 0;
+  }
+
+  .timeline-icon {
+    left: 5px !important;
+    right: auto !important;
+  }
+}
+
 @media (max-width: 768px) {
   .leader-card {
     flex-direction: column;
     text-align: center;
+    padding: 30px;
+  }
+
+  .stats-row {
+    gap: 15px;
+  }
+
+  .stat-item {
+    min-width: 110px;
+    padding: 20px 15px;
+  }
+
+  .stat-number {
+    font-size: 2.2rem;
+  }
+
+  .hero {
+    padding: 100px 20px 60px;
+  }
+
+  .section {
+    padding: 60px 20px;
+  }
+
+  .testimonial-nav {
+    display: none;
+  }
+
+  .tech-grid {
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    gap: 20px;
+  }
+}
+
+@media (max-width: 576px) {
+  .hero-title {
+    font-size: 2rem;
+  }
+
+  .mission-card {
+    padding: 35px 25px;
+  }
+
+  .value-icon,
+  .feature-icon {
+    font-size: 2.8rem;
+  }
+
+  .sponsor-box {
+    max-width: 100%;
+    height: 150px;
   }
 }
 </style>
