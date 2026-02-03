@@ -1,5 +1,5 @@
 <template>
-  <h1 class="mb-5"><i class="bi bi-speedometer2"></i> ផ្ទាំងគ្រប់គ្រង</h1>
+  <h1 class="mt-2 mb-5"><i class="bi bi-speedometer2"></i> ផ្ទាំងគ្រប់គ្រង</h1>
   <div class="container p-0 mt-4">
     <!-- Main Content -->
     <main class="main-content">

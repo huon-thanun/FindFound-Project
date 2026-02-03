@@ -174,17 +174,17 @@ const router = createRouter({
         {
           path: "/policy",
           name: "policy",
-          component: Policy
+          component: Policy,
         },
         {
           path: "/faq",
           name: "faq",
-          component: Faq
+          component: Faq,
         },
         {
           path: "/support",
           name: "support",
-          component: Support
+          component: Support,
         },
       ],
     },
@@ -279,6 +279,10 @@ const router = createRouter({
       redirect: "/login",
     },
   ],
+  scrollBehavior(to, from, savedPosition) {
+    // Always scroll to top when route changes
+    return { top: 0 };
+  },
 });
 
 /* ================= ROUTE GUARD ================= */

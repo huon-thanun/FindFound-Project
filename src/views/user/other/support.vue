@@ -1,6 +1,6 @@
 <template>
     <!-- Header Section -->
-    <header class="header-section">
+    <header class="header-section" id="support">
         <div class="container">
             <div class="text-center py-5">
                 <h1 class="khmer-title mb-3">ជំនួយ និងគាំទ្រ</h1>
