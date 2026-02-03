@@ -17,11 +17,11 @@
     <nav class="nav-menu">
       <router-link to="/" class="nav-item"> Dashboard </router-link>
 
-      <router-link to="about" class="nav-item"> Users </router-link>
+      <router-link to="/about" class="nav-item"> Users </router-link>
 
-      <router-link to="/about" class="nav-item"> Categories </router-link>
+      <router-link to="/categories" class="nav-item"> Categories </router-link>
 
-      <router-link to="reports" class="nav-item"> Reports </router-link>
+      <router-link to="/reports" class="nav-item"> Reports </router-link>
     </nav>
 
     <!-- User Section -->
@@ -31,10 +31,11 @@
           class="handle-btn mb-3"
           icon="person-circle"
           variant="secondary"
+          @click="goLogin"
         >
           Login
         </base-button>
-        <base-button class="handle-btn" icon="person-plus-fill">
+        <base-button class="handle-btn" icon="person-plus-fill" @click="goRegister">
           Register
         </base-button>
       </div>
@@ -43,6 +44,7 @@
           class="handle-btn mb-3"
           icon="plus-circle"
           variant="secondary"
+          @click="goRegister"
         >
           បាត់
         </base-button>
@@ -146,7 +148,7 @@
 
             <li class="nav-item">
               <router-link
-                to="about"
+                to="/about"
                 class="nav-link-custom"
                 :class="{ active: activeLink === 'about' }"
                 @click.prevent="setActive('about')"
@@ -174,10 +176,10 @@
         v-if="showAuthButtons"
         class="btn-active d-flex align-items-center gap-3"
       >
-        <base-button icon="person-circle" variant="secondary" class="btn-login">
+        <base-button icon="person-circle" variant="secondary" class="btn-login"  @click="goLogin">
           ចូល
         </base-button>
-        <base-button icon="person-plus-fill" class="btn-register">
+        <base-button icon="person-plus-fill" class="btn-register" @click="goRegister ">
           ចុះឈ្មោះ
         </base-button>
       </div>
@@ -286,6 +288,25 @@
 <script setup>
 import { ref, computed, onMounted } from "vue";
 import { useProfileStore } from "@/stores/profileStore";
+import { useRouter } from "vue-router";
+import { useAuthStore } from "@/stores/authStore";
+
+const auth = useAuthStore();
+
+
+
+
+const router = useRouter();
+
+const goLogin = () => {
+  router.push({ name: "login" }); 
+  // or: router.push("/login")
+};
+
+const goRegister = () => {
+  router.push({ name: "register" });
+  // or: router.push("/register")
+};
 
 const activeLink = ref("home");
 const profileStore = useProfileStore();
@@ -306,7 +327,7 @@ onMounted(() => {
 });
 
 // Show login buttons if no token
-const showAuthButtons = computed(() => !token.value);
+const showAuthButtons = computed(() => !auth.isAuthenticated);
 
 // Active link in navbar
 const setActive = (link) => {

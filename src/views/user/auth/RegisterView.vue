@@ -509,17 +509,15 @@ const register = async () => {
   color: #ef4444;
 }
 
-/* =========================
-   PRIMARY BUTTON
-========================= */
+/* PRIMARY BUTTON */
 .btn {
   width: 100%;
   font-size: 16px;
   font-weight: 600;
-  color: #ffffff;
+  font-family: inherit;
+  color: #ffffff !important; 
   cursor: pointer;
   border: none;
-  font-family: inherit;
 
   background: linear-gradient(135deg, #8c31e8, #742adb);
   border-radius: 14px;
@@ -530,37 +528,47 @@ const register = async () => {
     inset 0 1px 0 rgba(255, 255, 255, 0.15);
 
   transition:
+    background 0.25s ease,
     transform 0.18s ease,
-    box-shadow 0.18s ease,
-    filter 0.18s ease;
+    box-shadow 0.18s ease;
 }
 
+/* HOVER */
 .btn:hover:not(:disabled) {
+  background: linear-gradient(135deg, #9a4ef0, #8a3cf0);
   transform: translateY(-1px);
+  color: #ffffff !important; 
 
   box-shadow:
-    0 14px 32px rgba(135, 87, 184, 0.38),
-    inset 0 1px 0 rgba(255, 255, 255, 0.25);
-
-  filter: brightness(1.05);
+    0 16px 36px rgba(116, 38, 195, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.28);
 }
 
+/* ACTIVE (CLICK) */
 .btn:active:not(:disabled) {
+  background: linear-gradient(135deg, #7b25cf, #6721c1);
   transform: translateY(1px);
+  color: #ffffff !important;
 
   box-shadow:
     0 8px 18px rgba(142, 76, 208, 0.3),
     inset 0 2px 6px rgba(0, 0, 0, 0.18);
-
-  filter: brightness(0.98);
 }
 
+/* FOCUS (keyboard / click) */
+.btn:focus,
+.btn:focus-visible {
+  color: #ffffff !important;
+  outline: none;
+}
+
+/* DISABLED */
 .btn:disabled {
   opacity: 0.55;
   cursor: not-allowed;
   box-shadow: none;
-  filter: none;
 }
+
 /* =========================
    FOOTER LINK
 ========================= */
