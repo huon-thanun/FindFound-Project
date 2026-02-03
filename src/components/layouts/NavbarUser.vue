@@ -9,13 +9,15 @@
 
     <!-- Navigation Menu -->
     <nav class="nav-menu">
-      <router-link to="/" class="nav-item"> Dashboard </router-link>
+      <router-link :to="{name: 'home'}" class="nav-item"> ទំព័រ​ដើម </router-link>
 
-      <router-link to="about" class="nav-item"> Users </router-link>
+      <router-link :to="{name: 'report.user'}" class="nav-item"> របាយការណ៍ </router-link>
 
-      <router-link to="/about" class="nav-item"> Categories </router-link>
+      <router-link to="" class="nav-item"> ប្រភេទរបាយការណ៍ </router-link>
 
-      <router-link to="reports" class="nav-item"> Reports </router-link>
+      <router-link :to="{name: 'about'}" class="nav-item"> អំពី​យើង </router-link>
+
+      <router-link :to="{name: 'contact_us'}" class="nav-item"> ទំនាក់ទំនង </router-link>
     </nav>
 
     <!-- User Section -->
@@ -87,7 +89,7 @@
             <li class="nav-item">
               <router-link to="" class="nav-link-custom" :class="{ active: activeLink === 'categories' }"
                 @click.prevent="setActive('categories')">
-                Categories
+                ប្រភេទរបាយការណ៍
               </router-link>
             </li>
 
