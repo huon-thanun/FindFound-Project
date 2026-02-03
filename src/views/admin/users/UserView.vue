@@ -1,109 +1,86 @@
 <template>
-  <div>
+  <div class="p-3">
     <!-- Success Alert -->
-    <div
-      v-if="successMessage"
-      class="alert alert-success alert-dismissible fade show mb-4"
-      role="alert"
-    >
+    <div v-if="successMessage" class="alert alert-success alert-dismissible fade show mb-4" role="alert">
       {{ successMessage }}
-      <button
-        type="button"
-        class="btn-close"
-        @click="successMessage = ''"
-      ></button>
+      <button type="button" class="btn-close" @click="successMessage = ''"></button>
     </div>
 
     <!-- Error Alert -->
-    <div
-      v-if="errorMessage"
-      class="alert alert-danger alert-dismissible fade show mb-4"
-      role="alert"
-    >
+    <div v-if="errorMessage" class="alert alert-danger alert-dismissible fade show mb-4" role="alert">
       {{ errorMessage }}
-      <button
-        type="button"
-        class="btn-close"
-        @click="errorMessage = ''"
-      ></button>
+      <button type="button" class="btn-close" @click="errorMessage = ''"></button>
     </div>
 
     <!-- Header -->
     <div class="d-flex justify-content-between mb-4 align-items-center">
       <div>
-        <h3 class="fw-bold">Users</h3>
-        <p class="text-muted">Manage system users</p>
+        <h2 class="fw-bold">អ្នកប្រើប្រាស់</h2>
+        <p class="text-muted">បង្កើត និងគ្រប់គ្រងអ្នកប្រើប្រាស់</p>
       </div>
-      <BaseButton
-        icon="person-plus"
-        variant="primary"
-        @click="showCreateModal = true"
-      >
-        Create User
+      <BaseButton class="d-none d-md-block" icon="person-plus" variant="primary" @click="showCreateModal = true">
+        បង្កើតអ្នកប្រើប្រាស់
+      </BaseButton>
+      <BaseButton class="d-block d-md-none d-flex" icon="person-plus" variant="primary" @click="showCreateModal = true">
+        បង្កើត
       </BaseButton>
     </div>
 
     <!-- Filters -->
-    <div class="card mb-3">
-      <div class="card-body d-flex gap-3 align-items-start">
-        <div style="flex: 1" class=" p-0 m-0">
-          <BaseInput
-            type="text"
-            placeholder="Search by name or email"
-            v-model="filters.search"
-            @keyup.enter="resetAndLoadUsers"
-          />
-        
+    <div class="card mb-3 shadow">
+      <div class="card-body d-flex gap-3 align-items-start filter-row">
+        <div class="filter-search">
+          <BaseInput class="d-block d-md-none d-xl-block" type="text" placeholder="ស្វែងរកតាមឈ្មោះ​ និងអុីមែល..." v-model="filters.search"
+            @keyup.enter="resetAndLoadUsers" />
+          <BaseInput class="d-none d-md-block d-xl-none" type="text" placeholder="ស្វែងរក..." v-model="filters.search"
+            @keyup.enter="resetAndLoadUsers" />
         </div>
 
-        <div class="mt-2 p-0" style="flex: 1">
-          <BaseSelect
-            :modelValue="
-              sortOptions.find((o) => o.value === filters.sortBy) || null
-            "
-            :items="sortOptions"
-            labelField="label"
-            valueField="value"
-            @update:modelValue="
-              (item) => (filters.sortBy = item?.value || 'id')
-            "
-          />
+        <div class="mt-sm-0 mt-md-2 p-0 filter-sort-1">
+          <BaseSelect textField="តម្រៀបតាម" :modelValue="sortOptions.find((o) => o.value === filters.sortBy) || null
+            " :items="sortOptions" labelField="label" valueField="value" @update:modelValue="(item) => (filters.sortBy = item?.value || '')
+            " class="text-nowrap" />
         </div>
 
-        <div class="mt-2 p-0" style="flex: 1">
-          <BaseSelect
-            :modelValue="
-              statusOptions.find((o) => o.value === filters.status) || null
-            "
-            :items="statusOptions"
-            labelField="label"
-            valueField="value"
-            @update:modelValue="(item) => (filters.status = item?.value || '')"
-          />
+        <div class="d-flex gap-3 filter-column w-100">
+
+          <div class="mt-sm-0 mt-md-2 p-0 filter-sort">
+            <BaseSelect :modelValue="SORT_DIR_OPTIONS.find((o) => o.value === filters.sortDir) || null
+              " labelField="label" valueField="value" :items="SORT_DIR_OPTIONS"
+              @update:modelValue="(item) => (filters.sortDir = item?.value || '')" textField="ទិសដៅតម្រៀប"
+              class="text-nowrap" />
+          </div>
+
+          <div class="mt-sm-0 mt-md-2 p-0 filter-sort">
+            <BaseSelect textField="តម្រៀបស្ថានភាព" :modelValue="statusOptions.find((o) => o.value === filters.status) || null
+              " :items="statusOptions" labelField="label" valueField="value"
+              @update:modelValue="(item) => (filters.status = item?.value || '')" class="text-nowrap" />
+          </div>
+
         </div>
+
+        <!-- CLEAR FILTER -->
+        <div class="mt-sm-0 mt-md-1 mt-lg-2 p-0 d-flex justify-content-end filter-clear">
+          <BaseButton class="d-none d-md-block d-xl-none" variant="outline_primary" icon="stars" @click="clearFilter">
+            សម្អាត
+          </BaseButton>
+          <BaseButton class="d-block d-md-none d-xl-block d-flex" variant="outline_primary" icon="stars" @click="clearFilter">
+            សម្អាតការតម្រៀប
+          </BaseButton>
+        </div>
+
       </div>
     </div>
 
     <!-- Users Table -->
     <div class="card">
-      <BaseTableUserPage
-        :columns="tableColumns"
-        :items="users"
-        :isLoading="loading"
-        @edit="viewUser"
-        @delete="openStatus"
-      >
+      <BaseTableUserPage :columns="tableColumns" :items="users" :isLoading="loading" @edit="viewUser"
+        @delete="openStatus">
         <template #column-id="{ item }"> #{{ item.id }} </template>
 
         <template #column-fullname="{ item }">
           <div class="d-flex align-items-center gap-2">
-            <img
-              :src="item.avatar || '/avatar.png'"
-              width="40"
-              height="40"
-              class="rounded-circle"
-              alt="avatar"
-            />
+            <img :src="item.avatar || '/avatar.png'" width="40" height="40" class="rounded-circle" alt="avatar" />
             <span>{{ item.fullname }}</span>
           </div>
         </template>
@@ -113,198 +90,117 @@
         </template>
 
         <template #column-status="{ item }">
-          <span
-            class="badge"
-            :class="item.status === 'ACTIVATED' ? 'bg-success' : 'bg-secondary'"
-          >
+          <span class="badge" :class="item.status === 'ACTIVATED' ? 'bg-success' : 'bg-danger'">
             {{ item.status }}
           </span>
         </template>
       </BaseTableUserPage>
 
-      <div class="card-footer text-center">
+      <!-- <div class="card-footer text-center">
         <div class="d-flex gap-2 justify-content-center my-3">
-          <BaseButton
-          class="pointer"
-            variant="danger"
-            @click="previousPage"
-            :isDisabled="filters.page === 1"
-          >
-            Prev
+          <BaseButton class="pointer" variant="danger" @click="previousPage" :isDisabled="filters.page === 1">
+            មុន
           </BaseButton>
 
-          <BaseButton
-          class="pointer"
-            variant="primary"
-            @click="nextPage"
-            :isDisabled="!meta?.hasNextPage"
-          >
-            Next
+          <BaseButton class="pointer" variant="primary" @click="nextPage" :isDisabled="!meta?.hasNextPage">
+            បន្ទាប់
           </BaseButton>
         </div>
         <p class="text-muted">Total: {{ total }} users</p>
-      </div>
+      </div> -->
     </div>
 
     <!-- VIEW USER MODAL -->
-    <BaseModal
-    class=" align-items-start"
-      title="User Detail"
-      icon="person-circle"
-      :theme="'primary'"
-      :isClose="showViewModal"
-      @closeModal="showViewModal = false"
-    >
+    <BaseModal title="User Detail" icon="person-circle" :theme="'primary'" :isClose="showViewModal"
+      @closeModal="showViewModal = false">
       <template #body>
-        <p><b>ID:</b> {{ selectedUser?.id }}</p>
-        <p><b>Name:</b> {{ selectedUser?.fullname }}</p>
-        <p><b>Email:</b> {{ selectedUser?.email }}</p>
-        <p><b>Phone:</b> {{ selectedUser?.phoneNumber || '-' }}</p>
-        <p><b>Status:</b> {{ selectedUser?.status }}</p>
-        <p><b>Role:</b> {{ selectedUser?.role?.name }}</p>
-        <p><b>Registered:</b> {{ formatDate(selectedUser?.registeredAt) }}</p>
+        <div v-if="selectedUser" class="text-start">
+          <p><b class="text-dark">ល.រ:</b> #{{ selectedUser?.id }}</p>
+          <p><b class="text-dark">ឈ្មោះ:</b> {{ selectedUser?.fullname }}</p>
+          <p><b class="text-dark">អុីមែល:</b> {{ selectedUser?.email }}</p>
+          <p><b class="text-dark">លេខទូរស័ព្ទ:</b> {{ selectedUser?.phoneNumber || '-' }}</p>
+          <p><b class="text-dark">ស្ថានភាព:</b><span class="badge ms-2 fw-normal"
+              :class="selectedUser.status === 'ACTIVATED' ? 'bg-success' : 'bg-danger'"> {{ selectedUser?.status
+              }}</span></p>
+          <p><b class="text-dark">តួនាទី:</b> {{ selectedUser?.role?.name }}</p>
+          <p><b class="text-dark">បានចុះឈ្មោះ:</b> {{ formatDate(selectedUser?.registeredAt) }}</p>
+        </div>
       </template>
       <template #btnClose>
-        <BaseButton
-          variant="primary"
-          icon="x-circle"
-          @click="showViewModal = false"
-        >
-          Close
+        <BaseButton variant="primary" icon="x-circle" @click="showViewModal = false">
+          បិទ
         </BaseButton>
       </template>
     </BaseModal>
 
     <!-- CHANGE STATUS MODAL -->
-    <BaseModal
-      title="Change Status"
-      icon="pencil-square"
-      :theme="'warning'"
-      :isClose="showStatusModal"
-      @closeModal="showStatusModal = false"
-    >
+    <BaseModal title="ផ្លាស់ប្តូរស្ថានភាព" icon="pencil-square" :theme="'warning'" :isClose="showStatusModal"
+      @closeModal="showStatusModal = false">
       <template #body>
         <p>
-          Change status for <b>{{ selectedUser?.fullname }}</b>
+          ផ្លាស់ប្តូរស្ថានភាពសម្រាប់ <b class="text-dark">{{ selectedUser?.fullname }}</b>
         </p>
 
-        <p>
-          Current status:
-          <span
-            class="badge ms-2"
-            :class="
-              selectedUser?.status === 'ACTIVATED'
-                ? 'bg-success'
-                : 'bg-secondary'
-            "
-          >
+        <p class="fw-bold text-dark">
+          ស្ថានភាពបច្ចុប្បន្ន:
+          <span class="badge ms-2" :class="selectedUser?.status === 'ACTIVATED'
+            ? 'bg-success'
+            : 'bg-danger'
+            ">
             {{ selectedUser?.status }}
           </span>
         </p>
 
-        <p>
-          New status:
-          <span
-            class="badge ms-2"
-            :class="nextStatus === 'ACTIVATED' ? 'bg-success' : 'bg-secondary'"
-          >
+        <p class="fw-bold text-dark">
+          ស្ថានភាពថ្មី:
+          <span class="badge ms-2" :class="nextStatus === 'ACTIVATED' ? 'bg-success' : 'bg-danger'">
             {{ nextStatus }}
           </span>
         </p>
       </template>
       <template #btnClose>
-        <BaseButton
-          variant="cancel"
-          icon="x-circle"
-          @click="showStatusModal = false"
-        >
-          Cancel
+        <BaseButton variant="cancel" icon="x-circle" @click="showStatusModal = false">
+          បោះបង់
         </BaseButton>
       </template>
 
       <template #btnActive>
-        <BaseButton
-          icon="check-circle"
-          variant="primary"
-          @click="confirmChangeStatus"
-        >
-          Confirm
+        <BaseButton icon="check-circle" variant="primary" @click="confirmChangeStatus">
+          បញ្ជាក់
         </BaseButton>
       </template>
     </BaseModal>
 
     <!-- CREATE USER MODAL -->
-    <BaseModal
-      title="Create User"
-      icon="person-plus"
-      :theme="'success'"
-      :isClose="showCreateModal"
-      @closeModal="showCreateModal = false"
-    >
+    <BaseModal title="បង្កើតអ្នកប្រើប្រាស់" icon="person-plus" :theme="'success'" :isClose="showCreateModal"
+      @closeModal="showCreateModal = false">
       <template #body>
-        <BaseInput
-          type="text"
-          label="Full Name"
-          placeholder="Enter full name"
-          v-model="newUser.fullname"
-          :error="errors.fullname"
-        />
-        <BaseInput
-          type="email"
-          label="Email"
-          placeholder="Enter email address"
-          v-model="newUser.email"
-          :error="errors.email"
-        />
-        <BaseInput
-          type="tel"
-          label="Phone Number"
-          placeholder="Enter phone number"
-          v-model="newUser.phoneNumber"
-        />
-        <BaseInput
-          type="text"
-          label="Telegram Link"
-          placeholder="Enter telegram link"
-          v-model="newUser.telegramLink"
-        />
-        <BaseInput
-          type="password"
-          label="Password"
-          placeholder="Enter password"
-          v-model="newUser.password"
-          :error="errors.password"
-        />
+        <BaseInput type="text" label="ឈ្មោះពេញ" placeholder="បញ្ចូឈ្មោះពេញ" v-model="newUser.fullname"
+          :error="errors.fullname" />
+        <BaseInput type="email" label="អុីមែល" placeholder="បញ្ចូលអាសយដ្ឋានអុីមែល" v-model="newUser.email"
+          :error="errors.email" />
+        <BaseInput type="tel" label="លេខទូរស័ព្ទ" placeholder="បញ្ចូលលេខទូរស័ព្ទ" v-model="newUser.phoneNumber" />
+        <BaseInput type="text" label="តំណភ្ជាប់តេឡេក្រាម" placeholder="បញ្ចូលតំណភ្ជាប់តេឡេក្រាម"
+          v-model="newUser.telegramLink" />
+        <BaseInput type="password" label="ពាក្យសម្ងាត់" placeholder="បញ្ចូលពាក្យសម្ងាត់" v-model="newUser.password"
+          :error="errors.password" />
 
-        <BaseSelect
-          :modelValue="
-            roleOptions.find((o) => o.id === newUser.roleId?.id) ||
-            newUser.roleId ||
-            null
-          "
-          :items="roleOptions"
-          label="Role"
-          textField="Select a role"
-          labelField="name"
-          valueField="id"
-          @update:modelValue="(item) => (newUser.roleId = item)"
-          :error="errors.roleId"
-        />
+        <BaseSelect :modelValue="roleOptions.find((o) => o.id === newUser.roleId?.id) ||
+          newUser.roleId ||
+          null
+          " :items="roleOptions" label="តួនាទី" textField="ជ្រើសរើសតួនាទី" labelField="name" valueField="id"
+          @update:modelValue="(item) => (newUser.roleId = item)" :error="errors.roleId" />
       </template>
 
       <template #btnClose>
-        <BaseButton
-          variant="cancel"
-          icon="x-circle"
-          @click="showCreateModal = false"
-        >
-          Cancel
+        <BaseButton variant="cancel" icon="x-circle" @click="showCreateModal = false">
+          បោះបង់
         </BaseButton>
       </template>
 
       <template #btnActive>
         <BaseButton icon="check-circle" variant="primary" @click="createUser">
-          Create
+          បង្កើត
         </BaseButton>
       </template>
     </BaseModal>
@@ -321,20 +217,20 @@ import BaseTableUserPage from '@/components/base/BaseTableUserPage.vue';
 const store = useUserStore();
 
 const tableColumns = [
-  { key: 'id', label: 'ID' },
-  { key: 'fullname', label: 'User' },
-  { key: 'email', label: 'Email' },
-  { key: 'role', label: 'Role' },
-  { key: 'status', label: 'Status' },
+  { key: 'id', label: 'ល.រ' },
+  { key: 'fullname', label: 'អ្នកប្រើប្រាស់' },
+  { key: 'email', label: 'អុីមែល' },
+  { key: 'role', label: 'តួនាទី' },
+  { key: 'status', label: 'ស្ថានភាព' },
 ];
 
 const filters = reactive({
   page: 1,
-  perPage: 5,
+  perPage: 100,
   search: '',
   status: '',
-  sortBy: 'id',
-  sortDir: 'ASC',
+  sortBy: null,
+  sortDir: null,
 });
 
 const users = computed(() => store.users);
@@ -374,20 +270,25 @@ const errors = reactive({
 });
 
 const roleOptions = [
-  { id: 1, name: 'ADMIN' },
-  { id: 2, name: 'USER' },
+  { id: 1, name: 'Admin' },
+  { id: 2, name: 'User' },
 ];
 
 const sortOptions = [
-  { value: 'id', label: 'Sort by ID' },
-  { value: 'email', label: 'Sort by Email' },
-  { value: 'registeredAt', label: 'Sort by Registered Date' },
+  { value: 'id', label: 'ល.រ' },
+  { value: 'email', label: 'អុីមែល' },
+  { value: 'registeredAt', label: 'កាលបរិច្ឆេទចុះឈ្មោះ' },
 ];
 
 const statusOptions = [
-  { value: '', label: 'All Status' },
+  // { value: '', label: 'All Status' },
   { value: 'ACTIVATED', label: 'Activated' },
   { value: 'DEACTIVATED', label: 'Deactivated' },
+];
+
+const SORT_DIR_OPTIONS = [
+  { value: "ASC", label: "តូចទៅធំ" },
+  { value: "DESC", label: "ធំទៅតូច" },
 ];
 
 const formatDate = (d) => (d ? new Date(d).toLocaleString() : '-');
@@ -425,7 +326,7 @@ const confirmChangeStatus = async () => {
   await store.changeUserStatus(selectedUser.value.id, newStatus);
   selectedUser.value.status = newStatus;
   showStatusModal.value = false;
-  showSuccess(`User status changed to ${newStatus} successfully`);
+  showSuccess(`ស្ថានភាពអ្នកប្រើប្រាស់បានប្តូរទៅ ${newStatus} ដោយជោគជ័យ`);
   resetAndLoadUsers();
 };
 
@@ -438,20 +339,20 @@ const createUser = async () => {
 
   // Validation
   if (!newUser.fullname.trim()) {
-    errors.fullname = 'Full name is required';
+    errors.fullname = 'សូមបញ្ចូលឈ្មោះពេញ';
   }
   if (!newUser.email.trim()) {
-    errors.email = 'Email is required';
+    errors.email = 'សូមបញ្ចូលអាសយដ្ខានអុីមែល';
   } else if (!isValidEmail(newUser.email)) {
-    errors.email = 'Email is invalid';
+    errors.email = 'អុីមែលមិនត្រីមត្រូវ';
   }
   if (!newUser.password.trim()) {
-    errors.password = 'Password is required';
+    errors.password = 'សូមបញ្ចូលពាក្យសម្ងាត់';
   } else if (newUser.password.length < 6) {
-    errors.password = 'Password must be at least 6 characters';
+    errors.password = 'ពាក្យសម្ងាត់ត្រូវតែមានយ៉ាងហោចណាស់ 6 តួអក្សរ';
   }
   if (!newUser.roleId) {
-    errors.roleId = 'Role is required';
+    errors.roleId = 'សូមជ្រើសរើសតួនាទី';
   }
 
   // If there are any errors, stop
@@ -492,13 +393,13 @@ const createUser = async () => {
       status: 'ACTIVATED',
     });
 
-    showSuccess('User created successfully');
+    showSuccess('អ្នកប្រើប្រាស់ត្រូវបានបង្កើតដោយជោគជ័យ');
     resetAndLoadUsers();
   } catch (err) {
     console.error('Create user error:', err);
     console.error('Error response:', err.response?.data);
 
-    let errorMsg = 'Failed to create user. Please try again.';
+    let errorMsg = 'បរាជ័យក្នុងការបង្កើតអ្នកប្រើប្រាស់, សូមព្យាយាមម្តងទៀត';
 
     if (err.response?.data?.message) {
       errorMsg = err.response.data.message;
@@ -530,7 +431,7 @@ const isValidEmail = (email) => {
 
 // Watch filters for search, status, sort
 watch(
-  [() => filters.search, () => filters.status, () => filters.sortBy],
+  [() => filters.search, () => filters.status, () => filters.sortBy, () => filters.sortDir],
   () => {
     filters.page = 1;
     loadUsers();
@@ -598,6 +499,15 @@ const previousPage = async () => {
   }
 };
 
+// Clear Filter
+const clearFilter = () => {
+  filters.search = '';
+  filters.status = '';
+  filters.sortBy = null;
+  filters.sortDir = null;
+};
+
+
 // Load first page on mount
 onMounted(() => resetAndLoadUsers());
 </script>
@@ -605,5 +515,39 @@ onMounted(() => resetAndLoadUsers());
 <style scoped>
 .pointer {
   cursor: pointer;
+}
+
+/* Default (LG and up) */
+.filter-row>div {
+  flex: 1;
+}
+
+.filter-column>div {
+  flex: 1;
+}
+
+/* SM screens */
+@media (max-width: 767.98px) {
+  .filter-row {
+    flex-direction: column;
+  }
+
+  .filter-column {
+    flex-direction: row;
+  }
+
+  .filter-search,
+  .filter-clear {
+    width: 100%;
+  }
+
+  .filter-sort {
+    width: 50%;
+    flex: 1;
+  }
+
+  .filter-sort-1 {
+    width: 100%;
+  }
 }
 </style>

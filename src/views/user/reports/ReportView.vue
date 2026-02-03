@@ -6,7 +6,11 @@
         <p>រុករក និងមើលវត្ថុបាត់បង់ និងវត្ថុដែលបានរកឃើញទាំងអស់នៅក្នុងសហគមន៍</p>
       </div>
 
-      <BaseButton variant="primary" @click="" icon="plus-lg">
+      <BaseButton
+        variant="primary"
+        icon="plus-lg"
+        @click="btnHandleToCreatePage"
+      >
         បង្កើតការរាយការណ៍
       </BaseButton>
     </div>
@@ -61,16 +65,16 @@
 
       <button
         class="btn-filter"
-        :class="{ active: activeFilter === 'LOST' }"
-        @click="btnFilterReportType('LOST')"
+        :class="{ active: activeFilter === '1' }"
+        @click="btnFilterReportType('1')"
       >
         បាត់
       </button>
 
       <button
         class="btn-filter"
-        :class="{ active: activeFilter === 'FOUND' }"
-        @click="btnFilterReportType('FOUND')"
+        :class="{ active: activeFilter === '2' }"
+        @click="btnFilterReportType('2')"
       >
         រកឃើញ
       </button>
@@ -118,7 +122,7 @@
             <template #image>
               <img
                 class="w-100"
-                style="max-height: 200px; object-fit: cover"
+                style="height: 200px; object-fit: cover"
                 :src="
                   report.reportImages && report.reportImages.length > 0
                     ? report.reportImages[0].name
@@ -139,7 +143,7 @@
                   <span class="tag">{{ report.status }}</span>
                 </div>
               </div>
-              <h4 class="card-title">{{ report.title }}</h4>
+              <h5 class="card-title">{{ report.title }}</h5>
               <!-- <p class="card-text text-muted desc text-clamp-2">
             {{ report.description }}
           </p> -->
@@ -171,6 +175,7 @@ import { useReportStore } from "@/stores/reportStore";
 import { formatDate } from "@/utils/formatDate";
 
 import BaseReportCard from "@/components/base/BaseReportCard.vue";
+import { useRouter } from "vue-router";
 
 const categoryStore = useCategoryStore();
 const reportStore = useReportStore();
@@ -189,7 +194,7 @@ const fetchReports = async () => {
     search: search.value,
     status: statusValue.value,
     sortBy: "createdAt",
-    sortDir: "desc",
+    sortDir: "DESC",
     reportType: typeValue.value,
     categoryId: cateValue.value?.id,
   });
@@ -257,6 +262,10 @@ const clearFilter = () => {
   cateValue.value = null;
   activeFilter.value = "";
 };
+const router = useRouter();
+const btnHandleToCreatePage = () => {
+  router.push({ name: "create-report" });
+};
 </script>
 
 <style scoped>
@@ -290,7 +299,7 @@ const clearFilter = () => {
   border: 1px solid black;
   padding: 3px 7px;
   border-radius: 12px;
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 500;
 }
 .tag.type-tag {

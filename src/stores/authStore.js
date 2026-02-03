@@ -45,9 +45,7 @@ export const useAuthStore = defineStore("auth", {
 
         // normalize role
         const role =
-          user?.role?.name?.toLowerCase() ||
-          user?.role?.toLowerCase() ||
-          null;
+          user?.role?.name?.toLowerCase() || user?.role?.toLowerCase() || null;
 
         if (!token || !role) {
           throw new Error("Invalid login response");
@@ -66,9 +64,7 @@ export const useAuthStore = defineStore("auth", {
         return res.data;
       } catch (err) {
         this.error =
-          err.response?.data?.message ||
-          err.message ||
-          "Login failed";
+          err.response?.data?.message || err.message || "Login failed";
         throw err;
       } finally {
         this.loading = false;

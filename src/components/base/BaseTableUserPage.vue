@@ -10,7 +10,7 @@
           >
             {{ col.label }}
           </th>
-          <th class="text-center py-3 table-top truncate-header">Actions</th>
+          <th class="text-center py-3 table-top truncate-header">ការកំណត់</th>
         </tr>
       </thead>
 
@@ -29,7 +29,7 @@
         <!-- No data -->
         <tr v-else-if="!items.length">
           <td :colspan="columns.length + 1" class="text-center py-5">
-            <p class="fw-semibold mb-0">No data found</p>
+            <p class="fw-semibold mb-0">រកមិនឃើញទិន្នន័យ</p>
           </td>
         </tr>
 
@@ -97,12 +97,19 @@ defineEmits(['edit', 'delete', 'rowClick']);
 /* ---------- Table ---------- */
 .table-scroll {
   width: 100%;
+  max-height: 550px;
   overflow-x: auto;   /* 👈 enables left-right scroll */
-  overflow-y: hidden;
+  overflow-y: auto;
 }
 .base-table {    /* IMPORTANT */
   table-layout: auto; /* DEFAULT */
   min-width: 1100px;  /* or any width you want */
+}
+
+thead th {
+  position: sticky;
+  top: 0;
+  z-index: 10;
 }
 
 .table-row {

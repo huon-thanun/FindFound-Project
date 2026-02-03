@@ -17,11 +17,11 @@
     <nav class="nav-menu">
       <router-link to="/" class="nav-item"> Dashboard </router-link>
 
-      <router-link to="/about" class="nav-item"> Users </router-link>
+      <router-link to="about" class="nav-item"> Users </router-link>
 
       <router-link to="/about" class="nav-item"> Categories </router-link>
 
-      <router-link to="/about" class="nav-item"> Reports </router-link>
+      <router-link to="reports" class="nav-item"> Reports </router-link>
     </nav>
 
     <!-- User Section -->
@@ -44,36 +44,44 @@
           icon="plus-circle"
           variant="secondary"
         >
-          Lost
+          បាត់
         </base-button>
-        <base-button class="handle-btn" icon="plus-circle"> Found </base-button>
+        <base-button class="handle-btn" icon="plus-circle"> រកឃើញ </base-button>
       </div>
     </div>
 
     <!-- SHOW Lost / Found when HAS token -->
     <BaseModal
-      :title="'Logout'"
+      :title="'ចាកចេញពីគណនី'"
       :icon="'exclamation-triangle'"
       :theme="'danger'"
       :isClose="showModal"
-      @closeModal="showModal = true"
+      @closeModal="showModal = false"
     >
       <template #body>
-        <p>Are you sure ?</p>
+        <p class="khmer-font">តើអ្នកពិតជាចង់ចាកចេញពីកម្មវិធីមែនទេ?</p>
       </template>
+
       <template #btnClose>
         <BaseButton
           variant="cancel"
           icon="x-circle"
-          class="col-6"
-          @click="isOpen"
-          >Close</BaseButton
+          class="col-6 khmer-font"
+          @click="showModal = false"
         >
+          បោះបង់
+        </BaseButton>
       </template>
+
       <template #btnActive>
-        <BaseButton variant="danger" icon="check-circle" class="col-6"
-          >Confirm</BaseButton
+        <BaseButton
+          icon="check-circle"
+          variant="danger"
+          class="col-6 khmer-font"
+          @click="logout"
         >
+          បញ្ជាក់
+        </BaseButton>
       </template>
     </BaseModal>
   </div>
@@ -110,18 +118,18 @@
                 :class="{ active: activeLink === 'home' }"
                 @click.prevent="setActive('home')"
               >
-                Home
+                ទំព័រ​ដើម
               </router-link>
             </li>
 
             <li class="nav-item">
               <router-link
-                to=""
+                :to="{ name: 'report.user' }"
                 class="nav-link-custom"
                 :class="{ active: activeLink === 'reports' }"
                 @click.prevent="setActive('reports')"
               >
-                Reports
+                របាយការណ៍
               </router-link>
             </li>
 
@@ -138,23 +146,23 @@
 
             <li class="nav-item">
               <router-link
-                to=""
+                to="about"
                 class="nav-link-custom"
                 :class="{ active: activeLink === 'about' }"
                 @click.prevent="setActive('about')"
               >
-                About
+                អំពី​យើង
               </router-link>
             </li>
 
             <li class="nav-item">
               <router-link
-                to=""
+                to="/contact_us"
                 class="nav-link-custom"
                 :class="{ active: activeLink === 'contact' }"
                 @click.prevent="setActive('contact')"
               >
-                Contact
+                ទំនាក់ទំនង
               </router-link>
             </li>
           </ul>
@@ -167,19 +175,19 @@
         class="btn-active d-flex align-items-center gap-3"
       >
         <base-button icon="person-circle" variant="secondary" class="btn-login">
-          Login
+          ចូល
         </base-button>
         <base-button icon="person-plus-fill" class="btn-register">
-          Register
+          ចុះឈ្មោះ
         </base-button>
       </div>
 
       <!-- SHOW Lost / Found when HAS token -->
       <div v-else class="d-flex align-items-center gap-3">
         <base-button icon="plus-circle" variant="secondary" class="btn-lost">
-          Lost
+          បាត់
         </base-button>
-        <base-button icon="plus-circle" class="btn-found"> Found </base-button>
+        <base-button icon="plus-circle" class="btn-found"> រកឃើញ </base-button>
         <div>
           <!-- User Profile Dropdown -->
           <div class="user-profile">
@@ -198,41 +206,44 @@
                   alt="User Avatar"
                 />
                 <div class="user-info">
-                  <h6>John Doe</h6>
+                  <h6>sal</h6>
                   <p>john.doe@email.com</p>
                 </div>
               </div>
 
               <!-- Menu Items -->
-              <router-link to="" class="dropdown-item-custom">
+              <router-link to="/profile" class="dropdown-item-custom">
                 <i class="bi bi-person"></i>
-                <span>My Profile</span>
+                <span>ប្រវត្តិរូបរបស់ខ្ញុំ</span>
               </router-link>
 
-              <router-link to="" class="dropdown-item-custom">
+              <router-link
+                :to="{ name: 'own-reports' }"
+                class="dropdown-item-custom"
+              >
                 <i class="bi bi-file-earmark-text"></i>
-                <span>My Reports</span>
+                <span>របាយការណ៍របស់ខ្ញុំ</span>
               </router-link>
 
               <router-link to="" class="dropdown-item-custom">
                 <i class="bi bi-gear"></i>
-                <span>Settings</span>
+                <span>ការកំណត់</span>
               </router-link>
 
               <div class="dropdown-divider-custom"></div>
 
-              <router-link to="" class="dropdown-item-custom">
+              <router-link to="/support" class="dropdown-item-custom">
                 <i class="bi bi-question-circle"></i>
-                <span>Help & Support</span>
+                <span>ជំនួយ និងការគាំទ្រ</span>
               </router-link>
 
               <a
-                @click="isClose"
+                @click.prevent="openLogoutModal"
                 href="#"
                 class="dropdown-item-custom dropdown-item-logout"
               >
                 <i class="bi bi-box-arrow-right"></i>
-                <span>Logout</span>
+                <span>ចាកចេញ</span>
               </a>
             </div>
           </div>
@@ -240,60 +251,111 @@
       </div>
     </div>
     <BaseModal
-      :title="'Logout'"
+      v-if="showModal"
+      :title="'ចាកចាញ'"
       :icon="'exclamation-triangle'"
       :theme="'danger'"
-      :isClose="showModal"
-      @closeModal="showModal = true"
+      @closeModal="closeLogoutModal"
     >
       <template #body>
-        <p>Are you sure ?</p>
+        <p>Are you sure you want to logout?</p>
       </template>
       <template #btnClose>
         <BaseButton
           variant="cancel"
           icon="x-circle"
           class="col-6"
-          @click="isClose"
-          >Close</BaseButton
+          @click="closeLogoutModal"
         >
+          បិទ
+        </BaseButton>
       </template>
       <template #btnActive>
-        <BaseButton icon="check-circle" variant="danger" class="col-6"
-          >Confirm</BaseButton
+        <BaseButton
+          icon="check-circle"
+          variant="danger"
+          class="col-6"
+          @click="logout"
         >
+          បញ្ជាក់
+        </BaseButton>
       </template>
     </BaseModal>
   </nav>
 </template>
-
 <script setup>
 import { ref, computed, onMounted } from "vue";
+import { useProfileStore } from "@/stores/profileStore";
 
 const activeLink = ref("home");
+const profileStore = useProfileStore();
 
-// simulate token (later replace with Pinia / real auth)
+// Token and UI state
 const token = ref(null);
-const showModal = ref(false);
-function isClose() {
-  showModal.value = !showModal.value;
-}
-const isOpen = ref("true");
+const showModal = ref(false); // modal open/close
+const isSidebarOpen = ref(true); // sidebar open/close
+
+// Sidebar toggle
 const toggleSidebar = () => {
-  isOpen.value = !isOpen.value;
+  isSidebarOpen.value = !isSidebarOpen.value;
 };
-// example: get token from localStorage
+
+// Example: get token from localStorage
 onMounted(() => {
   token.value = localStorage.getItem("token");
 });
 
-// true = user NOT logged in
-// false = user logged in
+// Show login buttons if no token
 const showAuthButtons = computed(() => !token.value);
 
+// Active link in navbar
 const setActive = (link) => {
   activeLink.value = link;
 };
+
+// LOGOUT function
+async function logout() {
+  try {
+    if (!token.value) return;
+
+    const response = await fetch(
+      "https://ant-g2-landf.ti.linkpc.net/api/v1/auth/logout",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token.value}`,
+        },
+      },
+    );
+
+    const data = await response.json();
+    console.log("Logout response:", data);
+
+    // Clear token
+    localStorage.removeItem("token");
+    token.value = null;
+
+    // Close modal
+    showModal.value = false;
+
+    // Redirect to login page
+    window.location.href = "/login";
+  } catch (error) {
+    console.error("Logout failed:", error);
+    alert("Logout failed. Please try again.");
+  }
+}
+
+// Open logout modal
+function openLogoutModal() {
+  showModal.value = true;
+}
+
+// Close logout modal
+function closeLogoutModal() {
+  showModal.value = false;
+}
 </script>
 
 <style scoped>
