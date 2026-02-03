@@ -1,6 +1,7 @@
 import { ref } from "vue";
 import { defineStore } from "pinia";
 import api from "@/api/api";
+import reportApi from "@/api/reportApi";
 
 export const useReportStore = defineStore("report", () => {
   const allReportType = ref([]);
@@ -106,7 +107,7 @@ export const useReportStore = defineStore("report", () => {
   const creatOwnReport = async (formData) => {
     isLoadingCreateOwnReport.value = true;
     try {
-      const res = await api.post("/reports", formData, {
+      const res = await reportApi.post("/reports", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -126,9 +127,12 @@ export const useReportStore = defineStore("report", () => {
     isLoadingEditOwnReport.value = true;
 
     try {
-      const res = await api.put(`/reports/${id}`, formData);
+      const res = await reportApi.put(`/reports/${id}`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
       msgEditOwnReport.value = res.data;
-      return res.data;
     } catch (error) {
       console.error("Edit report error:", error.response?.data || error);
       throw error;

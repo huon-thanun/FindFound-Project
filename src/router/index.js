@@ -164,6 +164,7 @@ const router = createRouter({
           path: "reports/own/edit/:id",
           name: "edit-report",
           component: EditReportView,
+
           props: true,
         },
         {
@@ -174,17 +175,17 @@ const router = createRouter({
         {
           path: "/policy",
           name: "policy",
-          component: Policy
+          component: Policy,
         },
         {
           path: "/faq",
           name: "faq",
-          component: Faq
+          component: Faq,
         },
         {
           path: "/support",
           name: "support",
-          component: Support
+          component: Support,
         },
       ],
     },
