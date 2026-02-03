@@ -109,7 +109,7 @@ const router = createRouter({
         // },
         // {
         //   path: "reports/:id",
-        //   name: "report-detail-user",
+        //   name: "report-detail-user", 
         //   component: ReportDetailView,
         //   props: true,
         // },
