@@ -3,89 +3,79 @@
     <div class="blob-bg">
       <div class="blob blob-1"></div>
       <div class="blob blob-2"></div>
+      <div class="blob blob-3"></div>
     </div>
 
     <div class="container hero-container">
       <div class="row align-items-center gy-5">
-        <div class="col-lg-6 hero-content">
-          <div class="badge-new animate__animated animate__fadeInDown">
-            ✨ ជួយគ្នារករបស់ដែលបាត់មកវិញ
-          </div>
+        <div class="col-lg-6 hero-content text-start">
           <h1 class="gradient-text fw-bold mb-3">
-            បាត់របស់របរមែនទេ?<br />ពួកយើងជួយអ្នកបាន
+            បាត់របស់របរមែនទេ?<br />
+            <span class="text-highlight">ពួកយើងជួយអ្នកបាន</span>
           </h1>
+
           <p class="hero-description mb-4">
-            ស្វែងរក ឬប្រកាសរបស់របរដែលអ្នកបានបាត់ ឬរើសបាន។
-            ចូលរួមក្នុងសហគមន៍ជួយគ្នា ដើម្បីនាំរបស់មានតម្លៃត្រឡប់ទៅម្ចាស់ដើមវិញ។
+            បណ្ដាញសង្គមឈានមុខគេនៅកម្ពុជា សម្រាប់ស្វែងរករបស់បាត់។
+            ចូលរួមក្នុងសហគមន៍ជួយគ្នា
+            ដើម្បីនាំរបស់មានតម្លៃត្រឡប់ទៅម្ចាស់ដើមវិញដោយសុវត្ថិភាព។
           </p>
 
-          <div class="search-box-container mb-4">
-            <div class="search-glass-input">
-              <i class="bi bi-search ms-3 text-muted"></i>
-              <input type="text" placeholder="ស្វែងរករបស់ដែលបាត់..." />
-              <button class="btn-search">ស្វែងរក</button>
-            </div>
-          </div>
-
-          <div class="stats-grid mb-4">
+          <div class="stats-grid mb-5">
             <div
               class="stat-glass-card"
               v-for="(stat, index) in stats"
               :key="index"
             >
-              <span class="stat-number">{{ stat.value }}</span>
-              <span class="stat-label">{{ stat.label }}</span>
+              <div class="stat-icon-mini"><i :class="stat.icon"></i></div>
+              <div>
+                <span class="stat-number">{{ stat.value }}</span>
+                <span class="stat-label">{{ stat.label }}</span>
+              </div>
             </div>
           </div>
 
           <div class="action-buttons d-flex flex-wrap gap-3">
             <button class="btn-main-action">
-              <i class="bi bi-plus-circle"></i>
+              <i class="bi bi-plus-lg"></i>
               <span>ប្រកាសបាត់របស់</span>
             </button>
-            <button class="btn-video-action">
-              <div class="play-icon"><i class="bi bi-megaphone-fill"></i></div>
-              <span>របស់ទើបនឹងរើសបាន</span>
+            <button class="btn-secondary-action">
+              <i class="bi bi-eye"></i>
+              <span>មើលរបស់រើសបាន</span>
             </button>
           </div>
         </div>
 
-        <div class="col-lg-6 hero-media text-center">
-          <div class="floating-image-wrapper">
-            <div class="main-image-card">
+        <div class="col-lg-6 hero-media">
+          <div class="image-experience">
+            <div class="main-image-wrapper">
               <img
-                src="https://images.unsplash.com/photo-1544027993-37dbfe43562a?auto=format&fit=crop&q=80&w=800"
+                src="https://i.pinimg.com/736x/1b/fc/68/1bfc685cc413c0e852f3e891e2eb33c1.jpg"
                 alt="Lost and Found"
                 class="hero-img"
               />
-            </div>
-            <div class="floating-badge badge-top">
-              <i class="bi bi-shield-check-fill text-success fs-4"></i>
-              <div class="text-start">
-                <div class="fw-bold small">Verified System</div>
-                <div class="text-muted extra-small">សុវត្ថិភាពទិន្នន័យ</div>
-              </div>
-            </div>
-            <div class="floating-badge badge-bottom">
-              <i class="bi bi-heart-fill text-danger me-2"></i>
-              <span class="small fw-bold">ជួយមនុស្សបាន ២០០+ នាក់</span>
+              <div class="image-overlay-gradient"></div>
             </div>
           </div>
         </div>
       </div>
     </div>
 
-    <div class="container features-section mt-5">
+    <div class="container features-container mt-5">
       <div class="row g-4">
         <div class="col-md-4" v-for="(feature, index) in features" :key="index">
           <div
-            :class="['feature-glass-card', { featured: feature.isFeatured }]"
+            :class="[
+              'feature-modern-card',
+              { 'is-active': feature.isFeatured },
+            ]"
           >
-            <div :class="['icon-box', feature.isFeatured ? 'white' : 'purple']">
+            <div class="feature-icon">
               <i :class="feature.icon"></i>
             </div>
-            <h5 class="fw-bold">{{ feature.title }}</h5>
-            <p class="small mb-0">{{ feature.desc }}</p>
+            <h4>{{ feature.title }}</h4>
+            <p>{{ feature.desc }}</p>
+            <div class="feature-step">ជំហានទី {{ index + 1 }}</div>
           </div>
         </div>
       </div>
@@ -95,28 +85,32 @@
 
 <script setup>
 const stats = [
-  { value: "៨៥០+", label: "រកឃើញវិញ" },
-  { value: "៥K+", label: "សមាជិក" },
-  { value: "១០០%", label: "ឥតគិតថ្លៃ" },
+  { value: "៨៥០+", label: "រកឃើញវិញ", icon: "bi bi-heart-fill text-danger" },
+  { value: "៥K+", label: "សមាជិក", icon: "bi bi-people-fill text-primary" },
+  {
+    value: "១០០%",
+    label: "ឥតគិតថ្លៃ",
+    icon: "bi bi-patch-check-fill text-success",
+  },
 ];
 
 const features = [
   {
-    title: "១. បង្ហោះព័ត៌មាន",
-    desc: "ផ្ដល់ព័ត៌មាន និងរូបភាពរបស់ដែលបាត់ចូលក្នុងប្រព័ន្ធ។",
-    icon: "bi bi-pencil-square",
+    title: "បង្ហោះព័ត៌មាន",
+    desc: "ផ្ដល់ព័ត៌មាន និងរូបភាពរបស់ដែលបាត់ ឬរើសបានចូលក្នុងប្រព័ន្ធ។",
+    icon: "bi bi-megaphone",
     isFeatured: false,
   },
   {
-    title: "២. ប្រព័ន្ធផ្គូផ្គង AI",
-    desc: "ស្វែងរក និងផ្គូផ្គងរបស់ដែលស្រដៀងគ្នាឱ្យអ្នកភ្លាមៗ។",
-    icon: "bi bi-cpu-fill",
+    title: "ប្រព័ន្ធផ្គូផ្គង AI",
+    desc: "ស្វែងរក និងផ្គូផ្គងរបស់ដែលស្រដៀងគ្នាឱ្យអ្នកភ្លាមៗតាមបច្ចេកវិទ្យា AI។",
+    icon: "bi bi-lightning-charge-fill",
     isFeatured: true,
   },
   {
-    title: "៣. ទទួលរបស់វិញ",
-    desc: "ធ្វើការផ្ទៀងផ្ទាត់ដោយសុវត្ថិភាព និងទទួលយករបស់វិញ។",
-    icon: "bi bi-hand-thumbs-up-fill",
+    title: "ទទួលរបស់វិញ",
+    desc: "ធ្វើការផ្ទៀងផ្ទាត់ដោយសុវត្ថិភាពជាមួយម្ចាស់ និងទទួលយករបស់វិញ។",
+    icon: "bi bi-hand-index-thumb",
     isFeatured: false,
   },
 ];
@@ -127,263 +121,386 @@ const features = [
 
 .hero-section {
   position: relative;
-  padding: 60px 0 120px;
-  background-color: #f8fafc;
+  padding: 100px 0 140px;
+  background-color: #fcfdff;
   font-family: "Noto Sans Khmer", sans-serif;
   overflow: hidden;
 }
 
-/* Background Blobs */
+/* Background Decorations */
 .blob {
   position: absolute;
-  filter: blur(80px);
-  opacity: 0.3;
-  border-radius: 50%;
+  filter: blur(100px);
+  opacity: 0.25;
   z-index: 0;
+  border-radius: 50%;
 }
 .blob-1 {
-  width: 400px;
-  height: 400px;
-  background: #c084fc;
-  top: -100px;
-  right: -50px;
+  width: 500px;
+  height: 500px;
+  background: #3b1e54;
+  top: -10%;
+  right: -5%;
 }
 .blob-2 {
+  width: 400px;
+  height: 400px;
+  background: #7c3aed;
+  bottom: 5%;
+  left: -5%;
+}
+.blob-3 {
   width: 300px;
   height: 300px;
-  background: #818cf8;
-  bottom: 10%;
-  left: -50px;
+  background: #60a5fa;
+  top: 20%;
+  left: 30%;
+  opacity: 0.15;
 }
 
-/* Hero Content */
-.hero-container {
-  position: relative;
-  z-index: 2;
-}
+/* Text & Typography */
 .badge-new {
-  display: inline-block;
-  padding: 6px 16px;
-  background: rgba(59, 30, 84, 0.1);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 18px;
+  background: white;
+  border: 1px solid #e2e8f0;
   color: #3b1e54;
-  border-radius: 20px;
+  border-radius: 50px;
   font-weight: 600;
   font-size: 0.85rem;
-  margin-bottom: 20px;
+  margin-bottom: 25px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
 }
+.pulse-dot {
+  width: 8px;
+  height: 8px;
+  background: #10b981;
+  border-radius: 50%;
+  animation: pulse 2s infinite;
+}
+
 .gradient-text {
   font-family: "Koh Santepheap", sans-serif;
-  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-size: clamp(2.5rem, 6vw, 4rem);
+  color: #1e1b4b;
+  line-height: 1.1;
+}
+.text-highlight {
   background: linear-gradient(135deg, #3b1e54 0%, #7c3aed 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  line-height: 1.2;
 }
 .hero-description {
-  font-size: 1.1rem;
-  color: #475569;
-  max-width: 520px;
+  font-size: 1.15rem;
+  color: #64748b;
+  max-width: 550px;
+  line-height: 1.7;
 }
 
-/* Search Box */
+/* Search Box Refined */
+.search-wrapper {
+  max-width: 500px;
+}
 .search-glass-input {
   display: flex;
+  align-items: center;
   background: white;
-  border: 1px solid #e2e8f0;
-  border-radius: 18px;
-  padding: 6px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+  border: 2px solid #f1f5f9;
+  border-radius: 20px;
+  padding: 8px;
+  transition: all 0.3s ease;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.05);
+}
+.search-glass-input:focus-within {
+  border-color: #7c3aed;
+  box-shadow: 0 15px 35px rgba(124, 58, 237, 0.1);
 }
 .search-glass-input input {
   border: none;
-  width: 100%;
-  padding: 10px;
+  flex: 1;
+  padding: 10px 15px;
   outline: none;
-  font-size: 0.95rem;
+  font-size: 1rem;
 }
 .btn-search {
   background: #3b1e54;
   color: white;
   border: none;
-  padding: 10px 24px;
-  border-radius: 14px;
+  padding: 12px 28px;
+  border-radius: 15px;
   font-weight: 600;
   transition: 0.3s;
 }
+.btn-search:hover {
+  background: #512a73;
+}
 
-/* Stats */
+/* Stats Cards */
 .stats-grid {
   display: flex;
-  gap: 15px;
+  gap: 20px;
 }
 .stat-glass-card {
-  background: rgba(255, 255, 255, 0.8);
-  backdrop-filter: blur(10px);
-  border: 1px solid #fff;
-  padding: 12px;
-  border-radius: 18px;
-  flex: 1;
-  text-align: center;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
-}
-.stat-number {
-  display: block;
-  font-size: 1.3rem;
-  font-weight: 700;
-  color: #3b1e54;
-}
-.stat-label {
-  font-size: 0.75rem;
-  color: #64748b;
-}
-
-/* Buttons */
-.btn-main-action {
-  background: #3b1e54;
-  color: white;
-  padding: 14px 28px;
-  border: none;
-  border-radius: 16px;
-  font-weight: 600;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  box-shadow: 0 10px 20px rgba(59, 30, 84, 0.2);
-  transition: 0.3s;
-}
-.btn-main-action:hover {
-  transform: translateY(-3px);
-  background: #2a153d;
-}
-
-.btn-video-action {
   display: flex;
   align-items: center;
   gap: 12px;
-  border: none;
-  background: none;
-  font-weight: 600;
-  color: #1e1b4b;
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(10px);
+  padding: 15px 20px;
+  border-radius: 20px;
+  border: 1px solid white;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.03);
 }
-.play-icon {
-  width: 45px;
-  height: 45px;
+.stat-icon-mini {
+  width: 40px;
+  height: 40px;
   background: white;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+.stat-number {
+  display: block;
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #1e1b4b;
+  line-height: 1;
+}
+.stat-label {
+  font-size: 0.8rem;
+  color: #64748b;
+  font-weight: 500;
+}
+
+/* Action Buttons */
+.btn-main-action {
+  background: #3b1e54;
+  color: white;
+  padding: 16px 32px;
+  border: none;
+  border-radius: 18px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  transition: 0.3s;
+}
+.btn-main-action:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 25px rgba(59, 30, 84, 0.25);
+}
+
+.btn-secondary-action {
+  background: white;
+  color: #3b1e54;
+  padding: 16px 32px;
+  border: 2px solid #f1f5f9;
+  border-radius: 18px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  transition: 0.3s;
+}
+.btn-secondary-action:hover {
+  background: #f8fafc;
+  border-color: #3b1e54;
+}
+
+/* Image Side Layout */
+.image-experience {
+  position: relative;
+  padding: 20px;
+}
+.main-image-wrapper {
+  position: relative;
+  border-radius: 50px;
+  overflow: hidden;
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.15);
+  transform: perspective(1000px) rotateY(-5deg);
+}
+.hero-img {
+  width: 100%;
+  height: 500px;
+  object-fit: cover;
+}
+.image-overlay-gradient {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(106, 74, 134, 0.363), transparent);
+}
+
+/* Floating Cards */
+.floating-card {
+  position: absolute;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
+  padding: 15px 20px;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
+  z-index: 10;
+}
+.info-card-top {
+  top: 10%;
+  right: -20px;
+  border-top: 4px solid #10b981;
+}
+.info-card-bottom {
+  bottom: 15%;
+  left: -30px;
+}
+
+.icon-circle {
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  color: #7c3aed;
+  color: white;
 }
-
-/* Media Side */
-.floating-image-wrapper {
-  position: relative;
-  padding: 20px;
-}
-.main-image-card {
-  border-radius: 40px;
-  overflow: hidden;
-  transform: rotate(-2deg);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-}
-.hero-img {
-  width: 100%;
-  height: 420px;
-  object-fit: cover;
-}
-
-.floating-badge {
-  position: absolute;
-  background: white;
-  padding: 10px 18px;
-  border-radius: 16px;
+.avatar-stack {
   display: flex;
   align-items: center;
-  gap: 10px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
 }
-.badge-top {
-  top: 20px;
-  right: -10px;
-  border-left: 4px solid #10b981;
+.avatar-stack img {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  border: 2px solid white;
+  margin-right: -10px;
 }
-.badge-bottom {
-  bottom: 40px;
-  left: -10px;
-}
-.extra-small {
-  font-size: 0.7rem;
-}
-
-/* Features */
-.features-section {
-  margin-top: -60px;
-  position: relative;
-  z-index: 5;
-}
-.feature-glass-card {
-  background: white;
-  padding: 30px;
-  border-radius: 24px;
-  height: 100%;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-  transition: 0.3s;
-}
-.feature-glass-card.featured {
+.avatar-more {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
   background: #3b1e54;
   color: white;
-  transform: translateY(-10px);
-}
-.icon-box {
-  width: 50px;
-  height: 50px;
-  border-radius: 14px;
+  font-size: 0.7rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 20px;
-  margin-bottom: 20px;
-}
-.icon-box.purple {
-  background: rgba(124, 58, 237, 0.1);
-  color: #7c3aed;
-}
-.icon-box.white {
-  background: rgba(255, 255, 255, 0.2);
-  color: white;
+  border: 2px solid white;
 }
 
-/* Responsive */
+/* Feature Section Refined */
+.features-container {
+  margin-top: -40px;
+  position: relative;
+  z-index: 20;
+}
+.feature-modern-card {
+  background: white;
+  padding: 40px 30px;
+  border-radius: 30px;
+  height: 100%;
+  position: relative;
+  border: 1px solid #f1f5f9;
+  transition: 0.4s;
+}
+.feature-modern-card:hover {
+  transform: translateY(-12px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+}
+.feature-modern-card.is-active {
+  background: #3b1e54;
+  color: white;
+}
+.feature-icon {
+  width: 60px;
+  height: 60px;
+  background: #f8fafc;
+  border-radius: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  color: #7c3aed;
+  margin-bottom: 25px;
+}
+.is-active .feature-icon {
+  background: rgba(255, 255, 255, 0.15);
+  color: white;
+}
+.feature-step {
+  position: absolute;
+  top: 30px;
+  right: 30px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  opacity: 0.5;
+}
+
+/* Animations */
+@keyframes pulse {
+  0% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+  }
+  70% {
+    transform: scale(1);
+    box-shadow: 0 0 0 10px rgba(16, 185, 129, 0);
+  }
+  100% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+  }
+}
+.animate-float {
+  animation: float 4s ease-in-out infinite;
+}
+.animate-float-delayed {
+  animation: float 4s ease-in-out infinite 2s;
+}
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-15px);
+  }
+}
+
+/* Responsive Fixes */
 @media (max-width: 991px) {
   .hero-section {
     text-align: center;
-    padding-bottom: 50px;
+    padding: 60px 0;
   }
   .hero-content {
     display: flex;
     flex-direction: column;
     align-items: center;
   }
-  .action-buttons {
-    justify-content: center;
+  .gradient-text {
+    font-size: 2.8rem;
   }
-  .features-section {
+  .main-image-wrapper {
+    transform: none;
     margin-top: 40px;
   }
-  .feature-glass-card.featured {
-    transform: none;
+  .info-card-bottom {
+    left: 10px;
   }
-  .hero-img {
-    height: 320px;
+  .info-card-top {
+    right: 10px;
   }
-}
-
-@media (max-width: 576px) {
   .stats-grid {
-    flex-direction: column;
-    width: 100%;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .action-buttons {
+    justify-content: center;
   }
 }
 </style>

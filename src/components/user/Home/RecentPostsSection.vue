@@ -11,14 +11,6 @@
         </div>
 
         <div class="filter-controls">
-          <div class="search-input-wrapper">
-            <i class="bi bi-search"></i>
-            <input
-              type="text"
-              v-model="searchQuery"
-              placeholder="ស្វែងរកសម្ភារៈ..."
-            />
-          </div>
           <div class="status-filters">
             <button
               v-for="tab in ['ទាំងអស់', 'បាត់បង់', 'រើសបាន']"
@@ -59,13 +51,6 @@
             </div>
           </div>
         </div>
-      </div>
-
-      <div class="pagination-area">
-        <button class="btn-load-more">
-          <span>បង្ហាញបន្ថែមទៀត</span>
-          <i class="bi bi-chevron-down"></i>
-        </button>
       </div>
     </div>
   </section>
