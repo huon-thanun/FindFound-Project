@@ -13,7 +13,7 @@
 
       <router-link :to="{name: 'report.user'}" class="nav-item"> របាយការណ៍ </router-link>
 
-      <router-link to="" class="nav-item"> ប្រភេទរបាយការណ៍ </router-link>
+      <router-link :to="{name: 'category'}" class="nav-item"> ប្រភេទរបាយការណ៍ </router-link>
 
       <router-link :to="{name: 'about'}" class="nav-item"> អំពី​យើង </router-link>
 
@@ -87,7 +87,7 @@
             </li>
 
             <li class="nav-item">
-              <router-link to="" class="nav-link-custom" :class="{ active: activeLink === 'categories' }"
+              <router-link :to="{name: 'category'}" class="nav-link-custom" :class="{ active: activeLink === 'categories' }"
                 @click.prevent="setActive('categories')">
                 ប្រភេទរបាយការណ៍
               </router-link>
