@@ -2,6 +2,7 @@ import { ref } from "vue";
 import { defineStore } from "pinia";
 import api from "@/api/api";
 import reportApi from "@/api/reportApi";
+import { publicApi } from "@/api/publicApi";
 
 export const useReportStore = defineStore("report", () => {
   const allReportType = ref([]);
@@ -149,6 +150,40 @@ export const useReportStore = defineStore("report", () => {
       throw error;
     }
   };
+  const publicReports = ref([]);
+  const isLoadingPublicReports = ref(false);
+  const getAllPublicReports = async () => {
+    isLoadingPublicReports.value = true;
+    try {
+      const res = await api.get("/reports/public");
+
+      publicReports.value = res.data.data.items;
+    } catch (error) {
+      console.error(error);
+    } finally {
+      isLoadingPublicReports.value = false;
+    }
+  };
+  // const getAllPublicReports = async () => {
+  //   isLoadingPublicReports.value = true;
+
+  //   try {
+  //     const res = await fetch(
+  //       `${import.meta.env.VITE_API_BASE_URL}/reports/public`,
+  //     );
+
+  //     const data = await res.json();
+
+  //     console.log(data);
+
+  //     publicReports.value = data;
+  //   } catch (error) {
+  //     console.error(error);
+  //   } finally {
+  //     isLoadingPublicReports.value = false;
+  //   }
+  // };
+
   return {
     isLoadingGetAllReport,
     isLoadingGetAReport,
@@ -164,6 +199,7 @@ export const useReportStore = defineStore("report", () => {
     msgCreateOwnReport,
     msgEditOwnReport,
     matchReports,
+    publicReports,
     getAllReportType,
     getAllReports,
     getReportById,
@@ -172,6 +208,7 @@ export const useReportStore = defineStore("report", () => {
     creatOwnReport,
     editOwnReport,
     getMatchReportByid,
+    getAllPublicReports,
     meta,
     ownReportMeta,
   };

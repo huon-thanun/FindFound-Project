@@ -107,7 +107,7 @@
       <div
         v-else
         class="col-12 col-md-6 col-lg-4 col-xl-3 mb-3 card-hover"
-        v-for="report in reportStore.allReports"
+        v-for="report in reportStore.publicReports"
         :key="report.id"
       >
         <router-link
@@ -124,7 +124,7 @@
                 class="w-100"
                 style="height: 200px; object-fit: cover"
                 :src="
-                  report.reportImages && report.reportImages.length > 0
+                  report.reportImages
                     ? report.reportImages[0].name
                     : defaultImage
                 "
@@ -207,8 +207,13 @@ const activeFilter = ref("");
 
 onMounted(async () => {
   try {
-    await Promise.all([categoryStore.fetchCategories(), fetchReports()]);
+    await Promise.all([
+      categoryStore.fetchCategories(),
+      // fetchReports(),
+      reportStore.getAllPublicReports(),
+    ]);
     // console.log(reportStore.allReports);
+    console.log("public", reportStore.publicReports);
 
     // default active
     activeFilter.value = "";
@@ -240,7 +245,7 @@ const btnFilterReportType = async (reportTypeValue) => {
     activeFilter.value = reportTypeValue;
     typeValue.value = reportTypeValue;
     await fetchReports();
-    console.log(reportStore.allReports);
+    // console.log(reportStore.allReports);
   } catch (error) {
     console.error(error);
   }
