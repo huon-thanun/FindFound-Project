@@ -24,14 +24,7 @@
         <div class="dropdown hover-dropdown">
           <div class="user-profile shadow-sm">
             <div class="user-profile-avatar">
-              <img
-                :src="
-                  admin.avatar ||
-                  `https://ui-avatars.com/api/?name=${admin.fullname}&background=3b1e54&color=fff`
-                "
-                class="avatar-img"
-                alt="avatar"
-              />
+              <img :src="admin.avatar" class="avatar-img" alt="avatar" />
             </div>
             <div class="user-info d-none d-lg-block">
               <span class="user-profile-name">{{ admin.fullname }}</span>

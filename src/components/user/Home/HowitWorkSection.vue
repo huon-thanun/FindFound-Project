@@ -1,7 +1,12 @@
 <template>
-  <section class="how-it-works py-5 bg-white">
-    <div class="container py-5">
+  <section class="how-it-works py-5">
+    <div class="bg-pattern"></div>
+    <div class="bg-blob-1"></div>
+    <div class="bg-blob-2"></div>
+
+    <div class="container py-5 position-relative">
       <div class="text-center mb-5" data-aos="fade-up">
+        <div class="badge-mini mb-3">ដំណើរការយ៉ាងងាយស្រួល</div>
         <h3 class="khmer-font-title fw-bold display-6 mb-3">
           របៀបប្រើប្រាស់ងាយៗ
         </h3>
@@ -11,14 +16,16 @@
         </p>
       </div>
 
-      <div class="row g-4 position-relative">
+      <div class="row g-4 position-relative z-1">
         <div class="step-connector d-none d-lg-block"></div>
 
         <div class="col-md-4" data-aos="fade-up" data-aos-delay="100">
-          <div class="step-card text-center">
+          <div class="modern-step-card text-center">
             <div class="step-icon-wrapper mb-4">
-              <div class="step-number">១</div>
-              <div class="step-bg-icon"><i class="bi bi-megaphone"></i></div>
+              <div class="step-number shadow-lg">១</div>
+              <div class="step-bg-icon shadow-sm">
+                <i class="bi bi-megaphone"></i>
+              </div>
             </div>
             <h5 class="khmer-font-title fw-bold mb-3">បង្ហោះព័ត៌មាន</h5>
             <p class="khmer-font text-muted px-lg-3">
@@ -29,10 +36,12 @@
         </div>
 
         <div class="col-md-4" data-aos="fade-up" data-aos-delay="200">
-          <div class="step-card text-center">
+          <div class="modern-step-card text-center featured-step">
             <div class="step-icon-wrapper mb-4">
-              <div class="step-number">២</div>
-              <div class="step-bg-icon"><i class="bi bi-search"></i></div>
+              <div class="step-number shadow-lg">២</div>
+              <div class="step-bg-icon shadow-sm">
+                <i class="bi bi-search"></i>
+              </div>
             </div>
             <h5 class="khmer-font-title fw-bold mb-3">ស្វែងរក ឬរង់ចាំ</h5>
             <p class="khmer-font text-muted px-lg-3">
@@ -43,10 +52,10 @@
         </div>
 
         <div class="col-md-4" data-aos="fade-up" data-aos-delay="300">
-          <div class="step-card text-center">
+          <div class="modern-step-card text-center">
             <div class="step-icon-wrapper mb-4">
-              <div class="step-number">៣</div>
-              <div class="step-bg-icon">
+              <div class="step-number shadow-lg">៣</div>
+              <div class="step-bg-icon shadow-sm">
                 <i class="bi bi-hand-thumbs-up"></i>
               </div>
             </div>
@@ -67,91 +76,155 @@
 
 .how-it-works {
   font-family: "Noto Sans Khmer", sans-serif;
+  position: relative;
+  background-color: #f8faff; /* Light background base */
+  overflow: hidden;
 }
 
-.khmer-font-title {
-  font-family: "Koh Santepheap", cursive;
+/* --- BACKGROUND DECORATION --- */
+.bg-pattern {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: radial-gradient(#3a115e 0.5px, transparent 0.5px);
+  background-size: 30px 30px;
+  opacity: 0.05;
 }
 
-.khmer-font {
-  font-family: "Noto Sans Khmer", sans-serif;
-  font-size: 0.95rem;
-  line-height: 1.7;
+.bg-blob-1 {
+  position: absolute;
+  top: -10%;
+  right: -5%;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(
+    circle,
+    rgba(59, 30, 84, 0.08) 0%,
+    transparent 70%
+  );
+  border-radius: 50%;
 }
 
-/* Step Icon & Number Styles */
+.bg-blob-2 {
+  position: absolute;
+  bottom: -10%;
+  left: -5%;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(
+    circle,
+    rgba(124, 58, 237, 0.08) 0%,
+    transparent 70%
+  );
+  border-radius: 50%;
+}
+
+/* --- CARDS & UI --- */
+.badge-mini {
+  display: inline-block;
+  padding: 6px 16px;
+  background: rgba(59, 30, 84, 0.1);
+  color: #3b1e54;
+  border-radius: 50px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.modern-step-card {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  padding: 40px 25px;
+  border-radius: 30px;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  position: relative;
+  z-index: 2;
+}
+
+.modern-step-card:hover {
+  transform: translateY(-15px);
+  background: rgba(255, 255, 255, 1);
+  box-shadow: 0 25px 50px rgba(59, 30, 84, 0.1);
+  border-color: #3b1e54;
+}
+
+.featured-step {
+  border: 1px solid rgba(59, 30, 84, 0.2);
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 1) 0%,
+    rgba(248, 244, 255, 1) 100%
+  );
+}
+
 .step-icon-wrapper {
   position: relative;
   width: 100px;
   height: 100px;
   margin: 0 auto;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
 .step-number {
-  width: 45px;
-  height: 45px;
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  width: 38px;
+  height: 38px;
   background: #3b1e54;
-  color: #ffffff;
-  border-radius: 50%;
+  color: #fff;
+  border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
   font-weight: bold;
-  font-size: 1.2rem;
-  z-index: 2;
-  box-shadow: 0 4px 10px rgba(59, 30, 84, 0.3);
-  border: 4px solid #fff;
+  z-index: 3;
 }
 
 .step-bg-icon {
-  position: absolute;
-  width: 80px;
-  height: 80px;
-  background: #f8f4ff;
+  width: 90px;
+  height: 90px;
+  background: #ffffff;
   border-radius: 24px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 2rem;
+  font-size: 2.2rem;
   color: #3b1e54;
-  opacity: 0.5;
-  transform: rotate(-10deg);
-  transition: 0.3s ease;
+  transition: 0.4s;
 }
 
-.step-card:hover .step-bg-icon {
-  transform: rotate(0deg) scale(1.1);
+.modern-step-card:hover .step-bg-icon {
   background: #3b1e54;
-  color: #ffffff;
-  opacity: 1;
+  color: white;
+  transform: scale(1.1) rotate(5deg);
 }
 
-/* Connector Line */
 .step-connector {
   position: absolute;
-  top: 50px;
+  top: 100px;
   left: 15%;
   right: 15%;
   height: 2px;
-  border-top: 2px dashed #e2e8f0;
+  border-top: 2px dashed rgba(59, 30, 84, 0.2);
   z-index: 0;
 }
 
-/* Step Card Hover */
-.step-card {
-  padding: 20px;
-  transition: 0.3s;
+.khmer-font-title {
+  font-family: "Koh Santepheap", cursive;
+  color: #1a1a1a;
 }
 
-.step-card:hover h5 {
-  color: #3b1e54;
+.khmer-font {
+  font-family: "Noto Sans Khmer", sans-serif;
+  color: #64748b;
 }
 
 @media (max-width: 991px) {
-  .step-icon-wrapper {
+  .modern-step-card {
     margin-bottom: 20px;
   }
 }
