@@ -21,6 +21,7 @@ import EditReportView from "@/views/user/reports/EditReportView.vue";
 import ReportDetailViewUser from "@/views/user/reports/ReportDetailView.vue";
 
 /* ===== ADMIN VIEWS ===== */
+import AdminLoginView from "@/views/admin/auth/AdminLoginView.vue";
 import DashboardView from "@/views/admin/dashboard/dashboardView.vue";
 import ProfileView from "@/views/admin/profile/ProfileView.vue";
 import EditProfileView from "@/views/admin/profile/EditProfileView.vue";
@@ -41,6 +42,7 @@ import GalleryView from "@/views/user/gallery/GalleryView.vue";
 import ItemDetailsView from "@/views/user/gallery/ItemDetailsView.vue";
 import SuccessStoriesView from "@/views/user/success_stories/SuccessStoriesView.vue";
 
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -57,7 +59,7 @@ const router = createRouter({
     {
       path: "/admin/login",
       name: "admin.login",
-      component: LoginView,
+      component: AdminLoginView,
       meta: {
         public: true,
         isAdminLogin: true,
@@ -188,47 +190,6 @@ const router = createRouter({
     {
       path: "/admin",
       component: AdminLayout,
-      meta: { requiresAuth: true },
-      redirect: { name: "admin.dashboard" },
-      children: [
-        {
-          path: "dashboard",
-          name: "admin.dashboard",
-          component: DashboardView,
-        },
-        {
-          path: "profile",
-          name: "admin.profile",
-          component: ProfileView,
-        },
-        {
-          path: "profile-edit",
-          name: "admin.profile.edit",
-          component: EditProfileView,
-        },
-        {
-          path: "categories",
-          name: "admin.categories",
-          component: CategoryView,
-        },
-        {
-          path: "reports",
-          name: "admin.reports",
-          component: ReportView,
-        },
-        // {
-        //   path: "/reports/admin/:id",
-        //   name: "report-detail-admin",
-        //   component: ReportDetailView,
-        //   props: true,
-        // },
-      ],
-    },
-
-    /* ================= ADMIN AREA ================= */
-    {
-      path: "/admin",
-      component: AdminLayout,
       meta: {
         requiresAuth: true,
         role: "admin",
@@ -283,21 +244,34 @@ const router = createRouter({
 /* ================= ROUTE GUARD ================= */
 router.beforeEach((to, from, next) => {
   const token = localStorage.getItem("token");
-  const role = localStorage.getItem("role");
+  const role = localStorage.getItem("role"); // "user" | "admin"
 
-  // Protect admin routes
+  /* ===== USER PROTECTED ROUTES ===== */
+  if (to.meta.requiresAuth && to.meta.role === "user") {
+    if (!token || role !== "user") {
+      return next({ name: "login" });
+    }
+  }
+
+  /* ===== ADMIN PROTECTED ROUTES ===== */
   if (to.meta.requiresAuth && to.meta.role === "admin") {
     if (!token || role !== "admin") {
       return next({ name: "admin.login" });
     }
   }
 
-  // Prevent admin from opening login again
+  /* ===== PREVENT LOGGED-IN USER FROM LOGIN ===== */
+  if (to.name === "login" && token && role === "user") {
+    return next({ name: "home" });
+  }
+
+  /* ===== PREVENT LOGGED-IN ADMIN FROM ADMIN LOGIN ===== */
   if (to.name === "admin.login" && token && role === "admin") {
     return next({ name: "admin.dashboard" });
   }
 
   next();
 });
+
 
 export default router;

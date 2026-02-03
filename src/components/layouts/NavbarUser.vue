@@ -203,6 +203,25 @@
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from "vue";
 import { useProfileStore } from "@/stores/profileStore";
+import { useRouter } from "vue-router";
+import { useAuthStore } from "@/stores/authStore";
+
+const auth = useAuthStore();
+
+
+
+
+const router = useRouter();
+
+const goLogin = () => {
+  router.push({ name: "login" }); 
+  // or: router.push("/login")
+};
+
+const goRegister = () => {
+  router.push({ name: "register" });
+  // or: router.push("/register")
+};
 import { storeToRefs } from "pinia";
 
 const activeLink = ref("home");
@@ -252,7 +271,7 @@ onMounted(() => {
 });
 
 // Show login buttons if no token
-const showAuthButtons = computed(() => !token.value);
+const showAuthButtons = computed(() => !auth.isAuthenticated);
 
 // Active link in navbar
 const setActive = (link) => {
