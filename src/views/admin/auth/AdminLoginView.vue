@@ -8,12 +8,16 @@
             <img :src="logo" alt="Lost & Found logo" />
           </div>
 
-          <!-- <h1>Lost & Found</h1> -->
           <p class="title">
-            From lost to found<br /><span>reconnecting</span> you with <br>what matters
+            ពីការបាត់បង់ ទៅការជួបវិញ<br />
+            <span>ភ្ជាប់ទំនាក់ទំនង</span> អ្នកឡើងវិញ<br />
+            ជាមួយអ្វីដែលសំខាន់
           </p>
+
           <p class="title-1">
-            The world's most trusted platform for<br /> recovering items that find their way back<br /> home.
+            វេទិកាដែលទទួលបានការជឿទុកចិត្តខ្ពស់បំផុតនៅលើពិភពលោក<br />
+            សម្រាប់ជួយស្វែងរក និងនាំវត្ថុដែលបាត់បង់<br />
+            ត្រឡប់មកកាន់ម្ចាស់ដើមវិញ
           </p>
         </div>
 
@@ -50,30 +54,32 @@
       <div class="login-right">
         <form class="login-form" @submit.prevent="handleLogin">
           <div class="form-header">
-            <h2 class="header">Welcome Back</h2>
-            <p>Please enter your Admin credentials to sign in.</p>
+            <h2 class="header">សូមស្វាគមន៍ការត្រឡប់មកវិញ</h2>
+            <p>សូមបញ្ចូលព័ត៌មានគណនី Admin របស់អ្នក ដើម្បីចូលប្រើប្រាស់</p>
           </div>
 
           <!-- EMAIL -->
           <div class="form-group">
-            <label>Email</label>
+            <label>អ៊ីមែល</label>
             <input
               type="email"
-              placeholder="Enter your email address"
+              placeholder="បញ្ចូលអាសយដ្ឋានអ៊ីមែល"
               v-model="form.email"
               @blur="touched.email = true"
               :class="{ error: emailError }"
             />
-            <span v-if="emailError" class="field-error">{{ emailError }}</span>
+            <span v-if="emailError" class="field-error">
+              {{ emailError }}
+            </span>
           </div>
 
           <!-- PASSWORD -->
           <div class="form-group">
-            <label>Password</label>
+            <label>ពាក្យសម្ងាត់</label>
             <div class="password-input">
               <input
                 :type="showPassword ? 'text' : 'password'"
-                placeholder="Enter your password"
+                placeholder="បញ្ចូលពាក្យសម្ងាត់"
                 v-model="form.password"
                 @blur="touched.password = true"
                 :class="{ error: passwordError }"
@@ -123,9 +129,9 @@
                 </svg>
               </button>
             </div>
-            <span v-if="passwordError" class="field-error">{{
-              passwordError
-            }}</span>
+            <span v-if="passwordError" class="field-error">
+              {{ passwordError }}
+            </span>
           </div>
 
           <!-- LOGIN BUTTON -->
@@ -134,7 +140,7 @@
             class="btn"
             :disabled="auth.loading || !isFormValid"
           >
-            {{ auth.loading ? "Signing in..." : "Sign In" }}
+            {{ auth.loading ? "កំពុងចូល..." : "ចូលប្រើប្រាស់" }}
           </button>
 
           <!-- ERROR MESSAGE -->
@@ -142,17 +148,13 @@
             {{ auth.error }}
           </div>
 
-          <!-- DIVIDER
-          <div class="divider">
-            <span>ឬបន្តជាមួយ</span>
-          </div> -->
-
-          
+         
         </form>
       </div>
     </div>
   </div>
 </template>
+
 <script setup>
 import { reactive, ref, computed } from "vue";
 import { useRouter } from "vue-router";
@@ -215,13 +217,12 @@ const handleLogin = async () => {
 
 </script>
 <style scoped>
-@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
-/* RESET */
+
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: "Poppins", sans-serif;
+  font-family: "Hanuman", serif;
 }
 
 .logo img {
