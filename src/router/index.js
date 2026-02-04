@@ -42,6 +42,8 @@ import GalleryView from "@/views/user/gallery/GalleryView.vue";
 import ItemDetailsView from "@/views/user/gallery/ItemDetailsView.vue";
 import SuccessStoriesView from "@/views/user/success_stories/SuccessStoriesView.vue";
 import ProfileSecurity from "@/views/admin/profile/ProfileSecurity.vue";
+import CategoryUser from "@/views/user/categories/CategoryView.vue";
+
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -195,6 +197,11 @@ const router = createRouter({
           name: "support",
           component: Support,
         },
+        {
+          path: "/categories",
+          name: "category",
+          component: CategoryUser
+        }
       ],
     },
 

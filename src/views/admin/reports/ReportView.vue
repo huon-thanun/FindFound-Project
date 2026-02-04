@@ -1,7 +1,7 @@
 <template>
   <div class="p-3">
-    <h2 class="fw-bold">Reports</h2>
-    <p class="text-muted">View and manage all lost and found reports</p>
+    <h2 class="fw-bold">របាយការណ៍</h2>
+    <p class="text-muted">មើល និងគ្រប់គ្រងការរាយការណ៍បាត់បង់ និងរើសបានទាំងអស់</p>
 
     <div class="row">
       <!-- FILTER CARD -->
@@ -9,47 +9,24 @@
       <div class="card mb-3 col-12 shadow">
         <div class="card-body d-flex gap-3 align-items-start">
           <div class="m-0 p-0" style="flex: 1">
-            <BaseInput
-              class="w-100"
-              v-model="search"
-              type="text"
-              placeholder="Search Report..."
-            />
+            <BaseInput class="w-100" v-model="search" type="text" placeholder="ស្វែងរករបាយការណ៍..." />
           </div>
           <div class="mt-2" style="flex: 1">
-            <BaseSelect
-              class="w-100"
-              v-model="typeValue"
-              :items="reportStore.allReportType"
-              textField="All Type"
-              labelField="name"
-              valueField="id"
-            />
+            <BaseSelect class="w-100" v-model="typeValue" :items="reportStore.allReportType" textField="ប្រភេទទាំងអស់"
+              labelField="name" valueField="id" />
           </div>
           <div class="mt-2" style="flex: 1">
-            <BaseSelect
-              class="w-100"
-              v-model="statusValue"
-              :items="allStatus"
-              textField="All Status"
-              labelField="title"
-              valueField="value"
-            />
+            <BaseSelect class="w-100" v-model="statusValue" :items="allStatus" textField="ស្ថានភាពទាំងអស់"
+              labelField="title" valueField="value" />
           </div>
           <div class="mt-2" style="flex: 1">
-            <BaseSelect
-              class="w-100"
-              v-model="cateValue"
-              :items="categoryStore.categories"
-              textField="All Category"
-              labelField="name"
-              valueField="id"
-            />
+            <BaseSelect class="w-100" v-model="cateValue" :items="categoryStore.categories" textField="ប្រភេទទាំងអស់"
+              labelField="name" valueField="id" />
           </div>
           <!-- CLEAR FILTER -->
           <div class="mt-2 col-xl-2 pb-2 d-flex justify-content-end">
-            <BaseButton variant="dark" @click="clearFilter">
-              Clear filter
+            <BaseButton variant="outline_primary" icon="stars" @click="clearFilter">
+              សម្អាត
             </BaseButton>
           </div>
         </div>
@@ -57,48 +34,34 @@
 
       <div class="col-12 center2" v-if="reportStore.isLoadingGetAllReport">
         <div class="spinner-border" role="status">
-          <span class="visually-hidden">Loading...</span>
+          <span class="visually-hidden">កំពុងផ្ទុក...</span>
         </div>
       </div>
 
-      <div
-        v-else-if="reportStore.allReports.length <= 0"
-        class="my-3 col-12 center2"
-      >
+      <div v-else-if="reportStore.allReports.length <= 0" class="my-3 col-12 center2">
         <div class="w-100 d-flex flex-column align-items-center p-3 text-muted">
           <i class="bi bi-exclamation-circle" style="font-size: 35px"></i>
-          <h3 class="m-0">No Reports Found</h3>
+          <h3 class="m-0">មិនមានរបាយការណ៍ទេ</h3>
         </div>
       </div>
       <!-- REPORT LIST -->
 
       <div v-else class="col-12">
         <div class="row">
-          <div
-            class="col-12 col-md-6 col-lg-3 mb-3"
-            v-for="report in reportStore.allReports"
-            :key="report.id"
-          >
-            <BaseReportCard height="550px">
+          <div class="col-12 col-md-6 col-lg-3 mb-3" v-for="report in reportStore.allReports" :key="report.id">
+            <BaseReportCard height="500px">
               <template #image>
                 <div class="image">
-                  <img
-                    :src="
-                      report.reportImages && report.reportImages.length > 0
-                        ? report.reportImages[0].name
-                        : defaultImage
-                    "
-                    :alt="report.title || 'Report Image'"
-                  />
+                  <img :src="report.reportImages && report.reportImages.length > 0
+                    ? report.reportImages[0].name
+                    : defaultImage
+                    " :alt="report.title || 'រូបភាពរបាយការណ៍'" />
                 </div>
               </template>
 
               <div>
                 <div class="d-flex gap-2 my-2">
-                  <span
-                    class="status"
-                    :class="report.reportType.name.toLowerCase()"
-                  >
+                  <span class="status" :class="report.reportType.name.toLowerCase()">
                     {{ report.reportType.name }}
                   </span>
                   <span class="status" :class="report.status.toLowerCase()">
@@ -106,36 +69,38 @@
                   </span>
                 </div>
 
-                <h5 class="card-title">{{ report.title }}</h5>
+                <h5 class="card-title mt-3">{{ report.title }}</h5>
 
-                <ul class="item-list mt-2">
-                  <li class="fs-6">
-                    <i class="bi bi-file-earmark-text"></i>
-                    {{ report.category.name }}
+                <ul class="item-list d-flex justify-content-between mt-2">
+                  <li class="fs-6 ">
+                    <small><i class="bi bi-file-earmark-text"></i>
+                      {{ report.category.name }}</small>
                   </li>
-                  <li class="fs-6">
-                    <i class="bi bi-geo-alt-fill"></i>
-                    {{ report.locationText }}
-                  </li>
-                  <li class="fs-6">
-                    <i class="bi bi-calendar2"></i>
-                    {{ formatDate(report.createdAt) }}
-                  </li>
+                  <div>
+                    <li class="fs-6">
+                      <small>
+                        <i class="bi bi-geo-alt-fill"></i>
+                        {{ report.locationText }}
+                      </small>
+                    </li>
+                    <li class="fs-6">
+                      <small>
+                        <i class="bi bi-calendar2"></i>
+                        {{ formatDate(report.createdAt) }}
+                      </small>
+                    </li>
+                  </div>
                 </ul>
 
                 <div class="button-group">
-                  <BaseButton
-                    icon="bi-eye"
-                    variant="primary w-100"
-                    @click="fetchReportDetail(report.id)"
-                    :isLoading="isLoading === report.id"
-                  >
-                    View Details
+                  <BaseButton icon="bi-eye" variant="primary w-100" @click="fetchReportDetail(report.id)"
+                    :isLoading="isLoading === report.id">
+                    មើលលម្អិត
                   </BaseButton>
                 </div>
 
                 <span class="d-block mt-2 py-1" style="font-size: 16px">
-                  Reported by <strong>{{ report.reporter.fullname }}</strong>
+                  រាយការណ៍ដោយ <strong>{{ report.reporter.fullname }}</strong>
                 </span>
               </div>
             </BaseReportCard>
@@ -147,16 +112,9 @@
 
     <!-- pagination -->
 
-    <div
-      v-if="reportStore.meta?.totalPages > 1"
-      class="d-flex gap-2 justify-content-center my-3"
-    >
-      <BaseButton
-        variant="danger"
-        @click="PreviousPage"
-        :disabled="!reportStore.meta?.hasPreviousPage"
-      >
-        Prev
+    <div v-if="reportStore.meta?.totalPages > 1" class="d-flex gap-2 justify-content-center my-3">
+      <BaseButton variant="danger" @click="PreviousPage" :disabled="!reportStore.meta?.hasPreviousPage">
+        មុន
       </BaseButton>
 
       <!-- <BaseButton
@@ -168,12 +126,8 @@
         {{ p }}
       </BaseButton> -->
 
-      <BaseButton
-        variant="primary"
-        @click="nextPage"
-        :disabled="!reportStore.meta?.hasNextPage"
-      >
-        Next
+      <BaseButton variant="primary" @click="nextPage" :disabled="!reportStore.meta?.hasNextPage">
+        បន្ទាប់
       </BaseButton>
     </div>
 
@@ -201,9 +155,9 @@ const typeValue = ref("");
 const statusValue = ref("");
 
 const allStatus = [
-  { value: "ACTIVE", title: "Active" },
-  { value: "RESOLVED", title: "Resolved" },
-  { value: "HIDDEN", title: "Hidden" },
+  { value: "ACTIVE", title: "សកម្ម" },
+  { value: "RESOLVED", title: "បានដោះស្រាយ" },
+  { value: "HIDDEN", title: "លាក់" },
 ];
 
 let timeout = null;
@@ -331,19 +285,23 @@ const clearFilter = () => {
 .desc .card-text {
   color: rgba(128, 128, 128, 0.679);
 }
+
 .image {
   width: 100%;
   height: 200px;
 }
+
 .image img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
+
 .item-list {
   list-style-type: none;
   padding: 0;
 }
+
 .item-list li {
   display: flex;
   align-items: center;
@@ -351,12 +309,15 @@ const clearFilter = () => {
   font-size: 18px;
   color: rgba(128, 128, 128, 0.679);
 }
+
 .item-list li .icon {
   font-size: 18px;
 }
+
 .item-list li .detail {
   font-size: 16px;
 }
+
 .button-group {
   padding: 15px 0;
   width: 100%;
@@ -366,6 +327,7 @@ const clearFilter = () => {
   border-bottom: 1px solid rgb(78, 78, 78);
   column-gap: 8px;
 }
+
 .text-clamp-2 {
   overflow: hidden;
   display: -webkit-box;
@@ -379,6 +341,7 @@ const clearFilter = () => {
   justify-content: center;
   align-items: center;
 }
+
 .status {
   background: rgba(211, 211, 211, 0.4);
   color: rgba(0, 0, 0, 0.4);
@@ -386,18 +349,22 @@ const clearFilter = () => {
   border-radius: 50px;
   font-size: 14px;
 }
+
 .lost {
   background: rgb(255, 0, 0);
   color: rgb(255, 255, 255);
 }
+
 .found {
   background: rgb(0, 211, 0);
   color: rgb(255, 255, 255);
 }
+
 .active {
   background: rgba(0, 0, 255, 0.2);
   color: rgba(0, 0, 255, 0.8);
 }
+
 .resolved {
   background: rgba(92, 92, 92, 0.5);
   color: rgba(255, 255, 255, 0.8);
