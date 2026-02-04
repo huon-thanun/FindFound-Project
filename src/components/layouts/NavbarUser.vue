@@ -322,19 +322,19 @@ const router = useRouter();
 
 const goLogin = () => {
   router.push({ name: "login" });
-  // or: router.push("/login")
+ 
 };
 
 const goRegister = () => {
   router.push({ name: "register" });
-  // or: router.push("/register")
+  
 };
 import { storeToRefs } from "pinia";
 
 const activeLink = ref("home");
 const profileStore = useProfileStore();
 
-// ✅ keep reactivity
+
 const { profile, isLoadingProfile, error } = storeToRefs(profileStore);
 
 console.log("123", profileStore.fetchProfile());
@@ -377,8 +377,13 @@ onMounted(() => {
   token.value = localStorage.getItem("token");
 });
 
-// Show login buttons if no token
-const showAuthButtons = computed(() => !auth.isAuthenticated);
+
+const showAuthButtons = computed(() => {
+  return !auth.isAuthenticated || auth.role === "admin";
+});
+
+
+
 
 // Active link in navbar
 const setActive = (link) => {
