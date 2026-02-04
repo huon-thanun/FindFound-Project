@@ -9,20 +9,25 @@
 
     <!-- Navigation Menu -->
     <nav class="nav-menu">
-      <router-link :to="{name: 'home'}" class="nav-item"> ទំព័រ​ដើម </router-link>
+      <router-link :to="{ name: 'home' }" class="nav-item" :class="{ active: activeLink === 'home' }"
+        @click.prevent="setActive('home')"> ទំព័រ​ដើម </router-link>
 
-      <router-link :to="{name: 'report.user'}" class="nav-item"> របាយការណ៍ </router-link>
+      <router-link :to="{ name: 'report.user' }" class="nav-item" :class="{ active: activeLink === 'report' }"
+        @click.prevent="setActive('report')"> របាយការណ៍ </router-link>
 
-      <router-link to="" class="nav-item"> ប្រភេទរបាយការណ៍ </router-link>
+      <router-link to="" class="nav-item" :class="{ active: activeLink === 'category' }"
+        @click.prevent="setActive('category')"> ប្រភេទរបាយការណ៍ </router-link>
 
-      <router-link :to="{name: 'about'}" class="nav-item"> អំពី​យើង </router-link>
+      <router-link :to="{ name: 'about' }" class="nav-item" :class="{ active: activeLink === 'about' }"
+        @click.prevent="setActive('about')"> អំពី​យើង </router-link>
 
-      <router-link :to="{name: 'contact_us'}" class="nav-item"> ទំនាក់ទំនង </router-link>
+      <router-link :to="{ name: 'contact_us' }" class="nav-item" :class="{ active: activeLink === 'contact' }"
+        @click.prevent="setActive('contact')"> ទំនាក់ទំនង </router-link>
     </nav>
 
     <!-- User Section -->
     <div v-if="showAuthButtons" class="user-section">
-      <div >
+      <div>
         <base-button class="handle-btn mb-3" icon="person-circle" variant="secondary">
           ចូល
         </base-button>
@@ -110,11 +115,11 @@
         </div>
       </div>
       <!-- Right Side Items -->
-       <!-- ⏳ Loading -->
-<div v-if="isLoadingProfile" class="d-flex align-items-center ms-lg-5 ms-0  gap-2">
-  <div class="skeleton avatar"></div>
-  <div class="skeleton text"></div>
-</div>
+      <!-- ⏳ Loading -->
+      <div v-if="isLoadingProfile" class="d-flex align-items-center ms-lg-5 ms-0  gap-2">
+        <div class="skeleton avatar"></div>
+        <div class="skeleton text"></div>
+      </div>
       <!-- SHOW Lost / Found when HAS token -->
       <div v-else-if="!showAuthButtons" class="d-flex align-items-center gap-3">
         <div>
@@ -173,12 +178,16 @@
       </div>
       <!-- SHOW Login / Register when NO token -->
       <div v-else class="btn-active d-flex align-items-center gap-3">
-        <base-button icon="person-circle" variant="secondary" class="btn-login">
-          ចូល
-        </base-button>
-        <base-button icon="person-plus-fill" class="btn-register">
-          ចុះឈ្មោះ
-        </base-button>
+        <router-link :to="{ name: 'login' }">
+          <base-button icon="person-circle" variant="secondary" class="btn-login">
+            ចូល
+          </base-button>
+        </router-link>
+        <router-link :to="{ name: 'register' }">
+          <base-button icon="person-plus-fill" class="btn-register">
+            ចុះឈ្មោះ
+          </base-button>
+        </router-link>
       </div>
 
     </div>
@@ -214,7 +223,7 @@ const auth = useAuthStore();
 const router = useRouter();
 
 const goLogin = () => {
-  router.push({ name: "login" }); 
+  router.push({ name: "login" });
   // or: router.push("/login")
 };
 
@@ -335,12 +344,10 @@ body {
 }
 
 .skeleton {
-  background: linear-gradient(
-    90deg,
-    #e0e0e0 25%,
-    #f5f5f5 37%,
-    #e0e0e0 63%
-  );
+  background: linear-gradient(90deg,
+      #e0e0e0 25%,
+      #f5f5f5 37%,
+      #e0e0e0 63%);
   background-size: 400% 100%;
   animation: skeleton 1.4s ease infinite;
 }
@@ -361,6 +368,7 @@ body {
   0% {
     background-position: 100% 0;
   }
+
   100% {
     background-position: 0 0;
   }
@@ -441,7 +449,7 @@ body {
   color: var(--surface-color);
 }
 
-.sidebar .router-link-active {
+.sidebar .nav-item.active {
   background-color: var(--tertiary-color);
   color: var(--surface-color);
 }
