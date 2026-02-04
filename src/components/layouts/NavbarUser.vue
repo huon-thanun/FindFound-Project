@@ -92,7 +92,7 @@
             </li>
 
             <li class="nav-item">
-              <router-link to="" class="nav-link-custom" :class="{ active: activeLink === 'categories' }"
+              <router-link :to="{name: 'category'}" class="nav-link-custom" :class="{ active: activeLink === 'categories' }"
                 @click.prevent="setActive('categories')">
                 ប្រភេទរបាយការណ៍
               </router-link>

@@ -7,16 +7,24 @@ export const useCategoryStore = defineStore("category", () => {
     const isLoading = ref(false);
 
     const fetchCategories = async (params = {}) => {
-        try {
-            isLoading.value = true;
-            const res = await api.get("/categories", { params });
-            categories.value = res.data.data.items;
-        } catch (err) {
-            console.error("Fetch categories error:", err);
-        } finally {
-            isLoading.value = false;
-        }
-    };
+    try {
+        isLoading.value = true;
+        // Merge default params with any passed in params
+        // We set per_page to a higher number like 50 or 100
+        const res = await api.get("/categories", { 
+            params: { 
+                // _page: 1,
+                _per_page: 50, // This is the key change
+                ...params 
+            } 
+        });
+        categories.value = res.data.data.items;
+    } catch (err) {
+        console.error("Fetch categories error:", err);
+    } finally {
+        isLoading.value = false;
+    }
+};
 
     const createCategory = async (payload) => {
         // send payload to backend

@@ -41,6 +41,7 @@ import ContactUsView from "@/views/user/contact_us/ContactUsView.vue";
 import GalleryView from "@/views/user/gallery/GalleryView.vue";
 import ItemDetailsView from "@/views/user/gallery/ItemDetailsView.vue";
 import SuccessStoriesView from "@/views/user/success_stories/SuccessStoriesView.vue";
+import CategoryUser from "@/views/user/categories/CategoryView.vue";
 
 
 const router = createRouter({
@@ -183,6 +184,11 @@ const router = createRouter({
           name: "support",
           component: Support,
         },
+        {
+          path: "/categories",
+          name: "category",
+          component: CategoryUser
+        }
       ],
     },
 
