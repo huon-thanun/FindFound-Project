@@ -167,14 +167,22 @@ const fetchReports = async () => {
     _page: page.value,
     _per_page: 8,
     search: search.value,
-    status: statusValue.value,
+    status: statusValue.value?.value,
     sortBy: "createdAt",
     sortDir: "desc",
-    reportType: typeValue.value,
-    categoryId: cateValue.value,
+    reportType: typeValue.value?.id,
+    categoryId: cateValue.value?.id,
+
   });
   console.log("PAGE:", page.value);
   console.log("META:", reportStore.meta);
+
+  console.log({
+  search: search.value,
+  status: statusValue.value,
+  reportType: typeValue.value,
+  categoryId: cateValue.value,
+});
 };
 onMounted(async () => {
   try {
