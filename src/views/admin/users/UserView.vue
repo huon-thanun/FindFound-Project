@@ -73,7 +73,7 @@
     </div>
 
     <!-- Users Table -->
-    <div class="card">
+    <!-- <div class="card"> -->
       <BaseTableUserPage :columns="tableColumns" :items="users" :isLoading="loading" @edit="viewUser"
         @delete="openStatus">
         <template #column-id="{ item }"> #{{ item.id }} </template>
@@ -96,6 +96,10 @@
         </template>
       </BaseTableUserPage>
 
+      <div class="mt-3 text-muted">
+            <p class="text-muted mb-0">ស្ថិតិ: សរុបអ្នកប្រើប្រាស់ <strong class="text-dark">{{ users.length }}</strong> នាក់</p>
+      </div>
+
       <!-- <div class="card-footer text-center">
         <div class="d-flex gap-2 justify-content-center my-3">
           <BaseButton class="pointer" variant="danger" @click="previousPage" :isDisabled="filters.page === 1">
@@ -108,7 +112,8 @@
         </div>
         <p class="text-muted">Total: {{ total }} users</p>
       </div> -->
-    </div>
+    <!-- </div> -->
+
 
     <!-- VIEW USER MODAL -->
     <BaseModal title="User Detail" icon="person-circle" :theme="'primary'" :isClose="showViewModal"
@@ -524,6 +529,10 @@ onMounted(() => resetAndLoadUsers());
 
 .filter-column>div {
   flex: 1;
+}
+
+.filter-row>.filter-sort-1 {
+  flex: 0.5;
 }
 
 /* SM screens */

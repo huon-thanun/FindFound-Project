@@ -339,7 +339,8 @@ const clearFilter = () => {
                 <!-- Search -->
                 <div class="filter-search w-100">
                     <!-- <BaseInput class="d-block d-lg-none" v-model="search" placeholder="ស្វែងរកតាមប្រភេទ​ និងការពិពណ៌នា..." /> -->
-                    <BaseInput class="d-block d-md-none d-xl-block" v-model="search" placeholder="ស្វែងរកតាមប្រភេទ​ និងការពិពណ៌នា..." />
+                    <BaseInput class="d-block d-md-none d-xl-block" v-model="search"
+                        placeholder="ស្វែងរកតាមប្រភេទ​ និងការពិពណ៌នា..." />
                     <BaseInput class="d-none d-md-block d-xl-none" v-model="search" placeholder="ស្វែងរក..." />
                 </div>
 
@@ -372,6 +373,9 @@ const clearFilter = () => {
             <template #column-id="{ item }">
                 #{{ item.id }}
             </template>
+            <template #column-description="{ item }">
+                {{ item.description.length > 50 ? item.description.slice(0, 50) + '...' : item.description }}
+            </template>
             <template #column-createdAt="{ item }">
                 {{ formatDate(item.createdAt) }}
             </template>
@@ -379,6 +383,11 @@ const clearFilter = () => {
                 {{ formatDate(item.updatedAt) }}
             </template>
         </BaseTable>
+
+        <!-- Category Count -->
+        <div class="mt-3 text-muted">
+            <p class="mb-0">ស្ថិតិ: សរុបប្រភេទ <strong class="text-dark">{{ categories.length }}</strong> ប្រភេទ</p>
+        </div>
 
         <!-- DELETE MODAL -->
         <BaseModal :isClose="showDeleteModal" theme="danger" title="បញ្ជាក់ការលុប" @closeModal="showDeleteModal = false"

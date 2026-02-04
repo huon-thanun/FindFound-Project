@@ -23,7 +23,8 @@
         របាយការណ៍
       </router-link>
 
-      <router-link to="" class="nav-item"> ប្រភេទរបាយការណ៍ </router-link>
+      <router-link to="" class="nav-item" :class="{ active: activeLink === 'category' }"
+        @click.prevent="setActive('category')"> ប្រភេទរបាយការណ៍ </router-link>
 
       <router-link :to="{ name: 'about' }" class="nav-item">
         អំពី​យើង
@@ -139,12 +140,8 @@
             </li>
 
             <li class="nav-item">
-              <router-link
-                to=""
-                class="nav-link-custom"
-                :class="{ active: activeLink === 'categories' }"
-                @click.prevent="setActive('categories')"
-              >
+              <router-link :to="{name: 'category'}" class="nav-link-custom" :class="{ active: activeLink === 'categories' }"
+                @click.prevent="setActive('categories')">
                 ប្រភេទរបាយការណ៍
               </router-link>
             </li>
@@ -268,21 +265,16 @@
       </div>
       <!-- SHOW Login / Register when NO token -->
       <div v-else class="btn-active d-flex align-items-center gap-3">
-        <base-button
-          icon="person-circle"
-          variant="secondary"
-          class="btn-login"
-          @click="goLogin"
-        >
-          ចូល
-        </base-button>
-        <base-button
-          icon="person-plus-fill"
-          class="btn-register"
-          @click="goRegister"
-        >
-          ចុះឈ្មោះ
-        </base-button>
+        <router-link :to="{ name: 'login' }">
+          <base-button icon="person-circle" variant="secondary" class="btn-login">
+            ចូល
+          </base-button>
+        </router-link>
+        <router-link :to="{ name: 'register' }">
+          <base-button icon="person-plus-fill" class="btn-register">
+            ចុះឈ្មោះ
+          </base-button>
+        </router-link>
       </div>
     </div>
     <BaseModal
@@ -471,6 +463,7 @@ body {
   0% {
     background-position: 100% 0;
   }
+
   100% {
     background-position: 0 0;
   }
@@ -550,7 +543,7 @@ body {
   color: var(--surface-color);
 }
 
-.sidebar .router-link-active {
+.sidebar .nav-item.active {
   background-color: var(--tertiary-color);
   color: var(--surface-color);
 }
