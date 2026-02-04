@@ -41,7 +41,7 @@ import ContactUsView from "@/views/user/contact_us/ContactUsView.vue";
 import GalleryView from "@/views/user/gallery/GalleryView.vue";
 import ItemDetailsView from "@/views/user/gallery/ItemDetailsView.vue";
 import SuccessStoriesView from "@/views/user/success_stories/SuccessStoriesView.vue";
-
+import ProfileSecurity from "@/views/admin/profile/ProfileSecurity.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -132,7 +132,19 @@ const router = createRouter({
           path: "profile",
           name: "user.profile",
           component: ProfileUserView,
-          meta: { requiresAuth: true, role: "user" }, // <-- Protected
+        },
+        {
+          path: "profile/edit",
+          name: "user.profile.edit",
+          component: EditProfileView,
+          meta: { requiresAuth: true, role: "user" },
+        },
+
+        {
+          path: "profile/security",
+          name: "user.profile.security",
+          component: ProfileSecurity,
+          meta: { requiresAuth: true, role: "user" },
         },
         {
           path: "successstory",
@@ -212,6 +224,11 @@ const router = createRouter({
           component: EditProfileView,
         },
         {
+          path: "profile-security",
+          name: "admin.profile.security",
+          component: ProfileSecurity,
+        },
+        {
           path: "categories",
           name: "admin.categories",
           component: CategoryView,
@@ -272,6 +289,5 @@ router.beforeEach((to, from, next) => {
 
   next();
 });
-
 
 export default router;
