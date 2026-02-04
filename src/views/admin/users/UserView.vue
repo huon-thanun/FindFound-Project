@@ -18,53 +18,55 @@
         <h2 class="fw-bold">អ្នកប្រើប្រាស់</h2>
         <p class="text-muted">បង្កើត និងគ្រប់គ្រងអ្នកប្រើប្រាស់</p>
       </div>
-      <BaseButton class="d-none d-md-block" icon="person-plus" variant="primary" @click="showCreateModal = true">
+      <BaseButton icon="person-plus" variant="primary" @click="showCreateModal = true">
         បង្កើតអ្នកប្រើប្រាស់
       </BaseButton>
-      <BaseButton class="d-block d-md-none d-flex" icon="person-plus" variant="primary" @click="showCreateModal = true">
+      <!-- <BaseButton class="d-block d-md-none d-flex" icon="person-plus" variant="primary" @click="showCreateModal = true">
         បង្កើត
-      </BaseButton>
+      </BaseButton> -->
     </div>
 
     <!-- Filters -->
     <div class="card mb-3 shadow">
-      <div class="card-body d-flex gap-3 align-items-start filter-row">
-        <div class="filter-search">
-          <BaseInput class="d-block d-md-none d-xl-block" type="text" placeholder="ស្វែងរកតាមឈ្មោះ​ និងអុីមែល..." v-model="filters.search"
-            @keyup.enter="resetAndLoadUsers" />
-          <BaseInput class="d-none d-md-block d-xl-none" type="text" placeholder="ស្វែងរក..." v-model="filters.search"
-            @keyup.enter="resetAndLoadUsers" />
+      <div class="card-body row">
+        <div class="col-xl-4">
+          <BaseInput type="text" placeholder="ស្វែងរកតាមឈ្មោះ​ និងអុីមែល..."
+            v-model="filters.search" @keyup.enter="resetAndLoadUsers" />
+          <!-- <BaseInput class="d-none d-md-block d-xl-none" type="text" placeholder="ស្វែងរក..." v-model="filters.search"
+            @keyup.enter="resetAndLoadUsers" /> -->
         </div>
 
-        <div class="mt-sm-0 mt-md-2 p-0 filter-sort-1">
-          <BaseSelect textField="តម្រៀបតាម" :modelValue="sortOptions.find((o) => o.value === filters.sortBy) || null
-            " :items="sortOptions" labelField="label" valueField="value" @update:modelValue="(item) => (filters.sortBy = item?.value || '')
-            " class="text-nowrap" />
-        </div>
+        <div class="col-xl-5 mt-2">
+          <div class="row">
+            <div class="col-xl-6" style="flex: 1; flex-wrap: nowrap;">
+              <BaseSelect textField="តម្រៀបតាម" :modelValue="sortOptions.find((o) => o.value === filters.sortBy) || null
+                " :items="sortOptions" labelField="label" valueField="value" @update:modelValue="(item) => (filters.sortBy = item?.value || '')
+                " class="text-nowrap" />
+            </div>
 
-        <div class="d-flex gap-3 filter-column w-100">
+            <div class="col-xl-6" style="flex: 1; flex-wrap: nowrap;">
+              <BaseSelect :modelValue="SORT_DIR_OPTIONS.find((o) => o.value === filters.sortDir) || null
+                " labelField="label" valueField="value" :items="SORT_DIR_OPTIONS"
+                @update:modelValue="(item) => (filters.sortDir = item?.value || '')" textField="ទិសដៅតម្រៀប"
+                class="text-nowrap" />
+            </div>
 
-          <div class="mt-sm-0 mt-md-2 p-0 filter-sort">
-            <BaseSelect :modelValue="SORT_DIR_OPTIONS.find((o) => o.value === filters.sortDir) || null
-              " labelField="label" valueField="value" :items="SORT_DIR_OPTIONS"
-              @update:modelValue="(item) => (filters.sortDir = item?.value || '')" textField="ទិសដៅតម្រៀប"
-              class="text-nowrap" />
-          </div>
-
-          <div class="mt-sm-0 mt-md-2 p-0 filter-sort">
-            <BaseSelect textField="តម្រៀបស្ថានភាព" :modelValue="statusOptions.find((o) => o.value === filters.status) || null
-              " :items="statusOptions" labelField="label" valueField="value"
-              @update:modelValue="(item) => (filters.status = item?.value || '')" class="text-nowrap" />
+            <div class="col-xl-6" style="flex: 1; flex-wrap: nowrap;">
+              <BaseSelect textField="តម្រៀបស្ថានភាព" :modelValue="statusOptions.find((o) => o.value === filters.status) || null
+                " :items="statusOptions" labelField="label" valueField="value"
+                @update:modelValue="(item) => (filters.status = item?.value || '')" class="text-nowrap" />
+            </div>
           </div>
 
         </div>
 
         <!-- CLEAR FILTER -->
-        <div class="mt-sm-0 mt-md-1 mt-lg-2 p-0 d-flex justify-content-end filter-clear">
-          <BaseButton class="d-none d-md-block d-xl-none" variant="outline_primary" icon="stars" @click="clearFilter">
+        <div class="col-xl-3 mt-1 text-end">
+          <!-- <BaseButton class="d-none d-md-block d-xl-none" variant="outline_primary" icon="stars" @click="clearFilter">
             សម្អាត
-          </BaseButton>
-          <BaseButton class="d-block d-md-none d-xl-block d-flex" variant="outline_primary" icon="stars" @click="clearFilter">
+          </BaseButton> -->
+          <BaseButton variant="outline_primary" icon="stars"
+            @click="clearFilter">
             សម្អាតការតម្រៀប
           </BaseButton>
         </div>
@@ -74,33 +76,34 @@
 
     <!-- Users Table -->
     <!-- <div class="card"> -->
-      <BaseTableUserPage :columns="tableColumns" :items="users" :isLoading="loading" @edit="viewUser"
-        @delete="openStatus">
-        <template #column-id="{ item }"> #{{ item.id }} </template>
+    <BaseTableUserPage :columns="tableColumns" :items="users" :isLoading="loading" @edit="viewUser"
+      @delete="openStatus">
+      <template #column-id="{ item }"> #{{ item.id }} </template>
 
-        <template #column-fullname="{ item }">
-          <div class="d-flex align-items-center gap-2">
-            <img :src="item.avatar || '/avatar.png'" width="40" height="40" class="rounded-circle" alt="avatar" />
-            <span>{{ item.fullname }}</span>
-          </div>
-        </template>
+      <template #column-fullname="{ item }">
+        <div class="d-flex align-items-center gap-2">
+          <img :src="item.avatar || '/avatar.png'" width="40" height="40" class="rounded-circle" alt="avatar" />
+          <span>{{ item.fullname }}</span>
+        </div>
+      </template>
 
-        <template #column-role="{ item }">
-          {{ item.role?.name || '-' }}
-        </template>
+      <template #column-role="{ item }">
+        {{ item.role?.name || '-' }}
+      </template>
 
-        <template #column-status="{ item }">
-          <span class="badge" :class="item.status === 'ACTIVATED' ? 'bg-success' : 'bg-danger'">
-            {{ item.status }}
-          </span>
-        </template>
-      </BaseTableUserPage>
+      <template #column-status="{ item }">
+        <span class="badge" :class="item.status === 'ACTIVATED' ? 'bg-success' : 'bg-danger'">
+          {{ item.status }}
+        </span>
+      </template>
+    </BaseTableUserPage>
 
-      <div class="mt-3 text-muted">
-            <p class="text-muted mb-0">ស្ថិតិ: សរុបអ្នកប្រើប្រាស់ <strong class="text-dark">{{ users.length }}</strong> នាក់</p>
-      </div>
+    <div class="mt-3 text-muted">
+      <p class="text-muted mb-0">ស្ថិតិ: សរុបអ្នកប្រើប្រាស់ <strong class="text-dark">{{ users.length }}</strong> នាក់
+      </p>
+    </div>
 
-      <!-- <div class="card-footer text-center">
+    <!-- <div class="card-footer text-center">
         <div class="d-flex gap-2 justify-content-center my-3">
           <BaseButton class="pointer" variant="danger" @click="previousPage" :isDisabled="filters.page === 1">
             មុន
