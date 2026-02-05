@@ -62,6 +62,7 @@ export const useReportStore = defineStore("report", () => {
       isLoadingGetAReport.value = false;
     }
   };
+
   const ownReports = ref([]);
   const ownReportMeta = ref(null);
   const isLoadingGetOwnReports = ref(false);
@@ -113,7 +114,7 @@ export const useReportStore = defineStore("report", () => {
           "Content-Type": "multipart/form-data",
         },
       });
-      console.log(res);
+      // console.log(res);
 
       msgCreateOwnReport.value = res.data;
     } catch (error) {
@@ -142,22 +143,48 @@ export const useReportStore = defineStore("report", () => {
     }
   };
   const matchReports = ref([]);
+  // const getMatchReportByid = async (id) => {
+  //   try {
+  //     const res = await api.get(`/matches/reports/${id}`);
+  //     matchReports.value = res.data.data;
+  //   } catch (error) {
+  //     throw error;
+  //   }
+  // };
   const getMatchReportByid = async (id) => {
     try {
       const res = await api.get(`/matches/reports/${id}`);
       matchReports.value = res.data.data;
-    } catch (error) {
-      throw error;
+    } catch (err) {
+      if (err.response?.status === 404) {
+        console.warn("No match reports found");
+        matchReports.value = { matchedReports: [] };
+        return;
+      }
+
+      // other errors still throw
+      throw err;
     }
   };
+
   const publicReports = ref([]);
   const isLoadingPublicReports = ref(false);
-  const getAllPublicReports = async () => {
+  const metaPublicReports = ref(null);
+  const getAllPublicReports = async (params = {}) => {
     isLoadingPublicReports.value = true;
     try {
-      const res = await api.get("/reports/public");
+      // remove empty params
+      const cleanParams = Object.fromEntries(
+        Object.entries(params).filter(
+          ([_, v]) => v !== "" && v !== null && v !== undefined,
+        ),
+      );
+      const res = await api.get("/reports/public", {
+        params: cleanParams,
+      });
 
       publicReports.value = res.data.data.items;
+      metaPublicReports.value = res.data.data.meta;
     } catch (error) {
       console.error(error);
     } finally {
@@ -191,6 +218,7 @@ export const useReportStore = defineStore("report", () => {
     isLoadingDeleteOwnReport,
     isLoadingCreateOwnReport,
     isLoadingEditOwnReport,
+    isLoadingPublicReports,
     allReportType,
     allReports,
     report,
@@ -211,5 +239,6 @@ export const useReportStore = defineStore("report", () => {
     getAllPublicReports,
     meta,
     ownReportMeta,
+    metaPublicReports,
   };
 });
