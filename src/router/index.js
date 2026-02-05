@@ -43,7 +43,9 @@ import ItemDetailsView from "@/views/user/gallery/ItemDetailsView.vue";
 import SuccessStoriesView from "@/views/user/success_stories/SuccessStoriesView.vue";
 import ProfileSecurity from "@/views/admin/profile/ProfileSecurity.vue";
 import CategoryUser from "@/views/user/categories/CategoryView.vue";
-
+import ProfileUserSecurity from "@/views/user/profile/ProfileUserSecurity.vue";
+import EditProfileUserView from "@/views/user/profile/EditProfileUserView.vue";
+import VerifyEmail from "@/views/user/auth/VerifyEmail.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -98,7 +100,12 @@ const router = createRouter({
       component: UserVerifyOTPView,
       meta: { public: true },
     },
-
+    {
+      path: "/verify-email",
+      name: "verify-email",
+      component: VerifyEmail,
+      meta: { public: true },
+    },
     /* ================= USER AREA ================= */
     {
       path: "/",
@@ -134,18 +141,19 @@ const router = createRouter({
           path: "profile",
           name: "user.profile",
           component: ProfileUserView,
+          meta: { requiresAuth: true, role: "user" },
         },
         {
           path: "profile/edit",
           name: "user.profile.edit",
-          component: EditProfileView,
+          component: EditProfileUserView,
           meta: { requiresAuth: true, role: "user" },
         },
 
         {
           path: "profile/security",
           name: "user.profile.security",
-          component: ProfileSecurity,
+          component: ProfileUserSecurity,
           meta: { requiresAuth: true, role: "user" },
         },
         {
@@ -200,8 +208,8 @@ const router = createRouter({
         {
           path: "/categories",
           name: "category",
-          component: CategoryUser
-        }
+          component: CategoryUser,
+        },
       ],
     },
 

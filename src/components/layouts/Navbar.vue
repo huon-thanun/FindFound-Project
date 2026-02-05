@@ -5,20 +5,26 @@
     <div
       class="container-fluid d-flex justify-content-between align-items-center h-100"
     >
-    <h1 class="pt-2 d-none d-lg-block"><i class="bi-person-gear"></i> សូមស្វាគមន៍អ្នកគ្រប់គ្រង</h1>
+      <h1 class="pt-2 d-none d-lg-block">
+        <i class="bi-person-gear"></i> សូមស្វាគមន៍អ្នកគ្រប់គ្រង
+      </h1>
       <div class="d-flex align-items-center d-lg-none gap-3">
-        <base-button
-          @click="toggleSidebar"
-        >
+        <base-button @click="toggleSidebar">
           <i :class="isOpen ? 'bi bi-list' : 'bi bi-x-lg'"></i>
         </base-button>
       </div>
 
-      <div class="logo-section d-lg-none ">
-      <div class="d-flex align-items-center">
-        <img src="../../assets/images/logo/logo.png" class="object-fit-cover" height="79px" width="170px" alt="" />
+      <div class="logo-section d-lg-none">
+        <div class="d-flex align-items-center">
+          <img
+            src="../../assets/images/logo/logo.png"
+            class="object-fit-cover"
+            height="79px"
+            width="170px"
+            alt=""
+          />
+        </div>
       </div>
-    </div>
 
       <div class="navbar-user">
         <div class="dropdown hover-dropdown">
@@ -41,9 +47,12 @@
               </router-link>
             </li>
             <li>
-              <a class="dropdown-item khmer-font" href="#">
+              <router-link
+                class="dropdown-item khmer-font"
+                to="/admin/profile-security"
+              >
                 <i class="bi bi-gear"></i> ការកំណត់
-              </a>
+              </router-link>
             </li>
             <li><hr class="dropdown-divider" /></li>
             <li>
@@ -85,7 +94,7 @@
   </BaseModal>
 </template>
 <script setup>
-import { ref, computed, onMounted ,onUnmounted } from "vue";
+import { ref, computed, onMounted, onUnmounted } from "vue";
 import { useRouter } from "vue-router";
 import { useAuthStore } from "@/stores/authStore";
 import SidebarAdmin from "./Sidebar.vue";
@@ -93,7 +102,7 @@ import SidebarAdmin from "./Sidebar.vue";
 const auth = useAuthStore();
 const router = useRouter();
 const showLogoutModal = ref(false);
-const isOpen = ref(true)
+const isOpen = ref(true);
 const handleResize = () => {
   if (window.innerWidth <= 992) {
     isOpen.value = true;
@@ -116,8 +125,8 @@ const admin = computed(() => ({
   avatar: auth.user?.avatar || "",
 }));
 const toggleSidebar = () => {
-  isOpen.value = !isOpen.value
-}
+  isOpen.value = !isOpen.value;
+};
 const openLogoutModal = () => (showLogoutModal.value = true);
 const closeLogoutModal = () => (showLogoutModal.value = false);
 
@@ -129,7 +138,7 @@ const logout = () => {
 </script>
 
 <style scoped>
-.sidebar{
+.sidebar {
   display: block !important;
   width: 300px !important;
 }
@@ -243,32 +252,31 @@ const logout = () => {
   pointer-events: none;
 }
 @media (max-width: 992px) {
-  .navbar-top{
+  .navbar-top {
     width: 100% !important;
   }
 }
 @media (min-width: 992px) {
-  .sidebar{
+  .sidebar {
     display: none !important;
   }
 }
 /* Hover Action */
-  .hover-dropdown:hover .animated-dropdown {
-    visibility: visible;
-    opacity: 1;
-    transform: translateY(0);
-    pointer-events: auto;
-  }
+.hover-dropdown:hover .animated-dropdown {
+  visibility: visible;
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
 
-  .hover-dropdown:hover .user-profile {
-    background-color: #f8fafc;
-    border-color: #cbd5e1;
-  }
+.hover-dropdown:hover .user-profile {
+  background-color: #f8fafc;
+  border-color: #cbd5e1;
+}
 
-  .hover-dropdown:hover .chevron-icon {
-    transform: rotate(180deg);
-  }
-
+.hover-dropdown:hover .chevron-icon {
+  transform: rotate(180deg);
+}
 
 /* 5. Menu Items */
 .dropdown-item {
@@ -326,5 +334,4 @@ const logout = () => {
   transform: translateY(-50%);
   color: #94a3b8;
 }
-
 </style>

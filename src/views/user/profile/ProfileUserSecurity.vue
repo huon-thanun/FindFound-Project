@@ -20,9 +20,15 @@
         class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4"
       >
         <h4 class="fw-bold text-purple mb-0">ការកំណត់សុវត្ថិភាព</h4>
+        <RouterLink
+          :to="{ name: 'user.profile.edit' }"
+          class="btn btn-outline-purple fw-bold px-4 rounded-pill shadow-sm"
+        >
+          <i class="bi bi-arrow-left me-2"></i> ត្រឡប់ទៅកែប្រែព័ត៌មាន
+        </RouterLink>
       </div>
 
-      <ProfileTabsAdmin />
+      <ProfileTabs />
 
       <!-- Profile Card -->
       <div
@@ -110,7 +116,6 @@
                 </button>
               </div>
 
-              <!-- Password Strength Meter -->
               <div class="mt-3 d-flex gap-1">
                 <div
                   v-for="i in 4"
@@ -135,14 +140,14 @@
           </div>
         </div>
 
-        <!-- Change Email -->
+        <!-- Change & Verify Email -->
         <div class="col-lg-6">
           <div
             class="card border border-gray-200 shadow-sm rounded-4 p-4 p-md-5 h-100"
           >
             <h5 class="fw-bold mb-4 d-flex align-items-center">
-              <i class="bi bi-envelope-at me-2 text-purple"></i>
-              ប្តូរអាសយដ្ឋានអ៊ីមែល
+              <i class="bi bi-envelope-at me-2 text-purple"></i> ប្តូរអ៊ីមែល
+              និងផ្ទៀងផ្ទាត់
             </h5>
 
             <!-- New Email -->
@@ -163,7 +168,7 @@
               </div>
             </div>
 
-            <!-- Confirm Password -->
+            <!-- Current Password -->
             <div class="mb-4">
               <label class="form-label small fw-bold text-muted mb-2"
                 >បញ្ជាក់លេខសម្ងាត់</label
@@ -191,12 +196,12 @@
 
             <div class="alert alert-warning border-0 small mb-4 py-3 shadow-sm">
               <i class="bi bi-exclamation-triangle-fill me-2"></i>
-              យើងនឹងផ្ញើតំណភ្ជាប់ទៅកាន់អ៊ីមែលថ្មីរបស់អ្នកដើម្បីបញ្ជាក់។
+              យើងនឹងផ្ញើ token ទៅកាន់អ៊ីមែលថ្មីរបស់អ្នកដើម្បីផ្ទៀងផ្ទាត់។
             </div>
 
             <button
               @click="requestEmailChange"
-              class="btn btn-purple-outline w-100 py-3 mt-auto fw-bold"
+              class="btn btn-purple-outline w-100 py-3 fw-bold mb-3"
               :disabled="loadingEmail || !newEmail || !emailPassword"
             >
               <span
@@ -205,6 +210,31 @@
               ></span>
               ស្នើសុំប្តូរអ៊ីមែល
             </button>
+
+            <div v-if="emailRequested">
+              <label class="form-label small fw-bold text-muted mb-2"
+                >Token ផ្ទៀងផ្ទាត់</label
+              >
+              <div class="input-group custom-group shadow-sm mb-3">
+                <input
+                  v-model="emailVerifyToken"
+                  type="text"
+                  class="form-control border-0 bg-light py-2"
+                  placeholder="បញ្ចូល token ដែលបានផ្ញើ"
+                />
+              </div>
+              <button
+                @click="verifyEmailChange"
+                class="btn btn-purple w-100 py-3 fw-bold"
+                :disabled="loadingVerify || !emailVerifyToken"
+              >
+                <span
+                  v-if="loadingVerify"
+                  class="spinner-border spinner-border-sm me-2"
+                ></span>
+                ផ្ទៀងផ្ទាត់អ៊ីមែល
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -221,32 +251,29 @@
 <script setup>
 import ProfileHeader from "@/components/profile/ProfileHeader.vue";
 import ProfileSide from "@/components/profile/ProfileSide.vue";
-import { ref, onMounted, computed } from "vue";
-import { useRoute } from "vue-router";
-import ProfileTabsAdmin from "@/components/profile/ProfileTabsAdmin.vue";
+import ProfileTabs from "@/components/profile/ProfileTabs.vue";
+import { ref, onMounted } from "vue";
 
+// User data
 const user = ref(null);
 const skills = ["HTML", "CSS", "Vue", "MySQL", "JavaScript"];
-const route = useRoute();
-const isActive = (name) => route.name === name;
 
 // Form fields
-const fullname = ref("");
-const email = ref("");
-const phoneNumber = ref("");
-const telegramLink = ref("");
-
-// Password & Email
 const currentPassword = ref("");
 const newPassword = ref("");
-const emailPassword = ref("");
-const newEmail = ref("");
 const showCurrentPassword = ref(false);
 const showNewPassword = ref(false);
+
+const newEmail = ref("");
+const emailPassword = ref("");
 const showEmailPassword = ref(false);
-const loadingProfile = ref(false);
+const emailRequested = ref(false);
+const emailVerifyToken = ref("");
+
+// Loading states
 const loadingPassword = ref(false);
 const loadingEmail = ref(false);
+const loadingVerify = ref(false);
 
 // Fetch profile
 onMounted(async () => {
@@ -254,61 +281,20 @@ onMounted(async () => {
     const token = localStorage.getItem("token");
     const res = await fetch(
       "https://ant-g2-landf.ti.linkpc.net/api/v1/auth/profile",
-      { headers: { Authorization: `Bearer ${token}` } },
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      },
     );
     const json = await res.json();
-    if (json.result) {
-      user.value = json.data;
-      fullname.value = json.data.fullname;
-      email.value = json.data.email;
-      phoneNumber.value = json.data.phoneNumber;
-      telegramLink.value = json.data.telegramLink;
-    }
+    if (json.result) user.value = json.data;
   } catch (err) {
     console.error(err);
   }
 });
 
-// Update profile
-const updateProfile = async () => {
-  loadingProfile.value = true;
-  try {
-    const token = localStorage.getItem("token");
-    const res = await fetch(
-      "https://ant-g2-landf.ti.linkpc.net/api/v1/auth/update-profile",
-      {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          fullname: fullname.value,
-          email: email.value,
-          phoneNumber: phoneNumber.value,
-          telegramLink: telegramLink.value,
-        }),
-      },
-    );
-    const json = await res.json();
-    if (!res.ok) throw new Error(json.message || "Failed to update profile");
-    alert("Profile updated successfully!");
-    user.value = {
-      ...user.value,
-      fullname: fullname.value,
-      email: email.value,
-      phoneNumber: phoneNumber.value,
-      telegramLink: telegramLink.value,
-    };
-  } catch (err) {
-    alert(err.message || "Network error");
-  } finally {
-    loadingProfile.value = false;
-  }
-};
-
 // Update password
 const updatePassword = async () => {
+  if (!currentPassword.value || !newPassword.value) return;
   loadingPassword.value = true;
   try {
     const token = localStorage.getItem("token");
@@ -340,6 +326,10 @@ const updatePassword = async () => {
 
 // Request email change
 const requestEmailChange = async () => {
+  if (!newEmail.value || !emailPassword.value) {
+    alert("សូមបំពេញអ៊ីមែលថ្មី និងលេខសម្ងាត់");
+    return;
+  }
   loadingEmail.value = true;
   try {
     const token = localStorage.getItem("token");
@@ -352,32 +342,61 @@ const requestEmailChange = async () => {
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
-          password: emailPassword.value,
-          newEmail: newEmail.value,
+          newEmail: newEmail.value, // ✅ correct field
+          password: emailPassword.value, // ✅ correct field
         }),
       },
     );
     const json = await res.json();
     if (!res.ok)
       throw new Error(json.message || "Failed to request email change");
-    alert("Email change requested! Check your inbox for the token.");
+    alert("📩 Verification token sent to your new email!");
+    emailRequested.value = true;
     emailPassword.value = "";
-    newEmail.value = "";
   } catch (err) {
     alert(err.message || "Network error");
   } finally {
     loadingEmail.value = false;
   }
 };
+
+// Verify email change
+const verifyEmailChange = async () => {
+  if (!emailVerifyToken.value) {
+    alert("សូមបញ្ចូល token");
+    return;
+  }
+  loadingVerify.value = true;
+  try {
+    const token = emailVerifyToken.value.trim();
+    const res = await fetch(
+      "https://ant-g2-landf.ti.linkpc.net/api/v1/auth/verify-change-email",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ token }),
+      },
+    );
+    const json = await res.json();
+    if (!res.ok) throw new Error(json.message || "Invalid or expired token");
+    alert("🎉 អ៊ីមែលបានផ្ទៀងផ្ទាត់ដោយជោគជ័យ!");
+    user.value.email = newEmail.value;
+    newEmail.value = "";
+    emailVerifyToken.value = "";
+    emailRequested.value = false;
+  } catch (err) {
+    alert(err.message);
+  } finally {
+    loadingVerify.value = false;
+  }
+};
 </script>
 
 <style scoped>
 @import url("https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@300;400;600;700&display=swap");
-
 .khmer-font {
   font-family: "Kantumruy Pro", sans-serif;
 }
-
 .text-purple {
   color: #3b1e54 !important;
 }
@@ -387,7 +406,6 @@ const requestEmailChange = async () => {
 .border-purple {
   border-color: #3b1e54 !important;
 }
-
 .btn-purple {
   background: #3b1e54;
   color: #fff;
@@ -399,7 +417,6 @@ const requestEmailChange = async () => {
   transform: translateY(-2px);
   box-shadow: 0 8px 20px rgba(59, 30, 84, 0.25);
 }
-
 .btn-purple-outline {
   background: transparent;
   color: #3b1e54;
@@ -410,7 +427,6 @@ const requestEmailChange = async () => {
   background: #3b1e54;
   color: white;
 }
-
 .nav-tab {
   padding: 10px 16px;
   font-weight: 600;
@@ -425,7 +441,6 @@ const requestEmailChange = async () => {
   border-color: #3b1e54;
   border-bottom-color: #fff;
 }
-
 .custom-group {
   border-radius: 12px;
   border: 1px solid #ddd;
@@ -442,8 +457,6 @@ const requestEmailChange = async () => {
   background: #3b1e54;
   border-color: #2a153d;
 }
-
-/* Prevent horizontal scrollbar for tabs */
 .overflow-auto::-webkit-scrollbar {
   display: none;
 }
