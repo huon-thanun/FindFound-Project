@@ -1,5 +1,5 @@
 <template>
-  <div :class="`card ${padding} ${addClass}`" :style="`height:${height}`">
+  <div :class="`card ${padding} ${addClass}`" :style="`min-height:${height}`">
     <slot name="image"></slot>
     <div class="card-body px-0">
       <slot></slot>

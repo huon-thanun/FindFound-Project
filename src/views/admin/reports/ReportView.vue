@@ -14,16 +14,16 @@
         <div class="col-xl-5 mt-2">
           <div class="row">
             <div class="col-xl-6" style="flex: 1; flex-wrap: nowrap;">
-              <BaseSelect class="w-100 text-nowrap" v-model="typeValue" :items="reportStore.allReportType" textField="ប្រភេទទាំងអស់"
-                labelField="name" valueField="id" />
+              <BaseSelect class="w-100 text-nowrap" v-model="typeValue" :items="reportStore.allReportType"
+                textField="ប្រភេទទាំងអស់" labelField="name" valueField="id" />
             </div>
             <div class="col-xl-6" style="flex: 1; flex-wrap: nowrap;">
               <BaseSelect class="w-100 text-nowrap" v-model="statusValue" :items="allStatus" textField="ស្ថានភាពទាំងអស់"
                 labelField="title" valueField="value" />
             </div>
             <div class="col-xl-6" style="flex: 1; flex-wrap: nowrap;">
-              <BaseSelect class="w-100 text-nowrap" v-model="cateValue" :items="categoryStore.categories" textField="ប្រភេទទាំងអស់"
-                labelField="name" valueField="id" />
+              <BaseSelect class="w-100 text-nowrap" v-model="cateValue" :items="categoryStore.categories"
+                textField="ប្រភេទទាំងអស់" labelField="name" valueField="id" />
             </div>
           </div>
         </div>
@@ -52,14 +52,14 @@
 
     <div v-else class="col-12">
       <div class="row">
-        <div class="col-12 col-md-6 col-lg-3 mb-3" v-for="report in reportStore.allReports" :key="report.id">
+        <div class="col-12 col-lg-6 col-xl-4 col-xxl-3 mb-3" v-for="report in reportStore.allReports" :key="report.id">
           <BaseReportCard height="500px">
             <template #image>
-              <div class="image">
+              <div class="image border border-danger">
                 <img :src="report.reportImages && report.reportImages.length > 0
                   ? report.reportImages[0].name
                   : defaultImage
-                  " :alt="report.title || 'រូបភាពរបាយការណ៍'" style="height: 150px;"/>
+                  " :alt="report.title || 'រូបភាពរបាយការណ៍'" />
               </div>
             </template>
 
@@ -103,9 +103,18 @@
                 </BaseButton>
               </div>
 
-              <span class="d-block mt-2 py-1" style="font-size: 16px">
-                រាយការណ៍ដោយ <strong>{{ report.reporter.fullname }}</strong>
-              </span>
+              <div class="row">
+                <div class="col-lg-12 col-xl-6">
+                  <span class="d-block mt-2 py-1" style="font-size: 16px">
+                    រាយការណ៍ដោយ 
+                  </span>
+                </div>
+                <div class="col-lg-12 col-xl-6">
+                  <span class="d-block mt-2 py-1" style="font-size: 16px">
+                    <strong>{{ report.reporter.fullname }}</strong>
+                  </span>
+                </div>
+              </div>
             </div>
           </BaseReportCard>
         </div>
