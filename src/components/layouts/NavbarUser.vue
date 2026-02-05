@@ -15,22 +15,26 @@
 
     <!-- Navigation Menu -->
     <nav class="nav-menu">
-      <router-link :to="{ name: 'home' }" class="nav-item">
+      <router-link :to="{ name: 'home' }" class="nav-item" :class="{ active: activeLink === 'home' }"
+        @click.prevent="setActive('home')">
         ទំព័រ​ដើម
       </router-link>
 
-      <router-link :to="{ name: 'report.user' }" class="nav-item">
+      <router-link :to="{ name: 'report.user' }" class="nav-item" :class="{ active: activeLink === 'report' }"
+        @click.prevent="setActive('report')">
         របាយការណ៍
       </router-link>
 
-      <router-link to="" class="nav-item" :class="{ active: activeLink === 'category' }"
+      <router-link :to="{ name: 'category'}" class="nav-item" :class="{ active: activeLink === 'category' }"
         @click.prevent="setActive('category')"> ប្រភេទរបាយការណ៍ </router-link>
 
-      <router-link :to="{ name: 'about' }" class="nav-item">
+      <router-link :to="{ name: 'about' }" class="nav-item" :class="{ active: activeLink === 'about' }"
+        @click.prevent="setActive('about')">
         អំពី​យើង
       </router-link>
 
-      <router-link :to="{ name: 'contact_us' }" class="nav-item">
+      <router-link :to="{ name: 'contact_us' }" class="nav-item" :class="{ active: activeLink === 'contact' }"
+        @click.prevent="setActive('contact')">
         ទំនាក់ទំនង
       </router-link>
     </nav>
@@ -192,7 +196,7 @@
                 alt="User Avatar"
                 class="user-avatar"
               />
-              <span class="user-name text-white pt-1">{{
+              <span class="user-name d-none d-md-block text-white pt-1">{{
                 profile.fullname
               }}</span>
             </div>
@@ -245,7 +249,7 @@
                 to="/support"
                 class="dropdown-item-custom"
                 :class="{ active: activeLink === 'support' }"
-                @click.prevent="setActive('setting')"
+                @click.prevent="setActive('support')"
               >
                 <i class="bi bi-question-circle"></i>
                 <span>ជំនួយ និងការគាំទ្រ</span>

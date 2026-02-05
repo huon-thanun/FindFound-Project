@@ -2,14 +2,33 @@
   <div class="main-contact">
     <div class="container-fluid mx-0 p-0">
       <div class="contact-header">
-        <div data-aos="zoom-in" data-aos-duration="1000">
-          <h1>ទាក់ទងមកពួកយើង</h1>
-          <p>ផ្ញើរសារមកកាន់ទីនេះយើងនឹងឆ្លើយតបយ៉ាងឆាប់រហ័សបំផុត
-          </p>
+        <div class="container">
+            <div class="content-wrapper">
+                <div class="hero-text text-center">
+                    <span class="label"><i class="bi-person"></i> ទំនាក់ទំនង</span>
+                    <h1 class="header-title">ទាក់ទងមកពួកយើង</h1>
+                    <p>ផ្ញើរសារមកកាន់ទីនេះយើងនឹងឆ្លើយតបយ៉ាងឆាប់រហ័សបំផុត</p>
+                    
+                    <div class="features mt-4">
+                        <div class="feature">
+                            <div class="checkmark">✓</div>
+                            <span>ឆ្លើយតបរហ័ស 24/7</span>
+                        </div>
+                        <div class="feature">
+                            <div class="checkmark">✓</div>
+                            <span>ជំនួយដោយអ្នកជំនាញ</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="hero-image-wrapper">
+                    <img src="@/assets/images/background/image-Photoroom (2).png" alt="Contact Us" class="hero-image">
+                </div>
+            </div>
         </div>
-      </div>
+    </div>
       
-      <div class="contact-content">
+      <div class="contact-content mt-lg-5 mt-4">
         <div class="row g-4">
           <!-- Contact Form -->
           <div class="col-lg-6">
@@ -328,31 +347,106 @@ const handleSubmit = async () => {
   min-height: 100vh;
   padding-bottom: 50px;
 }
-
-/* Header Section */
 .contact-header {
-  width: 100%;
-  background: linear-gradient(135deg, var(--primary-color, #6366f1), #8b5cf6);
-  color: var(--text-white, #fff);
-  padding: 80px 0;
-  text-align: center;
-  position: relative;
-  overflow: hidden;
-  margin-bottom: 60px;
-}
+            background: linear-gradient(135deg, var(--primary-color, #6366f1), #8b5cf6);
+            padding: 0px 20px;
+            overflow: hidden;
+        }
 
-.contact-header::before {
-  content: "";
-  position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
-  background-size: 50px 50px;
-  animation: float 20s ease-in-out infinite;
-}
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
 
+        .content-wrapper {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 60px;
+        }
+
+        .hero-text {
+            flex: 1;
+            color: white;
+        }
+
+        .label {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-size: 14px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        p {
+            font-size: 18px;
+            line-height: 1.6;
+            opacity: 0.95;
+            margin-bottom: 30px;
+        }
+
+        .features {
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .feature {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .checkmark {
+            width: 32px;
+            height: 32px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .hero-image-wrapper {
+            flex: 1;
+            text-align: center;
+        }
+
+        .hero-image {
+            max-width: 450px;
+            width: 100%;
+            height: auto;
+            filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.2));
+        }
+
+        @media (max-width: 768px) {
+            .content-wrapper {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            h1 {
+                font-size: 36px;
+            }
+
+            .hero-image {
+                max-width: 300px;
+            }
+
+            .features {
+                align-items: center;
+            }
+        }
 @keyframes float {
   0%, 100% {
     transform: translateX(0) translateY(0) rotate(0deg);
@@ -364,9 +458,8 @@ const handleSubmit = async () => {
     transform: translateX(-5px) translateY(5px) rotate(-1deg);
   }
 }
-
 .contact-header h1 {
-  font-size: 3rem;
+  font-size: 4rem;
   font-weight: 700;
   margin-bottom: 20px;
   position: relative;

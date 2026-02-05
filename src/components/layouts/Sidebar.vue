@@ -131,7 +131,7 @@ body {
   border-radius: 8px;
   color: #4b5563;
   text-decoration: none;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 500;
   transition: all 0.2s;
   cursor: pointer;
