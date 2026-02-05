@@ -56,19 +56,12 @@
       >
         <div class="row align-items-center g-3">
           <div class="col-auto">
-            <!-- <img
-              src="https://images.unsplash.com/photo-1627123424574-724758594e93?auto=format&fit=crop&w=100"
-              class="rounded-3 object-fit-cover"
-              style="width: 80px; height: 80px"
-              alt="Lost wallet"
-            /> -->
             <img
               :src="
                 report.reportImages && report.reportImages.length > 0
                   ? report.reportImages[0].name
                   : defaultImage
               "
-              :alt="report.title || 'Report Image'"
               style="width: 80px; height: 80px"
             />
           </div>

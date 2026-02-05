@@ -361,7 +361,7 @@
       </div>
     </div>
     <!-- Message Model  -->
-    <BaseModal :icon="msgIcon" :theme="'success'" :isClose="showMessageModal">
+    <BaseModal :icon="msgIcon" :theme="themeColor" :isClose="showMessageModal">
       <template #body>
         <p class="fs-3">{{ message }}</p>
       </template>
@@ -370,7 +370,7 @@
         <BaseButton
           icon="box"
           class="col-6"
-          variant="success"
+          :variant="themeColor"
           @click="btnCloseMessage"
         >
           យល់ព្រម
@@ -418,7 +418,11 @@ const reportStore = useReportStore();
 const router = useRouter();
 
 onMounted(async () => {
-  await categoryStore.fetchCategories();
+  try {
+    await categoryStore.fetchCategories();
+  } catch (error) {
+    console.error(error);
+  }
   console.log(categoryStore.categories);
 });
 
@@ -536,70 +540,136 @@ function removeImage(index) {
   data.images.splice(index, 1);
   previewUrls.value.splice(index, 1);
 }
-
 const fnHandleCreateReport = async (formData) => {
-  await reportStore.creatOwnReport(formData);
+  try {
+    await reportStore.creatOwnReport(formData);
+  } catch (error) {
+    console.error(error);
+  }
 };
 
 const showMessageModal = ref(false);
 const msgIcon = ref("");
 const isLoading = ref(false);
 const message = ref("");
-const handleSubmit = () => {
-  if (validateForm()) {
-    console.log("Form is valid. Submit data:", data);
-    //Create formData
-    const formData = new FormData();
+const themeColor = ref("danger");
+// const handleSubmit = () => {
+//   if (validateForm()) {
+//     console.log("Form is valid. Submit data:", data);
+//     //Create formData
+//     const formData = new FormData();
 
-    // Append normal fields
-    formData.append("title", data.title);
-    formData.append("description", data.description);
-    formData.append("eventDate", data.eventDate);
-    formData.append("locationText", data.location);
-    formData.append("latitude", data.latitude);
-    formData.append("longitude", data.longitude);
-    formData.append("categoryId", data.category);
-    formData.append("reportTypeId", data.reportTypeId);
-    formData.append("phoneNumber", data.phone);
-    formData.append("telegramLink", data.telegramLink);
+//     // Append normal fields
+//     formData.append("title", data.title);
+//     formData.append("description", data.description);
+//     formData.append("eventDate", data.eventDate);
+//     formData.append("locationText", data.location);
+//     formData.append("latitude", data.latitude);
+//     formData.append("longitude", data.longitude);
+//     formData.append("categoryId", data.category);
+//     formData.append("reportTypeId", data.reportTypeId);
+//     formData.append("phoneNumber", data.phone);
+//     formData.append("telegramLink", data.telegramLink);
 
-    // Append images (multiple)
-    if (data.images && data.images.length > 0) {
-      data.images.forEach((file, index) => {
-        formData.append("reportImages", file); // name images[] to send array
-      });
-    }
-    isLoading.value = true;
-    // Call API or do next action
-    try {
-      fnHandleCreateReport(formData);
-      console.log(reportStore.msgCreateOwnReport);
-      console.log(reportStore.msgCreateOwnReport.message);
-      if (reportStore.msgCreateOwnReport?.result) {
-        msgIcon.value = "check-lg";
-        message.value = reportStore.msgCreateOwnReport.message;
-        console.log(message.value);
-      }
-    } catch (error) {
-      // Handle API/network errors
-      console.error(error);
-      msgIcon.value = "x-lg";
+//     // Append images (multiple)
+//     if (data.images && data.images.length > 0) {
+//       data.images.forEach((file, index) => {
+//         formData.append("reportImages", file); // name images[] to send array
+//       });
+//     }
+//     isLoading.value = true;
+//     // Call API or do next action
+//     try {
+//       fnHandleCreateReport(formData);
+//       console.log(reportStore.msgCreateOwnReport);
+//       console.log(reportStore.msgCreateOwnReport.message);
+//       if (reportStore.msgCreateOwnReport?.result) {
+//         msgIcon.value = "check-lg";
+//         themeColor.value = "success";
+//         message.value = "Created Successfully";
+//         console.log(message.value);
+//       }
+//     } catch (error) {
+//       // Handle API/network errors
+//       console.error(error);
+//       msgIcon.value = "x-lg";
+//       themeColor.value = "danger";
 
-      // If your API sends response in error.response.data, you can do:
-      if (error?.response?.data?.message) {
-        message.value = error.response.data.message;
-      } else {
-        message.value = "Failed to create report. Please try again.";
-      }
-    } finally {
-      isLoading.value = false;
-      showMessageModal.value = true;
-    }
-  } else {
+//       // If your API sends response in error.response.data, you can do:
+//       if (error?.response?.data?.message) {
+//         message.value = "Cannot Create";
+//       } else {
+//         message.value = "Failed to create report. Please try again.";
+//       }
+//     } finally {
+//       isLoading.value = false;
+//       showMessageModal.value = true;
+//     }
+//   } else {
+//     console.log("Validation errors:", errorInput);
+//     return;
+//   }
+// };
+const handleSubmit = async () => {
+  if (!validateForm()) {
     console.log("Validation errors:", errorInput);
     return;
   }
+
+  const formData = new FormData();
+
+  formData.append("title", data.title);
+  formData.append("description", data.description);
+  formData.append("eventDate", data.eventDate);
+  formData.append("locationText", data.location);
+  formData.append("latitude", data.latitude);
+  formData.append("longitude", data.longitude);
+  formData.append("categoryId", data.category);
+  formData.append("reportTypeId", data.reportTypeId);
+  formData.append("phoneNumber", data.phone);
+  formData.append("telegramLink", data.telegramLink);
+
+  if (data.images && data.images.length > 0) {
+    data.images.forEach((file) => {
+      formData.append("reportImages", file);
+    });
+  }
+
+  isLoading.value = true;
+
+  try {
+    await fnHandleCreateReport(formData);
+
+    if (reportStore.msgCreateOwnReport?.result) {
+      msgIcon.value = "check-lg";
+      themeColor.value = "success";
+      message.value = "Created successfully";
+    }
+  } catch (error) {
+    console.error(error);
+    msgIcon.value = "x-lg";
+    themeColor.value = "danger";
+
+    // ✅ NETWORK ERROR (lost internet)
+    if (!error.response) {
+      message.value = "No internet connection. Please check your network.";
+    }
+
+    // ✅ API error from server
+    else if (error.response?.data?.message) {
+      message.value = error.response.data.message;
+    }
+
+    // ✅ fallback
+    else {
+      message.value = "Failed to create report. Please try again.";
+    }
+  } finally {
+    isLoading.value = false;
+    showMessageModal.value = true;
+  }
 };
+
 const btnCloseMessage = () => {
   showMessageModal.value = false;
   clearData();

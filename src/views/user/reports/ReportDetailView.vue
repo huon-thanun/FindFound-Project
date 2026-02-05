@@ -151,71 +151,80 @@
           <div class="row">
             <div
               class="col-12 col-md-6 col-lg-3 mb-4"
-              v-for="item in reportStore.matchReports.matchedReports"
-              :key="item.id"
+              v-for="item in reportStore.matchReports?.matchedReports || []"
+              :key="item?.matchedReport?.id"
             >
-              <BaseReportCard class="match-card h-100">
-                <!-- Image -->
-                <template #image>
-                  <div class="match-image position-relative">
-                    <img
-                      :src="
-                        item.matchedReport.reportImages?.[0]?.name ||
-                        defaultImage
-                      "
-                      :alt="item.matchedReport.title || 'Report Image'"
-                    />
+              <router-link
+                class="text-decoration-none"
+                :to="
+                  item?.matchedReport
+                    ? {
+                        name: 'report-detail-user',
+                        params: { id: item.matchedReport.id },
+                      }
+                    : '#'
+                "
+              >
+                <BaseReportCard class="match-card h-100">
+                  <template #image>
+                    <div class="match-image position-relative">
+                      <img
+                        :src="
+                          item?.matchedReport?.reportImages?.[0]?.name ||
+                          defaultImage
+                        "
+                        :alt="item?.matchedReport?.title || 'Report Image'"
+                      />
 
-                    <!-- Confidence badge -->
-                    <span class="confidence-badge">
-                      {{ Math.round(item.confidenceScore * 100) }}% match
-                    </span>
+                      <span class="confidence-badge">
+                        {{ Math.round((item?.confidenceScore || 0) * 100) }}%
+                        match
+                      </span>
+                    </div>
+                  </template>
+
+                  <div class="p-3">
+                    <div class="d-flex gap-2 mb-2 flex-wrap">
+                      <span
+                        class="badge-pill"
+                        :class="
+                          item?.matchedReport?.reportType?.name?.toLowerCase()
+                        "
+                      >
+                        {{ item?.matchedReport?.reportType?.name }}
+                      </span>
+
+                      <span
+                        class="badge-pill"
+                        :class="item?.matchedReport?.status?.toLowerCase()"
+                      >
+                        {{ item?.matchedReport?.status }}
+                      </span>
+                    </div>
+
+                    <h5 class="fw-bold mb-2 text-truncate">
+                      {{ item?.matchedReport?.title }}
+                    </h5>
+
+                    <ul class="item-list small text-muted m-0 p-0">
+                      <li>
+                        <i class="bi bi-tag"></i>
+                        {{ item?.matchedReport?.category?.name }}
+                      </li>
+
+                      <li>
+                        <i class="bi bi-geo-alt"></i>
+                        {{ item?.matchedReport?.locationText }}
+                      </li>
+
+                      <li>
+                        <i class="bi bi-calendar3"></i>
+                        {{ formatDate(item?.matchedReport?.createdAt) }}
+                      </li>
+                    </ul>
                   </div>
-                </template>
-
-                <!-- Content -->
-                <div class="p-3">
-                  <!-- Status row -->
-                  <div class="d-flex gap-2 mb-2 flex-wrap">
-                    <span
-                      class="badge-pill"
-                      :class="item.matchedReport.reportType.name.toLowerCase()"
-                    >
-                      {{ item.matchedReport.reportType.name }}
-                    </span>
-
-                    <span
-                      class="badge-pill"
-                      :class="item.matchedReport.status.toLowerCase()"
-                    >
-                      {{ item.matchedReport.status }}
-                    </span>
-                  </div>
-
-                  <!-- Title -->
-                  <h5 class="fw-bold mb-2 text-truncate">
-                    {{ item.matchedReport.title }}
-                  </h5>
-
-                  <!-- Info -->
-                  <ul class="item-list small text-muted m-0 p-0">
-                    <li>
-                      <i class="bi bi-tag"></i>
-                      {{ item.matchedReport.category.name }}
-                    </li>
-
-                    <li>
-                      <i class="bi bi-geo-alt"></i>
-                      {{ item.matchedReport.locationText }}
-                    </li>
-
-                    <li>
-                      <i class="bi bi-calendar3"></i>
-                      {{ formatDate(item.matchedReport.createdAt) }}
-                    </li>
-                  </ul>
-                </div>
-              </BaseReportCard>
+                </BaseReportCard>
+              </router-link>
             </div>
           </div>
         </div>
@@ -225,48 +234,55 @@
 </template>
 <script setup>
 import { useReportStore } from "@/stores/reportStore";
-import { onMounted, ref } from "vue";
-import { computed } from "vue";
-import { useRoute } from "vue-router";
+import { onMounted, watch, computed } from "vue";
+import { useRoute, useRouter } from "vue-router";
 
 import { formatDate } from "@/utils/formatDate";
 import BaseReportCard from "@/components/base/BaseReportCard.vue";
 
 const route = useRoute();
-const id = ref(route.params.id);
+const router = useRouter();
+
 const defaultImage =
   "https://tse2.mm.bing.net/th/id/OIP.b8bpZyFwupiioDofQPXo_gAAAA?rs=1&pid=ImgDetMain&o=7&rm=3";
+
 const reportStore = useReportStore();
-onMounted(async () => {
+
+const loadReport = async (id) => {
   try {
     await Promise.all([
-      reportStore.getReportById(id.value),
-      reportStore.getMatchReportByid(id.value),
+      reportStore.getReportById(id),
+      reportStore.getMatchReportByid(id),
     ]);
     console.log(reportStore.report);
     console.log(reportStore.matchReports);
   } catch (error) {
-    console.error();
+    console.error(error);
   }
+};
+
+// first load
+onMounted(() => {
+  loadReport(route.params.id);
 });
+
+watch(
+  () => route.params.id,
+  (newId) => {
+    if (newId) loadReport(newId);
+  },
+);
 
 const reportTypeClass = computed(() => {
   const type = reportStore.report?.reportType?.name;
-
-  if (!type || typeof type !== "string") {
-    return "";
-  }
-
-  return type.toLowerCase();
+  return typeof type === "string" ? type.toLowerCase() : "";
 });
-import { useRouter } from "vue-router";
-
-const router = useRouter();
 
 const goBack = () => {
   router.back();
 };
 </script>
+
 <style scoped>
 /* Custom tweaks to match your screenshot exactly */
 .main-image {

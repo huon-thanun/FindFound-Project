@@ -74,10 +74,10 @@
 
                           <button
                             type="button"
-                            @click="data.status = 'RESOLVE'"
+                            @click="data.status = 'RESOLVED'"
                             :class="[
                               'btn btn-status no-border-left-radius',
-                              data.status === 'RESOLVE'
+                              data.status === 'RESOLVED'
                                 ? 'btn-secondary'
                                 : 'btn-no-border text-secondary',
                             ]"
@@ -400,7 +400,7 @@
       </div>
     </div>
     <!-- Message Model  -->
-    <BaseModal :icon="msgIcon" :theme="'success'" :isClose="showMessageModal">
+    <BaseModal :icon="msgIcon" :theme="themeColor" :isClose="showMessageModal">
       <template #body>
         <p class="fs-3">{{ message }}</p>
       </template>
@@ -409,7 +409,7 @@
         <BaseButton
           icon="box"
           class="col-6"
-          variant="success"
+          :variant="themeColor"
           @click="btnCloseMessage"
         >
           យល់ព្រម
@@ -609,6 +609,7 @@ const showMessageModal = ref(false);
 const msgIcon = ref("");
 const isLoading = ref(false);
 const message = ref("");
+const themeColor = ref("danger");
 const handleSubmit = async () => {
   if (validateForm()) {
     console.log("Form is valid. Submit data:", data);
@@ -650,12 +651,14 @@ const handleSubmit = async () => {
       console.log(reportStore.msgEditOwnReport.message);
       if (reportStore.msgEditOwnReport?.result) {
         msgIcon.value = "check-lg";
+        themeColor.value = "success";
         message.value = reportStore.msgEditOwnReport.message;
       }
     } catch (error) {
       // Handle API/network errors
       console.error(error);
       msgIcon.value = "x-lg";
+      themeColor.value = "danger";
 
       // If your API sends response in error.response.data, you can do:
       if (error?.response?.data?.message) {
