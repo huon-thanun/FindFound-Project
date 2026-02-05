@@ -11,7 +11,7 @@
     </template>
 
     <div v-if="user" class="mt-5 position-relative">
-      <ProfileTabsAdmin />
+      <ProfileTabs />
 
       <!-- Edit Profile Card -->
       <div class="card border border-purple shadow-sm rounded-4 p-4 p-md-5">
@@ -139,7 +139,8 @@
 </template>
 
 <script setup>
-import ProfileTabsAdmin from "@/components/profile/ProfileTabsAdmin.vue";
+// import ProfileTabsAdmin from "@/components/profile/ProfileTabsAdmin.vue";
+import ProfileTabs from "@/components/profile/ProfileTabs.vue";
 import ProfileHeader from "@/components/profile/ProfileHeader.vue";
 import ProfileSide from "@/components/profile/ProfileSide.vue";
 import { ref, onMounted } from "vue";

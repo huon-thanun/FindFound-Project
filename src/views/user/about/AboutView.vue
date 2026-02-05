@@ -12,7 +12,7 @@ const members = [
   {
     name: "អុី វិសាល",
     role: "អ្នកបង្កើត Video",
-    avatar: "https://i.pravatar.cc/300?img=32"
+    avatar: "https://i.pravatar.cc/300?img=32",
   },
   {
     name: "ហួន ថានុន",
@@ -112,7 +112,6 @@ const testimonials = [
   },
 ];
 
-
 // Core values
 const values = [
   {
@@ -196,28 +195,39 @@ const prevTestimonial = () => {
 <template>
   <div class="about-page">
     <!-- HERO -->
-    <section class="hero">
-      <div class="container text-center">
-        <div class="hero-badge" data-aos="fade-down">
-          <i class="bi bi-stars"></i> វេទិកាស្វែងរកវត្ថុបាត់បង់ល្អបំផុតនៅកម្ពុជា
-        </div>
-        <h1 class="hero-title" data-aos="fade-down" data-aos-delay="100">
-          អំពី <span>FindFound</span>
-        </h1>
-        <p class="hero-subtitle" data-aos="fade-up" data-aos-delay="200">
-          វេទិកាឆ្លាតវៃសម្រាប់ការស្វែងរក និងប្រគល់វត្ថុបាត់បង់<br />
-          ដែលតភ្ជាប់មនុស្សជាមួយអ្វីដែលពួកគេបានបាត់បង់
-        </p>
+    <div class="row container-fluid mx-auto align-items-center hero px-0">
+      <section class="col-xl-7 col-12 ">
+        <div class="container px-0 text-center">
+          <div class="hero-badge" data-aos="fade-down">
+            <i class="bi bi-stars"></i>
+            វេទិកាស្វែងរកវត្ថុបាត់បង់ល្អបំផុតនៅកម្ពុជា
+          </div>
+          <h1 class="hero-title" data-aos="fade-down" data-aos-delay="100">
+            អំពី <span>FindFound</span>
+          </h1>
+          <p class="hero-subtitle" data-aos="fade-up" data-aos-delay="200">
+            វេទិកាឆ្លាតវៃសម្រាប់ការស្វែងរក និងប្រគល់វត្ថុបាត់បង់<br />
+            ដែលតភ្ជាប់មនុស្សជាមួយអ្វីដែលពួកគេបានបាត់បង់
+          </p>
 
-        <!-- Stats Section -->
-        <div class="stats-row" data-aos="zoom-in" data-aos-delay="400">
-          <div v-for="(stat, i) in stats" :key="i" class="stat-item">
-            <div class="stat-number">{{ stat.number }}{{ stat.suffix }}</div>
-            <div class="stat-label">{{ stat.label }}</div>
+          <!-- Stats Section -->
+          <div class="stats-row" data-aos="zoom-in" data-aos-delay="400">
+            <div v-for="(stat, i) in stats" :key="i" class="stat-item">
+              <div class="stat-number">{{ stat.number }}{{ stat.suffix }}</div>
+              <div class="stat-label">{{ stat.label }}</div>
+            </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
+      <section class="col-5 d-none d-xl-block text-center p-0">
+        <img
+          class="object-fit-cover"
+          src="@/assets/images/background/image-Photoroom (1).png"
+          width="500"
+          alt=""
+        />
+      </section>
+    </div>
 
     <!-- MISSION -->
     <section class="section">
@@ -419,10 +429,10 @@ const prevTestimonial = () => {
               >ថ្នាក់បណ្ដុះបណ្ដាលបច្ចេកវិទ្យា ANT</span
             >
             ដែលបានផ្តល់អាហារូបករណ៍ និងឱកាសដ៏មានតម្លៃសម្រាប់ការសិក្សាផ្នែក Web
-            Development ដល់ពួកយើង។
-            អរគុណចំពោះការគាំទ្រ និងការយកចិត្តទុកដាក់របស់ស្ថាប័នទាំងអស់
-            ដែលមិនត្រឹមតែផ្ដល់ចំណេះដឹង និងជំនាញបច្ចេកទេសសម្រាប់ក្រុមយើងទេ
-            ប៉ុន្តែថែមទាំងជួយបង្កើនទំនុកចិត្ត និងសមត្ថភាពក្នុងការបង្កើតគេហទំព័រ
+            Development ដល់ពួកយើង។ អរគុណចំពោះការគាំទ្រ
+            និងការយកចិត្តទុកដាក់របស់ស្ថាប័នទាំងអស់ ដែលមិនត្រឹមតែផ្ដល់ចំណេះដឹង
+            និងជំនាញបច្ចេកទេសសម្រាប់ក្រុមយើងទេ ប៉ុន្តែថែមទាំងជួយបង្កើនទំនុកចិត្ត
+            និងសមត្ថភាពក្នុងការបង្កើតគេហទំព័រ
             ដើម្បីរួមចំណែកក្នុងការលើកវិស័យបច្ចេកវិទ្យា និងឌីជីថលនៅកម្ពុជាទៀតផង។
             យើងសូមសន្យាថា នឹងប្រើប្រាស់ចំណេះដឹង និងជំនាញដែលទទួលបាន
             ដើម្បីបន្តការបង្កើត និងអភិវឌ្ឍកម្មវិធី ឲ្យមានប្រយោជន៍ចំពោះសង្គម
@@ -430,24 +440,42 @@ const prevTestimonial = () => {
           </p>
           <div class="row g-4" data-aos="zoom-in-up" data-aos-duration="1000">
             <div
-            class="col-12 col-md-4 d-flex align-items-center justify-content-center"
+              class="col-12 col-md-4 d-flex align-items-center justify-content-center"
             >
-            <div class="sponsor-box">
-              <div class="sponsor-placeholder"><img class="object-fit-cover" src="@/assets/images/logo/CBRD Fund.png" alt=""></div>
+              <div class="sponsor-box">
+                <div class="sponsor-placeholder">
+                  <img
+                    class="object-fit-cover"
+                    src="@/assets/images/logo/CBRD Fund.png"
+                    alt=""
+                  />
+                </div>
+              </div>
             </div>
-          </div>
-          <div
-            class="col-12 col-md-4 d-flex align-items-center justify-content-center"
-          >
-            <div class="sponsor-box">
-              <div class="sponsor-placeholder"><img class="object-fit-cover" src="@/assets/images/logo/MPTC.png" alt=""></div>
-            </div>
-          </div>
             <div
               class="col-12 col-md-4 d-flex align-items-center justify-content-center"
             >
               <div class="sponsor-box">
-                <div class="sponsor-placeholder"><img class="object-fit-cover" src="@/assets/images/logo/ANT.png" alt=""></div>
+                <div class="sponsor-placeholder">
+                  <img
+                    class="object-fit-cover"
+                    src="@/assets/images/logo/MPTC.png"
+                    alt=""
+                  />
+                </div>
+              </div>
+            </div>
+            <div
+              class="col-12 col-md-4 d-flex align-items-center justify-content-center"
+            >
+              <div class="sponsor-box">
+                <div class="sponsor-placeholder">
+                  <img
+                    class="object-fit-cover"
+                    src="@/assets/images/logo/ANT.png"
+                    alt=""
+                  />
+                </div>
               </div>
             </div>
           </div>
@@ -466,7 +494,7 @@ const prevTestimonial = () => {
 
 /* ===== HERO ===== */
 .hero {
-  padding: 80px 20px;
+  padding: 60px 20px;
   background: linear-gradient(135deg, var(--primary-color, #6366f1), #8b5cf6);
   color: white;
   position: relative;
@@ -597,12 +625,12 @@ const prevTestimonial = () => {
   padding: 30px;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
   transition: all 0.3s ease;
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  border: 1px solid var(--primary-color);
 }
 
 .glass-card:hover {
   transform: translateY(-8px);
-  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.2);
 }
 
 /* ===== MISSION ===== */
@@ -620,6 +648,7 @@ const prevTestimonial = () => {
   text-align: center;
   height: 100%;
   padding: 40px 30px;
+  border: 1px solid var(--primary-color);
 }
 
 .value-icon {
@@ -644,6 +673,7 @@ const prevTestimonial = () => {
   text-align: center;
   height: 100%;
   padding: 35px 25px;
+  border:  1px solid var(--primary-color);
 }
 
 .feature-icon {

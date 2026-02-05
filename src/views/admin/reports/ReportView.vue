@@ -1,7 +1,9 @@
 <template>
   <div class="p-3">
     <h2 class="fw-bold">របាយការណ៍</h2>
-    <p class="text-muted">មើល និងគ្រប់គ្រងការរាយការណ៍បាត់បង់ និងរើសបានទាំងអស់</p>
+    <p class="text-muted">
+      មើល និងគ្រប់គ្រងការរាយការណ៍បាត់បង់ និងរើសបានទាំងអស់
+    </p>
 
     <!-- <div class="row"> -->
     <!-- FILTER CARD -->
@@ -125,8 +127,15 @@
 
     <!-- pagination -->
 
-    <div v-if="reportStore.meta?.totalPages > 1" class="d-flex gap-2 justify-content-center my-3">
-      <BaseButton variant="danger" @click="PreviousPage" :disabled="!reportStore.meta?.hasPreviousPage">
+    <div
+      v-if="reportStore.meta?.totalPages > 1"
+      class="d-flex gap-2 justify-content-center my-3"
+    >
+      <BaseButton
+        variant="danger"
+        @click="PreviousPage"
+        :disabled="!reportStore.meta?.hasPreviousPage"
+      >
         មុន
       </BaseButton>
 
@@ -139,7 +148,11 @@
         {{ p }}
       </BaseButton> -->
 
-      <BaseButton variant="primary" @click="nextPage" :disabled="!reportStore.meta?.hasNextPage">
+      <BaseButton
+        variant="primary"
+        @click="nextPage"
+        :disabled="!reportStore.meta?.hasNextPage"
+      >
         បន្ទាប់
       </BaseButton>
     </div>

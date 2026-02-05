@@ -1,6 +1,6 @@
 <template>
     <footer class="footer">
-        <div class="container p-0 m-0 m-auto">
+        <div class="container-fluid px-5 m-0 m-auto">
             <div class="row gy-4 text-center text-md-start">
 
                 <!-- Logo -->
@@ -17,6 +17,7 @@
                     <ul>
                         <li><router-link :to="{name: 'home'}">ទំព័រ​ដើម</router-link></li>
                         <li><router-link :to="{name: 'report.user'}">របាយការណ៍</router-link></li>
+                        <li><router-link :to="{name: 'about'}">ប្រភេទរបាយការណ៍</router-link></li>
                         <li><router-link :to="{name: 'about'}">អំពី​យើង</router-link></li>
                         <li><router-link :to="{name: 'contact_us'}">ទំនាក់ទំនង</router-link></li>
                     </ul>

@@ -78,25 +78,17 @@
       >
         រកឃើញ
       </button>
-
-      <button
-        class="btn-filter"
-        :class="{ active: activeFilter === 'RESOLVED' }"
-        @click="btnFilterReportStatus('RESOLVED')"
-      >
-        បានដោះស្រាយ
-      </button>
     </div>
     <div class="row">
       <!-- Loading -->
-      <div class="col-12 center2 p-3" v-if="reportStore.isLoadingGetAllReport">
+      <div class="col-12 center2 p-3" v-if="reportStore.isLoadingPublicReports">
         <div class="spinner-border" role="status">
           <span class="visually-hidden">Loading...</span>
         </div>
       </div>
       <!-- Not found  -->
       <div
-        v-else-if="reportStore.allReports.length <= 0"
+        v-else-if="reportStore.publicReports.length <= 0"
         class="my-3 col-12 center2"
       >
         <div class="w-100 d-flex flex-column align-items-center p-3 text-muted">
@@ -124,12 +116,14 @@
                 class="w-100"
                 style="height: 200px; object-fit: cover"
                 :src="
-                  report.reportImages
+                  report.reportImages && report.reportImages.length > 0
                     ? report.reportImages[0].name
                     : defaultImage
                 "
                 :alt="report.title || 'Report Image'"
               />
+              <!-- <p>{{ report.reportImages[0]?.name }}</p> -->
+              <!--<img :src="defaultImage" alt="" /> -->
               <span
                 class="tag type-tag"
                 :class="report.reportType.name.toLowerCase()"
@@ -183,21 +177,21 @@ const defaultImage =
   "https://tse2.mm.bing.net/th/id/OIP.b8bpZyFwupiioDofQPXo_gAAAA?rs=1&pid=ImgDetMain&o=7&rm=3";
 
 const search = ref("");
-const statusValue = ref("");
 const typeValue = ref("");
-const cateValue = ref(null);
+const cateValue = ref("");
 
 const fetchReports = async () => {
-  await reportStore.getAllReports({
-    _page: 1,
-    _per_page: 4,
-    search: search.value,
-    status: statusValue.value,
-    sortBy: "createdAt",
-    sortDir: "DESC",
-    reportType: typeValue.value,
-    categoryId: cateValue.value?.id,
-  });
+  try {
+    await reportStore.getAllPublicReports({
+      _page: 1,
+      _per_page: 100,
+      search: search.value,
+      reportType: typeValue.value,
+      categoryId: cateValue.value?.id || "",
+    });
+  } catch (error) {
+    console.error(error);
+  }
   // console.log("PAGE:", page.value);
   // console.log("META:", reportStore.meta);
 };
@@ -209,12 +203,12 @@ onMounted(async () => {
   try {
     await Promise.all([
       categoryStore.fetchCategories(),
-      // fetchReports(),
-      reportStore.getAllPublicReports(),
+      fetchReports(),
+      // reportStore.getAllPublicReports(),
     ]);
     // console.log(reportStore.allReports);
     console.log("public", reportStore.publicReports);
-
+    console.log(cateValue.value);
     // default active
     activeFilter.value = "";
   } catch (error) {
@@ -222,16 +216,15 @@ onMounted(async () => {
   }
 });
 let timeout = null;
-watch([search, cateValue, typeValue, statusValue], () => {
+watch([search, typeValue, cateValue], () => {
   clearTimeout(timeout);
   timeout = setTimeout(fetchReports, 500);
-  // console.log(reportStore.allReports);
+  console.log(reportStore.allReports);
   // console.log(cateValue.value);
 });
 const btnFilterAllReport = async () => {
   try {
     cateValue.value = null;
-    statusValue.value = "";
     typeValue.value = "";
     activeFilter.value = "";
     await fetchReports();
@@ -241,20 +234,8 @@ const btnFilterAllReport = async () => {
 };
 const btnFilterReportType = async (reportTypeValue) => {
   try {
-    statusValue.value = "";
     activeFilter.value = reportTypeValue;
     typeValue.value = reportTypeValue;
-    await fetchReports();
-    // console.log(reportStore.allReports);
-  } catch (error) {
-    console.error(error);
-  }
-};
-const btnFilterReportStatus = async (reportStatusValue) => {
-  try {
-    typeValue.value = "";
-    activeFilter.value = reportStatusValue;
-    statusValue.value = reportStatusValue;
     await fetchReports();
   } catch (error) {
     console.error(error);
@@ -263,13 +244,18 @@ const btnFilterReportStatus = async (reportStatusValue) => {
 const clearFilter = () => {
   search.value = "";
   typeValue.value = "";
-  statusValue.value = "";
   cateValue.value = null;
   activeFilter.value = "";
 };
 const router = useRouter();
 const btnHandleToCreatePage = () => {
-  router.push({ name: "create-report" });
+  const token = localStorage.getItem("token");
+
+  if (token) {
+    router.push({ name: "create-report" });
+  } else {
+    router.push({ name: "login" }); // 👈 redirect here
+  }
 };
 </script>
 
