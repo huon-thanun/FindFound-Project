@@ -15,28 +15,28 @@
         <!-- Sidebar Navigation -->
         <div class="sticky-top" style="top: 120px">
           <div class="list-group">
-            <a href="#intro" class="list-group-item list-group-item-action"
+            <a href="#intro" class="list-group-item py-3 list-group-item-action"
               >១. ការណែនាំ</a
             >
             <a
               href="#data-collection"
-              class="list-group-item list-group-item-action"
+              class="list-group-item py-3 list-group-item-action"
               >២. ការប្រមូលព័ត៌មាន</a
             >
-            <a href="#data-use" class="list-group-item list-group-item-action"
+            <a href="#data-use" class="list-group-item py-3 list-group-item-action"
               >៣. ការប្រើប្រាស់ព័ត៌មាន</a
             >
             <a
               href="#data-protection"
-              class="list-group-item list-group-item-action"
+              class="list-group-item py-3 list-group-item-action"
               >៤. ការការពារព័ត៌មាន</a
             >
             <a
               href="#user-rights"
-              class="list-group-item list-group-item-action"
+              class="list-group-item py-3 list-group-item-action"
               >៥. សិទ្ធិអ្នកប្រើប្រាស់</a
             >
-            <a href="#contact" class="list-group-item list-group-item-action"
+            <a href="#contact" class="list-group-item py-3 list-group-item-action"
               >៦. ទំនាក់ទំនង</a
             >
           </div>
@@ -203,11 +203,6 @@
 </template>
 
     <style scoped>
-body {
-  background-color: #f8f9fa;
-  color: #333;
-  line-height: 1.6;
-}
 .header-bg {
   background: linear-gradient(
     to right,
