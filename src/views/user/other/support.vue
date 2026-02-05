@@ -23,7 +23,7 @@
                     <p class="mb-0">ប្រសិនបើអ្នកមានបញ្ហាបន្ទាន់ ឬទំនិញបាត់ដែលមានតម្លៃខ្ពស់ សូមទាក់ទងយើងភ្លាមៗ។</p>
                 </div>
                 <div class="col-md-4 text-md-end mt-3 mt-md-0">
-                    <a href="tel:+85512345678" class="btn btn-light fs-6 btn-lg">
+                    <a href="tel:+85512345678" class="btn text-danger btn-light fs-6 btn-lg">
                         <i class="bi bi-telephone-outbound-fill me-2"></i> ទូរស័ព្ទបន្ទាន់
                     </a>
                 </div>
@@ -38,7 +38,7 @@
             <div class="col-lg-3 col-md-6 mb-4">
                 <div class="support-card support-type-1 text-center p-4">
                     <div class="card-icon">
-                        <i class="bi bi-chat-dots"></i>
+                        <i class="bi bi-chat-dots" style="color: #A855F7;"></i>
                     </div>
                     <h4 class="khmer-title">ជជែកផ្ទាល់</h4>
                     <p>ទាក់ទងជាមួយអ្នកគាំទ្រតាមរយៈការជជែកផ្ទាល់</p>
@@ -51,7 +51,7 @@
             <div class="col-lg-3 col-md-6 mb-4">
                 <div class="support-card support-type-2 text-center p-4">
                     <div class="card-icon">
-                        <i class="bi bi-telephone"></i>
+                        <i class="bi bi-telephone" style="color: #EC4899;"></i>
                     </div>
                     <h4 class="khmer-title">ទូរស័ព្ទ</h4>
                     <p>ទូរស័ព្ទមកកាន់ក្រុមជំនួយរបស់យើងបើមានបញ្ហាបន្ទាន់</p>
@@ -64,7 +64,7 @@
             <div class="col-lg-3 col-md-6 mb-4">
                 <div class="support-card support-type-3 text-center p-4">
                     <div class="card-icon">
-                        <i class="bi bi-envelope"></i>
+                        <i class="bi bi-envelope" style="color:#06B6D4"></i>
                     </div>
                     <h4 class="khmer-title">អ៊ីមែល</h4>
                     <p>ផ្ញើអ៊ីមែលមកយើង យើងនឹងឆ្លើយតបក្នុង ២៤ម៉ោង</p>
@@ -77,7 +77,7 @@
             <div class="col-lg-3 col-md-6 mb-4">
                 <div class="support-card support-type-4 text-center p-4">
                     <div class="card-icon">
-                        <i class="bi bi-question-circle"></i>
+                        <i class="bi bi-question-circle" style="color: #F59E0B;"></i>
                     </div>
                     <h4 class="khmer-title">FAQ</h4>
                     <p>ស្វែងរកចម្លើយដោយខ្លួនឯងក្នុងផ្នែកសំណួរញឹកញាប់</p>
@@ -319,12 +319,12 @@ onUnmounted(() => {
         }
         
         .support-type-1 .card-icon {
-            background-color: rgba(26, 93, 26, 0.1);
+            background-color: rgba(168, 85, 247, 0.1);
             color: var(--primary-color);
         }
         
         .support-type-2 .card-icon {
-            background-color: rgba(220, 53, 69, 0.1);
+            background-color: rgba(236, 72, 153, 0.1);
             color: var(--danger-color);
         }
         
@@ -363,7 +363,7 @@ onUnmounted(() => {
         }
         
         .btn-success {
-            background-color: var(--secondary-color);
+            background-color: #A855F7;
             border-color: var(--secondary-color);
         }
         
