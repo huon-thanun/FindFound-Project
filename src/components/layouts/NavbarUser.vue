@@ -144,8 +144,12 @@
             </li>
 
             <li class="nav-item">
-              <router-link :to="{name: 'category'}" class="nav-link-custom" :class="{ active: activeLink === 'categories' }"
-                @click.prevent="setActive('categories')">
+              <router-link
+                :to="{ name: 'category' }"
+                class="nav-link-custom"
+                :class="{ active: activeLink === 'categories' }"
+                @click.prevent="setActive('categories')"
+              >
                 ប្រភេទរបាយការណ៍
               </router-link>
             </li>
@@ -270,7 +274,11 @@
       <!-- SHOW Login / Register when NO token -->
       <div v-else class="btn-active d-flex align-items-center gap-3">
         <router-link :to="{ name: 'login' }">
-          <base-button icon="person-circle" variant="secondary" class="btn-login">
+          <base-button
+            icon="person-circle"
+            variant="secondary"
+            class="btn-login"
+          >
             ចូល
           </base-button>
         </router-link>
