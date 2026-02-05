@@ -333,39 +333,37 @@ const clearFilter = () => {
         </div>
 
         <div class="card mb-3 shadow">
-            <!-- <div class=""> -->
-            <div class="card-body d-flex gap-3 align-items-start filter-row">
-
+            <div class="card-body row">
+                
                 <!-- Search -->
-                <div class="filter-search w-100">
-                    <!-- <BaseInput class="d-block d-lg-none" v-model="search" placeholder="ស្វែងរកតាមប្រភេទ​ និងការពិពណ៌នា..." /> -->
-                    <BaseInput class="d-block d-md-none d-xl-block" v-model="search"
-                        placeholder="ស្វែងរកតាមប្រភេទ​ និងការពិពណ៌នា..." />
-                    <BaseInput class="d-none d-md-block d-xl-none" v-model="search" placeholder="ស្វែងរក..." />
+                <div class="col-xl-6">
+                    <BaseInput class="" v-model="search" placeholder="ស្វែងរកតាមប្រភេទ​ និងការពិពណ៌នា..." />
                 </div>
 
-                <div class="d-flex gap-3 filter-column w-100">
-                    <!-- Sort By -->
-                    <div class="mt-sm-0 mt-md-2 p-0 filter-sort">
-                        <BaseSelect v-model="sortBy" :items="SORT_BY_OPTIONS" labelField="name" valueField="id"
-                            textField="តម្រៀបតាម" class="text-nowrap" />
-                    </div>
-                    <!-- Sort Direction -->
-                    <div class="mt-sm-0 mt-md-2 p-0 filter-sort">
-                        <BaseSelect v-model="sortDir" :items="SORT_DIR_OPTIONS" labelField="name" valueField="id"
-                            textField="ទិសដៅតម្រៀប" class="text-nowrap" />
+                <div class="col-xl-3 mt-2">
+                    <div class="row">
+
+                        <!-- Sort By -->
+                        <div class="col-xl-6" style="flex: 1; flex-wrap: nowrap;">
+                            <BaseSelect v-model="sortBy" :items="SORT_BY_OPTIONS" labelField="name" valueField="id"
+                                textField="តម្រៀបតាម" class="text-nowrap" />
+                        </div>
+
+                        <!-- Sort Direction -->
+                        <div class="col-xl-6" style="flex: 1; flex-wrap: nowrap;">
+                            <BaseSelect v-model="sortDir" :items="SORT_DIR_OPTIONS" labelField="name" valueField="id"
+                                textField="ទិសដៅតម្រៀប" class="text-nowrap" />
+                        </div>
                     </div>
                 </div>
 
                 <!-- CLEAR FILTER -->
-                <div class="mt-sm-0 mt-md-1 mt-lg-2 p-0 d-flex justify-content-end filter-clear">
+                <div class="col-xl-3 mt-1 text-end">
                     <BaseButton variant="outline_primary" icon="stars" @click="clearFilter">
                         សម្អាតការតម្រៀប
                     </BaseButton>
                 </div>
             </div>
-            <!-- </div> -->
-
         </div>
 
         <BaseTable :columns="columns" :items="categories" :isLoading="isLoading" @edit="openEditModal"
@@ -460,7 +458,7 @@ const clearFilter = () => {
                         selectedCategoryDetail.name }}</span></p>
                     <p><strong class="text-dark">ការពិពណ៌នា:</strong> {{ selectedCategoryDetail.description }}</p>
                     <p><strong class="text-dark">បានបង្កើតនៅ:</strong> {{ formatDate(selectedCategoryDetail.createdAt)
-                        }}</p>
+                    }}</p>
                     <p><strong class="text-dark">បានធ្វើបច្ចុប្បន្នភាពនៅ:</strong> {{
                         formatDate(selectedCategoryDetail.updatedAt) }}</p>
                 </div>
