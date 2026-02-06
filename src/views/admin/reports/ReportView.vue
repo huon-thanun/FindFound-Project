@@ -8,7 +8,7 @@
     <!-- <div class="row"> -->
     <!-- FILTER CARD -->
 
-    <div class="card mb-3 shadow">
+    <div class="card mb-3 shadow border-color">
       <div class="card-body row">
         <div class="col-xl-4">
           <BaseInput class="w-100" v-model="search" type="text" placeholder="ស្វែងរករបាយការណ៍..." />
@@ -55,9 +55,9 @@
     <div v-else class="col-12">
       <div class="row">
         <div class="col-12 col-lg-6 col-xl-4 col-xxl-3 mb-3" v-for="report in reportStore.allReports" :key="report.id">
-          <BaseReportCard height="500px">
+          <BaseReportCard class="border-color" height="500px">
             <template #image>
-              <div class="image border border-danger">
+              <div class="image">
                 <img :src="report.reportImages && report.reportImages.length > 0
                   ? report.reportImages[0].name
                   : defaultImage
@@ -318,6 +318,10 @@ const clearFilter = () => {
 } */
 .desc .card-text {
   color: rgba(128, 128, 128, 0.679);
+}
+
+.border-color{
+  border-color: var(--primary-color);
 }
 
 .image {
