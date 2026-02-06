@@ -49,7 +49,7 @@ const success = ref(false);
 const error = ref("");
 
 onMounted(async () => {
-  const token = route.query.token; // 👈 route match from URL
+  const token = route.query.token;
 
   if (!token) {
     error.value = "Token មិនមាននៅក្នុងតំណភ្ជាប់";
@@ -72,13 +72,22 @@ onMounted(async () => {
 
     success.value = true;
 
+    // Save role info from API
+    const role = json.role; // <-- make sure backend returns "role" field
+
     // Force logout after email change
     localStorage.removeItem("token");
     localStorage.removeItem("role");
 
-    // Redirect to login after 2 seconds
+    // Redirect based on role
     setTimeout(() => {
-      router.push({ name: "login" });
+      if (role === "admin") {
+        router.push({ name: "admin.profile.security" });
+      } else if (role === "user") {
+        router.push({ name: "user.profile.security" });
+      } else {
+        router.push({ name: "home" }); // fallback
+      }
     }, 2000);
   } catch (err) {
     error.value = err.message || "Token មិនត្រឹមត្រូវ ឬផុតកំណត់";
