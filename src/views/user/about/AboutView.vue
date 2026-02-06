@@ -3,7 +3,7 @@ import { ref, onMounted } from "vue";
 
 const leader = {
   name: "ហេង ល័ងឈ័រ",
-  role: "ប្រធានគម្រោង",
+  role: "ប្រធានក្រុម",
   desc: "ទទួលខុសត្រូវលើស្ថាបត្យកម្មប្រព័ន្ធ ការសម្របសម្រួលក្រុម និងការប្រគល់ផលិតផលចុងក្រោយ។",
   avatar: "https://i.pravatar.cc/300?img=12",
 };
@@ -11,27 +11,27 @@ const leader = {
 const members = [
   {
     name: "អុី វិសាល",
-    role: "អ្នកបង្កើត Video",
+    role: "សមាជិក",
     avatar: "https://i.pravatar.cc/300?img=32",
   },
   {
     name: "ហួន ថានុន",
-    role: "អ្នកបង្កើត UI/UX",
+    role: "សមាជិក",
     avatar: "https://i.pravatar.cc/300?img=45",
   },
   {
     name: "អាន ម៉េងហួ",
-    role: "អ្នករចនា Frontend",
+    role: "សមាជិក",
     avatar: "https://i.pravatar.cc/300?img=56",
   },
   {
     name: "អន សម្បត្តិ",
-    role: "អ្នកបង្កើត Slide",
+    role: "សមាជិក",
     avatar: "https://i.pravatar.cc/300?img=67",
   },
   {
     name: "ប៊ូ លក្ខិណា",
-    role: "ធ្វើតេស្តប្រព័ន្ធ",
+    role: "សមាជិក",
     avatar: "https://i.pravatar.cc/300?img=68",
   },
 ];
@@ -230,7 +230,7 @@ const prevTestimonial = () => {
     </div>
 
     <!-- MISSION -->
-    <section class="section">
+    <section class="section col-8 mx-auto">
       <div class="container">
         <div class="glass-card text-center mission-card" data-aos="fade-up">
           <div class="mission-icon"><i class="bi-compass"></i></div>
@@ -497,6 +497,7 @@ const prevTestimonial = () => {
   padding: 60px 20px;
   background: linear-gradient(135deg, var(--primary-color, #6366f1), #8b5cf6);
   color: white;
+  border-radius: 0 0 30px 30px;
   position: relative;
   overflow: hidden;
 }
@@ -625,7 +626,6 @@ const prevTestimonial = () => {
   padding: 30px;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
   transition: all 0.3s ease;
-  border: 1px solid var(--primary-color);
 }
 
 .glass-card:hover {
@@ -641,6 +641,7 @@ const prevTestimonial = () => {
 .mission-icon {
   font-size: 4rem;
   margin-bottom: 20px;
+  color: #6366f1;
 }
 
 /* ===== VALUES ===== */
@@ -648,12 +649,12 @@ const prevTestimonial = () => {
   text-align: center;
   height: 100%;
   padding: 40px 30px;
-  border: 1px solid var(--primary-color);
 }
 
 .value-icon {
   font-size: 4rem;
   margin-bottom: 20px;
+  color: rgb(15,185,129);
 }
 
 .value-title {
@@ -673,12 +674,12 @@ const prevTestimonial = () => {
   text-align: center;
   height: 100%;
   padding: 35px 25px;
-  border:  1px solid var(--primary-color);
 }
 
 .feature-icon {
   font-size: 3.5rem;
   margin-bottom: 20px;
+  color: rgb(99,102,241);
 }
 
 .feature-title {

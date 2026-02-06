@@ -351,6 +351,7 @@ const handleSubmit = async () => {
             background: linear-gradient(135deg, var(--primary-color, #6366f1), #8b5cf6);
             padding: 0px 20px;
             overflow: hidden;
+            border-radius: 0 0 30px 30px;
         }
 
         .container {
@@ -632,7 +633,6 @@ const handleSubmit = async () => {
   background: #fff;
   border-radius: 12px;
   transition: all 0.3s ease;
-  border-left: 4px solid var(--primary-color, #5a189a);
   box-shadow: 0 3px 10px rgba(0,0,0,0.08);
 }
 

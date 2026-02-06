@@ -1,6 +1,7 @@
 <template>
-  <h1 class="mt-2 mb-5"><i class="bi bi-speedometer2"></i> ផ្ទាំងគ្រប់គ្រង</h1>
-  <div class="container p-0 mt-4">
+  <h1 class="mt-2 fw-bold header-title p-3">ផ្ទាំងគ្រប់គ្រង</h1>
+  <p class="px-3 text-black-50">មើលទិន្នន័យទាំងអស់ដែលមាននៅក្នុងប្រព័ន្ធ</p>
+  <div class="container p-3 mt-4">
     <!-- Main Content -->
     <main class="main-content">
       <!-- Stats Cards -->
@@ -279,7 +280,10 @@ body {
   min-height: 100vh;
   overflow-x: hidden;
 }
-
+.header-title{
+  font-size: 32px;
+  font-family: hanuman;
+}
 .new-badge {
   margin-left: 6px;
   font-size: 10px;

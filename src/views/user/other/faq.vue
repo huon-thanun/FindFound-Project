@@ -2,11 +2,26 @@
   <!-- Header Section -->
   <header class="header-section">
     <div class="container">
-      <div class="text-center py-5">
+      <div class="text-center pt-5 pb-4">
         <h1 class="khmer-title mb-3">សំណួរដែលសួរញឹកញាប់</h1>
-        <p class="lead khmer-content">
+        <p class="lead khmer-content m-0">
           ស្វែងរកចម្លើយសម្រាប់សំណួរទូទៅបំផុតអំពីសេវាកម្មរបស់យើង
         </p>
+      </div>
+      <div class="search-box">
+        <div class="input-group">
+          <input
+            type="text"
+            class="form-control"
+            id="faqSearch"
+            v-model="searchTerm"
+            placeholder="ស្វែងរកសំណួរឬចម្លើយ..."
+            @keyup.enter="performSearch"
+          />
+          <button class="btn btn-success" type="button" @click="performSearch">
+            <i class="bi bi-search"></i> ស្វែងរក
+          </button>
+        </div>
       </div>
     </div>
   </header>
@@ -14,21 +29,6 @@
   <!-- Main Content -->
   <main class="container py-3">
     <!-- Search Box -->
-    <div class="search-box">
-      <div class="input-group">
-        <input
-          type="text"
-          class="form-control"
-          id="faqSearch"
-          v-model="searchTerm"
-          placeholder="ស្វែងរកសំណួរឬចម្លើយ..."
-          @keyup.enter="performSearch"
-        />
-        <button class="btn btn-success" type="button" @click="performSearch">
-          <i class="bi bi-search"></i> ស្វែងរក
-        </button>
-      </div>
-    </div>
     <div class="row mb-4" ref="statsRef">
       <div class="col-md-3 col-6" v-for="(item, i) in stats" :key="i">
         <div class="faq-stats text-center">
@@ -910,8 +910,8 @@ body {
 }
 
 .category-header {
-  background-color: var(--primary-color);
-  color: white;
+  background-color: var(--surface-color);
+  color: var(--primary-color);
   padding: 1rem 1.5rem;
   cursor: pointer;
   display: flex;
@@ -922,6 +922,10 @@ body {
 
 .category-header:hover {
   background-color: var(--secondary-color);
+  color: var(--surface-color);
+}
+.category-content.active{
+  background: var(--secondary-color);
 }
 
 .category-content {
@@ -974,13 +978,13 @@ body {
 }
 
 .search-box input {
-  border-radius: 50px;
+  border-radius: 20px;
   padding: 0.75rem 1.5rem;
   border: 2px solid var(--secondary-color);
 }
 
 .search-box button {
-  border-radius: 50px;
+  border-radius: 20px;
   padding: 0.75rem 2rem;
   background-color: var(--secondary-color);
   border: none;
