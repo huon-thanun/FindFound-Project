@@ -29,9 +29,6 @@
                 class="main-profile-img shadow"
                 alt="User Avatar"
               />
-              <div class="avatar-edit-badge">
-                <i class="bi bi-camera-fill"></i>
-              </div>
             </div>
           </div>
 
@@ -49,12 +46,9 @@
         </div>
 
         <!-- Account Details -->
-        <h6
-          class="text-uppercase fw-bold text-muted small mb-4"
-          style="letter-spacing: 1px"
-        >
-          Account Details
-        </h6>
+        <div class="section-title">
+          <h2>ព័ត៌មានលម្អិតអំពីគណនី</h2>
+        </div>
 
         <div class="row g-4">
           <!-- Full Name -->
@@ -139,6 +133,22 @@ onMounted(async () => {
 
 * {
   font-family: "Kantumruy Pro", sans-serif;
+}
+.section-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 25px;
+}
+
+.section-title h2 {
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: #1e0469; /* Purple theme */
+  text-transform: uppercase;
+  margin: 0;
+  position: relative;
 }
 
 /* Avatar Upload Styling */

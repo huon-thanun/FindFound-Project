@@ -101,7 +101,7 @@ const router = createRouter({
       meta: { public: true },
     },
     {
-      path: "/verify-email",
+      path: "/verify-change-email",
       name: "verify-email",
       component: VerifyEmail,
       meta: { public: true },

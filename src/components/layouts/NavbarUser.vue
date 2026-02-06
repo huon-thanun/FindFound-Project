@@ -15,26 +15,48 @@
 
     <!-- Navigation Menu -->
     <nav class="nav-menu">
-      <router-link :to="{ name: 'home' }" class="nav-item" :class="{ active: activeLink === 'home' }"
-        @click.prevent="setActive('home')">
+      <router-link
+        :to="{ name: 'home' }"
+        class="nav-item"
+        :class="{ active: activeLink === 'home' }"
+        @click.prevent="setActive('home')"
+      >
         ទំព័រ​ដើម
       </router-link>
 
-      <router-link :to="{ name: 'report.user' }" class="nav-item" :class="{ active: activeLink === 'report' }"
-        @click.prevent="setActive('report')">
+      <router-link
+        :to="{ name: 'report.user' }"
+        class="nav-item"
+        :class="{ active: activeLink === 'report' }"
+        @click.prevent="setActive('report')"
+      >
         របាយការណ៍
       </router-link>
 
-      <router-link :to="{ name: 'category'}" class="nav-item" :class="{ active: activeLink === 'category' }"
-        @click.prevent="setActive('category')"> ប្រភេទរបាយការណ៍ </router-link>
+      <router-link
+        :to="{ name: 'category' }"
+        class="nav-item"
+        :class="{ active: activeLink === 'category' }"
+        @click.prevent="setActive('category')"
+      >
+        ប្រភេទរបាយការណ៍
+      </router-link>
 
-      <router-link :to="{ name: 'about' }" class="nav-item" :class="{ active: activeLink === 'about' }"
-        @click.prevent="setActive('about')">
+      <router-link
+        :to="{ name: 'about' }"
+        class="nav-item"
+        :class="{ active: activeLink === 'about' }"
+        @click.prevent="setActive('about')"
+      >
         អំពី​យើង
       </router-link>
 
-      <router-link :to="{ name: 'contact_us' }" class="nav-item" :class="{ active: activeLink === 'contact' }"
-        @click.prevent="setActive('contact')">
+      <router-link
+        :to="{ name: 'contact_us' }"
+        class="nav-item"
+        :class="{ active: activeLink === 'contact' }"
+        @click.prevent="setActive('contact')"
+      >
         ទំនាក់ទំនង
       </router-link>
     </nav>
@@ -334,18 +356,15 @@ const router = useRouter();
 
 const goLogin = () => {
   router.push({ name: "login" });
- 
 };
 
 const goRegister = () => {
   router.push({ name: "register" });
-  
 };
 import { storeToRefs } from "pinia";
 
 const activeLink = ref("home");
 const profileStore = useProfileStore();
-
 
 const { profile, isLoadingProfile, error } = storeToRefs(profileStore);
 
@@ -389,13 +408,9 @@ onMounted(() => {
   token.value = localStorage.getItem("token");
 });
 
-
 const showAuthButtons = computed(() => {
   return !auth.isAuthenticated || auth.role === "admin";
 });
-
-
-
 
 // Active link in navbar
 const setActive = (link) => {
