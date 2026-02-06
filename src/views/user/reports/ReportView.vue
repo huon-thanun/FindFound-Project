@@ -1,6 +1,8 @@
 <template>
   <div class="container py-4">
-    <div class="d-flex justify-content-between mb-3 align-items-center">
+    <div
+      class="d-flex justify-content-between flex-wrap mb-3 align-items-center"
+    >
       <div>
         <h2>ការរាយការណ៍</h2>
         <p>រុករក និងមើលវត្ថុបាត់បង់ និងវត្ថុដែលបានរកឃើញទាំងអស់នៅក្នុងសហគមន៍</p>
@@ -53,160 +55,81 @@
         </div>
       </div>
     </BaseReportCard>
-
-    <div class="mt-3 mb-5 btn-group bg-btn-group">
-      <button
-        class="btn-filter"
-        :class="{ active: activeFilter === '' }"
-        @click="btnFilterAllReport"
-      >
-        ទាំងអស់
-      </button>
-
-      <button
-        class="btn-filter"
-        :class="{ active: activeFilter === '1' }"
-        @click="btnFilterReportType('1')"
-      >
-        បាត់
-      </button>
-
-      <button
-        class="btn-filter"
-        :class="{ active: activeFilter === '2' }"
-        @click="btnFilterReportType('2')"
-      >
-        រកឃើញ
-      </button>
-    </div>
-    <div class="row">
-      <!-- Loading -->
-      <div class="col-12 center2 p-3" v-if="reportStore.isLoadingPublicReports">
-        <div class="spinner-border" role="status">
-          <span class="visually-hidden">Loading...</span>
-        </div>
-      </div>
-      <!-- Not found  -->
-      <div
-        v-else-if="reportStore.publicReports.length <= 0"
-        class="my-3 col-12 center2"
-      >
-        <div class="w-100 d-flex flex-column align-items-center p-3 text-muted">
-          <i class="bi bi-exclamation-circle" style="font-size: 35px"></i>
-          <h3 class="m-0">មិនមាន​ ការរាយការណ៍</h3>
-        </div>
-      </div>
-      <div
-        v-else
-        class="col-12 col-md-6 col-lg-4 col-xl-3 mb-3 card-hover"
-        v-for="report in reportStore.publicReports"
-        :key="report.id"
-      >
-        <router-link
-          :to="{ name: 'report-detail-user', params: { id: report.id } }"
-          class="link-detail"
+    <div
+      class="mt-3 mb-5 align-items-center d-flex justify-content-between flex-wrap"
+    >
+      <div class="btn-group bg-btn-group my-1">
+        <button
+          class="btn-filter"
+          :class="{ active: activeFilter === '' }"
+          @click="btnFilterAllReport"
         >
-          <BaseReportCard
-            height="400px"
-            padding="p-0"
-            addClass="overflow-hidden"
-          >
-            <template #image>
-              <img
-                class="w-100"
-                style="height: 200px; object-fit: cover"
-                :src="
-                  report.reportImages && report.reportImages.length > 0
-                    ? report.reportImages[0].name
-                    : defaultImage
-                "
-                :alt="report.title || 'Report Image'"
-              />
-              <!-- <p>{{ report.reportImages[0]?.name }}</p> -->
-              <!--<img :src="defaultImage" alt="" /> -->
-              <span
-                class="tag type-tag"
-                :class="report.reportType.name.toLowerCase()"
-                >{{ report.reportType.name }}</span
-              >
-            </template>
-            <div class="px-3">
-              <div class="py-2 mb-2">
-                <div class="d-flex gap-2">
-                  <span class="tag">{{ report.category.name }}</span>
-                  <span class="tag">{{ report.status }}</span>
-                </div>
-              </div>
-              <h5 class="card-title">{{ report.title }}</h5>
-              <!-- <p class="card-text text-muted desc text-clamp-2">
-            {{ report.description }}
-          </p> -->
-              <ul class="detail">
-                <li>
-                  <span class="icon">
-                    <i class="bi bi-geo-alt-fill"></i>
-                  </span>
-                  <span class="text">{{ report.locationText }}</span>
-                </li>
-                <li>
-                  <span class="icon">
-                    <i class="bi bi-calendar2"></i>
-                  </span>
-                  <span class="text">{{ formatDate(report.eventDate) }}</span>
-                </li>
-              </ul>
-            </div>
-          </BaseReportCard>
-        </router-link>
+          ទាំងអស់
+        </button>
+
+        <button
+          class="btn-filter"
+          :class="{ active: activeFilter === '1' }"
+          @click="btnFilterReportType('1')"
+        >
+          បាត់
+        </button>
+
+        <button
+          class="btn-filter"
+          :class="{ active: activeFilter === '2' }"
+          @click="btnFilterReportType('2')"
+        >
+          រកឃើញ
+        </button>
+      </div>
+      <div class="d-flex gap-2 align-items-center my-1">
+        <div class="mt-2" style="width: 150px">
+          <BaseSelect
+            class="w-100"
+            v-model="sortDir"
+            :items="sortDirData"
+            labelField="name"
+            valueField="id"
+          />
+        </div>
       </div>
     </div>
+    <SectionPublicReports
+      :page="1"
+      :perPage="20"
+      :search="search"
+      :reportTypeId="typeValue"
+      :categoryId="cateValue?.id"
+      :sortDir="sortDir"
+    ></SectionPublicReports>
   </div>
 </template>
 <script setup>
-import { ref, onMounted, watch } from "vue";
+import { ref, onMounted, reactive } from "vue";
 import { useCategoryStore } from "@/stores/categoryStore";
 import { useReportStore } from "@/stores/reportStore";
-import { formatDate } from "@/utils/formatDate";
+import { useRouter } from "vue-router";
 
 import BaseReportCard from "@/components/base/BaseReportCard.vue";
-import { useRouter } from "vue-router";
+import SectionPublicReports from "@/components/report/SectionPublicReports.vue";
 
 const categoryStore = useCategoryStore();
 const reportStore = useReportStore();
-const defaultImage =
-  "https://tse2.mm.bing.net/th/id/OIP.b8bpZyFwupiioDofQPXo_gAAAA?rs=1&pid=ImgDetMain&o=7&rm=3";
 
 const search = ref("");
 const typeValue = ref("");
 const cateValue = ref("");
-
-const fetchReports = async () => {
-  try {
-    await reportStore.getAllPublicReports({
-      _page: 1,
-      _per_page: 100,
-      search: search.value,
-      reportType: typeValue.value,
-      categoryId: cateValue.value?.id || "",
-    });
-  } catch (error) {
-    console.error(error);
-  }
-  // console.log("PAGE:", page.value);
-  // console.log("META:", reportStore.meta);
-};
-
-// active filter
 const activeFilter = ref("");
-
+const sortDirData = reactive([
+  { id: "DESC", name: "ថ្មីបំផុត" },
+  { id: "ASC", name: "ចាស់បំផុត" },
+]);
+const sortDir = ref(sortDirData[0]);
 onMounted(async () => {
   try {
-    await Promise.all([
-      categoryStore.fetchCategories(),
-      fetchReports(),
-      // reportStore.getAllPublicReports(),
-    ]);
-    // console.log(reportStore.allReports);
+    await Promise.all([categoryStore.fetchCategories()]);
+
     console.log("public", reportStore.publicReports);
     console.log(cateValue.value);
     // default active
@@ -215,19 +138,11 @@ onMounted(async () => {
     console.error(error);
   }
 });
-let timeout = null;
-watch([search, typeValue, cateValue], () => {
-  clearTimeout(timeout);
-  timeout = setTimeout(fetchReports, 500);
-  console.log(reportStore.allReports);
-  // console.log(cateValue.value);
-});
 const btnFilterAllReport = async () => {
   try {
     cateValue.value = null;
     typeValue.value = "";
     activeFilter.value = "";
-    await fetchReports();
   } catch (error) {
     console.error(error);
   }
@@ -236,7 +151,6 @@ const btnFilterReportType = async (reportTypeValue) => {
   try {
     activeFilter.value = reportTypeValue;
     typeValue.value = reportTypeValue;
-    await fetchReports();
   } catch (error) {
     console.error(error);
   }
@@ -254,12 +168,21 @@ const btnHandleToCreatePage = () => {
   if (token) {
     router.push({ name: "create-report" });
   } else {
-    router.push({ name: "login" }); // 👈 redirect here
+    router.push({ name: "login" });
   }
 };
 </script>
 
 <style scoped>
+.image {
+  width: 100%;
+  height: 230px;
+}
+.image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
 .center2 {
   display: flex !important;
   justify-content: center;

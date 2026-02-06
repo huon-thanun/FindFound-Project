@@ -43,6 +43,7 @@ import ItemDetailsView from "@/views/user/gallery/ItemDetailsView.vue";
 import SuccessStoriesView from "@/views/user/success_stories/SuccessStoriesView.vue";
 import ProfileSecurity from "@/views/admin/profile/ProfileSecurity.vue";
 import CategoryUser from "@/views/user/categories/CategoryView.vue";
+import Card from "@/views/user/reports/Card.vue";
 import ProfileUserSecurity from "@/views/user/profile/ProfileUserSecurity.vue";
 import EditProfileUserView from "@/views/user/profile/EditProfileUserView.vue";
 import VerifyEmail from "@/views/user/auth/VerifyEmail.vue";
@@ -182,6 +183,11 @@ const router = createRouter({
           path: "reports/own/create",
           name: "create-report",
           component: CreateReportView,
+        },
+        {
+          path: "reports/card",
+          name: "card-test",
+          component: Card,
         },
         {
           path: "reports/own/edit/:id",
