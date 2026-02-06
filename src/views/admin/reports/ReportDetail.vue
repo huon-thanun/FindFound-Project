@@ -8,9 +8,7 @@
 
       <div class="row">
         <div class="my-modal col-12 col-md-7 col-xl-6">
-          <div
-            class="modal-header p-3 d-flex justify-content-between align-items-center"
-          >
+          <div class="modal-header p-3 d-flex justify-content-between align-items-center">
             <h2 class="m-0">{{ data.title }}</h2>
             <button class="btn-close" @click="close"></button>
           </div>
@@ -18,10 +16,7 @@
             <div class="row">
               <div class="col-12 col-md-12 col-xl-6 px-3">
                 <div class="d-flex gap-2 mb-3">
-                  <span
-                    class="status"
-                    :class="data.reportType.name.toLowerCase()"
-                  >
+                  <span class="status" :class="data.reportType.name.toLowerCase()">
                     {{ reportType }}
                   </span>
                   <span class="status" :class="data.status.toLowerCase()">
@@ -31,11 +26,7 @@
                 <span class="fs-5 fw-bold">ការពិពណ៌នា</span>
                 <p class="card-text text-muted py-3">{{ data.description }}</p>
                 <ul class="row p-0" style="list-style-type: none">
-                  <li
-                    class="col-6 col-md-6 col-xl-6 d-flex gap-2 mb-2"
-                    v-for="(item, index) in detail"
-                    :key="index"
-                  >
+                  <li class="col-6 col-md-6 col-xl-6 d-flex gap-2 mb-2" v-for="(item, index) in detail" :key="index">
                     <span class="icon"><i :class="item.icon"></i></span>
                     <span class="d-flex flex-column">
                       <span class="title">{{ item.title }}</span>
@@ -49,47 +40,26 @@
               </div>
               <div class="col-12 col-md-12 col-xl-6">
                 <div class="row">
-                  <div
-                    class="col-12 d-flex justify-content-center position-relative"
-                  >
-                    <img
-                      v-if="hasImages"
-                      :src="currentImage"
-                      alt="Report image"
-                      class="ms-auto w-100"
-                    />
+                  <div class="col-12 d-flex justify-content-center position-relative">
+                    <img v-if="hasImages" :src="currentImage" alt="Report image" class="ms-auto w-100" />
 
-                    <img
-                      v-else
+                    <img v-else
                       src="https://tse2.mm.bing.net/th/id/OIP.b8bpZyFwupiioDofQPXo_gAAAA?rs=1&pid=ImgDetMain&o=7&rm=3"
-                      alt="Default image"
-                      class="ms-auto w-100"
-                      style="max-height: 500px"
-                    />
-                    <button
-                      class="btn border-0 fs-2"
-                      style="
+                      alt="Default image" class="ms-auto w-100" style="max-height: 500px" />
+                    <button class="btn border-0 fs-2" style="
                         position: absolute;
                         left: 0;
                         top: 50%;
                         transform: translateY(-50%);
-                      "
-                      @click="prevImage"
-                      :disabled="!canPrev"
-                    >
+                      " @click="prevImage" :disabled="!canPrev">
                       <i class="bi bi-chevron-left"></i>
                     </button>
-                    <button
-                      class="btn border-0 fs-2"
-                      style="
+                    <button class="btn border-0 fs-2" style="
                         position: absolute;
                         right: 0;
                         top: 50%;
                         transform: translateY(-50%);
-                      "
-                      @click="nextImage"
-                      :disabled="!canNext"
-                    >
+                      " @click="nextImage" :disabled="!canNext">
                       <i class="bi bi-chevron-right"></i>
                     </button>
                   </div>
@@ -97,9 +67,7 @@
               </div>
             </div>
           </div>
-          <div
-            class="modal-footer p-3 padding justify-content-start align-items-center gap-2"
-          >
+          <div class="modal-footer p-3 padding justify-content-start align-items-center gap-2">
             <img class="avatar" :src="data.reporter.avatar" alt="" />
 
             <div class="d-flex flex-column">
@@ -135,11 +103,11 @@ const props = defineProps({
 
 const REPORT_TYPE_KH = {
   LOST: "បានបាត់",
-  FOUND: "រើសបាន",
+  FOUND: "បានប្រទះឃើញ",
 };
 
 const STATUS_KH = {
-  ACTIVE: "កំពុងស្វែងរក",
+  ACTIVE: "សកម្ម",
   RESOLVED: "បានដោះស្រាយ",
   HIDDEN: "លាក់",
 };
@@ -278,12 +246,15 @@ const nextImage = () => {
   border-radius: 8px;
   /* max-width: 900px; */
 }
+
 .my-modal .modal-footer {
   border-top: 1px solid #000;
 }
+
 .my-modal .modal-header {
   border-bottom: 1px solid #000;
 }
+
 .status {
   background: rgba(211, 211, 211, 0.4);
   color: rgba(0, 0, 0, 0.4);
@@ -291,30 +262,37 @@ const nextImage = () => {
   border-radius: 50px;
   font-size: 18px;
 }
+
 .lost {
   background: var(--danger);
   color: var(--light);
 }
+
 .found {
   background: var(--success);
   color: var(--light);
 }
+
 .active {
   background: rgba(0, 0, 255, 0.2);
   color: rgba(0, 0, 255, 0.8);
 }
+
 .resolved {
   background: rgba(92, 92, 92, 0.5);
   color: rgba(255, 255, 255, 0.8);
 }
+
 .icon {
   font-size: 22px;
   color: rgb(126, 126, 126);
 }
+
 .title {
   font-size: 14px;
   color: rgb(126, 126, 126);
 }
+
 .value {
   font-size: 16px;
   color: black;
@@ -322,6 +300,7 @@ const nextImage = () => {
   overflow-wrap: break-word;
   word-break: break-word;
 }
+
 .avatar {
   width: 40px;
   height: 40px;
