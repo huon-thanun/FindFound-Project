@@ -43,7 +43,7 @@ import ItemDetailsView from "@/views/user/gallery/ItemDetailsView.vue";
 import SuccessStoriesView from "@/views/user/success_stories/SuccessStoriesView.vue";
 import ProfileSecurity from "@/views/admin/profile/ProfileSecurity.vue";
 import CategoryUser from "@/views/user/categories/CategoryView.vue";
-
+import Card from "@/views/user/reports/Card.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -176,6 +176,11 @@ const router = createRouter({
           component: CreateReportView,
         },
         {
+          path: "reports/card",
+          name: "card-test",
+          component: Card,
+        },
+        {
           path: "reports/own/edit/:id",
           name: "edit-report",
           component: EditReportView,
@@ -200,8 +205,8 @@ const router = createRouter({
         {
           path: "/categories",
           name: "category",
-          component: CategoryUser
-        }
+          component: CategoryUser,
+        },
       ],
     },
 

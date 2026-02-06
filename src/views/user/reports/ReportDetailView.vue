@@ -14,7 +14,7 @@
       </div>
       <div v-else class="row g-4">
         <div class="col-lg-8">
-          <div class="card border-0 mb-4 overflow-hidden position-relative">
+          <div class="card border-1 mb-4 overflow-hidden position-relative">
             <span
               v-if="reportStore.report?.reportType?.name"
               :class="reportTypeClass"
@@ -28,16 +28,54 @@
               class="card-img-top main-image"
               alt="Found blue backpack"
             /> -->
-            <img
-              :src="
-                reportStore.report.reportImages &&
-                reportStore.report.reportImages.length > 0
-                  ? reportStore.report.reportImages[0].name
-                  : defaultImage
-              "
-              :alt="reportStore.report.title || 'Report Image'"
-              style="max-height: 480px"
-            />
+
+            <div
+              class="slider-wrapper"
+              v-if="reportStore.report?.reportImages?.length"
+            >
+              <!-- Main slider -->
+              <Swiper
+                :spaceBetween="10"
+                :navigation="true"
+                :thumbs="{ swiper: thumbsSwiper }"
+                :modules="modules"
+                class="mySwiper2"
+              >
+                <!-- <SwiperSlide v-for="n in 10" :key="'main-' + n">
+            <img :src="`https://swiperjs.com/demos/images/nature-${n}.jpg`" />
+          </SwiperSlide> -->
+                <SwiperSlide
+                  v-for="image in reportStore.report?.reportImages || []"
+                  :key="image.id"
+                >
+                  <img :src="image.name" />
+                </SwiperSlide>
+              </Swiper>
+
+              <!-- Thumbnail slider -->
+              <Swiper
+                @swiper="setThumbsSwiper"
+                :spaceBetween="10"
+                :slidesPerView="4"
+                :freeMode="true"
+                :watchSlidesProgress="true"
+                :modules="modules"
+                class="mySwiper mt-2"
+              >
+                <SwiperSlide
+                  v-for="image in reportStore.report?.reportImages || []"
+                  :key="image.id"
+                >
+                  <img :src="image.name" />
+                </SwiperSlide>
+              </Swiper>
+            </div>
+            <div v-else class="image">
+              <img
+                :src="defaultImage"
+                :alt="reportStore.report.title || 'Report Image'"
+              />
+            </div>
           </div>
 
           <div class="card border-0 box-shadow p-4">
@@ -234,11 +272,20 @@
 </template>
 <script setup>
 import { useReportStore } from "@/stores/reportStore";
-import { onMounted, watch, computed } from "vue";
+import { onMounted, watch, computed, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
 import { formatDate } from "@/utils/formatDate";
 import BaseReportCard from "@/components/base/BaseReportCard.vue";
+
+import { Swiper, SwiperSlide } from "swiper/vue";
+
+import "swiper/css";
+import "swiper/css/free-mode";
+import "swiper/css/navigation";
+import "swiper/css/thumbs";
+
+import { FreeMode, Navigation, Thumbs } from "swiper/modules";
 
 const route = useRoute();
 const router = useRouter();
@@ -248,6 +295,13 @@ const defaultImage =
 
 const reportStore = useReportStore();
 
+const thumbsSwiper = ref(null);
+
+const setThumbsSwiper = (swiper) => {
+  thumbsSwiper.value = swiper;
+};
+
+const modules = [FreeMode, Navigation, Thumbs];
 const loadReport = async (id) => {
   try {
     await Promise.all([
@@ -284,7 +338,47 @@ const goBack = () => {
 </script>
 
 <style scoped>
+/*swiper*/
+.slider-wrapper {
+  width: 100%;
+  max-width: 100%;
+}
+
+.mySwiper,
+.mySwiper2 {
+  width: 100%;
+}
+
+.mySwiper {
+  border: 1px solid red;
+  width: 100%;
+}
+.mySwiper img {
+  width: 100%;
+  height: 80px;
+  object-fit: contain;
+  border-radius: 8px;
+  border: 1px solid black;
+}
+
+.mySwiper2 img {
+  width: 100%;
+  height: 350px;
+  object-fit: contain;
+  border-radius: 12px;
+}
+
 /* Custom tweaks to match your screenshot exactly */
+
+.image {
+  width: 100%;
+  height: 550px;
+}
+.image img {
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+}
 .main-image {
   height: 450px;
   object-fit: cover;
@@ -360,7 +454,7 @@ const goBack = () => {
 .match-image img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
 }
 
 /* Confidence badge */
