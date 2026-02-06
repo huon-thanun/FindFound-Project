@@ -56,14 +56,14 @@
       </base-button>
     </div>
     <BaseModal
-      :title="'Logout'"
+      :title="'ចាកចេញពីគណនី'"
       :icon="'exclamation-triangle'"
       :theme="'danger'"
       :isClose="showModal"
       @closeModal="showModal = true"
     >
       <template #body>
-        <p>Are you sure ?</p>
+        <p>តើអ្នកពិតជាចង់ចាកចេញពីកម្មវិធីមែនទេ?</p>
       </template>
       <template #btnClose>
         <BaseButton
@@ -71,12 +71,12 @@
           icon="x-circle"
           class="col-6"
           @click="isOpen"
-          >Close</BaseButton
+          >បោះបង់</BaseButton
         >
       </template>
       <template #btnActive>
         <BaseButton variant="danger" icon="check-circle" class="col-6"
-          >Confirm</BaseButton
+          >បញ្ជាក់</BaseButton
         >
       </template>
     </BaseModal>
@@ -131,7 +131,7 @@ body {
   border-radius: 8px;
   color: #4b5563;
   text-decoration: none;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 500;
   transition: all 0.2s;
   cursor: pointer;

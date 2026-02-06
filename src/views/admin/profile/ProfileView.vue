@@ -9,46 +9,15 @@
     <template #left>
       <ProfileSide :user="user" :skills="skills" />
     </template>
+    <ProfileTabsAdmin />
 
     <!-- Main Profile Card -->
     <div
       v-if="user"
-      class="card border-0 shadow-sm rounded-4 mt-4 overflow-hidden"
+      class="card border-2 shadow-sm rounded-4 mt-4 overflow-hidden align-content-center"
     >
-      <!-- Nav Tabs -->
-      <div class="card-header bg-white border-bottom px-4 pt-3">
-        <div class="d-flex gap-4">
-          <!-- Overview -->
-          <RouterLink
-            :to="{ name: 'admin.profile' }"
-            class="nav-tab"
-            :class="{ active: isActive('admin.profile') }"
-          >
-            Overview
-          </RouterLink>
-
-          <!-- Edit Profile -->
-          <RouterLink
-            :to="{ name: 'admin.profile.edit' }"
-            class="nav-tab"
-            :class="{ active: isActive('admin.profile.edit') }"
-          >
-            Edit Profile
-          </RouterLink>
-
-          <!-- Security -->
-          <RouterLink
-            :to="{ name: 'admin.profile.security' }"
-            class="nav-tab"
-            :class="{ active: isActive('admin.profile.security') }"
-          >
-            Security
-          </RouterLink>
-        </div>
-      </div>
-
       <!-- Profile Body -->
-      <div class="card-body p-4 p-md-5">
+      <div class="card-body p-5 m-5">
         <!-- Avatar & Info -->
         <div class="row align-items-center mb-5">
           <div class="col-md-auto text-center text-md-start mb-4 mb-md-0">
@@ -60,9 +29,6 @@
                 class="main-profile-img shadow"
                 alt="User Avatar"
               />
-              <div class="avatar-edit-badge">
-                <i class="bi bi-camera-fill"></i>
-              </div>
             </div>
           </div>
 
@@ -80,12 +46,9 @@
         </div>
 
         <!-- Account Details -->
-        <h6
-          class="text-uppercase fw-bold text-muted small mb-4"
-          style="letter-spacing: 1px"
-        >
-          Account Details
-        </h6>
+        <div class="section-title">
+          <h2>ព័ត៌មានលម្អិតអំពីគណនី</h2>
+        </div>
 
         <div class="row g-4">
           <!-- Full Name -->
@@ -135,10 +98,9 @@
 </template>
 
 <script setup>
-import ProfileHeader from "@/components/profile/ProfileHeader.vue";
-import ProfileSide from "@/components/profile/ProfileSide.vue";
 import { ref, onMounted } from "vue";
 import { useRoute } from "vue-router";
+import ProfileTabsAdmin from "@/components/profile/ProfileTabsAdmin.vue";
 
 const user = ref(null);
 const skills = ["HTML", "CSS", "Vue", "MySQL", "JavaScript"];
@@ -167,7 +129,30 @@ onMounted(async () => {
 </script>
 
 <style scoped>
+@import url("https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@400;700&display=swap");
+
+* {
+  font-family: "Kantumruy Pro", sans-serif;
+}
+.section-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 25px;
+}
+
+.section-title h2 {
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: #1e0469; /* Purple theme */
+  text-transform: uppercase;
+  margin: 0;
+  position: relative;
+}
+
 /* Avatar Upload Styling */
+
 .main-profile-img {
   width: 130px;
   height: 130px;
@@ -188,7 +173,7 @@ onMounted(async () => {
   position: absolute;
   bottom: 5px;
   right: 5px;
-  background: #0d6efd;
+  background: #3b1e54;
   color: white;
   width: 35px;
   height: 35px;
@@ -212,10 +197,12 @@ onMounted(async () => {
 }
 
 .nav-tab.active {
-  color: #0d6efd;
-  border-bottom-color: #0d6efd;
+  color: #3b1e54;
+  border-bottom-color: #2b0151;
 }
-
+.card {
+  margin: 80px;
+}
 /* Info Card Hover */
 .info-card {
   transition: background 0.3s ease;

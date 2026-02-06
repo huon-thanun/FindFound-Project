@@ -5,158 +5,124 @@
       មើល និងគ្រប់គ្រងការរាយការណ៍បាត់បង់ និងរើសបានទាំងអស់
     </p>
 
-    <div class="row">
-      <!-- FILTER CARD -->
+    <!-- <div class="row"> -->
+    <!-- FILTER CARD -->
 
-      <div class="card mb-3 col-12 shadow">
-        <div class="card-body d-flex gap-3 align-items-start">
-          <div class="m-0 p-0" style="flex: 1">
-            <BaseInput
-              class="w-100"
-              v-model="search"
-              type="text"
-              placeholder="ស្វែងរករបាយការណ៍..."
-            />
-          </div>
-          <div class="mt-2" style="flex: 1">
-            <BaseSelect
-              class="w-100"
-              v-model="typeValue"
-              :items="reportStore.allReportType"
-              textField="ប្រភេទទាំងអស់"
-              labelField="name"
-              valueField="id"
-            />
-          </div>
-          <div class="mt-2" style="flex: 1">
-            <BaseSelect
-              class="w-100"
-              v-model="statusValue"
-              :items="allStatus"
-              textField="ស្ថានភាពទាំងអស់"
-              labelField="title"
-              valueField="value"
-            />
-          </div>
-          <div class="mt-2" style="flex: 1">
-            <BaseSelect
-              class="w-100"
-              v-model="cateValue"
-              :items="categoryStore.categories"
-              textField="ប្រភេទទាំងអស់"
-              labelField="name"
-              valueField="id"
-            />
-          </div>
-          <!-- CLEAR FILTER -->
-          <div class="mt-2 col-xl-2 pb-2 d-flex justify-content-end">
-            <BaseButton
-              variant="outline_primary"
-              icon="stars"
-              @click="clearFilter"
-            >
-              សម្អាត
-            </BaseButton>
+    <div class="card mb-3 shadow border-color">
+      <div class="card-body row">
+        <div class="col-xl-4">
+          <BaseInput class="w-100" v-model="search" type="text" placeholder="ស្វែងរករបាយការណ៍..." />
+        </div>
+        <div class="col-xl-5 mt-2">
+          <div class="row">
+            <div class="col-xl-6" style="flex: 1; flex-wrap: nowrap;">
+              <BaseSelect class="w-100 text-nowrap" v-model="typeValue" :items="reportStore.allReportType"
+                textField="ប្រភេទទាំងអស់" labelField="name" valueField="id" />
+            </div>
+            <div class="col-xl-6" style="flex: 1; flex-wrap: nowrap;">
+              <BaseSelect class="w-100 text-nowrap" v-model="statusValue" :items="allStatus" textField="ស្ថានភាពទាំងអស់"
+                labelField="title" valueField="value" />
+            </div>
+            <div class="col-xl-6" style="flex: 1; flex-wrap: nowrap;">
+              <BaseSelect class="w-100 text-nowrap" v-model="cateValue" :items="categoryStore.categories"
+                textField="ប្រភេទទាំងអស់" labelField="name" valueField="id" />
+            </div>
           </div>
         </div>
-      </div>
-
-      <div class="col-12 center2" v-if="reportStore.isLoadingGetAllReport">
-        <div class="spinner-border" role="status">
-          <span class="visually-hidden">កំពុងផ្ទុក...</span>
-        </div>
-      </div>
-
-      <div
-        v-else-if="reportStore.allReports.length <= 0"
-        class="my-3 col-12 center2"
-      >
-        <div class="w-100 d-flex flex-column align-items-center p-3 text-muted">
-          <i class="bi bi-exclamation-circle" style="font-size: 35px"></i>
-          <h3 class="m-0">មិនមានរបាយការណ៍ទេ</h3>
-        </div>
-      </div>
-      <!-- REPORT LIST -->
-
-      <div v-else class="col-12">
-        <div class="row">
-          <div
-            class="col-12 col-md-6 col-lg-3 mb-3"
-            v-for="report in reportStore.allReports"
-            :key="report.id"
-          >
-            <BaseReportCard height="500px">
-              <template #image>
-                <div class="image">
-                  <img
-                    :src="
-                      report.reportImages && report.reportImages.length > 0
-                        ? report.reportImages[0].name
-                        : defaultImage
-                    "
-                    :alt="report.title || 'រូបភាពរបាយការណ៍'"
-                  />
-                </div>
-              </template>
-
-              <div>
-                <div class="d-flex gap-2 my-2">
-                  <span
-                    class="status"
-                    :class="report.reportType.name.toLowerCase()"
-                  >
-                    {{ report.reportType.name }}
-                  </span>
-                  <span class="status" :class="report.status.toLowerCase()">
-                    {{ report.status }}
-                  </span>
-                </div>
-
-                <h5 class="card-title mt-3">{{ report.title }}</h5>
-
-                <ul class="item-list d-flex justify-content-between mt-2">
-                  <li class="fs-6">
-                    <small
-                      ><i class="bi bi-file-earmark-text"></i>
-                      {{ report.category.name }}</small
-                    >
-                  </li>
-                  <div>
-                    <li class="fs-6">
-                      <small>
-                        <i class="bi bi-geo-alt-fill"></i>
-                        {{ report.locationText }}
-                      </small>
-                    </li>
-                    <li class="fs-6">
-                      <small>
-                        <i class="bi bi-calendar2"></i>
-                        {{ formatDate(report.createdAt) }}
-                      </small>
-                    </li>
-                  </div>
-                </ul>
-
-                <div class="button-group">
-                  <BaseButton
-                    icon="bi-eye"
-                    variant="primary w-100"
-                    @click="fetchReportDetail(report.id)"
-                    :isLoading="isLoading === report.id"
-                  >
-                    មើលលម្អិត
-                  </BaseButton>
-                </div>
-
-                <span class="d-block mt-2 py-1" style="font-size: 16px">
-                  រាយការណ៍ដោយ <strong>{{ report.reporter.fullname }}</strong>
-                </span>
-              </div>
-            </BaseReportCard>
-          </div>
+        <!-- CLEAR FILTER -->
+        <div class="col-xl-3 mt-1 text-end">
+          <BaseButton variant="outline_primary" icon="stars" @click="clearFilter">
+            សម្អាតការតម្រៀប
+          </BaseButton>
         </div>
       </div>
     </div>
+
+    <div class="col-12 center2" v-if="reportStore.isLoadingGetAllReport">
+      <div class="spinner-border" role="status">
+        <span class="visually-hidden">កំពុងផ្ទុក...</span>
+      </div>
+    </div>
+
+    <div v-else-if="reportStore.allReports.length <= 0" class="my-3 col-12 center2">
+      <div class="w-100 d-flex flex-column align-items-center p-3 text-muted">
+        <i class="bi bi-exclamation-circle" style="font-size: 35px"></i>
+        <h3 class="m-0">មិនមានរបាយការណ៍ទេ</h3>
+      </div>
+    </div>
+    <!-- REPORT LIST -->
+
+    <div v-else class="col-12">
+      <div class="row">
+        <div class="col-12 col-lg-6 col-xl-4 col-xxl-3 mb-3" v-for="report in reportStore.allReports" :key="report.id">
+          <BaseReportCard class="border-color" height="500px">
+            <template #image>
+              <div class="image">
+                <img :src="report.reportImages && report.reportImages.length > 0
+                  ? report.reportImages[0].name
+                  : defaultImage
+                  " :alt="report.title || 'រូបភាពរបាយការណ៍'" />
+              </div>
+            </template>
+
+            <div>
+              <div class="d-flex gap-2 my-2">
+                <span class="status" :class="report.reportType.name.toLowerCase()">
+                  {{ report.reportType.name }}
+                </span>
+                <span class="status" :class="report.status.toLowerCase()">
+                  {{ report.status }}
+                </span>
+              </div>
+
+              <h5 class="card-title mt-3">{{ report.title }}</h5>
+
+              <ul class="item-list d-flex justify-content-between mt-2">
+                <li class="fs-6 ">
+                  <small><i class="bi bi-file-earmark-text"></i>
+                    {{ report.category.name }}</small>
+                </li>
+                <div>
+                  <li class="fs-6">
+                    <small>
+                      <i class="bi bi-geo-alt-fill"></i>
+                      {{ report.locationText }}
+                    </small>
+                  </li>
+                  <li class="fs-6">
+                    <small>
+                      <i class="bi bi-calendar2"></i>
+                      {{ formatDate(report.createdAt) }}
+                    </small>
+                  </li>
+                </div>
+              </ul>
+
+              <div class="button-group">
+                <BaseButton icon="bi-eye" variant="primary w-100" @click="fetchReportDetail(report.id)"
+                  :isLoading="isLoading === report.id">
+                  មើលលម្អិត
+                </BaseButton>
+              </div>
+
+              <div class="row">
+                <div class="col-lg-12 col-xl-6">
+                  <span class="d-block mt-2 py-1" style="font-size: 16px">
+                    រាយការណ៍ដោយ 
+                  </span>
+                </div>
+                <div class="col-lg-12 col-xl-6">
+                  <span class="d-block mt-2 py-1" style="font-size: 16px">
+                    <strong>{{ report.reporter.fullname }}</strong>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </BaseReportCard>
+        </div>
+      </div>
+    </div>
+    <!-- </div> -->
     <div class="d-flex my-2 gap-2 justify-content-center"></div>
 
     <!-- pagination -->
@@ -227,14 +193,22 @@ const fetchReports = async () => {
     _page: page.value,
     _per_page: 8,
     search: search.value,
-    status: statusValue.value,
+    status: statusValue.value?.value,
     sortBy: "createdAt",
     sortDir: "desc",
-    reportType: typeValue.value,
-    categoryId: cateValue.value,
+    reportType: typeValue.value?.id,
+    categoryId: cateValue.value?.id,
+
   });
   console.log("PAGE:", page.value);
   console.log("META:", reportStore.meta);
+
+  console.log({
+    search: search.value,
+    status: statusValue.value,
+    reportType: typeValue.value,
+    categoryId: cateValue.value,
+  });
 };
 onMounted(async () => {
   try {
@@ -344,6 +318,10 @@ const clearFilter = () => {
 } */
 .desc .card-text {
   color: rgba(128, 128, 128, 0.679);
+}
+
+.border-color{
+  border-color: var(--primary-color);
 }
 
 .image {

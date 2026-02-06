@@ -11,7 +11,7 @@
     </template>
 
     <div v-if="user" class="mt-5 position-relative">
-      <ProfileTabsAdmin />
+      <ProfileTabs />
 
       <!-- Edit Profile Card -->
       <div class="card border border-purple shadow-sm rounded-4 p-4 p-md-5">
@@ -125,21 +125,42 @@
       <p class="text-muted khmer-font">កំពុងផ្ទុកព័ត៌មាន...</p>
     </div>
 
-    <!-- Success Popup -->
+    <!-- Dynamic Success/Error Popup -->
     <div v-if="showPopup" class="popup-backdrop">
       <div class="popup-card">
-        <div class="popup-icon">
-          <i class="bi bi-check-circle-fill"></i>
+        <div
+          class="popup-icon"
+          :class="popupType === 'success' ? 'text-success' : 'text-danger'"
+        >
+          <i v-if="popupType === 'success'" class="bi bi-check-circle-fill"></i>
+          <i v-else class="bi bi-x-circle-fill"></i>
         </div>
-        <h5>ជោគជ័យ!</h5>
-        <p>ព័ត៌មានរបស់អ្នកត្រូវបានរក្សាទុករួចរាល់ 🎉</p>
+        <h5 :class="popupType === 'success' ? 'text-success' : 'text-danger'">
+          {{ popupType === "success" ? "ជោគជ័យ!" : "បរាជ័យ!" }}
+        </h5>
+        <p>{{ popupMessage }}</p>
+      </div>
+    </div>
+
+    <!-- Custom Confirm Popup for Delete Avatar -->
+    <div v-if="showConfirmPopup" class="popup-backdrop">
+      <div class="popup-card">
+        <h5>តើអ្នកចង់លុបរូបប្រើប្រាស់មែនទេ?</h5>
+        <div class="d-flex justify-content-center gap-3 mt-3">
+          <button class="btn btn-success" @click="confirmYes">
+            ចាប់ផ្ដើមលុប
+          </button>
+          <button class="btn btn-danger" @click="showConfirmPopup = false">
+            បោះបង់
+          </button>
+        </div>
       </div>
     </div>
   </ProfileLayout>
 </template>
 
 <script setup>
-import ProfileTabsAdmin from "@/components/profile/ProfileTabsAdmin.vue";
+import ProfileTabs from "@/components/profile/ProfileTabs.vue";
 import ProfileHeader from "@/components/profile/ProfileHeader.vue";
 import ProfileSide from "@/components/profile/ProfileSide.vue";
 import { ref, onMounted } from "vue";
@@ -154,7 +175,27 @@ const form = ref({
   avatar: "",
 });
 const loading = ref(false);
+
+// Dynamic popup
 const showPopup = ref(false);
+const popupMessage = ref("");
+const popupType = ref("success"); // "success" or "error"
+const showPopupMessage = (message, type = "success") => {
+  popupMessage.value = message;
+  popupType.value = type;
+  showPopup.value = true;
+  setTimeout(() => (showPopup.value = false), 2500);
+};
+
+// Custom confirm popup
+const showConfirmPopup = ref(false);
+let confirmAction = null;
+
+const confirmYes = async () => {
+  showConfirmPopup.value = false;
+  if (confirmAction) await confirmAction();
+  confirmAction = null;
+};
 
 /* Load profile */
 onMounted(async () => {
@@ -180,7 +221,6 @@ onMounted(async () => {
 const onAvatarChange = async (e) => {
   const file = e.target.files[0];
   if (!file) return;
-
   form.value.avatar = URL.createObjectURL(file);
 
   try {
@@ -196,44 +236,41 @@ const onAvatarChange = async (e) => {
         body: formData,
       },
     );
-
     const json = await res.json();
     if (!res.ok) throw new Error(json.message || "Upload failed");
 
     user.value.avatar = json.data.avatar;
-    alert("Avatar uploaded successfully!");
+    showPopupMessage("រូបភាពរបស់អ្នកត្រូវបានផ្ទុករួចរាល់ 🎉", "success");
   } catch (err) {
     console.error(err);
-    alert(err.message || "Failed to upload avatar");
+    showPopupMessage(err.message || "បរាជ័យក្នុងការផ្ទុករូបភាព ❌", "error");
   }
 };
 
-/* Delete avatar */
-const deleteAvatar = async () => {
-  if (!confirm("តើអ្នកចង់លុបរូបប្រើប្រាស់មែនទេ?")) return;
+/* Delete avatar with custom confirm */
+const deleteAvatar = () => {
+  confirmAction = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const res = await fetch(
+        "https://ant-g2-landf.ti.linkpc.net/api/v1/auth/profile/avatar",
+        {
+          method: "DELETE",
+          headers: { Authorization: `Bearer ${token}` },
+        },
+      );
+      const json = await res.json();
+      if (!res.ok) throw new Error(json.message || "Delete failed");
 
-  try {
-    const token = localStorage.getItem("token");
-
-    const res = await fetch(
-      "https://ant-g2-landf.ti.linkpc.net/api/v1/auth/profile/avatar",
-      {
-        method: "DELETE",
-        headers: { Authorization: `Bearer ${token}` },
-      },
-    );
-
-    const json = await res.json();
-    if (!res.ok) throw new Error(json.message || "Delete failed");
-
-    form.value.avatar = "";
-    user.value.avatar = "";
-
-    alert("Avatar deleted successfully!");
-  } catch (err) {
-    console.error(err);
-    alert(err.message || "Failed to delete avatar");
-  }
+      form.value.avatar = "";
+      user.value.avatar = "";
+      showPopupMessage("រូបភាពរបស់អ្នកត្រូវបានលុបរួចរាល់ 🗑️", "success");
+    } catch (err) {
+      console.error(err);
+      showPopupMessage(err.message || "បរាជ័យក្នុងការលុបរូបភាព ❌", "error");
+    }
+  };
+  showConfirmPopup.value = true;
 };
 
 /* Update profile */
@@ -258,16 +295,14 @@ const updateProfile = async () => {
         body: JSON.stringify(payload),
       },
     );
-
     const json = await res.json();
     if (!res.ok) throw new Error(json.message || "Update failed");
 
     user.value = { ...user.value, ...payload };
-    showPopup.value = true;
-    setTimeout(() => (showPopup.value = false), 2500);
+    showPopupMessage("ព័ត៌មានរបស់អ្នកត្រូវបានរក្សាទុករួចរាល់ 🎉", "success");
   } catch (err) {
     console.error(err);
-    alert(err.message || "Network error");
+    showPopupMessage(err.message || "បរាជ័យក្នុងការផ្លាស់ប្តូរ ❌", "error");
   } finally {
     loading.value = false;
   }
@@ -276,7 +311,6 @@ const updateProfile = async () => {
 
 <style scoped>
 @import url("https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@400;700&display=swap");
-
 * {
   font-family: "Kantumruy Pro", sans-serif;
 }
@@ -287,7 +321,7 @@ const updateProfile = async () => {
   color: #463258;
 }
 
-/* Save button with gradient */
+/* Buttons */
 .btn-save-profile {
   background: linear-gradient(135deg, #6a1b9a, #8e24aa);
   color: #fff;
@@ -301,8 +335,6 @@ const updateProfile = async () => {
   transform: translateY(-3px);
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
 }
-
-/* Delete avatar button */
 .btn-avatar-delete {
   background: #f8d7da;
   color: #721c24;
@@ -310,16 +342,15 @@ const updateProfile = async () => {
   border-radius: 50px;
   padding: 8px 20px;
   border: none;
-  transition: all 0.3s ease;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   font-size: 0.9rem;
+  transition: all 0.3s ease;
 }
 .btn-avatar-delete:hover {
   background: #f5c6cb;
   transform: translateY(-2px);
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 /* Avatar */
@@ -379,16 +410,21 @@ const updateProfile = async () => {
 }
 .popup-icon {
   font-size: 60px;
-  color: #3b1e54;
   margin-bottom: 15px;
 }
 .popup-card h5 {
-  color: #3b1e54;
   font-weight: 800;
 }
 .popup-card p {
   color: #6c757d;
   font-size: 15px;
+}
+
+.text-success {
+  color: #28a745 !important;
+}
+.text-danger {
+  color: #dc3545 !important;
 }
 
 @keyframes popupScale {

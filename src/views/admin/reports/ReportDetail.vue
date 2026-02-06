@@ -22,13 +22,13 @@
                     class="status"
                     :class="data.reportType.name.toLowerCase()"
                   >
-                    {{ data.reportType.name }}
+                    {{ reportType }}
                   </span>
                   <span class="status" :class="data.status.toLowerCase()">
-                    {{ data.status }}
+                    {{ status }}
                   </span>
                 </div>
-                <span class="fs-5 fw-bold">Description</span>
+                <span class="fs-5 fw-bold">ការពិពណ៌នា</span>
                 <p class="card-text text-muted py-3">{{ data.description }}</p>
                 <ul class="row p-0" style="list-style-type: none">
                   <li
@@ -105,8 +105,8 @@
             <div class="d-flex flex-column">
               <span>{{ data.reporter.fullname }}</span>
               <span class="text-muted" style="font-size: 14px">
-                <span>Report ID: #{{ data.id }}.</span>
-                <span>Created At {{ formatDate(data.createdAt) }}</span>
+                <span>លេខសម្គាល់របាយការណ៍: <strong>#{{ data.id }}</strong>. </span>
+                <span>ថ្ងៃបង្កើត <strong>{{ formatDate(data.createdAt) }}</strong></span>
               </span>
             </div>
           </div>
@@ -133,6 +133,26 @@ const props = defineProps({
   },
 });
 
+const REPORT_TYPE_KH = {
+  LOST: "បានបាត់",
+  FOUND: "រើសបាន",
+};
+
+const STATUS_KH = {
+  ACTIVE: "កំពុងស្វែងរក",
+  RESOLVED: "បានដោះស្រាយ",
+  HIDDEN: "លាក់",
+};
+
+const reportType = computed(() =>
+  REPORT_TYPE_KH[props.data?.reportType?.name] || props.data?.reportType?.name
+);
+
+const status = computed(() =>
+  STATUS_KH[props.data?.status] || props.data?.status
+);
+
+
 const detail = ref([]);
 
 watch(
@@ -142,37 +162,37 @@ watch(
     detail.value = [
       {
         icon: "bi bi-tag",
-        title: "Category",
+        title: "ប្រភេទ",
         value: data.category?.name || "-",
       },
       {
         icon: "bi bi-person",
-        title: "Reporter",
+        title: "អ្នករាយការណ៍",
         value: data.reporter?.fullname || "-",
       },
       {
         icon: "bi bi-geo-alt-fill",
-        title: "Location",
+        title: "ទីតាំង",
         value: data.locationText,
       },
       {
         icon: "bi bi-envelope",
-        title: "Email",
+        title: "អុីមែល",
         value: data.reporter?.email,
       },
       {
         icon: "bi bi-calendar",
-        title: "Event Date",
+        title: "កាលបរិច្ឆេទព្រឹត្តិការណ៍",
         value: formatDate(data.eventDate),
       },
       {
         icon: "bi bi-telephone-fill",
-        title: "Phone",
+        title: "លេខទូរស័ព្ទ",
         value: data.reporter?.phoneNumber || "-",
       },
       {
         icon: "bi bi-telegram",
-        title: "Telegram Link",
+        title: "តំណភ្ជាប់ Telegram",
         value: data.reporter?.telegramLink || "-",
       },
     ];
@@ -269,7 +289,7 @@ const nextImage = () => {
   color: rgba(0, 0, 0, 0.4);
   padding: 6px 15px;
   border-radius: 50px;
-  font-size: 14px;
+  font-size: 18px;
 }
 .lost {
   background: var(--danger);

@@ -44,6 +44,9 @@ import SuccessStoriesView from "@/views/user/success_stories/SuccessStoriesView.
 import ProfileSecurity from "@/views/admin/profile/ProfileSecurity.vue";
 import CategoryUser from "@/views/user/categories/CategoryView.vue";
 import Card from "@/views/user/reports/Card.vue";
+import ProfileUserSecurity from "@/views/user/profile/ProfileUserSecurity.vue";
+import EditProfileUserView from "@/views/user/profile/EditProfileUserView.vue";
+import VerifyEmail from "@/views/user/auth/VerifyEmail.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -98,7 +101,12 @@ const router = createRouter({
       component: UserVerifyOTPView,
       meta: { public: true },
     },
-
+    {
+      path: "/verify-change-email",
+      name: "verify-email",
+      component: VerifyEmail,
+      meta: { public: true },
+    },
     /* ================= USER AREA ================= */
     {
       path: "/",
@@ -134,18 +142,19 @@ const router = createRouter({
           path: "profile",
           name: "user.profile",
           component: ProfileUserView,
+          meta: { requiresAuth: true, role: "user" },
         },
         {
           path: "profile/edit",
           name: "user.profile.edit",
-          component: EditProfileView,
+          component: EditProfileUserView,
           meta: { requiresAuth: true, role: "user" },
         },
 
         {
           path: "profile/security",
           name: "user.profile.security",
-          component: ProfileSecurity,
+          component: ProfileUserSecurity,
           meta: { requiresAuth: true, role: "user" },
         },
         {

@@ -15,22 +15,48 @@
 
     <!-- Navigation Menu -->
     <nav class="nav-menu">
-      <router-link :to="{ name: 'home' }" class="nav-item">
+      <router-link
+        :to="{ name: 'home' }"
+        class="nav-item"
+        :class="{ active: activeLink === 'home' }"
+        @click.prevent="setActive('home')"
+      >
         ទំព័រ​ដើម
       </router-link>
 
-      <router-link :to="{ name: 'report.user' }" class="nav-item">
+      <router-link
+        :to="{ name: 'report.user' }"
+        class="nav-item"
+        :class="{ active: activeLink === 'report' }"
+        @click.prevent="setActive('report')"
+      >
         របាយការណ៍
       </router-link>
 
-      <router-link to="" class="nav-item" :class="{ active: activeLink === 'category' }"
-        @click.prevent="setActive('category')"> ប្រភេទរបាយការណ៍ </router-link>
+      <router-link
+        :to="{ name: 'category' }"
+        class="nav-item"
+        :class="{ active: activeLink === 'category' }"
+        @click.prevent="setActive('category')"
+      >
+        ប្រភេទរបាយការណ៍
+      </router-link>
 
-      <router-link :to="{ name: 'about' }" class="nav-item">
+      <router-link
+        :to="{ name: 'about' }"
+        class="nav-item"
+        :class="{ active: activeLink === 'about' }"
+        @click.prevent="setActive('about')"
+      >
         អំពី​យើង
       </router-link>
 
-      <router-link :to="{ name: 'contact_us' }" class="nav-item">
+      <router-link
+        :to="{ name: 'contact_us' }"
+        class="nav-item"
+        :class="{ active: activeLink === 'contact' }"
+        @click.prevent="setActive('contact')"
+      >
         ទំនាក់ទំនង
       </router-link>
     </nav>
@@ -140,8 +166,12 @@
             </li>
 
             <li class="nav-item">
-              <router-link :to="{name: 'category'}" class="nav-link-custom" :class="{ active: activeLink === 'categories' }"
-                @click.prevent="setActive('categories')">
+              <router-link
+                :to="{ name: 'category' }"
+                class="nav-link-custom"
+                :class="{ active: activeLink === 'categories' }"
+                @click.prevent="setActive('categories')"
+              >
                 ប្រភេទរបាយការណ៍
               </router-link>
             </li>
@@ -192,7 +222,7 @@
                 alt="User Avatar"
                 class="user-avatar"
               />
-              <span class="user-name text-white pt-1">{{
+              <span class="user-name d-none d-md-block text-white pt-1">{{
                 profile.fullname
               }}</span>
             </div>
@@ -245,7 +275,7 @@
                 to="/support"
                 class="dropdown-item-custom"
                 :class="{ active: activeLink === 'support' }"
-                @click.prevent="setActive('setting')"
+                @click.prevent="setActive('support')"
               >
                 <i class="bi bi-question-circle"></i>
                 <span>ជំនួយ និងការគាំទ្រ</span>
@@ -266,7 +296,11 @@
       <!-- SHOW Login / Register when NO token -->
       <div v-else class="btn-active d-flex align-items-center gap-3">
         <router-link :to="{ name: 'login' }">
-          <base-button icon="person-circle" variant="secondary" class="btn-login">
+          <base-button
+            icon="person-circle"
+            variant="secondary"
+            class="btn-login"
+          >
             ចូល
           </base-button>
         </router-link>
@@ -322,19 +356,16 @@ const router = useRouter();
 
 const goLogin = () => {
   router.push({ name: "login" });
-  // or: router.push("/login")
 };
 
 const goRegister = () => {
   router.push({ name: "register" });
-  // or: router.push("/register")
 };
 import { storeToRefs } from "pinia";
 
 const activeLink = ref("home");
 const profileStore = useProfileStore();
 
-// ✅ keep reactivity
 const { profile, isLoadingProfile, error } = storeToRefs(profileStore);
 
 console.log("123", profileStore.fetchProfile());
@@ -377,8 +408,9 @@ onMounted(() => {
   token.value = localStorage.getItem("token");
 });
 
-// Show login buttons if no token
-const showAuthButtons = computed(() => !auth.isAuthenticated);
+const showAuthButtons = computed(() => {
+  return !auth.isAuthenticated || auth.role === "admin";
+});
 
 // Active link in navbar
 const setActive = (link) => {
