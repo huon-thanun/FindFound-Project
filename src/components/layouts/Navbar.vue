@@ -72,7 +72,7 @@
 
   <BaseModal
     v-if="showLogoutModal"
-    :title="'ចាកចេញ'"
+    :title="'ចាកចេញពីគណនី'"
     icon="exclamation-triangle"
     theme="danger"
     :isClose="showLogoutModal"
@@ -83,7 +83,7 @@
     </template>
     <template #btnClose>
       <BaseButton variant="cancel" class="col-6" @click="closeLogoutModal"
-        >បិទ</BaseButton
+        >បោះបង់</BaseButton
       >
     </template>
     <template #btnActive>
