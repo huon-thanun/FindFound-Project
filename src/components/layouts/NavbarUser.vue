@@ -180,7 +180,8 @@
               <router-link
                 :to="{ name: 'about' }"
                 class="nav-link-custom"
-                @click="setActive('about')"
+                :class="{ active: activeLink === 'about' }"
+                @click.prevent="setActive('about')"
               >
                 អំពី​យើង
               </router-link>

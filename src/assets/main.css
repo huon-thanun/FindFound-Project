@@ -8,9 +8,9 @@
 
     /* base btn */
     --button-primary: #6b1bba;
-    --primary-color: #3B1E54;
+    --primary-color: rgb(135,48,230);
     --primary-color-shadow: rgba(59, 30, 84, 0.3);
-    --secondary-color: #9B7EBD;
+    --secondary-color: #3B1E54;
     --secondary-color-shadow: rgba(155, 126, 189, 0.3);
     --tertiary-color: #D4BEE4;
     --tertiary-color-shadow: rgba(212, 190, 228, 0.3);
