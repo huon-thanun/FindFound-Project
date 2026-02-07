@@ -1,264 +1,457 @@
 <template>
   <ProfileLayout>
-    <!-- Header -->
     <template #header>
       <ProfileHeader :user="user" />
     </template>
 
-    <!-- Sidebar -->
-    <template #left>
-      <ProfileSide :user="user" :skills="skills" />
-    </template>
-
-    <!-- Main Content -->
-    <div
-      v-if="user"
-      class="profile-security-wrapper khmer-font py-4 px-3 px-md-5"
-    >
-      <!-- Title + Back Button -->
-      <div
-        class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4"
-      >
-        <h4 class="fw-bold text-purple mb-0">ការកំណត់សុវត្ថិភាព</h4>
-        <RouterLink
-          :to="{ name: 'user.profile.edit' }"
-          class="btn btn-outline-purple fw-bold px-4 rounded-pill shadow-sm"
-        >
-          <i class="bi bi-arrow-left me-2"></i> ត្រឡប់ទៅកែប្រែព័ត៌មាន
-        </RouterLink>
-      </div>
-
-      <ProfileTabs />
-
-      <!-- Profile Card -->
-      <div
-        class="card border border-gray-300 shadow-sm rounded-4 mb-5 overflow-hidden"
-      >
-        <div class="card-body p-4 d-flex align-items-center gap-4">
-          <img
-            :src="user.avatar || 'https://ui-avatars.com/api/?name=Admin'"
-            class="rounded-4 shadow-sm border border-2 border-white"
-            style="width: 80px; height: 80px; object-fit: cover"
-          />
-          <div>
-            <h5 class="fw-bold mb-1">{{ user.fullname }}</h5>
-            <p class="text-muted mb-0 small">{{ user.email }}</p>
-            <span class="badge bg-purple-subtle text-purple mt-2">
-              {{
-                user.status === "ACTIVATED" ? "អ្នកគ្រប់គ្រងសកម្ម" : "មិនសកម្ម"
-              }}
-            </span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Security Forms -->
-      <div class="row g-4 mb-5">
-        <!-- Change Password -->
-        <div class="col-lg-6">
-          <div
-            class="card border border-gray-200 shadow-sm rounded-4 p-4 p-md-5 h-100"
-          >
-            <h5 class="fw-bold mb-4 d-flex align-items-center">
-              <i class="bi bi-shield-lock me-2 text-purple"></i> ប្តូរលេខសម្ងាត់
-            </h5>
-
-            <!-- Current Password -->
-            <div class="mb-4">
-              <label class="form-label small fw-bold text-muted mb-2"
-                >លេខសម្ងាត់បច្ចុប្បន្ន</label
-              >
-              <div class="input-group custom-group shadow-sm">
-                <span class="input-group-text bg-light border-0"
-                  ><i class="bi bi-lock"></i
-                ></span>
-                <input
-                  :type="showCurrentPassword ? 'text' : 'password'"
-                  v-model="currentPassword"
-                  class="form-control border-0 bg-light py-2"
-                  placeholder="បញ្ចូលលេខសម្ងាត់ចាស់"
-                />
-                <button
-                  class="btn btn-light border-0"
-                  @click="showCurrentPassword = !showCurrentPassword"
-                >
-                  <i
-                    :class="
-                      showCurrentPassword ? 'bi bi-eye-slash' : 'bi bi-eye'
-                    "
-                  ></i>
-                </button>
-              </div>
-            </div>
-
-            <!-- New Password -->
-            <div class="mb-4">
-              <label class="form-label small fw-bold text-muted mb-2"
-                >លេខសម្ងាត់ថ្មី</label
-              >
-              <div class="input-group custom-group shadow-sm">
-                <span class="input-group-text bg-light border-0"
-                  ><i class="bi bi-shield-plus"></i
-                ></span>
-                <input
-                  :type="showNewPassword ? 'text' : 'password'"
-                  v-model="newPassword"
-                  class="form-control border-0 bg-light py-2"
-                  placeholder="បញ្ចូលលេខសម្ងាត់ថ្មី"
-                />
-                <button
-                  class="btn btn-light border-0"
-                  @click="showNewPassword = !showNewPassword"
-                >
-                  <i
-                    :class="showNewPassword ? 'bi bi-eye-slash' : 'bi bi-eye'"
-                  ></i>
-                </button>
-              </div>
-
-              <div class="mt-3 d-flex gap-1">
-                <div
-                  v-for="i in 4"
-                  :key="i"
-                  class="password-meter"
-                  :class="{ active: newPassword.length > i * 2 }"
-                ></div>
-              </div>
-            </div>
-
-            <button
-              @click="updatePassword"
-              class="btn btn-purple w-100 py-3 mt-2 fw-bold"
-              :disabled="loadingPassword || !currentPassword || !newPassword"
-            >
-              <span
-                v-if="loadingPassword"
-                class="spinner-border spinner-border-sm me-2"
-              ></span>
-              ធ្វើបច្ចុប្បន្នភាពលេខសម្ងាត់
-            </button>
-          </div>
-        </div>
-
-        <!-- Change & Verify Email -->
-        <div class="col-lg-6">
-          <div
-            class="card border border-gray-200 shadow-sm rounded-4 p-4 p-md-5 h-100"
-          >
-            <h5 class="fw-bold mb-4 d-flex align-items-center">
-              <i class="bi bi-envelope-at me-2 text-purple"></i> ប្តូរអ៊ីមែល
-              និងផ្ទៀងផ្ទាត់
-            </h5>
-
-            <!-- New Email -->
-            <div class="mb-4">
-              <label class="form-label small fw-bold text-muted mb-2"
-                >អ៊ីមែលថ្មី</label
-              >
-              <div class="input-group custom-group shadow-sm">
-                <span class="input-group-text bg-light border-0"
-                  ><i class="bi bi-envelope"></i
-                ></span>
-                <input
-                  v-model="newEmail"
-                  type="email"
-                  class="form-control border-0 bg-light py-2"
-                  placeholder="ឧទាហរណ៍: name@mail.com"
-                />
-              </div>
-            </div>
-
-            <!-- Current Password -->
-            <div class="mb-4">
-              <label class="form-label small fw-bold text-muted mb-2"
-                >បញ្ជាក់លេខសម្ងាត់</label
-              >
-              <div class="input-group custom-group shadow-sm">
-                <span class="input-group-text bg-light border-0"
-                  ><i class="bi bi-shield-check"></i
-                ></span>
-                <input
-                  :type="showEmailPassword ? 'text' : 'password'"
-                  v-model="emailPassword"
-                  class="form-control border-0 bg-light py-2"
-                  placeholder="បញ្ចូលលេខសម្ងាត់ដើម្បីបញ្ជាក់"
-                />
-                <button
-                  class="btn btn-light border-0"
-                  @click="showEmailPassword = !showEmailPassword"
-                >
-                  <i
-                    :class="showEmailPassword ? 'bi bi-eye-slash' : 'bi bi-eye'"
-                  ></i>
-                </button>
-              </div>
-            </div>
-
-            <div class="alert alert-warning border-0 small mb-4 py-3 shadow-sm">
-              <i class="bi bi-exclamation-triangle-fill me-2"></i>
-              យើងនឹងផ្ញើ token ទៅកាន់អ៊ីមែលថ្មីរបស់អ្នកដើម្បីផ្ទៀងផ្ទាត់។
-            </div>
-
-            <button
-              @click="requestEmailChange"
-              class="btn btn-purple-outline w-100 py-3 fw-bold mb-3"
-              :disabled="loadingEmail || !newEmail || !emailPassword"
-            >
-              <span
-                v-if="loadingEmail"
-                class="spinner-border spinner-border-sm me-2"
-              ></span>
-              ស្នើសុំប្តូរអ៊ីមែល
-            </button>
-
-            <div v-if="emailRequested">
-              <label class="form-label small fw-bold text-muted mb-2"
-                >Token ផ្ទៀងផ្ទាត់</label
-              >
-              <div class="input-group custom-group shadow-sm mb-3">
-                <input
-                  v-model="emailVerifyToken"
-                  type="text"
-                  class="form-control border-0 bg-light py-2"
-                  placeholder="បញ្ចូល token ដែលបានផ្ញើ"
-                />
-              </div>
-              <button
-                @click="verifyEmailChange"
-                class="btn btn-purple w-100 py-3 fw-bold"
-                :disabled="loadingVerify || !emailVerifyToken"
-              >
-                <span
-                  v-if="loadingVerify"
-                  class="spinner-border spinner-border-sm me-2"
-                ></span>
-                ផ្ទៀងផ្ទាត់អ៊ីមែល
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
+    <div v-if="!user" class="loading-full">
+      <div class="custom-loader"></div>
+      <p class="mt-4 khmer-font text-purple-accent">កំពុងផ្ទុកទិន្នន័យ...</p>
     </div>
 
-    <!-- Loading -->
-    <div v-else class="text-center py-5">
-      <div class="spinner-border text-purple mb-3"></div>
-      <p class="khmer-font text-muted">កំពុងផ្ទុកព័ត៌មាន...</p>
+    <div v-else class="profile-page">
+      <section class="hero-lavender">
+        <div class="container-fluid px-lg-5">
+          <div class="row align-items-center pt-5 pb-5">
+            <div class="col-md-auto text-center text-md-start">
+              <div class="avatar-glow-wrapper" data-aos="zoom-in">
+                <img
+                  :src="user.avatar || 'https://ui-avatars.com/api/?name=Admin'"
+                  class="profile-img-premium shadow-lg"
+                  alt="Avatar"
+                />
+                <div class="status-indicator-online"></div>
+              </div>
+            </div>
+
+            <div
+              class="col-md ps-md-4 mt-4 mt-md-0 text-center text-md-start"
+              data-aos="fade-right"
+            >
+              <div
+                class="d-flex align-items-center justify-content-center justify-content-md-start gap-2 mb-2"
+              >
+                <h1
+                  class="display-6 fw-bold text-dark-indigo mb-0 khmer-font-title"
+                >
+                  {{ user.fullname }}
+                </h1>
+                <span class="badge-verified-glow">
+                  <i class="bi bi-patch-check-fill"></i>
+                </span>
+              </div>
+              <p class="text-muted fs-5 mb-3">{{ user.email }}</p>
+
+              <div
+                class="d-flex flex-wrap gap-2 justify-content-center justify-content-md-start"
+              >
+                <span class="badge-status-premium">
+                  {{
+                    user.status === "ACTIVATED"
+                      ? "អ្នកគ្រប់គ្រងប្រព័ន្ធ"
+                      : "មិនទាន់ដំណើរការ"
+                  }}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div class="container-fluid px-lg-5 content-overlap">
+        <div class="row g-4">
+          <div class="col-lg-8" data-aos="fade-up">
+            <ProfileTabs class="mb-4" />
+
+            <div class="row g-4">
+              <div class="col-md-6">
+                <div class="main-details-card h-100 shadow-sm">
+                  <div class="card-header-clean mb-4">
+                    <div class="accent-dot"></div>
+                    <h5 class="fw-bold mb-0 text-dark-indigo khmer-font-title">
+                      ប្តូរលេខសម្ងាត់
+                    </h5>
+                  </div>
+
+                  <div class="info-box-item-input mb-3">
+                    <label class="info-label">លេខសម្ងាត់បច្ចុប្បន្ន</label>
+                    <div class="input-with-icon">
+                      <i class="bi bi-shield-lock text-purple-accent"></i>
+                      <input
+                        :type="showCurrentPassword ? 'text' : 'password'"
+                        v-model="currentPassword"
+                        class="clean-input"
+                        placeholder="••••••••"
+                      />
+                      <button
+                        @click="showCurrentPassword = !showCurrentPassword"
+                        class="btn-eye"
+                      >
+                        <i
+                          :class="
+                            showCurrentPassword
+                              ? 'bi bi-eye-slash'
+                              : 'bi bi-eye'
+                          "
+                        ></i>
+                      </button>
+                    </div>
+                  </div>
+
+                  <div class="info-box-item-input mb-2">
+                    <label class="info-label">លេខសម្ងាត់ថ្មី</label>
+                    <div class="input-with-icon">
+                      <i class="bi bi-key text-purple-accent"></i>
+                      <input
+                        :type="showNewPassword ? 'text' : 'password'"
+                        v-model="newPassword"
+                        class="clean-input"
+                        placeholder="••••••••"
+                      />
+                      <button
+                        @click="showNewPassword = !showNewPassword"
+                        class="btn-eye"
+                      >
+                        <i
+                          :class="
+                            showNewPassword ? 'bi bi-eye-slash' : 'bi bi-eye'
+                          "
+                        ></i>
+                      </button>
+                    </div>
+                  </div>
+
+                  <div class="d-flex gap-1 mb-4">
+                    <div
+                      v-for="i in 4"
+                      :key="i"
+                      class="pwd-meter"
+                      :class="{ active: newPassword.length > i * 2 }"
+                    ></div>
+                  </div>
+
+                  <button
+                    @click="updatePassword"
+                    class="btn-save-premium w-100"
+                    :disabled="
+                      loadingPassword || !currentPassword || !newPassword
+                    "
+                  >
+                    <span
+                      v-if="loadingPassword"
+                      class="spinner-border spinner-border-sm me-2"
+                    ></span>
+                    ធ្វើបច្ចុប្បន្នភាព
+                  </button>
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <div class="main-details-card h-100 shadow-sm">
+                  <div class="card-header-clean mb-4">
+                    <div class="accent-dot"></div>
+                    <h5 class="fw-bold mb-0 text-dark-indigo khmer-font-title">
+                      ប្តូរអ៊ីមែល
+                    </h5>
+                  </div>
+
+                  <div class="info-box-item-input mb-3">
+                    <label class="info-label">អ៊ីមែលថ្មី</label>
+                    <div class="input-with-icon">
+                      <i class="bi bi-envelope-at text-purple-accent"></i>
+                      <input
+                        v-model="newEmail"
+                        type="email"
+                        class="clean-input"
+                        placeholder="example@mail.com"
+                      />
+                    </div>
+                  </div>
+
+                  <div class="info-box-item-input mb-3">
+                    <label class="info-label">លេខសម្ងាត់បញ្ជាក់</label>
+                    <div class="input-with-icon">
+                      <i class="bi bi-lock text-purple-accent"></i>
+                      <input
+                        :type="showEmailPassword ? 'text' : 'password'"
+                        v-model="emailPassword"
+                        class="clean-input"
+                        placeholder="បញ្ចូលលេខសម្ងាត់"
+                      />
+                      <button
+                        @click="showEmailPassword = !showEmailPassword"
+                        class="btn-eye"
+                      >
+                        <i
+                          :class="
+                            showEmailPassword ? 'bi bi-eye-slash' : 'bi bi-eye'
+                          "
+                        ></i>
+                      </button>
+                    </div>
+                  </div>
+
+                  <div
+                    v-if="emailRequested"
+                    class="info-box-item-input mb-3 border-success animate-zoom"
+                  >
+                    <label class="info-label text-success"
+                      >Token ផ្ទៀងផ្ទាត់</label
+                    >
+                    <input
+                      v-model="emailVerifyToken"
+                      type="text"
+                      class="clean-input"
+                      placeholder="បញ្ចូល Token ពីអ៊ីមែល"
+                    />
+                  </div>
+
+                  <button
+                    v-if="!emailRequested"
+                    @click="requestEmailChange"
+                    class="btn-outline-premium w-100 mt-2"
+                    :disabled="loadingEmail || !newEmail || !emailPassword"
+                  >
+                    <span
+                      v-if="loadingEmail"
+                      class="spinner-border spinner-border-sm me-2"
+                    ></span>
+                    ស្នើសុំប្តូរអ៊ីមែល
+                  </button>
+
+                  <button
+                    v-else
+                    @click="verifyEmailChange"
+                    class="btn-save-premium w-100 mt-2"
+                    :disabled="loadingVerify || !emailVerifyToken"
+                  >
+                    <span
+                      v-if="loadingVerify"
+                      class="spinner-border spinner-border-sm me-2"
+                    ></span>
+                    ផ្ទៀងផ្ទាត់អ៊ីមែលថ្មី
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-4" data-aos="fade-left">
+            <div class="sidebar-sticky">
+              <ProfileSide :user="user" :skills="skills" />
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </ProfileLayout>
 </template>
 
+<style scoped>
+@import url("https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@300;400;600;700&family=Koh+Santepheap:wght@700&display=swap");
+
+.profile-page {
+  font-family: "Kantumruy Pro", sans-serif;
+  background-color: #f9f8ff;
+  min-height: 100vh;
+  padding-bottom: 80px;
+}
+
+.khmer-font-title {
+  font-family: "Koh Santepheap", sans-serif;
+}
+
+/* HERO SECTION - Premium Lavender */
+.hero-lavender {
+  background-color: #f1edff;
+  background-image:
+    radial-gradient(at 0% 0%, rgba(124, 58, 237, 0.08) 0, transparent 50%),
+    radial-gradient(at 50% 0%, rgba(59, 30, 84, 0.08) 0, transparent 50%);
+  padding-bottom: 120px;
+}
+
+.profile-img-premium {
+  width: 160px;
+  height: 160px;
+  border-radius: 42px;
+  object-fit: cover;
+  border: 6px solid #ffffff;
+}
+
+.status-indicator-online {
+  position: absolute;
+  bottom: 12px;
+  right: 12px;
+  width: 22px;
+  height: 22px;
+  background: #00d084;
+  border: 4px solid #ffffff;
+  border-radius: 50%;
+  box-shadow: 0 0 15px rgba(0, 208, 132, 0.4);
+}
+
+/* CONTENT BOXES */
+.content-overlap {
+  margin-top: -80px;
+}
+
+.main-details-card {
+  background: white;
+  border-radius: 32px;
+  padding: 40px;
+  border: 1px solid rgba(124, 58, 237, 0.05);
+}
+
+.card-header-clean {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.accent-dot {
+  width: 8px;
+  height: 8px;
+  background: #7c3aed;
+  border-radius: 50%;
+}
+
+/* INPUT INFO BOX STYLE */
+.info-box-item-input {
+  background: #fcfaff;
+  padding: 12px 20px;
+  border-radius: 18px;
+  border: 1px solid #f1efff;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.info-box-item-input:focus-within {
+  background: white;
+  border-color: #7c3aed;
+  box-shadow: 0 8px 20px rgba(124, 58, 237, 0.06);
+}
+
+.info-label {
+  font-size: 0.7rem;
+  color: #94a3b8;
+  font-weight: 700;
+  text-transform: uppercase;
+  margin-bottom: 2px;
+  display: block;
+}
+
+.input-with-icon {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.clean-input {
+  border: none;
+  background: transparent;
+  width: 100%;
+  font-weight: 600;
+  color: #1e1b4b;
+  outline: none;
+  padding: 5px 0;
+}
+
+.btn-eye {
+  background: none;
+  border: none;
+  color: #adb5bd;
+  padding: 0;
+}
+.btn-eye:hover {
+  color: #7c3aed;
+}
+
+/* LOADING COMPONENT */
+.loading-full {
+  height: 80vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.custom-loader {
+  width: 60px;
+  height: 60px;
+  border: 6px solid #f3f3f3;
+  border-top: 6px solid #7c3aed;
+  border-radius: 50%;
+  animation: spin 1s cubic-bezier(0.68, -0.55, 0.27, 1.55) infinite;
+}
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* BUTTONS */
+.btn-save-premium {
+  background: #3b1e54;
+  color: white;
+  padding: 14px;
+  border-radius: 15px;
+  font-weight: 700;
+  border: none;
+  transition: 0.3s;
+}
+.btn-save-premium:hover:not(:disabled) {
+  background: #7c3aed;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(124, 58, 237, 0.2);
+}
+
+.btn-outline-premium {
+  background: white;
+  color: #3b1e54;
+  border: 2px solid #3b1e54;
+  padding: 12px;
+  border-radius: 15px;
+  font-weight: 700;
+  transition: 0.3s;
+}
+.btn-outline-premium:hover:not(:disabled) {
+  background: #f3eff7;
+}
+
+.pwd-meter {
+  height: 4px;
+  flex: 1;
+  background: #eee;
+  border-radius: 10px;
+}
+.pwd-meter.active {
+  background: #7c3aed;
+}
+
+.text-purple-accent {
+  color: #7c3aed;
+}
+.text-dark-indigo {
+  color: #1e1b4b;
+}
+
+@media (max-width: 991px) {
+  .content-overlap {
+    margin-top: 0;
+    padding-top: 30px;
+  }
+}
+</style>
 <script setup>
 import ProfileHeader from "@/components/profile/ProfileHeader.vue";
 import ProfileSide from "@/components/profile/ProfileSide.vue";
 import ProfileTabs from "@/components/profile/ProfileTabs.vue";
 import { ref, onMounted } from "vue";
 
-// User data
 const user = ref(null);
 const skills = ["HTML", "CSS", "Vue", "MySQL", "JavaScript"];
 
-// Form fields
 const currentPassword = ref("");
 const newPassword = ref("");
 const showCurrentPassword = ref(false);
@@ -270,12 +463,10 @@ const showEmailPassword = ref(false);
 const emailRequested = ref(false);
 const emailVerifyToken = ref("");
 
-// Loading states
 const loadingPassword = ref(false);
 const loadingEmail = ref(false);
 const loadingVerify = ref(false);
 
-// Fetch profile
 onMounted(async () => {
   try {
     const token = localStorage.getItem("token");
@@ -292,9 +483,7 @@ onMounted(async () => {
   }
 });
 
-// Update password
 const updatePassword = async () => {
-  if (!currentPassword.value || !newPassword.value) return;
   loadingPassword.value = true;
   try {
     const token = localStorage.getItem("token");
@@ -312,24 +501,18 @@ const updatePassword = async () => {
         }),
       },
     );
-    const json = await res.json();
-    if (!res.ok) throw new Error(json.message || "Failed to update password");
-    alert("Password updated successfully!");
+    if (!res.ok) throw new Error();
+    alert("លេខសម្ងាត់បានប្តូរដោយជោគជ័យ! 🎉");
     currentPassword.value = "";
     newPassword.value = "";
   } catch (err) {
-    alert(err.message || "Network error");
+    alert("បរាជ័យក្នុងការប្តូរលេខសម្ងាត់");
   } finally {
     loadingPassword.value = false;
   }
 };
 
-// Request email change
 const requestEmailChange = async () => {
-  if (!newEmail.value || !emailPassword.value) {
-    alert("សូមបំពេញអ៊ីមែលថ្មី និងលេខសម្ងាត់");
-    return;
-  }
   loadingEmail.value = true;
   try {
     const token = localStorage.getItem("token");
@@ -342,122 +525,40 @@ const requestEmailChange = async () => {
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
-          newEmail: newEmail.value, // ✅ correct field
-          password: emailPassword.value, // ✅ correct field
+          newEmail: newEmail.value,
+          password: emailPassword.value,
         }),
       },
     );
-    const json = await res.json();
-    if (!res.ok)
-      throw new Error(json.message || "Failed to request email change");
-    alert("📩 Verification token sent to your new email!");
+    if (!res.ok) throw new Error();
     emailRequested.value = true;
-    emailPassword.value = "";
+    alert("Token ផ្ទៀងផ្ទាត់ត្រូវបានផ្ញើទៅកាន់អ៊ីមែលថ្មី! 📩");
   } catch (err) {
-    alert(err.message || "Network error");
+    alert("មានបញ្ហាក្នុងការស្នើសុំ");
   } finally {
     loadingEmail.value = false;
   }
 };
 
-// Verify email change
 const verifyEmailChange = async () => {
-  if (!emailVerifyToken.value) {
-    alert("សូមបញ្ចូល token");
-    return;
-  }
   loadingVerify.value = true;
   try {
-    const token = emailVerifyToken.value.trim();
     const res = await fetch(
       "https://ant-g2-landf.ti.linkpc.net/api/v1/auth/verify-change-email",
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ token }),
+        body: JSON.stringify({ token: emailVerifyToken.value.trim() }),
       },
     );
-    const json = await res.json();
-    if (!res.ok) throw new Error(json.message || "Invalid or expired token");
-    alert("🎉 អ៊ីមែលបានផ្ទៀងផ្ទាត់ដោយជោគជ័យ!");
+    if (!res.ok) throw new Error();
+    alert("អ៊ីមែលបានផ្ទៀងផ្ទាត់រួចរាល់! 🎉");
     user.value.email = newEmail.value;
-    newEmail.value = "";
-    emailVerifyToken.value = "";
     emailRequested.value = false;
   } catch (err) {
-    alert(err.message);
+    alert("Token មិនត្រឹមត្រូវ");
   } finally {
     loadingVerify.value = false;
   }
 };
 </script>
-
-<style scoped>
-@import url("https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@300;400;600;700&display=swap");
-.khmer-font {
-  font-family: "Kantumruy Pro", sans-serif;
-}
-.text-purple {
-  color: #3b1e54 !important;
-}
-.bg-purple-subtle {
-  background-color: #f3eff7 !important;
-}
-.border-purple {
-  border-color: #3b1e54 !important;
-}
-.btn-purple {
-  background: #3b1e54;
-  color: #fff;
-  border: none;
-  transition: all 0.3s ease;
-}
-.btn-purple:hover:not(:disabled) {
-  background: #2a153d;
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(59, 30, 84, 0.25);
-}
-.btn-purple-outline {
-  background: transparent;
-  color: #3b1e54;
-  border: 2px solid #3b1e54;
-  transition: all 0.3s ease;
-}
-.btn-purple-outline:hover:not(:disabled) {
-  background: #3b1e54;
-  color: white;
-}
-.nav-tab {
-  padding: 10px 16px;
-  font-weight: 600;
-  text-decoration: none;
-  color: #6c757d;
-  border: 1px solid transparent;
-  border-radius: 12px 12px 0 0;
-  transition: all 0.3s ease;
-}
-.nav-tab.active {
-  color: #3b1e54;
-  border-color: #3b1e54;
-  border-bottom-color: #fff;
-}
-.custom-group {
-  border-radius: 12px;
-  border: 1px solid #ddd;
-  background: #fff;
-}
-.password-meter {
-  height: 6px;
-  flex: 1;
-  background: #e9ecef;
-  border-radius: 10px;
-  border: 1px solid #ccc;
-}
-.password-meter.active {
-  background: #3b1e54;
-  border-color: #2a153d;
-}
-.overflow-auto::-webkit-scrollbar {
-  display: none;
-}
-</style>

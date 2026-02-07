@@ -1,44 +1,19 @@
 <template>
-  <section class="features-section py-5">
-    <div class="container py-4">
-      <div class="row g-4 text-center mb-5">
-        <div
-          class="col-md-4"
-          v-for="stat in stats"
-          :key="stat.label"
-          data-aos="zoom-in"
-        >
-          <div class="stat-card">
-            <div class="stat-content">
-              <h2 class="stat-value">{{ stat.value }}</h2>
-              <p class="stat-label">{{ stat.label }}</p>
-            </div>
-            <div class="stat-line"></div>
-          </div>
-        </div>
-      </div>
-
-      <div class="text-center mb-5">
-        <h3 class="khmer-font-title fw-bold">ហេតុអ្វីជ្រើសរើសវេទិការបស់យើង?</h3>
-        <div class="divider mx-auto"></div>
-      </div>
-
+  <section class="stats-scroll-section py-3">
+    <div class="container">
       <div class="row g-4">
         <div
-          class="col-lg-4"
-          v-for="feature in features"
-          :key="feature.title"
-          data-aos="fade-up"
+          v-for="(stat, index) in stats"
+          :key="index"
+          class="col-md-4 text-center"
+          ref="statsContainer"
         >
-          <div class="feature-card h-100">
-            <div class="feature-icon-wrapper" :class="feature.bgClass">
-              <i :class="feature.icon"></i>
-            </div>
-            <h5 class="feature-title khmer-font-title">{{ feature.title }}</h5>
-            <p class="feature-desc khmer-font">{{ feature.desc }}</p>
-            <div class="card-arrow">
-              <i class="bi bi-arrow-right-short"></i>
-            </div>
+          <div class="stat-item-wrap">
+            <h2 class="display-3 fw-bold running-number">
+              {{ animatedNumbers[index] }}{{ stat.suffix }}
+            </h2>
+            <p class="khmer-font-body text-muted mt-2">{{ stat.label }}</p>
+            <div class="accent-bar mx-auto"></div>
           </div>
         </div>
       </div>
@@ -47,188 +22,98 @@
 </template>
 
 <script setup>
+import { ref, onMounted, reactive } from "vue";
+
 const stats = [
-  { value: "5K+", label: "របស់ដែលបានរកឃើញ" },
-  { value: "12K+", label: "សមាជិកជួយគ្នា" },
-  { value: "25+", label: "ខេត្ត-ក្រុងទូទាំងប្រទេស" },
+  { target: 5000, suffix: "+", label: "របស់ដែលបានរកឃើញ" },
+  { target: 12000, suffix: "+", label: "សមាជិកជួយគ្នា" },
+  { target: 25, suffix: "+", label: "ខេត្ត-ក្រុងទូទាំងប្រទេស" },
 ];
 
-const features = [
-  {
-    title: "ការផ្ទៀងផ្ទាត់ច្បាស់លាស់",
-    desc: "យើងធានាថាព័ត៌មានដែលបានបង្ហោះត្រូវបានត្រួតពិនិត្យ ដើម្បីជៀសវាងការបោកប្រាស់ផ្សេងៗ។",
-    icon: "bi bi-patch-check-fill",
-    bgClass: "icon-purple",
-  },
-  {
-    title: "ស្វែងរករហ័សទាន់ចិត្ត",
-    desc: "ប្រើប្រាស់បច្ចេកវិទ្យា Filter វៃឆ្លាត ជួយឱ្យអ្នករកឃើញរបស់ដែលបាត់តាមប្រភេទ និងទីតាំង។",
-    icon: "bi bi-search-heart-fill",
-    bgClass: "icon-gold",
-  },
-  {
-    title: "សហគមន៍ជួយគ្នា",
-    desc: "មិនត្រឹមតែជាគេហទំព័រ ប៉ុន្តែជាសហគមន៍ដែលបងប្អូនខ្មែរជួយគ្នាដោយទឹកចិត្តសប្បុរស។",
-    icon: "bi bi-people-fill",
-    bgClass: "icon-blue",
-  },
-];
+// This holds the numbers that will "run"
+const animatedNumbers = reactive([0, 0, 0]);
+const statsContainer = ref(null);
+let hasRun = false;
+
+const startCounting = () => {
+  if (hasRun) return;
+  hasRun = true;
+
+  stats.forEach((stat, index) => {
+    let start = 0;
+    const end = stat.target;
+    const duration = 2000; // 2 seconds to finish running
+    const increment = end / (duration / 16); // 16ms is roughly 1 frame
+
+    const timer = setInterval(() => {
+      start += increment;
+      if (start >= end) {
+        animatedNumbers[index] = end.toLocaleString(); // Format with commas
+        clearInterval(timer);
+      } else {
+        animatedNumbers[index] = Math.floor(start).toLocaleString();
+      }
+    }, 16);
+  });
+};
+
+onMounted(() => {
+  // This detects when the section enters the screen
+  const observer = new IntersectionObserver(
+    (entries) => {
+      if (entries[0].isIntersecting) {
+        startCounting();
+      }
+    },
+    { threshold: 0.5 },
+  ); // Trigger when 50% of the section is visible
+
+  if (statsContainer.value) {
+    // We observe the first element in the array of refs
+    observer.observe(statsContainer.value[0]);
+  }
+});
 </script>
 
 <style scoped>
-@import url("https://fonts.googleapis.com/css2?family=Koh+Santepheap:wght@700&family=Kantumruy+Pro:wght@300;400;600&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Koh+Santepheap:wght@700&family=Noto+Sans+Khmer:wght@400;600&display=swap");
 
-.features-section {
-  background: linear-gradient(to bottom, #ffffff, #f8fafc);
-  overflow: hidden;
+.stats-scroll-section {
+  background-color: #ffffff;
 }
 
-.khmer-font {
-  font-family: "Kantumruy Pro", sans-serif;
-}
-.khmer-font-title {
+.running-number {
   font-family: "Koh Santepheap", sans-serif;
+  color: #3b1e54; /* Your purple brand color */
+  letter-spacing: -1px;
 }
 
-/* Stat Card Styles */
-.stat-card {
-  background: white;
-  padding: 2rem;
-  border-radius: 24px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
-  position: relative;
-  overflow: hidden;
-  transition: 0.3s;
+.khmer-font-body {
+  font-family: "Noto Sans Khmer", sans-serif;
+  font-weight: 600;
+  font-size: 1.1rem;
 }
 
-.stat-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 15px 35px rgba(59, 30, 84, 0.1);
-}
-
-.stat-value {
-  font-family: "Koh Santepheap", sans-serif;
-  font-size: 2.5rem;
-  background: linear-gradient(135deg, #3b1e54 0%, #d4af37 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  margin-bottom: 5px;
-}
-
-.stat-label {
-  color: #64748b;
-  font-weight: 500;
-  font-family: "Kantumruy Pro", sans-serif;
-}
-
-.stat-line {
-  position: absolute;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 40px;
+.accent-bar {
+  width: 30px;
   height: 4px;
-  background: #d4af37;
-  border-radius: 10px 10px 0 0;
-  transition: 0.3s;
-}
-
-.stat-card:hover .stat-line {
-  width: 100%;
-}
-
-/* Feature Card Styles */
-.feature-card {
-  background: white;
-  padding: 2.5rem 2rem;
-  border-radius: 30px;
-  border: 1px solid #f1f5f9;
-  position: relative;
-  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-
-.feature-card:hover {
-  transform: translateY(-12px);
-  background: #3b1e54;
-  border-color: #3b1e54;
-}
-
-.feature-icon-wrapper {
-  width: 60px;
-  height: 60px;
-  border-radius: 18px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.8rem;
-  margin-bottom: 1.5rem;
-  transition: 0.4s;
-}
-
-.feature-card:hover .feature-icon-wrapper {
-  background: white !important;
-  color: #3b1e54 !important;
-  transform: rotateY(360deg);
-}
-
-.icon-purple {
-  background: #f3e8ff;
-  color: #7c3aed;
-}
-.icon-gold {
-  background: #fffbeb;
-  color: #d4af37;
-}
-.icon-blue {
-  background: #e0f2fe;
-  color: #0284c7;
-}
-
-.feature-title {
-  font-size: 1.25rem;
-  margin-bottom: 1rem;
-  transition: 0.3s;
-}
-
-.feature-desc {
-  font-size: 0.9rem;
-  color: #64748b;
-  line-height: 1.7;
-  transition: 0.3s;
-}
-
-.feature-card:hover .feature-title,
-.feature-card:hover .feature-desc {
-  color: white;
-}
-
-/* Decoration */
-.divider {
-  width: 60px;
-  height: 4px;
-  background: #d4af37;
-  border-radius: 2px;
+  background: #7c3aed; /* Light purple accent */
+  border-radius: 10px;
   margin-top: 15px;
+  transition: width 0.3s ease;
 }
 
-.card-arrow {
-  position: absolute;
-  bottom: 20px;
-  right: 25px;
-  font-size: 1.5rem;
-  color: #d4af37;
-  opacity: 0;
-  transition: 0.3s;
+.stat-item-wrap:hover .accent-bar {
+  width: 60px;
 }
 
-.feature-card:hover .card-arrow {
-  opacity: 1;
-  right: 20px;
+/* Subtle entrance for the whole container */
+.stat-item-wrap {
+  padding: 20px;
+  transition: transform 0.3s ease;
 }
 
-@media (max-width: 768px) {
-  .stat-value {
-    font-size: 2rem;
-  }
+.stat-item-wrap:hover {
+  transform: translateY(-5px);
 }
 </style>
