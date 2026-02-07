@@ -45,8 +45,8 @@ const SORT_BY_OPTIONS = [
 ];
 
 const SORT_DIR_OPTIONS = [
-    { id: "ASC", name: "តូចទៅធំ" },
-    { id: "DESC", name: "ធំទៅតូច" },
+    { id: "ASC", name: "ចាស់បំផុត" },
+    { id: "DESC", name: "ថ្មីបំផុត" },
 ];
 
 // ===== Validation =====
@@ -324,33 +324,33 @@ const clearFilter = () => {
                 <h2 class="fw-bold">ប្រភេទរបាយការណ៍</h2>
                 <p class="text-muted">បង្កើត និងគ្រប់គ្រងប្រភេទនៃរបាយការណ៍ផ្សេងៗ</p>
             </div>
-            <BaseButton class="d-none d-md-block" variant="primary" @click="openCreateModal" icon="plus-circle">
+            <BaseButton variant="primary" @click="openCreateModal" icon="plus-circle">
                 បង្កើតប្រភេទថ្មី
             </BaseButton>
-            <BaseButton class="d-block d-md-none d-flex" variant="primary" @click="openCreateModal" icon="plus-circle">
+            <!-- <BaseButton class="d-block d-md-none d-flex" variant="primary" @click="openCreateModal" icon="plus-circle">
                 បង្កើត
-            </BaseButton>
+            </BaseButton> -->
         </div>
 
-        <div class="card mb-3 shadow">
+        <div class="card mb-3 shadow border-color">
             <div class="card-body row">
                 
                 <!-- Search -->
-                <div class="col-xl-6">
+                <div class="col-xxl-12">
                     <BaseInput class="" v-model="search" placeholder="ស្វែងរកតាមប្រភេទ​ និងការពិពណ៌នា..." />
                 </div>
 
-                <div class="col-xl-3 mt-2">
+                <div class="col-xxl-8 mt-2">
                     <div class="row">
 
                         <!-- Sort By -->
-                        <div class="col-xl-6" style="flex: 1; flex-wrap: nowrap;">
+                        <div class="col-lg-6 col-xxl-3" style="flex-wrap: nowrap;">
                             <BaseSelect v-model="sortBy" :items="SORT_BY_OPTIONS" labelField="name" valueField="id"
                                 textField="តម្រៀបតាម" class="text-nowrap" />
                         </div>
 
                         <!-- Sort Direction -->
-                        <div class="col-xl-6" style="flex: 1; flex-wrap: nowrap;">
+                        <div class="col-lg-6 col-xxl-4" style="flex-wrap: nowrap;">
                             <BaseSelect v-model="sortDir" :items="SORT_DIR_OPTIONS" labelField="name" valueField="id"
                                 textField="ទិសដៅតម្រៀប" class="text-nowrap" />
                         </div>
@@ -358,7 +358,7 @@ const clearFilter = () => {
                 </div>
 
                 <!-- CLEAR FILTER -->
-                <div class="col-xl-3 mt-1 text-end">
+                <div class="col-xxl-4 mt-1 text-end">
                     <BaseButton variant="outline_primary" icon="stars" @click="clearFilter">
                         សម្អាតការតម្រៀប
                     </BaseButton>
@@ -474,6 +474,10 @@ const clearFilter = () => {
 </template>
 
 <style scoped>
+
+.border-color {
+  border-color: var(--primary-color);
+}
 /* Default (LG and up) */
 .filter-row>div {
     flex: 1;

@@ -24,7 +24,7 @@
                   </span>
                 </div>
                 <span class="fs-5 fw-bold">ការពិពណ៌នា</span>
-                <p class="card-text text-muted py-3">{{ data.description }}</p>
+                <p class="card-text text-muted py-3 description">{{ data.description }}</p>
                 <ul class="row p-0" style="list-style-type: none">
                   <li class="col-6 col-md-6 col-xl-6 d-flex gap-2 mb-2" v-for="(item, index) in detail" :key="index">
                     <span class="icon"><i :class="item.icon"></i></span>
@@ -88,6 +88,9 @@
 import { watch, onUnmounted, ref } from "vue";
 import { formatDate } from "@/utils/formatDate";
 import { computed } from "vue";
+import { useReportStore } from "@/stores/reportStore";
+
+const reportStore = useReportStore();
 
 const props = defineProps({
   modelValue: {
@@ -156,12 +159,12 @@ watch(
       {
         icon: "bi bi-telephone-fill",
         title: "លេខទូរស័ព្ទ",
-        value: data.reporter?.phoneNumber || "-",
+        value: reportStore.report.contactInformation?.phoneNumber || "-",
       },
       {
         icon: "bi bi-telegram",
         title: "តំណភ្ជាប់ Telegram",
-        value: data.reporter?.telegramLink || "-",
+        value: reportStore.report.contactInformation?.telegramLink || "-",
       },
     ];
   },
@@ -291,6 +294,14 @@ const nextImage = () => {
 .title {
   font-size: 14px;
   color: rgb(126, 126, 126);
+}
+
+.description {
+  max-width: 100%;
+  white-space: normal;
+  overflow-wrap: anywhere; /* 🔥 strongest fix */
+  word-break: break-word;
+  line-break: auto;
 }
 
 .value {

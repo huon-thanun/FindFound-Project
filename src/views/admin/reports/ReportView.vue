@@ -1,36 +1,43 @@
 <template>
   <div class="p-3">
-    <h2 class="fw-bold">របាយការណ៍</h2>
-    <p class="text-muted">
-      មើល និងគ្រប់គ្រងការរាយការណ៍បាត់បង់ និងរើសបានទាំងអស់
-    </p>
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <div>
+        <h2 class="fw-bold">របាយការណ៍</h2>
+        <p class="text-muted">
+          មើល និងគ្រប់គ្រងការរាយការណ៍បាត់បង់ និងរើសបានទាំងអស់
+        </p>
+      </div>
+      <BaseButton class="d-none" icon="person-plus" variant="primary" @click="showCreateModal = true">
+        បង្កើតអ្នកប្រើប្រាស់
+      </BaseButton>
+    </div>
 
     <!-- <div class="row"> -->
     <!-- FILTER CARD -->
 
     <div class="card mb-3 shadow border-color">
       <div class="card-body row">
-        <div class="col-xl-4">
+        <div class="col-xxl-12">
           <BaseInput class="w-100" v-model="search" type="text" placeholder="ស្វែងរករបាយការណ៍..." />
         </div>
-        <div class="col-xl-5 mt-2">
+        <div class="col-xxl-8 mt-2">
           <div class="row">
-            <div class="col-xl-6" style="flex: 1; flex-wrap: nowrap;">
+            <div class="col-lg-6 col-xxl-3" style="flex-wrap: nowrap;">
               <BaseSelect class="w-100 text-nowrap" v-model="typeValue" :items="reportTypeOptions"
                 textField="ប្រភេទទាំងអស់" labelField="khName" valueField="id" />
             </div>
-            <div class="col-xl-6" style="flex: 1; flex-wrap: nowrap;">
+            <div class="col-lg-6 col-xxl-4" style=" flex-wrap: nowrap;">
               <BaseSelect class="w-100 text-nowrap" v-model="statusValue" :items="allStatus" textField="ស្ថានភាពទាំងអស់"
                 labelField="title" valueField="value" />
             </div>
-            <div class="col-xl-6" style="flex: 1; flex-wrap: nowrap;">
+            <div class=" col-xxl-5" style=" flex-wrap: nowrap;">
               <BaseSelect class="w-100 text-nowrap" v-model="cateValue" :items="categoryStore.categories"
                 textField="ប្រភេទទាំងអស់" labelField="name" valueField="id" />
             </div>
           </div>
         </div>
         <!-- CLEAR FILTER -->
-        <div class="col-xl-3 mt-1 text-end">
+        <div class="col-xxl-4 mt-1 text-end">
           <BaseButton variant="outline_primary" icon="stars" @click="clearFilter">
             សម្អាតការតម្រៀប
           </BaseButton>
@@ -52,9 +59,9 @@
     </div>
     <!-- REPORT LIST -->
 
-    <div v-else class="col-12">
+    <div v-else class="col-12 mt-4">
       <div class="row g-3">
-        <div class="col-12 col-lg-6 col-xl-4 col-xxl-3" v-for="report in reportStore.allReports" :key="report.id">
+        <div class="col-12 col-md-6 col-xl-4 col-xxl-3" v-for="report in reportStore.allReports" :key="report.id">
           <BaseReportCard class="border-color pb-0" height="500px">
             <template #image>
               <div class="image">
@@ -84,18 +91,18 @@
                     {{ report.category.name }}</small>
                 </li> -->
                 <!-- <div> -->
-                  <li class="fs-6">
-                    <small>
-                      <i class="bi bi-geo-alt-fill"></i>
-                      {{ report.locationText }}
-                    </small>
-                  </li>
-                  <li class="fs-6">
-                    <small>
-                      <i class="bi bi-calendar2"></i>
-                      {{ formatDate(report.createdAt) }}
-                    </small>
-                  </li>
+                <li class="fs-6">
+                  <small>
+                    <i class="bi bi-geo-alt-fill"></i>
+                    {{ report.locationText }}
+                  </small>
+                </li>
+                <li class="fs-6">
+                  <small>
+                    <i class="bi bi-calendar2"></i>
+                    {{ formatDate(report.createdAt) }}
+                  </small>
+                </li>
                 <!-- </div> -->
               </ul>
 
@@ -108,12 +115,12 @@
               </div>
 
               <div class="row">
-                <div class="col-lg-12 col-xl-6">
+                <div class="col-lg-12 col-xxl-6">
                   <span class="d-block mt-2 py-1" style="font-size: 16px">
                     រាយការណ៍ដោយ៖
                   </span>
                 </div>
-                <div class="col-lg-12 col-xl-6">
+                <div class="col-lg-12 col-xxl-6">
                   <span class="d-block mt-2 text-end py-1" style="font-size: 16px">
                     <strong>{{ report.reporter.fullname }}</strong>
                   </span>
