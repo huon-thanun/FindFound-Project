@@ -2,12 +2,11 @@
   <div class="app-container">
     <main>
       <HeroSection />
+      <FeatureSection />
 
       <HowitWorkSection />
 
       <RecentPostsSection />
-
-      <FeatureSection />
 
       <AboutSection />
       <CTASection />

@@ -110,7 +110,7 @@ const items = [
 <style scoped>
 /* រក្សាស្ទីលមូលដ្ឋាន និងកែសម្រួលចំណុចខ្វះខាត */
 .item-feed-section {
-  padding: 80px 0;
+  padding: 60px 0;
   background-color: #f8fafc;
 }
 

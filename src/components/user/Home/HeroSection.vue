@@ -20,20 +20,6 @@
             ដើម្បីនាំរបស់មានតម្លៃត្រឡប់ទៅម្ចាស់ដើមវិញដោយសុវត្ថិភាព។
           </p>
 
-          <div class="stats-grid mb-5">
-            <div
-              class="stat-glass-card"
-              v-for="(stat, index) in stats"
-              :key="index"
-            >
-              <div class="stat-icon-mini"><i :class="stat.icon"></i></div>
-              <div>
-                <span class="stat-number">{{ stat.value }}</span>
-                <span class="stat-label">{{ stat.label }}</span>
-              </div>
-            </div>
-          </div>
-
           <div class="action-buttons d-flex flex-wrap gap-3">
             <button class="btn-main-action">
               <i class="bi bi-plus-lg"></i>
@@ -50,32 +36,12 @@
           <div class="image-experience">
             <div class="main-image-wrapper">
               <img
-                src="https://i.pinimg.com/736x/1b/fc/68/1bfc685cc413c0e852f3e891e2eb33c1.jpg"
+                src="../../../assets/images/home/hero/hero-img.png"
                 alt="Lost and Found"
                 class="hero-img"
               />
               <div class="image-overlay-gradient"></div>
             </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="container features-container mt-5">
-      <div class="row g-4">
-        <div class="col-md-4" v-for="(feature, index) in features" :key="index">
-          <div
-            :class="[
-              'feature-modern-card',
-              { 'is-active': feature.isFeatured },
-            ]"
-          >
-            <div class="feature-icon">
-              <i :class="feature.icon"></i>
-            </div>
-            <h4>{{ feature.title }}</h4>
-            <p>{{ feature.desc }}</p>
-            <div class="feature-step">ជំហានទី {{ index + 1 }}</div>
           </div>
         </div>
       </div>
@@ -121,7 +87,7 @@ const features = [
 
 .hero-section {
   position: relative;
-  padding: 100px 0 140px;
+  padding: 40px 0 0px;
   background-color: #fcfdff;
   font-family: "Noto Sans Khmer", sans-serif;
   overflow: hidden;
@@ -138,7 +104,7 @@ const features = [
 .blob-1 {
   width: 500px;
   height: 500px;
-  background: #3b1e54;
+  background: #9955d5a6;
   top: -10%;
   right: -5%;
 }
@@ -321,18 +287,13 @@ const features = [
   position: relative;
   border-radius: 50px;
   overflow: hidden;
-  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.15);
+  /* box-shadow: 0 10px 60px rgba(0, 0, 0, 0.15); */
   transform: perspective(1000px) rotateY(-5deg);
 }
 .hero-img {
   width: 100%;
   height: 500px;
   object-fit: cover;
-}
-.image-overlay-gradient {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to top, rgba(106, 74, 134, 0.363), transparent);
 }
 
 /* Floating Cards */
