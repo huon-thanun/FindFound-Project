@@ -713,4 +713,19 @@ const register = async () => {
 .opacity-75 {
   color: #100e13;
 }
+@media (max-width: 1024px) {
+  .image-panel {
+    display: none !important;
+  }
+
+  .card {
+    max-width: 420px !important;
+  }
+
+  .col-md-6.bg-white {
+    width: 100%;
+    padding: 40px 28px;
+  }
+}
+
 </style>

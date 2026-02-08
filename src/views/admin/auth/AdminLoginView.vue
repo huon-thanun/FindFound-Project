@@ -179,13 +179,13 @@ const touched = reactive({
 /* ================= VALIDATION ================= */
 const emailError = computed(() => {
   if (!touched.email) return "";
-  if (!form.email) return "Email is required";
+  if (!form.email) return "សូមបញ្ចូលអ៊ីមែល";
   return "";
 });
 
 const passwordError = computed(() => {
   if (!touched.password) return "";
-  if (!form.password) return "Password is required";
+  if (!form.password) return "សូមបញ្ចូលពាក្យសម្ងាត់";
   return "";
 });
 
@@ -315,12 +315,7 @@ const handleLogin = async () => {
   margin-bottom: 12px;
 }
 
-/* .brand p {
-  font-size: 18px;
-  line-height: 1.7;
-  max-width: 360px;
-  color: #3b1d6a;
-} */
+
 
 /* illustration */
 .illustration {
@@ -751,6 +746,23 @@ const handleLogin = async () => {
   100% {
     opacity: 1;
     transform: perspective(900px) rotateY(0deg) translateY(0);
+  }
+}
+@media (max-width: 1024px) {
+  .login-left {
+    display: none;
+  }
+
+  .login-wrapper {
+    max-width: 420px;
+    border-radius: 20px;
+  }
+
+  .login-right {
+    flex: 1;
+    width: 100%;
+    padding: 40px 28px;
+    border-radius: 20px;
   }
 }
 </style>
