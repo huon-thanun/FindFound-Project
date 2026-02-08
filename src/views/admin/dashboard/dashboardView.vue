@@ -1,104 +1,113 @@
 <template>
-  <h1 class="mt-2 fw-bold header-title p-3">ផ្ទាំងគ្រប់គ្រង</h1>
-  <p class="px-3 text-black-50">មើលទិន្នន័យទាំងអស់ដែលមាននៅក្នុងប្រព័ន្ធ</p>
-  <div class="container p-3 mt-4">
-    <!-- Main Content -->
-    <main class="main-content">
-      <!-- Stats Cards -->
-      <div class="row">
-        <div v-for="(card, index) in Cards" :key="index" class="col-12 col-md-6 col-lg-3 mb-4">
-          <div class="stat-card text-center" :class="['cyan', 'blue', 'pink', 'purple'][index]">
-            <div :class="`stat-icon mx-auto text-white ${card.icon}`"></div>
-            <div class="stat-label">{{ card.title }}</div>
-            <div class="stat-value">{{ card.value }}</div>
+  <div class="p-3">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <div>
+        <h2 class="fw-bold">ផ្ទាំងគ្រប់គ្រង</h2>
+        <p class="text-muted">មើលទិន្នន័យទាំងអស់ដែលមាននៅក្នុងប្រព័ន្ធ</p>
+      </div>
+      <BaseButton class="d-none" icon="person-plus" variant="primary" @click="showCreateModal = true">
+        បង្កើតអ្នកប្រើប្រាស់
+      </BaseButton>
+    </div>
+    <div class="">
+      <!-- Main Content -->
+      <main class="main-content">
+        <!-- Stats Cards -->
+        <div class="row">
+          <div v-for="(card, index) in Cards" :key="index" class="col-12 col-md-6 col-lg-3 mb-4">
+            <div class="stat-card text-center" :class="['cyan', 'blue', 'pink', 'purple'][index]">
+              <div :class="`stat-icon mx-auto text-white ${card.icon}`"></div>
+              <div class="stat-label">{{ card.title }}</div>
+              <div class="stat-value">{{ card.value }}</div>
+            </div>
           </div>
         </div>
-      </div>
-      <!-- Dashboard Grid -->
-      <div class="dashboard-grid">
-        <!-- Recent Activity -->
-        <div class="card">
-          <div class="card-header">
-            <div class="card-title text-white"><i class="bi-stars"></i> សកម្មភាពថ្មីៗ</div>
-          </div>
-
-          <div class="transaction-tabs">
-            <div class="tab" :class="{ active: activeTab === 'All' }" @click="activeTab = 'All'">
-              របាយការណ៍សរុប
+        <!-- Dashboard Grid -->
+        <div class="dashboard-grid">
+          <!-- Recent Activity -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title text-white"><i class="bi-stars"></i> សកម្មភាពថ្មីៗ</div>
             </div>
-            <div class="tab" :class="{ active: activeTab === 'Lost' }" @click="activeTab = 'Lost'">
-              បាត់
+
+            <div class="transaction-tabs">
+              <div class="tab" :class="{ active: activeTab === 'All' }" @click="activeTab = 'All'">
+                របាយការណ៍សរុប
+              </div>
+              <div class="tab" :class="{ active: activeTab === 'Lost' }" @click="activeTab = 'Lost'">
+                បាត់
+              </div>
+              <div class="tab" :class="{ active: activeTab === 'Found' }" @click="activeTab = 'Found'">
+                រកឃើញ
+              </div>
             </div>
-            <div class="tab" :class="{ active: activeTab === 'Found' }" @click="activeTab = 'Found'">
-              រកឃើញ
-            </div>
-          </div>
 
 
-          <div v-for="item in filteredItems" :key="item.id" class="transactions-list">
-            <div class="transaction-item">
-              <div class="transaction-left">
-                <div class="transaction-icon">
-                  <img :src="item.reportImages?.[0]?.name || '/placeholder.png'" alt="Report Image" />
-                </div>
-                <div class="transaction-details">
-                  <h4>
-                    {{ item.title }}
-                    <span class="new-badge"> ថ្មីៗ </span>
-                  </h4>
+            <div v-for="item in filteredItems" :key="item.id" class="transactions-list">
+              <div class="transaction-item">
+                <div class="transaction-left">
+                  <div class="transaction-icon">
+                    <img :src="item.reportImages?.[0]?.name || '/placeholder.png'" alt="Report Image" />
+                  </div>
+                  <div class="transaction-details">
+                    <h4>
+                      {{ item.title }}
+                      <span class="new-badge"> ថ្មីៗ </span>
+                    </h4>
 
-                  <div class="transaction-meta">
-                    <span>{{ item.category?.name }}</span>
-                    <span>
-                      {{ item.reportType?.name }} •
-                      <span>{{ dayjs(item.createdAt).format("DD MMM YYYY, HH:mm") }}</span>
-                    </span>
+                    <div class="transaction-meta">
+                      <span>{{ item.category?.name }}</span>
+                      <span>
+                        {{ item.reportType?.name }} •
+                        <span>{{ dayjs(item.createdAt).format("DD MMM YYYY, HH:mm") }}</span>
+                      </span>
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              <div class="transaction-status" :class="item.reportType?.name === 'FOUND' ? 'found' : 'lost'">
-                {{ item.reportType?.name === "FOUND" ? "✓ Found" : "⚠ Lost" }}
-              </div>
-            </div>
-          </div>
-
-        </div>
-        <!-- Category Breakdown -->
-        <div class="card">
-          <div class="card-header">
-            <div class="card-title text-white"><i class="bi-tag"></i> របស់តាមប្រភេទ</div>
-          </div>
-
-          <div class="activity-chart">
-            <div class="donut-chart" :style="donutStyle">
-              <div class="donut-center">
-                <div class="donut-value">{{ totalItems }}</div>
-                <div class="donut-label">របស់សរុប</div>
+                <div class="transaction-status" :class="item.reportType?.name === 'FOUND' ? 'found' : 'lost'">
+                  {{ item.reportType?.name === "FOUND" ? "✓ Found" : "⚠ Lost" }}
+                </div>
               </div>
             </div>
-          </div>
 
-          <div class="activity-legend">
-            <div class="legend-item" v-for="cat in categoryStats" :key="cat.category.name">
-              <!-- Top row -->
-              <div class="legend-top">
-                <div class="legend-label">
-                  {{ cat.category.name }}
+          </div>
+          <!-- Category Breakdown -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title text-white"><i class="bi-tag"></i> របស់តាមប្រភេទ</div>
+            </div>
+
+            <div class="activity-chart">
+              <div class="donut-chart" :style="donutStyle">
+                <div class="donut-center">
+                  <div class="donut-value">{{ totalItems }}</div>
+                  <div class="donut-label">របស់សរុប</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="activity-legend">
+              <div class="legend-item" v-for="cat in categoryStats" :key="cat.category.name">
+                <!-- Top row -->
+                <div class="legend-top">
+                  <div class="legend-label">
+                    {{ cat.category.name }}
+                  </div>
+
+                  <div class="legend-value">{{ cat.percent }}%</div>
                 </div>
 
-                <div class="legend-value">{{ cat.percent }}%</div>
-              </div>
-
-              <!-- Progress bar -->
-              <div class="legend-progress">
-                <div class="legend-progress-bar" :style="{ width: cat.percent + '%' }"></div>
+                <!-- Progress bar -->
+                <div class="legend-progress">
+                  <div class="legend-progress-bar" :style="{ width: cat.percent + '%' }"></div>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-    </main>
+      </main>
+    </div>
   </div>
 </template>
 
@@ -268,11 +277,11 @@ onMounted(() => {
 
 
 <style scoped>
-* {
+/* * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-}
+} */
 
 body {
   background: linear-gradient(135deg, #eef2f8 0%, #e8edfa 50%, #f2e8fa 100%);
@@ -280,10 +289,12 @@ body {
   min-height: 100vh;
   overflow-x: hidden;
 }
-.header-title{
+
+.header-title {
   font-size: 32px;
   font-family: hanuman;
 }
+
 .new-badge {
   margin-left: 6px;
   font-size: 10px;

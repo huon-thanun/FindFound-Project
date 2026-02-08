@@ -13,7 +13,7 @@
     </div>
 
     <!-- Header -->
-    <div class="d-flex justify-content-between mb-4 align-items-center">
+    <div class="d-flex justify-content-between align-items-center mb-3">
       <div>
         <h2 class="fw-bold">អ្នកប្រើប្រាស់</h2>
         <p class="text-muted">បង្កើត និងគ្រប់គ្រងអ្នកប្រើប្រាស់</p>
@@ -27,31 +27,31 @@
     </div>
 
     <!-- Filters -->
-    <div class="card mb-3 shadow">
+    <div class="card mb-3 shadow border-color">
       <div class="card-body row">
-        <div class="col-xl-4">
-          <BaseInput type="text" placeholder="ស្វែងរកតាមឈ្មោះ​ និងអុីមែល..."
-            v-model="filters.search" @keyup.enter="resetAndLoadUsers" />
+        <div class="col-xxl-12">
+          <BaseInput type="text" placeholder="ស្វែងរកតាមឈ្មោះ​ និងអុីមែល..." v-model="filters.search"
+            @keyup.enter="resetAndLoadUsers" />
           <!-- <BaseInput class="d-none d-md-block d-xl-none" type="text" placeholder="ស្វែងរក..." v-model="filters.search"
             @keyup.enter="resetAndLoadUsers" /> -->
         </div>
 
-        <div class="col-xl-5 mt-2">
+        <div class="col-xxl-8 mt-2">
           <div class="row">
-            <div class="col-xl-6" style="flex: 1; flex-wrap: nowrap;">
+            <div class="col-lg-6 col-xxl-3" style="flex-wrap: nowrap;">
               <BaseSelect textField="តម្រៀបតាម" :modelValue="sortOptions.find((o) => o.value === filters.sortBy) || null
                 " :items="sortOptions" labelField="label" valueField="value" @update:modelValue="(item) => (filters.sortBy = item?.value || '')
                 " class="text-nowrap" />
             </div>
 
-            <div class="col-xl-6" style="flex: 1; flex-wrap: nowrap;">
+            <div class="col-lg-6 col-xxl-4" style="flex-wrap: nowrap;">
               <BaseSelect :modelValue="SORT_DIR_OPTIONS.find((o) => o.value === filters.sortDir) || null
                 " labelField="label" valueField="value" :items="SORT_DIR_OPTIONS"
                 @update:modelValue="(item) => (filters.sortDir = item?.value || '')" textField="ទិសដៅតម្រៀប"
                 class="text-nowrap" />
             </div>
 
-            <div class="col-xl-6" style="flex: 1; flex-wrap: nowrap;">
+            <div class="col-xxl-5" style="flex-wrap: nowrap;">
               <BaseSelect textField="តម្រៀបស្ថានភាព" :modelValue="statusOptions.find((o) => o.value === filters.status) || null
                 " :items="statusOptions" labelField="label" valueField="value"
                 @update:modelValue="(item) => (filters.status = item?.value || '')" class="text-nowrap" />
@@ -61,12 +61,11 @@
         </div>
 
         <!-- CLEAR FILTER -->
-        <div class="col-xl-3 mt-1 text-end">
+        <div class="col-xxl-4 mt-1 text-end">
           <!-- <BaseButton class="d-none d-md-block d-xl-none" variant="outline_primary" icon="stars" @click="clearFilter">
             សម្អាត
           </BaseButton> -->
-          <BaseButton variant="outline_primary" icon="stars"
-            @click="clearFilter">
+          <BaseButton variant="outline_primary" icon="stars" @click="clearFilter">
             សម្អាតការតម្រៀប
           </BaseButton>
         </div>
@@ -77,7 +76,7 @@
     <!-- Users Table -->
     <!-- <div class="card"> -->
     <BaseTableUserPage :columns="tableColumns" :items="users" :isLoading="loading" @edit="viewUser"
-      @delete="openStatus">
+      @delete="openStatus" class="mt-4">
       <template #column-id="{ item }"> #{{ item.id }} </template>
 
       <template #column-fullname="{ item }">
@@ -295,8 +294,8 @@ const statusOptions = [
 ];
 
 const SORT_DIR_OPTIONS = [
-  { value: "ASC", label: "តូចទៅធំ" },
-  { value: "DESC", label: "ធំទៅតូច" },
+  { value: "ASC", label: "ចាស់បំផុត" },
+  { value: "DESC", label: "ថ្មីបំផុត" },
 ];
 
 const formatDate = (d) => (d ? new Date(d).toLocaleString() : '-');
@@ -523,6 +522,10 @@ onMounted(() => resetAndLoadUsers());
 <style scoped>
 .pointer {
   cursor: pointer;
+}
+
+.border-color {
+  border-color: var(--primary-color);
 }
 
 /* Default (LG and up) */

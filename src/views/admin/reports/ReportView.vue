@@ -1,36 +1,43 @@
 <template>
   <div class="p-3">
-    <h2 class="fw-bold">របាយការណ៍</h2>
-    <p class="text-muted">
-      មើល និងគ្រប់គ្រងការរាយការណ៍បាត់បង់ និងរើសបានទាំងអស់
-    </p>
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <div>
+        <h2 class="fw-bold">របាយការណ៍</h2>
+        <p class="text-muted">
+          មើល និងគ្រប់គ្រងការរាយការណ៍បាត់បង់ និងរើសបានទាំងអស់
+        </p>
+      </div>
+      <BaseButton class="d-none" icon="person-plus" variant="primary" @click="showCreateModal = true">
+        បង្កើតអ្នកប្រើប្រាស់
+      </BaseButton>
+    </div>
 
     <!-- <div class="row"> -->
     <!-- FILTER CARD -->
 
     <div class="card mb-3 shadow border-color">
       <div class="card-body row">
-        <div class="col-xl-4">
+        <div class="col-xxl-12">
           <BaseInput class="w-100" v-model="search" type="text" placeholder="ស្វែងរករបាយការណ៍..." />
         </div>
-        <div class="col-xl-5 mt-2">
+        <div class="col-xxl-8 mt-2">
           <div class="row">
-            <div class="col-xl-6" style="flex: 1; flex-wrap: nowrap;">
-              <BaseSelect class="w-100 text-nowrap" v-model="typeValue" :items="reportStore.allReportType"
-                textField="ប្រភេទទាំងអស់" labelField="name" valueField="id" />
+            <div class="col-lg-6 col-xxl-3" style="flex-wrap: nowrap;">
+              <BaseSelect class="w-100 text-nowrap" v-model="typeValue" :items="reportTypeOptions"
+                textField="ប្រភេទទាំងអស់" labelField="khName" valueField="id" />
             </div>
-            <div class="col-xl-6" style="flex: 1; flex-wrap: nowrap;">
+            <div class="col-lg-6 col-xxl-4" style=" flex-wrap: nowrap;">
               <BaseSelect class="w-100 text-nowrap" v-model="statusValue" :items="allStatus" textField="ស្ថានភាពទាំងអស់"
                 labelField="title" valueField="value" />
             </div>
-            <div class="col-xl-6" style="flex: 1; flex-wrap: nowrap;">
+            <div class=" col-xxl-5" style=" flex-wrap: nowrap;">
               <BaseSelect class="w-100 text-nowrap" v-model="cateValue" :items="categoryStore.categories"
                 textField="ប្រភេទទាំងអស់" labelField="name" valueField="id" />
             </div>
           </div>
         </div>
         <!-- CLEAR FILTER -->
-        <div class="col-xl-3 mt-1 text-end">
+        <div class="col-xxl-4 mt-1 text-end">
           <BaseButton variant="outline_primary" icon="stars" @click="clearFilter">
             សម្អាតការតម្រៀប
           </BaseButton>
@@ -52,10 +59,10 @@
     </div>
     <!-- REPORT LIST -->
 
-    <div v-else class="col-12">
-      <div class="row">
-        <div class="col-12 col-lg-6 col-xl-4 col-xxl-3 mb-3" v-for="report in reportStore.allReports" :key="report.id">
-          <BaseReportCard class="border-color" height="500px">
+    <div v-else class="col-12 mt-4">
+      <div class="row g-3">
+        <div class="col-12 col-md-6 col-xl-4 col-xxl-3" v-for="report in reportStore.allReports" :key="report.id">
+          <BaseReportCard class="border-color pb-0" height="500px">
             <template #image>
               <div class="image">
                 <img :src="report.reportImages && report.reportImages.length > 0
@@ -63,56 +70,58 @@
                   : defaultImage
                   " :alt="report.title || 'រូបភាពរបាយការណ៍'" />
               </div>
+              <span class="category-tag tag-box-shadow-in">{{ report.category.name }}</span>
             </template>
 
             <div>
               <div class="d-flex gap-2 my-2">
                 <span class="status" :class="report.reportType.name.toLowerCase()">
-                  {{ report.reportType.name }}
+                  {{ getReportTypeKh(report.reportType.name) }}
                 </span>
                 <span class="status" :class="report.status.toLowerCase()">
-                  {{ report.status }}
+                  {{ getStatusKh(report.status) }}
                 </span>
               </div>
 
               <h5 class="card-title mt-3">{{ report.title }}</h5>
 
-              <ul class="item-list d-flex justify-content-between mt-2">
-                <li class="fs-6 ">
+              <ul class="item-list mt-2">
+                <!-- <li class="fs-6 ">
                   <small><i class="bi bi-file-earmark-text"></i>
                     {{ report.category.name }}</small>
+                </li> -->
+                <!-- <div> -->
+                <li class="fs-6">
+                  <small>
+                    <i class="bi bi-geo-alt-fill"></i>
+                    {{ report.locationText }}
+                  </small>
                 </li>
-                <div>
-                  <li class="fs-6">
-                    <small>
-                      <i class="bi bi-geo-alt-fill"></i>
-                      {{ report.locationText }}
-                    </small>
-                  </li>
-                  <li class="fs-6">
-                    <small>
-                      <i class="bi bi-calendar2"></i>
-                      {{ formatDate(report.createdAt) }}
-                    </small>
-                  </li>
-                </div>
+                <li class="fs-6">
+                  <small>
+                    <i class="bi bi-calendar2"></i>
+                    {{ formatDate(report.createdAt) }}
+                  </small>
+                </li>
+                <!-- </div> -->
               </ul>
 
               <div class="button-group">
                 <BaseButton icon="bi-eye" variant="primary w-100" @click="fetchReportDetail(report.id)"
                   :isLoading="isLoading === report.id">
-                  មើលលម្អិត
+                  <i class="bi bi-arrow-right me-2"></i>
+                  <span>មើលលម្អិត</span>
                 </BaseButton>
               </div>
 
               <div class="row">
-                <div class="col-lg-12 col-xl-6">
+                <div class="col-lg-12 col-xxl-6">
                   <span class="d-block mt-2 py-1" style="font-size: 16px">
-                    រាយការណ៍ដោយ 
+                    រាយការណ៍ដោយ៖
                   </span>
                 </div>
-                <div class="col-lg-12 col-xl-6">
-                  <span class="d-block mt-2 py-1" style="font-size: 16px">
+                <div class="col-lg-12 col-xxl-6">
+                  <span class="d-block mt-2 text-end py-1" style="font-size: 16px">
                     <strong>{{ report.reporter.fullname }}</strong>
                   </span>
                 </div>
@@ -123,19 +132,12 @@
       </div>
     </div>
     <!-- </div> -->
-    <div class="d-flex my-2 gap-2 justify-content-center"></div>
+    <!-- <div class="d-flex my-2 gap-2 justify-content-center"></div> -->
 
     <!-- pagination -->
 
-    <div
-      v-if="reportStore.meta?.totalPages > 1"
-      class="d-flex gap-2 justify-content-center my-3"
-    >
-      <BaseButton
-        variant="danger"
-        @click="PreviousPage"
-        :disabled="!reportStore.meta?.hasPreviousPage"
-      >
+    <div v-if="reportStore.meta?.totalPages > 1" class="d-flex gap-2 justify-content-center my-3">
+      <BaseButton variant="danger" @click="PreviousPage" :disabled="!reportStore.meta?.hasPreviousPage">
         មុន
       </BaseButton>
 
@@ -148,11 +150,7 @@
         {{ p }}
       </BaseButton> -->
 
-      <BaseButton
-        variant="primary"
-        @click="nextPage"
-        :disabled="!reportStore.meta?.hasNextPage"
-      >
+      <BaseButton variant="primary" @click="nextPage" :disabled="!reportStore.meta?.hasNextPage">
         បន្ទាប់
       </BaseButton>
     </div>
@@ -186,12 +184,38 @@ const allStatus = [
   { value: "HIDDEN", title: "លាក់" },
 ];
 
+const REPORT_TYPE_KH = {
+  LOST: "បានបាត់",
+  FOUND: "បានប្រទះឃើញ",
+};
+
+const STATUS_KH = {
+  ACTIVE: "សកម្ម",
+  RESOLVED: "បានដោះស្រាយ",
+  HIDDEN: "លាក់",
+};
+
+const getReportTypeKh = (type) => {
+  return REPORT_TYPE_KH[type] || type;
+};
+
+const getStatusKh = (status) => {
+  return STATUS_KH[status] || status;
+};
+
+const reportTypeOptions = computed(() => {
+  return reportStore.allReportType.map(type => ({
+    ...type,
+    khName: REPORT_TYPE_KH[type.name] || type.name
+  }));
+});
+
 let timeout = null;
 const page = ref(1);
 const fetchReports = async () => {
   await reportStore.getAllReports({
     _page: page.value,
-    _per_page: 8,
+    _per_page: 20,
     search: search.value,
     status: statusValue.value?.value,
     sortBy: "createdAt",
@@ -320,7 +344,7 @@ const clearFilter = () => {
   color: rgba(128, 128, 128, 0.679);
 }
 
-.border-color{
+.border-color {
   border-color: var(--primary-color);
 }
 
@@ -406,5 +430,23 @@ const clearFilter = () => {
 .resolved {
   background: rgba(92, 92, 92, 0.5);
   color: rgba(255, 255, 255, 0.8);
+}
+
+.tag-box-shadow-in {
+  box-shadow:
+    rgb(204, 219, 232) 3px 3px 6px 0px inset,
+    rgba(255, 255, 255, 0.5) -3px -3px 6px 1px inset;
+}
+
+.category-tag {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: rgba(255, 255, 255, 0.95);
+  padding: 5px 12px;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #3b1e54;
 }
 </style>

@@ -12,7 +12,13 @@
                     </p>
                 </div>
                 <div class="col-lg-6">
-                    <BaseInput v-model="searchQuery" type="text" placeholder="ស្វែងរកប្រភេទ..." />
+                    <!-- <BaseInput v-model="searchQuery" type="text" placeholder="ស្វែងរកប្រភេទ..." /> -->
+                    <div
+                        class="search-bar-wrapper shadow-sm rounded-pill bg-white d-flex align-items-center border position-relative" style="height: 50px;">
+                        <i class="bi bi-search text-muted me-2 ms-3"></i>
+                        <input type="text" v-model="searchQuery" class="form-control border-0 rounded-pill position-absolute ps-5 bg-transparent h-100 w-100 khmer-font"
+                            placeholder="ស្វែងរកប្រភេទ..." />
+                    </div>
                 </div>
             </div>
 
@@ -49,7 +55,7 @@
                                 {{ category.description || "គ្មានលម្អិត" }}
                             </p>
                             <div class="d-flex gap-2">
-                                <BaseButton variant="primary" class="flex-grow-1" icon="search"
+                                <BaseButton variant="primary" class="flex-grow-1" icon="arrow-right"
                                     @click="openModal(category)">
                                     មើលលម្អិត
                                 </BaseButton>
@@ -156,7 +162,19 @@ const navigateToGallery = () => {
 </script>
 
 <style scoped>
-.category-page {
+.ca
+.form-control {
+  outline: none;
+  box-shadow: none;
+  border: 1px solid #d1d5db;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.form-control:focus {
+  border-color: var(--primary-color); /* primary */
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.25);
+  outline: none;
+}tegory-page {
     min-height: 100vh;
     /* background: linear-gradient(135deg, #eaddf3 0%, #f5e6fb 100%); */
 }
