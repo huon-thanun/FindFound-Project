@@ -27,6 +27,7 @@
           class="btn-details tag-box-shadow-out"
           @click="handleActionButton"
         >
+          <i class="bi bi-arrow-right"></i>
           {{ btnTitle }}
         </button>
       </div>

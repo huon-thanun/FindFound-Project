@@ -120,7 +120,7 @@
                 <div class="col-12 col-xl-6">
                   <div class="mb-4">
                     <label for="select-category" class="form-label">
-                      Category
+                      ប្រភេទ
                       <span class="text-danger"> * </span>
                     </label>
                     <select
@@ -132,7 +132,7 @@
                         errorInput.category.error ? 'border-danger' : '',
                       ]"
                     >
-                      <option value="">Select Category</option>
+                      <option value="">ជ្រើសរើសប្រភេទ</option>
                       <option
                         v-for="category in categoryStore.categories"
                         :key="category.id"
@@ -154,7 +154,7 @@
                 <div class="col-12 col-xl-6">
                   <div class="mb-4">
                     <label for="input-date" class="form-label">
-                      Event Date
+                      កាលបរិច្ឆេទនៃព្រឹត្តិការណ៍(ខែ/ថ្ងៃ/ឆ្នាំ)
                       <span class="text-danger"> * </span>
                     </label>
                     <input
@@ -165,7 +165,6 @@
                         'form-control form-control-custom',
                         errorInput.eventDate.error ? 'border-danger' : '',
                       ]"
-                      placeholder="Enter Event Date"
                     />
                     <span
                       v-if="errorInput.eventDate.error"
@@ -180,7 +179,7 @@
                 <div class="col-12">
                   <div class="mb-4">
                     <label for="input-desc" class="form-label">
-                      Description
+                      ព័ត៌មានលម្អិត
                       <span class="text-danger"> * </span>
                     </label>
                     <textarea
@@ -191,7 +190,7 @@
                         errorInput.description.error ? 'border-danger' : '',
                       ]"
                       style="min-height: 150px"
-                      placeholder="Write Something"
+                      placeholder="សរសេរព័ត៌មានលម្អិត"
                     ></textarea>
                     <span
                       v-if="errorInput.description.error"
@@ -206,7 +205,7 @@
                 <div class="col-12">
                   <div class="mb-4">
                     <label for="input-images" class="form-label">
-                      Upload Images
+                      បញ្ចូលរូបភាព
                       <!-- <span class="text-danger"> * </span> -->
                     </label>
                     <input
@@ -243,17 +242,23 @@
                         >
                       </div>
                     </div>
+                    <span
+                      v-if="errorInput.images.error"
+                      class="validation-msg text-danger"
+                    >
+                      {{ errorInput.images.msg }}
+                    </span>
                   </div>
                 </div>
 
-                <!-- Latitude & Longitude  -->
+                <!--  Location Latitude & Longitude  -->
                 <div class="col-12">
                   <div class="row">
                     <!-- Location  -->
                     <div class="col-6">
                       <div class="mb-4">
                         <label for="input-location" class="form-label">
-                          Location
+                          ទីតាំង
                           <span class="text-danger"> * </span>
                         </label>
                         <input
@@ -264,7 +269,7 @@
                             'form-control form-control-custom',
                             errorInput.location.error ? 'border-danger' : '',
                           ]"
-                          placeholder="Enter Location"
+                          placeholder="ទីតាំង​ព្រឹត្តិការណ៍"
                         />
                         <span
                           v-if="errorInput.location.error"
@@ -290,7 +295,7 @@
                             'form-control form-control-custom',
                             errorInput.latitude.error ? 'border-danger' : '',
                           ]"
-                          placeholder="Enter Latitude"
+                          placeholder="បញ្ចូល Latitude"
                         />
                         <span
                           v-if="errorInput.latitude.error"
@@ -316,7 +321,7 @@
                             'form-control form-control-custom',
                             errorInput.longitude.error ? 'border-danger' : '',
                           ]"
-                          placeholder="Enter Longitude"
+                          placeholder="បញ្ចូល Longitude"
                         />
                         <span
                           v-if="errorInput.longitude.error"
@@ -333,7 +338,7 @@
                 <div class="col-12 col-xl-6">
                   <div class="mb-4">
                     <label for="input-phone" class="form-label">
-                      Phone Number
+                      លេខទូរសព្ទ
                       <span class="text-danger"> * </span>
                     </label>
                     <input
@@ -344,7 +349,7 @@
                         'form-control form-control-custom',
                         errorInput.phone.error ? 'border-danger' : '',
                       ]"
-                      placeholder="Enter Phone Number"
+                      placeholder="បញ្ចូលលេខទូរសព្ទ"
                     />
                     <span
                       v-if="errorInput.phone.error"
@@ -370,7 +375,7 @@
                         'form-control form-control-custom',
                         errorInput.telegramLink.error ? 'border-danger' : '',
                       ]"
-                      placeholder="Enter Telegram Link"
+                      placeholder="បញ្ចូលតំណភ្ជាប់Telegram"
                     />
                     <span
                       v-if="errorInput.telegramLink.error"
@@ -449,6 +454,7 @@ const errorInput = reactive({
   longitude: { error: false, msg: "" },
   phone: { error: false, msg: "" },
   telegramLink: { error: false, msg: "" },
+  images: { error: false, msg: "" },
 });
 
 const categoryStore = useCategoryStore();
@@ -520,21 +526,21 @@ function validateForm() {
   // Title: required, length > 5
   if (!data.title || data.title.length < 6) {
     errorInput.title.error = true;
-    errorInput.title.msg = "Title is required and must be >5 characters";
+    errorInput.title.msg = "ចំណងជើងត្រូវបានទាមទារ និងត្រូវមានតួអក្សរច្រើនជាង 5";
     isValid = false;
   }
 
   // Event Date: required
   if (!data.eventDate) {
     errorInput.eventDate.error = true;
-    errorInput.eventDate.msg = "Event date is required";
+    errorInput.eventDate.msg = "កាលបរិច្ឆេទនៃព្រឹត្តិការណ៍ត្រូវបានទាមទារ";
     isValid = false;
   }
 
   // Category: required
   if (!data.category) {
     errorInput.category.error = true;
-    errorInput.category.msg = "Category is required";
+    errorInput.category.msg = "ប្រភេទត្រូវបានទាមទារ";
     isValid = false;
   }
 
@@ -542,35 +548,36 @@ function validateForm() {
   if (!data.description || data.description.length < 11) {
     errorInput.description.error = true;
     errorInput.description.msg =
-      "Description is required and must be >10 characters";
+      "ព័ត៌មានលម្អិតត្រូវបានទាមទារ និងត្រូវមានអក្សរច្រើនជាង10";
     isValid = false;
   }
 
   // Location: required
   if (!data.location) {
     errorInput.location.error = true;
-    errorInput.location.msg = "Location is required";
+    errorInput.location.msg = "ទីតាំងត្រូវបានទាមទារ";
     isValid = false;
   }
 
-  // Latitude: required, number
-  if (!data.latitude || !regex.number.test(data.latitude)) {
+  // Latitude: number
+  if (!regex.number.test(data.latitude)) {
     errorInput.latitude.error = true;
-    errorInput.latitude.msg = "Latitude is required and must be a number";
+    errorInput.latitude.msg = "Latitude ត្រូវតែជលេខ";
     isValid = false;
   }
 
   // Longitude: required, number
-  if (!data.longitude || !regex.number.test(data.longitude)) {
+  if (!regex.number.test(data.longitude)) {
     errorInput.longitude.error = true;
-    errorInput.longitude.msg = "Longitude is required and must be a number";
+    errorInput.longitude.msg = "Longitude ត្រូវតែជលេខ";
     isValid = false;
   }
 
   // Phone: required, number, 8-15 digits
   if (!data.phone || !/^[0-9]{8,15}$/.test(data.phone)) {
     errorInput.phone.error = true;
-    errorInput.phone.msg = "Phone number is required and must be 8-15 digits";
+    errorInput.phone.msg =
+      "លេខទូរសព្ទត្រូវបានទាមទារ និងមានចំនួនចាប់ពី8-15សខ្ទង់";
     isValid = false;
   }
 
@@ -578,21 +585,50 @@ function validateForm() {
   if (!data.telegramLink || !regex.url.test(data.telegramLink)) {
     errorInput.telegramLink.error = true;
     errorInput.telegramLink.msg =
-      "Telegram link is required and must be a valid URL";
+      "តំណភ្ជាប់ Telegram ត្រូវបានទាមទារ និងត្រូវតែជា URL ត្រឹមត្រូវ";
+    isValid = false;
+  }
+
+  // Upload Images: Max=3
+  if (data.images.length > 3) {
+    errorInput.images.error = true;
+    errorInput.images.msg = "រូបភាពច្រើនជាង3";
     isValid = false;
   }
 
   return isValid;
 }
 const previewUrls = ref([]);
-function handleFileUpload(event) {
-  const files = Array.from(event.target.files); // convert FileList to array
-  // Add new files to existing images
-  data.images.push(...files);
-  console.log(data.images);
+// function handleFileUpload(event) {
+//   const files = Array.from(event.target.files); // convert FileList to array
+//   // Add new files to existing images
+//   data.images.push(...files);
+//   console.log(data.images);
 
-  // Generate preview URLs
-  previewUrls.value.push(...files.map((file) => URL.createObjectURL(file)));
+//   // Generate preview URLs
+//   previewUrls.value.push(...files.map((file) => URL.createObjectURL(file)));
+// }
+function handleFileUpload(event) {
+  const files = Array.from(event.target.files);
+
+  const total = data.images.length + files.length;
+
+  // block if over 3
+  if (total > 3) {
+    errorInput.images.error = true;
+    errorInput.images.msg = "អាចបញ្ចូលរូបភាពបានតែ 3 ប៉ុណ្ណោះ";
+
+    // reset input so user can reselect
+    event.target.value = "";
+    return;
+  }
+
+  // clear error
+  errorInput.images.error = false;
+  errorInput.images.msg = "";
+
+  data.images.push(...files);
+  previewUrls.value.push(...files.map((f) => URL.createObjectURL(f)));
 }
 
 function removeImage(index) {

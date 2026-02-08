@@ -34,41 +34,46 @@
               v-if="reportStore.report?.reportImages?.length"
             >
               <!-- Main slider -->
-              <Swiper
-                :spaceBetween="10"
-                :navigation="true"
-                :thumbs="{ swiper: thumbsSwiper }"
-                :modules="modules"
-                class="mySwiper2"
-              >
-                <!-- <SwiperSlide v-for="n in 10" :key="'main-' + n">
+              <div>
+                <Swiper
+                  :spaceBetween="10"
+                  :navigation="true"
+                  :thumbs="{ swiper: thumbsSwiper }"
+                  :modules="modules"
+                  class="mySwiper2"
+                >
+                  <!-- <SwiperSlide v-for="n in 10" :key="'main-' + n">
             <img :src="`https://swiperjs.com/demos/images/nature-${n}.jpg`" />
           </SwiperSlide> -->
-                <SwiperSlide
-                  v-for="image in reportStore.report?.reportImages || []"
-                  :key="image.id"
-                >
-                  <img :src="image.name" />
-                </SwiperSlide>
-              </Swiper>
+                  <SwiperSlide
+                    v-for="image in reportStore.report?.reportImages || []"
+                    :key="image.id"
+                  >
+                    <img :src="image.name" />
+                  </SwiperSlide>
+                </Swiper>
+              </div>
 
               <!-- Thumbnail slider -->
-              <Swiper
-                @swiper="setThumbsSwiper"
-                :spaceBetween="10"
-                :slidesPerView="4"
-                :freeMode="true"
-                :watchSlidesProgress="true"
-                :modules="modules"
-                class="mySwiper mt-2"
-              >
-                <SwiperSlide
-                  v-for="image in reportStore.report?.reportImages || []"
-                  :key="image.id"
+              <div>
+                <Swiper
+                  @swiper="setThumbsSwiper"
+                  :spaceBetween="10"
+                  :slidesPerView="4"
+                  :freeMode="true"
+                  :watchSlidesProgress="true"
+                  :modules="modules"
+                  class="mySwiper d-flex"
                 >
-                  <img :src="image.name" />
-                </SwiperSlide>
-              </Swiper>
+                  <SwiperSlide
+                    v-for="image in reportStore.report?.reportImages || []"
+                    :key="image.id"
+                    class="bg-danger"
+                  >
+                    <img :src="image.name" class="shadow" />
+                  </SwiperSlide>
+                </Swiper>
+              </div>
             </div>
             <div v-else class="image">
               <img
@@ -188,81 +193,42 @@
           <h2 class="fw-bold pb-2">របាយការណ៍ស្រដៀងគ្នា</h2>
           <div class="row">
             <div
+              class="col-12"
+              v-if="reportStore.matchReports?.matchedReports?.length <= 0"
+            >
+              <div
+                class="w-100 d-flex flex-column align-items-center p-3 text-muted"
+              >
+                <i class="bi bi-exclamation-circle" style="font-size: 35px"></i>
+                <h3 class="m-0">មិនមាន​ របាយការណ៍ស្រដៀងគ្នា</h3>
+              </div>
+            </div>
+            <div
               class="col-12 col-md-6 col-lg-3 mb-4"
               v-for="item in reportStore.matchReports?.matchedReports || []"
               :key="item?.matchedReport?.id"
             >
-              <router-link
-                class="text-decoration-none"
-                :to="
-                  item?.matchedReport
-                    ? {
-                        name: 'report-detail-user',
-                        params: { id: item.matchedReport.id },
-                      }
-                    : '#'
-                "
+              <BaseCard
+                :category="item.matchedReport?.category"
+                :reportType="item.matchedReport?.reportType"
+                :eventDate="item.matchedReport?.eventDate"
+                :title="item.matchedReport?.title"
+                :location="item.matchedReport?.locationText"
+                btnTitle="ព័ត៌មានលម្អិត"
+                @onClick="btnHandleReportDetail(item?.matchedReport?.id)"
               >
-                <BaseReportCard class="match-card h-100">
-                  <template #image>
-                    <div class="match-image position-relative">
-                      <img
-                        :src="
-                          item?.matchedReport?.reportImages?.[0]?.name ||
-                          defaultImage
-                        "
-                        :alt="item?.matchedReport?.title || 'Report Image'"
-                      />
-
-                      <span class="confidence-badge">
-                        {{ Math.round((item?.confidenceScore || 0) * 100) }}%
-                        match
-                      </span>
-                    </div>
-                  </template>
-
-                  <div class="p-3">
-                    <div class="d-flex gap-2 mb-2 flex-wrap">
-                      <span
-                        class="badge-pill"
-                        :class="
-                          item?.matchedReport?.reportType?.name?.toLowerCase()
-                        "
-                      >
-                        {{ item?.matchedReport?.reportType?.name }}
-                      </span>
-
-                      <span
-                        class="badge-pill"
-                        :class="item?.matchedReport?.status?.toLowerCase()"
-                      >
-                        {{ item?.matchedReport?.status }}
-                      </span>
-                    </div>
-
-                    <h5 class="fw-bold mb-2 text-truncate">
-                      {{ item?.matchedReport?.title }}
-                    </h5>
-
-                    <ul class="item-list small text-muted m-0 p-0">
-                      <li>
-                        <i class="bi bi-tag"></i>
-                        {{ item?.matchedReport?.category?.name }}
-                      </li>
-
-                      <li>
-                        <i class="bi bi-geo-alt"></i>
-                        {{ item?.matchedReport?.locationText }}
-                      </li>
-
-                      <li>
-                        <i class="bi bi-calendar3"></i>
-                        {{ formatDate(item?.matchedReport?.createdAt) }}
-                      </li>
-                    </ul>
+                <template #image>
+                  <div class="recommendation-image">
+                    <img
+                      :src="
+                        item.reportImages && item.reportImages.length > 0
+                          ? item.reportImages[0].name
+                          : defaultImage
+                      "
+                    />
                   </div>
-                </BaseReportCard>
-              </router-link>
+                </template>
+              </BaseCard>
             </div>
           </div>
         </div>
@@ -277,6 +243,7 @@ import { useRoute, useRouter } from "vue-router";
 
 import { formatDate } from "@/utils/formatDate";
 import BaseReportCard from "@/components/base/BaseReportCard.vue";
+import BaseCard from "@/components/report/BaseCard.vue";
 
 import { Swiper, SwiperSlide } from "swiper/vue";
 
@@ -335,6 +302,15 @@ const reportTypeClass = computed(() => {
 const goBack = () => {
   router.back();
 };
+
+const btnHandleReportDetail = (reportId) => {
+  const token = localStorage.getItem("token");
+  if (!token) {
+    router.push({ name: "login" });
+  } else {
+    router.push({ name: "report-detail-user", params: { id: reportId } });
+  }
+};
 </script>
 
 <style scoped>
@@ -350,15 +326,20 @@ const goBack = () => {
 }
 
 .mySwiper {
-  border: 1px solid red;
+  border-top: 1px solid black;
   width: 100%;
+  padding: 5px;
 }
 .mySwiper img {
   width: 100%;
   height: 80px;
   object-fit: contain;
-  border-radius: 8px;
-  border: 1px solid black;
+  /* border-radius: 10px; */
+  /* border: 1px solid black; */
+}
+.mySwiper img:hover {
+  border: 1px solid red;
+  cursor: pointer;
 }
 
 .mySwiper2 img {
@@ -483,5 +464,14 @@ const goBack = () => {
   display: flex;
   gap: 6px;
   margin-bottom: 4px;
+}
+.recommendation-image {
+  width: 100%;
+  height: 230px;
+}
+.recommendation-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 </style>
