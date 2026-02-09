@@ -6,25 +6,86 @@
         សូមស្វាគមន៍, ទាំងនេះជាការរាយការណ៍ទាំងអស់របស់អ្នក។
       </p>
     </header>
+    <BaseReportCard>
+      <div class="row align-items-center">
+        <div class="m-0 py-0 px-3" style="flex: 4">
+          <BaseInput
+            v-model="search"
+            type="text"
+            placeholder="ស្វែងរក ការរាយការណ៍..."
+          />
+        </div>
+        <!-- CATEGORY -->
+        <div class="mt-2" style="flex: 2">
+          <!-- <select class="form-select" v-model="cateValue">
+            <option value="">All Category</option>
+            <option
+              v-for="category in categoryStore.categories"
+              :key="category.id"
+              :value="category.id"
+            >
+              {{ category.name }}
+            </option>
+          </select> -->
+          <BaseSelect
+            v-model="cateValue"
+            :items="categoryStore.categories"
+            textField="ប្រភេទនៃការរាយការណ៍ទំាងអស់"
+            labelField="name"
+            valueField="id"
+          />
+        </div>
+        <div
+          class="d-flex justify-content-end align-items-center"
+          style="flex: 1"
+        >
+          <BaseButton variant="dark" @click="clearFilter">
+            សម្អាតការចម្រោះ
+          </BaseButton>
+        </div>
+      </div>
+    </BaseReportCard>
+    <div
+      class="mt-3 mb-1 align-items-center d-flex justify-content-between flex-wrap"
+    >
+      <div class="btn-group bg-btn-group my-1">
+        <button
+          class="btn-filter"
+          :class="{ active: activeFilter === '' }"
+          @click="btnFilterAllReport"
+        >
+          ទាំងអស់
+        </button>
 
-    <div class="row g-4 mb-5">
-      <div v-for="stat in stats" :key="stat.label" class="col-md-4">
-        <div class="card border-0 box-shadow p-4 h-100 position-relative">
-          <div :class="['fs-3 mb-2', stat.iconColor]">
-            <i :class="['bi', stat.icon]"></i>
-          </div>
-          <i
-            v-if="stat.trend"
-            class="bi bi-graph-up-arrow position-absolute top-0 end-0 m-3 text-success small"
-          ></i>
+        <button
+          class="btn-filter"
+          :class="{ active: activeFilter === 'LOST' }"
+          @click="btnFilterReportType('LOST')"
+        >
+          បាត់
+        </button>
 
-          <h3 class="fw-bold mb-0">{{ stat.value }}</h3>
-          <small class="text-muted fw-semibold">{{ stat.label }}</small>
+        <button
+          class="btn-filter"
+          :class="{ active: activeFilter === 'FOUND' }"
+          @click="btnFilterReportType('FOUND')"
+        >
+          រកឃើញ
+        </button>
+      </div>
+      <div class="d-flex gap-2 align-items-center my-1">
+        <div class="mt-2" style="width: 150px">
+          <BaseSelect
+            class="w-100"
+            v-model="sortDir"
+            :items="sortDirData"
+            labelField="name"
+            valueField="id"
+          />
         </div>
       </div>
     </div>
-
-    <div class="card border-0 box-shadow p-4">
+    <div class="card border-0 box-shadow p-4 mb-3">
       <div class="d-flex justify-content-between align-items-center mb-4">
         <h5 class="fw-bold mb-0">របាយការណ៍</h5>
         <button
@@ -55,38 +116,42 @@
         :key="report.id"
       >
         <div class="row align-items-center g-3">
-          <div class="col-auto">
+          <div class="col-2 -md-2 col-xl-2">
             <img
               :src="
                 report.reportImages && report.reportImages.length > 0
                   ? report.reportImages[0].name
                   : defaultImage
               "
-              style="width: 80px; height: 80px"
+              style="width: 80px; height: 80px; border: 1px solid black"
             />
           </div>
 
-          <div class="col">
-            <div class="d-flex align-items-center gap-2 mb-1">
-              <h6 class="fw-bold mb-0">{{ report.title }}</h6>
-              <span
-                class="badge rounded-pill px-2"
-                style="font-size: 0.7rem"
-                :class="report.reportType?.name.toLowerCase()"
-              >
-                {{ report.reportType?.name }}
-              </span>
-              <span
-                class="badge border rounded-pill px-2"
-                style="font-size: 0.7rem"
-                :class="report.status?.toLowerCase()"
-              >
-                {{ report.status }}
-              </span>
+          <div class="col-10 col-md-5 col-xl-5 col-xxl-5">
+            <div class="row align-items-center mb-1">
+              <div class="col-12 col-xl-6">
+                <h6 class="fw-bold mb-0 title">{{ report.title }}</h6>
+              </div>
+              <div class="col-12 col-xl-6">
+                <span
+                  class="badge rounded-pill px-2"
+                  style="font-size: 0.7rem"
+                  :class="report.reportType?.name.toLowerCase()"
+                >
+                  {{ report.reportType?.name }}
+                </span>
+                <span
+                  class="badge border rounded-pill px-2"
+                  style="font-size: 0.7rem"
+                  :class="report.status?.toLowerCase()"
+                >
+                  {{ report.status }}
+                </span>
+              </div>
             </div>
-            <div class="d-flex flex-wrap gap-3 text-muted small">
+            <div class="d-flex flex-wrap gap-3 text-muted small mt-2">
               <span>
-                <i class="bi bi-geo-alt me-1"></i>
+                <i class="bi bi-geo-alt me-1 text-danger"></i>
                 {{ report.locationText }}
               </span>
               <span
@@ -96,25 +161,35 @@
             </div>
           </div>
 
-          <div class="col-auto">
-            <div class="btn-group shadow-sm">
+          <div class="col-12 col-md-5 col-xl-5 col-xxl-5">
+            <div class="btn-group ms-5 shadow-sm">
               <button
-                class="btn btn-outline-secondary btn-sm px-3"
+                class="btn btn-action btn-outline-secondary"
                 @click="gotoDetailPage(report.id)"
               >
-                <i class="bi bi-eye me-1"></i> មើល
+                <span class="icon text-warning me-2">
+                  <i class="bi bi-eye"></i>
+                </span>
+                <span class="btn-title">មើល</span>
               </button>
               <button
-                class="btn btn-outline-secondary btn-sm px-3"
+                class="btn btn-action btn-outline-secondary"
                 @click="btnHandleEditReport(report.id)"
               >
-                <i class="bi bi-pencil-square me-1"></i> កែសម្រួល
+                <span class="icon text-primary me-2">
+                  <i class="bi bi-pencil-square"></i>
+                </span>
+
+                <span class="btn-title"> កែសម្រួល </span>
               </button>
               <button
-                class="btn btn-outline-secondary btn-sm px-3"
+                class="btn btn-action btn-outline-secondary"
                 @click="btnHandleDeleteOwnReport(report.id)"
               >
-                <i class="bi bi-trash me-1"></i> លុប
+                <span class="icon text text-danger me-2">
+                  <i class="bi bi-trash"></i>
+                </span>
+                <span class="btn-title"> លុប </span>
               </button>
             </div>
           </div>
@@ -125,8 +200,11 @@
     <!-- pagination -->
 
     <div
-      v-if="reportStore.ownReportMeta?.totalPages > 1"
-      class="d-flex gap-2 justify-content-center my-3"
+      v-if="
+        reportStore.ownReportMeta?.totalPages > 1 &&
+        !reportStore.isLoadingGetOwnReports
+      "
+      class="d-flex gap-2 justify-content-center"
     >
       <BaseButton
         variant="danger"
@@ -203,11 +281,15 @@
 
 <script setup>
 import { useReportStore } from "@/stores/reportStore";
-import { onMounted, ref, computed } from "vue";
+import { useCategoryStore } from "@/stores/categoryStore";
+import { onMounted, ref, reactive, computed, watch } from "vue";
 import { formatDate } from "@/utils/formatDate";
 import { useRouter } from "vue-router";
 
+import BaseReportCard from "@/components/base/BaseReportCard.vue";
+
 const reportStore = useReportStore();
+const categoryStore = useCategoryStore();
 const router = useRouter();
 
 const defaultImage =
@@ -216,7 +298,13 @@ const defaultImage =
 const search = ref("");
 const cateValue = ref("");
 const typeValue = ref("");
-const statusValue = ref("");
+const activeFilter = ref("");
+const sortDirData = reactive([
+  { id: "DESC", name: "ថ្មីបំផុត" },
+  { id: "ASC", name: "ចាស់បំផុត" },
+]);
+const sortDir = ref(sortDirData[0]);
+// const statusValue = ref("");
 
 const page = ref(1);
 let timeout = ref(null);
@@ -224,9 +312,12 @@ let timeout = ref(null);
 const fetchOwnReports = async () => {
   const params = {
     _page: page.value,
-    _per_page: 5,
+    _per_page: 10,
     sortBy: "id",
-    sortDir: "desc",
+    sortDir: sortDir.value?.id,
+    categoryId: cateValue.value || "",
+    reportType: typeValue.value || "",
+    search: search.value || "",
   };
 
   // if (search.value) params.search = search.value;
@@ -239,9 +330,21 @@ const fetchOwnReports = async () => {
   console.log("PAGE:", page.value);
   console.log("META:", reportStore.ownReportMeta);
 };
+watch(
+  () => [search.value, cateValue.value, typeValue.value, sortDir.value],
+  () => {
+    page.value = 1;
+    fetchOwnReports();
+  },
+);
+
 onMounted(async () => {
   try {
-    await Promise.all([fetchOwnReports(), countReports()]);
+    await Promise.all([
+      fetchOwnReports(),
+      countReports(),
+      categoryStore.fetchCategories(),
+    ]);
     console.log(reportStore.ownReports);
     console.log(reportStore.ownReportMeta.totalItems);
     // just for stats on current page
@@ -255,6 +358,30 @@ onMounted(async () => {
     console.error(error);
   }
 });
+
+const btnFilterAllReport = async () => {
+  cateValue.value = null;
+  typeValue.value = "";
+  activeFilter.value = "";
+  await fetchOwnReports();
+};
+
+const btnFilterReportType = async (reportTypeValue) => {
+  activeFilter.value = reportTypeValue;
+  typeValue.value = reportTypeValue;
+  await fetchOwnReports();
+};
+
+const clearFilter = async () => {
+  search.value = "";
+  typeValue.value = "";
+  cateValue.value = null;
+  activeFilter.value = "";
+  page.value = 1;
+
+  await fetchOwnReports();
+};
+
 const gotoDetailPage = async (id) => {
   router.push({ name: "report-detail-user", params: { id: id } });
 };
@@ -325,15 +452,15 @@ const stats = computed(() => [
   //   iconColor: "text-purple",
   // },
 ]);
-import { watch } from "vue";
 
-watch(
-  () => reportStore.ownReports,
-  () => {
-    countReports();
-  },
-  { immediate: true },
-);
+// watch(
+//   () => reportStore.ownReports,
+//   () => {
+//     countReports();
+//   },
+//   { immediate: true },
+// );
+
 const btnHandleCreateReport = () => {
   router.push({ name: "create-report" });
 };
@@ -404,6 +531,14 @@ const PreviousPage = async () => {
 
 <style scoped>
 /* Custom purple for the last stat icon */
+.title {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+  width: 100%;
+}
+
 .text-purple {
   color: #a855f7;
 }
@@ -428,6 +563,17 @@ const PreviousPage = async () => {
 .btn-group .btn:hover {
   background-color: #f8f9fa;
   color: #212529;
+}
+.btn-action {
+  display: flex;
+  justify-content: center !important;
+  align-items: center !important;
+  transition: 0.2s linear;
+  padding: 5px 20px;
+}
+
+.btn-action:hover {
+  background-color: #dee2e6 !important;
 }
 .box-shadow {
   box-shadow:
@@ -457,5 +603,29 @@ const PreviousPage = async () => {
 .resolved {
   background: rgba(92, 92, 92, 0.5);
   color: rgba(255, 255, 255, 0.8);
+}
+/* ----------- */
+.bg-btn-group {
+  padding: 5px;
+  background-color: rgba(226, 226, 226, 0.877);
+  border-radius: 20px;
+}
+
+.bg-btn-group .btn-filter {
+  background-color: transparent;
+  border: none;
+  padding: 4px 15px;
+  font-size: 16px;
+  border-radius: 15px;
+  cursor: pointer;
+}
+.bg-btn-group .btn-filter.active {
+  background-color: #fff;
+}
+@media (max-width: 912px) {
+  /* CSS rules for screens 650px or smaller */
+  .btn-action .btn-title {
+    display: none;
+  }
 }
 </style>

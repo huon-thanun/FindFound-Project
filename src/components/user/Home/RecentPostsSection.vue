@@ -10,7 +10,7 @@
           </div>
         </div>
 
-        <div class="filter-controls">
+        <!-- <div class="filter-controls">
           <div class="status-filters">
             <button
               v-for="tab in ['ទាំងអស់', 'បាត់បង់', 'រើសបាន']"
@@ -21,10 +21,19 @@
               {{ tab }}
             </button>
           </div>
-        </div>
+        </div> -->
+      </div>
+      <div class="text-end mb-2">
+        <router-link
+          :to="{ name: 'report.user' }"
+          style="text-decoration: none"
+        >
+          <span> មើលច្រើនទៀត </span>
+          <i class="bi bi-arrow-right"></i>
+        </router-link>
       </div>
 
-      <div class="items-grid">
+      <!-- <div class="items-grid">
         <div class="post-card" v-for="(item, index) in items" :key="index">
           <div class="image-box">
             <img :src="item.image" :alt="item.title" />
@@ -51,14 +60,16 @@
             </div>
           </div>
         </div>
-      </div>
+      </div> -->
+      <SectionPublicReports :page="1" :perPage="4" :has-load-more-btn="false">
+      </SectionPublicReports>
     </div>
   </section>
 </template>
 
 <script setup>
 import { ref } from "vue";
-
+import SectionPublicReports from "@/components/report/SectionPublicReports.vue";
 const searchQuery = ref("");
 const currentTab = ref("ទាំងអស់");
 
@@ -118,7 +129,7 @@ const items = [
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 40px;
+  margin-bottom: 10px;
   flex-wrap: wrap;
   gap: 25px;
 }
