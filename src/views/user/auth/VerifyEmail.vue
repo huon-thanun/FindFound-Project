@@ -14,7 +14,7 @@
       </div>
 
       <!-- Success -->
-      <div v-if="success">
+      <div v-else-if="success">
         <div class="fs-1 text-success mb-3">✔</div>
         <h4 class="fw-bold text-success mb-2">អ៊ីមែលបានផ្ទៀងផ្ទាត់!</h4>
         <p class="text-muted">
@@ -24,7 +24,7 @@
       </div>
 
       <!-- Error -->
-      <div v-if="error">
+      <div v-else>
         <div class="fs-1 text-danger mb-3">✖</div>
         <h4 class="fw-bold text-danger mb-2">ការផ្ទៀងផ្ទាត់បរាជ័យ</h4>
         <p class="text-muted">{{ error }}</p>
@@ -68,26 +68,21 @@ onMounted(async () => {
     );
 
     const json = await res.json();
-    if (!res.ok) throw new Error(json.message || "Invalid or expired token");
 
+    if (!res.ok) {
+      throw new Error(json.message || "Token មិនត្រឹមត្រូវ ឬផុតកំណត់");
+    }
+
+    // success
     success.value = true;
 
-    // Save role info from API
-    const role = json.role; // <-- make sure backend returns "role" field
-
-    // Force logout after email change
+    // force logout (email changed => token invalid)
     localStorage.removeItem("token");
     localStorage.removeItem("role");
 
-    // Redirect based on role
+    // redirect to login
     setTimeout(() => {
-      if (role === "admin") {
-        router.push({ name: "admin.profile.security" });
-      } else if (role === "user") {
-        router.push({ name: "user.profile.security" });
-      } else {
-        router.push({ name: "home" }); // fallback
-      }
+      router.push({ name: "login" });
     }, 2000);
   } catch (err) {
     error.value = err.message || "Token មិនត្រឹមត្រូវ ឬផុតកំណត់";

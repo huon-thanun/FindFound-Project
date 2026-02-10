@@ -196,7 +196,7 @@ const prevTestimonial = () => {
   <div class="about-page">
     <!-- HERO -->
     <div class="row container-fluid mx-auto align-items-center hero px-0">
-      <section class="col-xl-7 col-12 ">
+      <section class="col-xl-7 col-12">
         <div class="container px-0 text-center">
           <div class="hero-badge" data-aos="fade-down">
             <i class="bi bi-stars"></i>
@@ -509,7 +509,8 @@ const prevTestimonial = () => {
   left: 0;
   right: 0;
   bottom: 0;
-  background: radial-gradient(
+  background:
+    radial-gradient(
       circle at 20% 50%,
       rgba(255, 255, 255, 0.1) 0%,
       transparent 50%
@@ -654,7 +655,7 @@ const prevTestimonial = () => {
 .value-icon {
   font-size: 4rem;
   margin-bottom: 20px;
-  color: rgb(15,185,129);
+  color: rgb(15, 185, 129);
 }
 
 .value-title {
@@ -679,7 +680,7 @@ const prevTestimonial = () => {
 .feature-icon {
   font-size: 3.5rem;
   margin-bottom: 20px;
-  color: rgb(99,102,241);
+  color: rgb(99, 102, 241);
 }
 
 .feature-title {
