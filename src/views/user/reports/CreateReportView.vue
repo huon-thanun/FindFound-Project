@@ -38,14 +38,11 @@
             <div
               class="card-header py-5 d-flex flex-column align-items-center"
               style="
-                /* background-color: var(--primary-color);
-              background-color: #f2f4ff; */
                 border-bottom: none;
                 background-color: #fff;
                 border-radius: 18px;
               "
             >
-              <!-- <h3 class="fw-bold r">ការបង្កើតរបាយការណ៍</h3> -->
               <span class="icons mb-3">
                 <i class="bi bi-box-seam"></i>
               </span>
