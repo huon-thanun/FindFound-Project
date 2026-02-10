@@ -145,7 +145,7 @@
           <ul class="navbar-nav navbar-nav-custom">
             <li class="nav-item">
               <router-link
-                to="/"
+                :to="{name: 'home'}"
                 class="nav-link-custom"
                 :class="{ active: activeLink === 'home' }"
                 @click.prevent="setActive('home')"
@@ -189,7 +189,7 @@
 
             <li class="nav-item">
               <router-link
-                to="/contact_us"
+                :to="{name: 'contact_us'}"
                 class="nav-link-custom"
                 :class="{ active: activeLink === 'contact' }"
                 @click.prevent="setActive('contact')"
@@ -348,7 +348,7 @@
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from "vue";
 import { useProfileStore } from "@/stores/profileStore";
-import { useRouter } from "vue-router";
+import { useRouter, useRoute } from "vue-router";
 import { useAuthStore } from "@/stores/authStore";
 
 const auth = useAuthStore();
@@ -364,7 +364,7 @@ const goRegister = () => {
 };
 import { storeToRefs } from "pinia";
 
-const activeLink = ref("home");
+// const activeLink = ref("home");
 const profileStore = useProfileStore();
 
 const { profile, isLoadingProfile, error } = storeToRefs(profileStore);
@@ -414,9 +414,11 @@ const showAuthButtons = computed(() => {
 });
 
 // Active link in navbar
-const setActive = (link) => {
-  activeLink.value = link;
-};
+const route = useRoute();
+
+const activeLink = computed(() => {
+  return route.name;
+});
 
 // LOGOUT function
 async function logout() {
@@ -676,6 +678,10 @@ body {
   color: var(--surface-color);
 }
 
+.nav-link-custom.router-link-exact-active {
+  color: var(--surface-color);
+}
+
 .nav-link-custom:before {
   content: "";
   position: absolute;
@@ -702,7 +708,7 @@ body {
 }
 
 /* Active underline (STAYS visible) */
-.nav-link-custom.active::before {
+.nav-link-custom.router-link-exact-active::before {
   left: 0;
   right: 0;
 }

@@ -38,7 +38,7 @@
                 បាត់
               </div>
               <div class="tab" :class="{ active: activeTab === 'Found' }" @click="activeTab = 'Found'">
-                រកឃើញ
+                ប្រទះឃើញ
               </div>
             </div>
 
@@ -66,7 +66,7 @@
                 </div>
 
                 <div class="transaction-status" :class="item.reportType?.name === 'FOUND' ? 'found' : 'lost'">
-                  {{ item.reportType?.name === "FOUND" ? "✓ Found" : "⚠ Lost" }}
+                  {{ item.reportType?.name === "FOUND" ? "✓ ប្រទះឃើញ" : "⚠ បានបាត់" }}
                 </div>
               </div>
             </div>

@@ -96,14 +96,14 @@ defineEmits(["edit", "delete", "rowClick"]);
 <style scoped>
 /* ---------- Wrapper (IMPORTANT) ---------- */
 .table-wrapper {
-  border-top: 1px solid var(--primary-color) !important;
-  border-left: 1px solid var(--primary-color) !important;
-  border-right: 1px solid var(--primary-color) !important;
+  border-top: 1px solid var(--tertiary-color) !important;
+  border-left: 1px solid var(--tertiary-color) !important;
+  border-right: 1px solid var(--tertiary-color) !important;
 }
 /* ---------- Table ---------- */
 .table-scroll {
   width: 100%;
-  max-height: 550px;   /* 👈 adjust height */
+  /* max-height: 550px;   👈 adjust height */
   overflow-x: auto;
   overflow-y: auto;    /* 👈 vertical scroll */
 }
@@ -121,7 +121,7 @@ thead th {
 }
 
 .table-row {
-  border-bottom: 1px solid var(--primary-color);
+  border-bottom: 1px solid var(--tertiary-color);
 }
 /* ---------- Header ---------- */
 .table-top {

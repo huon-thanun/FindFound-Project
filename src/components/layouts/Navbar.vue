@@ -2,9 +2,7 @@
   <SidebarAdmin class="sidebar d-lg-none" :class="{ closed: isOpen }" />
 
   <nav class="navbar-top shadow-sm p-2 ms-auto">
-    <div
-      class="container-fluid d-flex justify-content-between align-items-center h-100"
-    >
+    <div class="container-fluid d-flex justify-content-between align-items-center h-100">
       <h1 class="pt-2 d-none d-lg-block">
         <i class="bi-person-gear"></i> សូមស្វាគមន៍អ្នកគ្រប់គ្រង
       </h1>
@@ -16,13 +14,7 @@
 
       <div class="logo-section d-lg-none">
         <div class="d-flex align-items-center">
-          <img
-            src="../../assets/images/logo/logo.png"
-            class="object-fit-cover"
-            height="79px"
-            width="170px"
-            alt=""
-          />
+          <img src="../../assets/images/logo/logo.png" class="object-fit-cover" height="79px" width="170px" alt="" />
         </div>
       </div>
 
@@ -38,29 +30,23 @@
             <i class="bi bi-chevron-down chevron-icon ms-1"></i>
           </div>
 
-          <ul
-            class="dropdown-menu dropdown-menu-end shadow-lg animated-dropdown"
-          >
+          <ul class="dropdown-menu dropdown-menu-end shadow-lg animated-dropdown">
             <li>
               <router-link class="dropdown-item khmer-font" to="/admin/profile">
                 <i class="bi bi-person-circle"></i> គណនីផ្ទាល់ខ្លួន
               </router-link>
             </li>
             <li>
-              <router-link
-                class="dropdown-item khmer-font"
-                to="/admin/profile-security"
-              >
+              <router-link class="dropdown-item khmer-font" to="/admin/profile-security">
                 <i class="bi bi-gear"></i> ការកំណត់
               </router-link>
             </li>
-            <li><hr class="dropdown-divider" /></li>
             <li>
-              <a
-                class="dropdown-item khmer-font text-danger"
-                href="javascript:void(0)"
-                @click.prevent="openLogoutModal"
-              >
+              <hr class="dropdown-divider" />
+            </li>
+            <li>
+              <a class="dropdown-item khmer-font text-danger" href="javascript:void(0)"
+                @click.prevent="openLogoutModal">
                 <i class="bi bi-box-arrow-right"></i> ចាកចេញ
               </a>
             </li>
@@ -70,26 +56,16 @@
     </div>
   </nav>
 
-  <BaseModal
-    v-if="showLogoutModal"
-    :title="'ចាកចេញពីគណនី'"
-    icon="exclamation-triangle"
-    theme="danger"
-    :isClose="showLogoutModal"
-    @closeModal="closeLogoutModal"
-  >
+  <BaseModal v-if="showLogoutModal" :title="'ចាកចេញពីគណនី'" icon="exclamation-triangle" theme="danger"
+    :isClose="showLogoutModal" @closeModal="closeLogoutModal">
     <template #body>
       <p class="khmer-font text-center mb-0">តើអ្នកពិតជាចង់ចាកចេញមែនទេ?</p>
     </template>
     <template #btnClose>
-      <BaseButton variant="cancel" class="col-6" @click="closeLogoutModal"
-        >បោះបង់</BaseButton
-      >
+      <BaseButton variant="cancel" class="col-6" @click="closeLogoutModal">បោះបង់</BaseButton>
     </template>
     <template #btnActive>
-      <BaseButton variant="danger" class="col-6" @click="logout"
-        >បញ្ជាក់</BaseButton
-      >
+      <BaseButton variant="danger" class="col-6" @click="logout">បញ្ជាក់</BaseButton>
     </template>
   </BaseModal>
 </template>
@@ -142,9 +118,11 @@ const logout = () => {
   display: block !important;
   width: 300px !important;
 }
+
 .sidebar.closed {
   transform: translateX(-300px);
 }
+
 .navbar-brand-container {
   display: flex;
   align-items: center;
@@ -152,12 +130,14 @@ const logout = () => {
 }
 
 .navbar-brand-container:hover {
-  transform: scale(1.05); /* Slight pop when hovering logo */
+  transform: scale(1.05);
+  /* Slight pop when hovering logo */
 }
 
 .navbar-logo {
   object-fit: contain;
-  max-width: 150px; /* Adjust based on your logo width */
+  max-width: 150px;
+  /* Adjust based on your logo width */
 }
 
 /* Ensure the navbar items don't feel cramped */
@@ -182,7 +162,8 @@ const logout = () => {
 /* 2. Hover Bridge Strategy */
 .hover-dropdown {
   position: relative;
-  padding: 10px 0; /* Creates invisible hover area */
+  padding: 10px 0;
+  /* Creates invisible hover area */
 }
 
 /* 3. User Profile Trigger */
@@ -251,16 +232,19 @@ const logout = () => {
   transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
   pointer-events: none;
 }
+
 @media (max-width: 992px) {
   .navbar-top {
     width: 100% !important;
   }
 }
+
 @media (min-width: 992px) {
   .sidebar {
     display: none !important;
   }
 }
+
 /* Hover Action */
 .hover-dropdown:hover .animated-dropdown {
   visibility: visible;
@@ -298,7 +282,8 @@ const logout = () => {
 .dropdown-item:hover {
   background-color: #f1f0ff;
   color: #3b1e54;
-  padding-left: 18px; /* Slight slide effect */
+  padding-left: 18px;
+  /* Slight slide effect */
 }
 
 .dropdown-item:hover i {
