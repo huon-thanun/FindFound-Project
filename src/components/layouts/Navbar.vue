@@ -103,8 +103,6 @@
         </div>
       </div>
       </div>
-    </div>
-    </div>
   </nav>
 
   <BaseModal
@@ -265,7 +263,6 @@ const logout = () => {
   max-width: 150px;
 }
   /* Adjust based on your logo width */
-}
 .icon-action-btn:hover {
   background: #f5f3ff;
   color: #7c3aed;
@@ -305,13 +302,11 @@ const logout = () => {
   padding: 10px 0;
 }
   /* Creates invisible hover area */
-}
 @media (min-width: 992px) {
   .navbar-top {
     width: calc(100% - 280px);
     margin-left: 280px;
   }
-}
 }
 
   .nav-glass-container {
@@ -502,7 +497,6 @@ const logout = () => {
   padding-left: 18px;
 }
   /* Slight slide effect */
-}
 .p-item:hover {
   background: #f5f3ff;
   color: #7c3aed;
@@ -556,5 +550,4 @@ const logout = () => {
       transform: translateY(0) scale(1);
     }
   }
-}
 </style>

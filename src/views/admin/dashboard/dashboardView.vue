@@ -205,8 +205,10 @@
             </div>
           </div>
         </div>
-      </div>
-      </div>
+        </div>
+        </div>
+        </div>
+        </div>
     </main>
   </div>
 </template>
@@ -248,7 +250,7 @@ const activeTab = ref("All");
 const filteredItems = computed(() => {
   if (activeTab.value === "All") return items.value;
   return items.value.filter(
-    (i) => i.reportType?.name === activeTab.value.toUpperCase(),
+    (i) => i.reportType?.name === activeTab.value.toUpperCase()
   );
 });
 
@@ -302,10 +304,10 @@ const fetchStats = async () => {
     totalItems.value = res.data.data.meta.totalItems;
 
     lostReports.value = allItems.value.filter(
-      (i) => i.reportType?.name === "LOST",
+      (i) => i.reportType?.name === "LOST"
     ).length;
     foundReports.value = allItems.value.filter(
-      (i) => i.reportType?.name === "FOUND",
+      (i) => i.reportType?.name === "FOUND"
     ).length;
 
     // Build category stats
