@@ -263,6 +263,7 @@
           </div>
         </div>
       </div>
+      </div>
     </main>
   </div>
 </template>
@@ -900,7 +901,7 @@ onMounted(() => {
   border: none !important;
 }
 
-< scoped>
+
 /* Chart Container */
 .line-chart-wrapper {
   padding: 20px 0;
