@@ -5,9 +5,7 @@
   />
 
   <nav class="navbar-top">
-    <div
-      class="nav-glass-container d-flex justify-content-between align-items-center"
-    >
+    <div class="nav-glass-container d-flex justify-content-between align-items-center">
       <div class="d-flex align-items-center gap-3">
         <button @click="toggleSidebar" class="modern-toggle d-lg-none">
           <div class="hamburger" :class="{ active: !isOpen }">
@@ -104,6 +102,7 @@
           </div>
         </div>
       </div>
+    </div>
     </div>
   </nav>
 
@@ -222,6 +221,7 @@ const logout = () => {
   transform: translateX(-300px);
 }
 
+.navbar-brand-container, 
 .search-input {
   width: 100%;
   padding: 10px 15px 10px 45px;
@@ -262,6 +262,7 @@ const logout = () => {
 .navbar-logo {
   object-fit: contain;
   max-width: 150px;
+}
   /* Adjust based on your logo width */
 }
 .icon-action-btn:hover {
@@ -301,6 +302,7 @@ const logout = () => {
 .hover-dropdown {
   position: relative;
   padding: 10px 0;
+}
   /* Creates invisible hover area */
 }
 @media (min-width: 992px) {
@@ -496,6 +498,7 @@ const logout = () => {
   background-color: #f1f0ff;
   color: #3b1e54;
   padding-left: 18px;
+}
   /* Slight slide effect */
 }
 .p-item:hover {

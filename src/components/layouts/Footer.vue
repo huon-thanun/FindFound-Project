@@ -1,6 +1,6 @@
 <template>
     <footer class="footer">
-        <div class="container-fluid px-5 m-0 m-auto">
+        <div class="container-fluid px-5">
             <div class="row gy-4 text-center text-md-start">
 
                 <!-- Logo -->
@@ -53,10 +53,10 @@
                 </div>
 
             </div>
-
+            <hr/>
             <!-- Copyright -->
-            <div class="copyright mt-4">
-                © Copyright 2024 FindFound<br />
+            <div class="copyright">
+                © Copyright 2024 FindFound<br/>
                 All Right Reserved
             </div>
         </div>
@@ -113,6 +113,15 @@ ul li a::before {
 
 ul li a:hover::before {
     right: 0;
+}
+hr{
+    border: 1px solid white;
+}
+.copyright {
+    font-size: 14px;
+    color: #555;
+    text-align: center;
+    margin-top: 30px;
 }
 
 </style>
