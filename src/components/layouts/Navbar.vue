@@ -5,9 +5,7 @@
   />
 
   <nav class="navbar-top">
-    <div
-      class="nav-glass-container d-flex justify-content-between align-items-center"
-    >
+    <div class="nav-glass-container d-flex justify-content-between align-items-center">
       <div class="d-flex align-items-center gap-3">
         <button @click="toggleSidebar" class="modern-toggle d-lg-none">
           <div class="hamburger" :class="{ active: !isOpen }">
@@ -69,43 +67,65 @@
               ></i>
             </div>
 
-          <ul class="dropdown-menu dropdown-menu-end shadow-lg animated-dropdown">
-            <li>
-              <router-link class="dropdown-item khmer-font" to="/admin/profile">
-                <i class="bi bi-person-circle"></i> គណនីផ្ទាល់ខ្លួន
-              </router-link>
-            </li>
-            <li>
-              <router-link class="dropdown-item khmer-font" to="/admin/profile-security">
-                <i class="bi bi-gear"></i> ការកំណត់
-              </router-link>
-            </li>
-            <li>
-              <hr class="dropdown-divider" />
-            </li>
-            <li>
-              <a class="dropdown-item khmer-font text-danger" href="javascript:void(0)"
-                @click.prevent="openLogoutModal">
-                <i class="bi bi-box-arrow-right"></i> ចាកចេញ
-              </a>
-            </li>
-          </ul>
+            <ul
+              class="dropdown-menu dropdown-menu-end shadow-lg animated-dropdown"
+            >
+              <li>
+                <router-link
+                  class="dropdown-item khmer-font"
+                  to="/admin/profile"
+                >
+                  <i class="bi bi-person-circle"></i> គណនីផ្ទាល់ខ្លួន
+                </router-link>
+              </li>
+              <li>
+                <router-link
+                  class="dropdown-item khmer-font"
+                  to="/admin/profile-security"
+                >
+                  <i class="bi bi-gear"></i> ការកំណត់
+                </router-link>
+              </li>
+              <li>
+                <hr class="dropdown-divider" />
+              </li>
+              <li>
+                <a
+                  class="dropdown-item khmer-font text-danger"
+                  href="javascript:void(0)"
+                  @click.prevent="openLogoutModal"
+                >
+                  <i class="bi bi-box-arrow-right"></i> ចាកចេញ
+                </a>
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
     </div>
-  </div>
+    </div>
   </nav>
 
-  <BaseModal v-if="showLogoutModal" :title="'ចាកចេញពីគណនី'" icon="exclamation-triangle" theme="danger"
-    :isClose="showLogoutModal" @closeModal="closeLogoutModal">
+  <BaseModal
+    v-if="showLogoutModal"
+    :title="'ចាកចេញពីគណនី'"
+    icon="exclamation-triangle"
+    theme="danger"
+    :isClose="showLogoutModal"
+    @closeModal="closeLogoutModal"
+  >
     <template #body>
       <p class="khmer-font text-center mb-0">តើអ្នកពិតជាចង់ចាកចេញមែនទេ?</p>
     </template>
     <template #btnClose>
-      <BaseButton variant="cancel" class="col-6" @click="closeLogoutModal">បោះបង់</BaseButton>
+      <BaseButton variant="cancel" class="col-6" @click="closeLogoutModal"
+        >បោះបង់</BaseButton
+      >
     </template>
     <template #btnActive>
-      <BaseButton variant="danger" class="col-6" @click="logout">បញ្ជាក់</BaseButton>
+      <BaseButton variant="danger" class="col-6" @click="logout"
+        >បញ្ជាក់</BaseButton
+      >
     </template>
   </BaseModal>
 </template>
@@ -201,7 +221,7 @@ const logout = () => {
   transform: translateX(-300px);
 }
 
-/* .navbar-brand-container { */
+.navbar-brand-container, 
 .search-input {
   width: 100%;
   padding: 10px 15px 10px 45px;
@@ -244,6 +264,7 @@ const logout = () => {
   max-width: 150px;
 }
   /* Adjust based on your logo width */
+}
 .icon-action-btn:hover {
   background: #f5f3ff;
   color: #7c3aed;
@@ -283,6 +304,7 @@ const logout = () => {
   padding: 10px 0;
 }
   /* Creates invisible hover area */
+}
 @media (min-width: 992px) {
   .navbar-top {
     width: calc(100% - 280px);
@@ -478,6 +500,7 @@ const logout = () => {
   padding-left: 18px;
 }
   /* Slight slide effect */
+}
 .p-item:hover {
   background: #f5f3ff;
   color: #7c3aed;
