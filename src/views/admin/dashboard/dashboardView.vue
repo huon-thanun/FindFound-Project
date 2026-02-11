@@ -142,120 +142,138 @@
                 <span>បាត់បង់សរុប</span>
                 <span class="fw-bold">+5%</span>
               </div>
-              <div class="tab" :class="{ active: activeTab === 'Found' }" @click="activeTab = 'Found'">
+              <div
+                class="tab"
+                :class="{ active: activeTab === 'Found' }"
+                @click="activeTab = 'Found'"
+              >
                 ប្រទះឃើញ
-              <div
-                class="progress"
-                style="height: 8px; background: rgba(255, 255, 255, 0.2)"
-              >
-                <div class="progress-bar bg-warning" style="width: 40%"></div>
-              </div>
-            </div>
-            <hr class="my-4" />
-            <div class="text-center">
-              <small
-                >អ្នកបានដោះស្រាយបញ្ហាចំនួន
-                <strong>{{ foundReports }}</strong> ក្នុងខែនេះ!</small
-              >
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="row g-4">
-        <div class="col-xl-8">
-          <div class="content-card">
-            <div class="content-card-header">
-              <h5 class="m-0">
-                <i class="bi bi-clock-history me-2"></i>សកម្មភាពថ្មីៗ
-              </h5>
-              <div class="custom-tabs">
-                <button
-                  v-for="tab in ['All', 'Lost', 'Found']"
-                  :key="tab"
-                  :class="['tab-btn', { active: activeTab === tab }]"
-                  @click="activeTab = tab"
-                >
-                  {{
-                    tab === "All"
-                      ? "ទាំងអស់"
-                      : tab === "Lost"
-                        ? "បាត់"
-                        : "រកឃើញ"
-                  }}
-                </button>
-              </div>
-            </div>
-
-            <div class="transaction-container mt-3">
-              <div
-                v-for="item in filteredItems"
-                :key="item.id"
-                class="activity-item"
-              >
-                <div class="activity-left">
-                  <div class="img-wrapper">
-                    <img
-                      :src="item.reportImages?.[0]?.name || '/placeholder.png'"
-                      alt="item"
-                    />
-                  </div>
-                  <div class="activity-info">
-                    <h6 class="item-title">
-                      {{ item.title }}
-                      <span v-if="isRecent(item.createdAt)" class="badge-new"
-                        >ថ្មី</span
-                      >
-                    </h6>
-                    <p class="item-meta">
-                      <span class="cat-tag">{{ item.category?.name }}</span>
-                      <span class="dot"></span>
-                      <span class="time-tag">{{
-                        dayjs(item.createdAt).format("DD MMM, HH:mm")
-                      }}</span>
-                    </p>
-                  </div>
-                </div>
-
-                <div class="transaction-status" :class="item.reportType?.name === 'FOUND' ? 'found' : 'lost'">
-                  {{ item.reportType?.name === "FOUND" ? "✓ ប្រទះឃើញ" : "⚠ បានបាត់" }}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-xl-4">
-          <div class="content-card">
-            <div class="content-card-header">
-              <h5 class="m-0"><i class="bi bi-pie-chart me-2"></i>តាមប្រភេទ</h5>
-            </div>
-
-            <div class="chart-section">
-              <div class="donut-chart-wrapper">
-                <div class="donut-visual" :style="donutStyle">
-                  <div class="donut-inner">
-                    <span class="total-num">{{ totalItems }}</span>
-                    <span class="total-text">សរុប</span>
-                  </div>
-                </div>
-              </div>
-
-              <div class="legend-list mt-4">
                 <div
-                  v-for="cat in categoryStats"
-                  :key="cat.category.name"
-                  class="legend-row"
+                  class="progress"
+                  style="height: 8px; background: rgba(255, 255, 255, 0.2)"
                 >
-                  <div class="legend-info">
-                    <span class="legend-name">{{ cat.category.name }}</span>
-                    <span class="legend-percent">{{ cat.percent }}%</span>
+                  <div class="progress-bar bg-warning" style="width: 40%"></div>
+                </div>
+              </div>
+              <hr class="my-4" />
+              <div class="text-center">
+                <small
+                  >អ្នកបានដោះស្រាយបញ្ហាចំនួន
+                  <strong>{{ foundReports }}</strong> ក្នុងខែនេះ!</small
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row g-4">
+          <div class="col-xl-8">
+            <div class="content-card">
+              <div class="content-card-header">
+                <h5 class="m-0">
+                  <i class="bi bi-clock-history me-2"></i>សកម្មភាពថ្មីៗ
+                </h5>
+                <div class="custom-tabs">
+                  <button
+                    v-for="tab in ['All', 'Lost', 'Found']"
+                    :key="tab"
+                    :class="['tab-btn', { active: activeTab === tab }]"
+                    @click="activeTab = tab"
+                  >
+                    {{
+                      tab === "All"
+                        ? "ទាំងអស់"
+                        : tab === "Lost"
+                          ? "បាត់"
+                          : "រកឃើញ"
+                    }}
+                  </button>
+                </div>
+              </div>
+
+              <div class="transaction-container mt-3">
+                <div
+                  v-for="item in filteredItems"
+                  :key="item.id"
+                  class="activity-item"
+                >
+                  <div class="activity-left">
+                    <div class="img-wrapper">
+                      <img
+                        :src="
+                          item.reportImages?.[0]?.name || '/placeholder.png'
+                        "
+                        alt="item"
+                      />
+                    </div>
+                    <div class="activity-info">
+                      <h6 class="item-title">
+                        {{ item.title }}
+                        <span v-if="isRecent(item.createdAt)" class="badge-new"
+                          >ថ្មី</span
+                        >
+                      </h6>
+                      <p class="item-meta">
+                        <span class="cat-tag">{{ item.category?.name }}</span>
+                        <span class="dot"></span>
+                        <span class="time-tag">{{
+                          dayjs(item.createdAt).format("DD MMM, HH:mm")
+                        }}</span>
+                      </p>
+                    </div>
                   </div>
-                  <div class="progress-thin">
-                    <div
-                      class="progress-bar-thin"
-                      :style="{ width: cat.percent + '%' }"
-                    ></div>
+
+                  <div
+                    class="transaction-status"
+                    :class="
+                      item.reportType?.name === 'FOUND' ? 'found' : 'lost'
+                    "
+                  >
+                    {{
+                      item.reportType?.name === "FOUND"
+                        ? "✓ ប្រទះឃើញ"
+                        : "⚠ បានបាត់"
+                    }}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-xl-4">
+            <div class="content-card">
+              <div class="content-card-header">
+                <h5 class="m-0">
+                  <i class="bi bi-pie-chart me-2"></i>តាមប្រភេទ
+                </h5>
+              </div>
+
+              <div class="chart-section">
+                <div class="donut-chart-wrapper">
+                  <div class="donut-visual" :style="donutStyle">
+                    <div class="donut-inner">
+                      <span class="total-num">{{ totalItems }}</span>
+                      <span class="total-text">សរុប</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="legend-list mt-4">
+                  <div
+                    v-for="cat in categoryStats"
+                    :key="cat.category.name"
+                    class="legend-row"
+                  >
+                    <div class="legend-info">
+                      <span class="legend-name">{{ cat.category.name }}</span>
+                      <span class="legend-percent">{{ cat.percent }}%</span>
+                    </div>
+                    <div class="progress-thin">
+                      <div
+                        class="progress-bar-thin"
+                        :style="{ width: cat.percent + '%' }"
+                      ></div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -900,7 +918,6 @@ onMounted(() => {
   border: none !important;
 }
 
-< scoped>
 /* Chart Container */
 .line-chart-wrapper {
   padding: 20px 0;

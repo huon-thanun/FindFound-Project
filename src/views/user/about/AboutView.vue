@@ -231,14 +231,15 @@ const prevTestimonial = () => {
             data-aos-delay="200"
           >
             <img
-              src="../../../assets/images/contact/hero-banner.png"
-              alt="Contact Us Illustration"
+              src="../../../assets/images/about/hero-banner.png"
+              alt="About Us Illustration"
               class="hero-img"
             />
           </div>
         </div>
       </div>
     </section>
+
     <!-- MISSION -->
     <section class="section col-8 mx-auto">
       <div class="container">
@@ -501,125 +502,143 @@ const prevTestimonial = () => {
   background: linear-gradient(135deg, #f4f7ff, #eef1ff);
   min-height: 100vh;
 }
-/* ===== HERO SECTION ===== */
+/* ===== MODERN CONTACT US HERO ===== */
+
+/* ── Hero ── (shorter height) ── */
 .hero-section {
   position: relative;
-  min-height: 80vh;
-  padding: 80px 0;
+  background: linear-gradient(
+    135deg,
+    #f5f0ff 0%,
+    #efe8ff 35%,
+    #e6d9ff 65%,
+    #d9ccff 100%
+  );
+  color: #111111;
+  padding: 140px 0 220px; /* Reduced height */
   overflow: hidden;
-  background: linear-gradient(135deg, #6366f1, #8b5cf6);
-  color: white;
+  border-radius: 0 0 80px 80px;
 }
 
 .hero-bg {
   position: absolute;
   inset: 0;
   background: radial-gradient(
-    circle at 30% 20%,
-    rgba(255, 255, 255, 0.12) 0%,
-    transparent 60%
+    ellipse at 40% 60%,
+    rgba(165, 180, 252, 0.06) 0%,
+    transparent 70%
   );
-  pointer-events: none;
+  opacity: 0.92;
 }
 
 .floating-shapes {
   position: absolute;
   inset: 0;
   pointer-events: none;
+  z-index: 0;
 }
 
 .shape {
   position: absolute;
+  background: rgba(139, 92, 246, 0.025);
+  backdrop-filter: blur(30px);
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(4px);
-  animation: float 18s infinite ease-in-out;
+  animation: float-slow 50s infinite ease-in-out;
+  pointer-events: none;
 }
 
 .shape-1 {
-  width: 180px;
-  height: 180px;
-  top: 15%;
-  left: 10%;
+  width: 380px;
+  height: 380px;
+  top: -20%;
+  left: -25%;
   animation-delay: 0s;
 }
 .shape-2 {
-  width: 140px;
-  height: 140px;
-  bottom: 20%;
-  right: 12%;
-  animation-delay: 6s;
+  width: 500px;
+  height: 500px;
+  bottom: -30%;
+  right: -30%;
+  animation-delay: 20s;
+  border-radius: 60% 40% 55% 45%;
 }
 .shape-3 {
-  width: 220px;
-  height: 220px;
-  top: 55%;
-  right: 18%;
-  animation-delay: 12s;
+  width: 320px;
+  height: 320px;
+  top: 60%;
+  left: -10%;
+  animation-delay: 35s;
 }
 
-@keyframes float {
+@keyframes float-slow {
   0%,
   100% {
     transform: translate(0, 0) rotate(0deg);
   }
+  25% {
+    transform: translate(40px, -60px) rotate(4deg);
+  }
   50% {
-    transform: translate(30px, -30px) rotate(10deg);
+    transform: translate(-50px, 70px) rotate(-4deg);
+  }
+  75% {
+    transform: translate(60px, 50px) rotate(3deg);
   }
 }
 
+/* Text on top */
+.hero-text-col,
+.hero-title,
+.hero-subtitle,
+.badge-modern {
+  position: relative;
+  z-index: 2;
+}
+
 .hero-title {
-  font-size: clamp(2.6rem, 6vw, 4.8rem);
+  font-size: 3.8rem; /* Slightly smaller for better proportion */
   font-weight: 800;
   line-height: 1.1;
-  margin-bottom: 1.2rem;
-  text-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  margin-bottom: 1.4rem;
+  color: #111111;
 }
 
 .gradient-text {
-  background: linear-gradient(90deg, #ffffff, #e0e7ff);
+  background: linear-gradient(to right, #8b5cf6, #a78bfa, #c4b5fd);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
 .hero-subtitle {
-  font-size: 1.25rem;
+  font-size: 1.3rem;
+  color: #222222;
+  max-width: 560px;
   line-height: 1.7;
-  max-width: 520px;
-  opacity: 0.95;
-  margin-bottom: 1.5rem;
 }
 
-.hero-img {
-  width: 100%;
-  max-width: 520px;
+.badge-modern {
+  background: rgba(139, 92, 246, 0.12);
+  backdrop-filter: blur(14px);
+  border: 1px solid rgba(139, 92, 246, 0.22);
+  padding: 12px 28px;
+  border-radius: 60px;
+  font-size: 1.05rem;
+  color: #111111;
+}
+
+/* Hero image (large but fits shorter height) */
+.hero-illustration .hero-img {
+  width: 130%; /* Still big, but not overflowing */
+  max-width: none;
   height: auto;
-  border-radius: 24px;
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.35);
-  background: rgba(255, 255, 255, 0.85);
-  padding: 20px;
-  object-fit: contain;
-  transition: all 0.5s ease;
+  margin-left: -15%;
+  filter: drop-shadow(0 35px 80px rgba(0, 0, 0, 0.18)) brightness(1.04);
+  border-radius: 40px;
+  transition: all 0.7s ease;
 }
 
 .hero-illustration:hover .hero-img {
-  transform: scale(1.04) translateY(-10px);
-}
-
-/* Mobile adjustments */
-@media (max-width: 992px) {
-  .hero-section {
-    padding: 60px 0 80px;
-    min-height: auto;
-  }
-  .hero-title {
-    font-size: clamp(2.4rem, 8vw, 3.8rem);
-  }
-  .hero-img {
-    max-width: 420px;
-    margin: 0 auto;
-    display: block;
-  }
+  transform: scale(1.08) translateY(-20px);
 }
 
 /* ===== STATS ===== */
