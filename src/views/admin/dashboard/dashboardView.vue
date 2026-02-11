@@ -161,6 +161,7 @@
           </div>
         </div>
       </div>
+</div>
 
       <div class="row g-4">
         <div class="col-xl-8">
@@ -900,7 +901,6 @@ onMounted(() => {
   border: none !important;
 }
 
-< scoped>
 /* Chart Container */
 .line-chart-wrapper {
   padding: 20px 0;
