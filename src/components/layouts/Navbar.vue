@@ -103,7 +103,7 @@
         </div>
       </div>
     </div>
-    </div>
+    <!-- </div> -->
   </nav>
 
   <BaseModal
@@ -264,7 +264,7 @@ const logout = () => {
   max-width: 150px;
 }
   /* Adjust based on your logo width */
-}
+
 .icon-action-btn:hover {
   background: #f5f3ff;
   color: #7c3aed;
@@ -304,7 +304,7 @@ const logout = () => {
   padding: 10px 0;
 }
   /* Creates invisible hover area */
-}
+
 @media (min-width: 992px) {
   .navbar-top {
     width: calc(100% - 280px);
@@ -553,5 +553,5 @@ const logout = () => {
       transform: translateY(0) scale(1);
     }
   }
-}
+
 </style>
