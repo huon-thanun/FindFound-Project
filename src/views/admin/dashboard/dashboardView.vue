@@ -142,21 +142,26 @@
                 <span>បាត់បង់សរុប</span>
                 <span class="fw-bold">+5%</span>
               </div>
-              <div class="tab" :class="{ active: activeTab === 'Found' }" @click="activeTab = 'Found'">
-                ប្រទះឃើញ
               <div
-                class="progress"
-                style="height: 8px; background: rgba(255, 255, 255, 0.2)"
+                class="tab"
+                :class="{ active: activeTab === 'Found' }"
+                @click="activeTab = 'Found'"
               >
-                <div class="progress-bar bg-warning" style="width: 40%"></div>
+                ប្រទះឃើញ
+                <div
+                  class="progress"
+                  style="height: 8px; background: rgba(255, 255, 255, 0.2)"
+                >
+                  <div class="progress-bar bg-warning" style="width: 40%"></div>
+                </div>
               </div>
-            </div>
-            <hr class="my-4" />
-            <div class="text-center">
-              <small
-                >អ្នកបានដោះស្រាយបញ្ហាចំនួន
-                <strong>{{ foundReports }}</strong> ក្នុងខែនេះ!</small
-              >
+              <hr class="my-4" />
+              <div class="text-center">
+                <small
+                  >អ្នកបានដោះស្រាយបញ្ហាចំនួន
+                  <strong>{{ foundReports }}</strong> ក្នុងខែនេះ!</small
+                >
+              </div>
             </div>
           </div>
         </div>
@@ -217,8 +222,15 @@
                   </div>
                 </div>
 
-                <div class="transaction-status" :class="item.reportType?.name === 'FOUND' ? 'found' : 'lost'">
-                  {{ item.reportType?.name === "FOUND" ? "✓ ប្រទះឃើញ" : "⚠ បានបាត់" }}
+                <div
+                  class="transaction-status"
+                  :class="item.reportType?.name === 'FOUND' ? 'found' : 'lost'"
+                >
+                  {{
+                    item.reportType?.name === "FOUND"
+                      ? "✓ ប្រទះឃើញ"
+                      : "⚠ បានបាត់"
+                  }}
                 </div>
               </div>
             </div>
@@ -900,7 +912,6 @@ onMounted(() => {
   border: none !important;
 }
 
-< scoped>
 /* Chart Container */
 .line-chart-wrapper {
   padding: 20px 0;
