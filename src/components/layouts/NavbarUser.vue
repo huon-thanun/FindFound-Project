@@ -261,7 +261,7 @@
               </router-link>
 
               <router-link
-                to=""
+                to="/profile/security"
                 class="dropdown-item-custom"
                 :class="{ active: activeLink === 'setting' }"
                 @click.prevent="setActive('setting')"

@@ -84,6 +84,34 @@
     </div>
   </aside>
 </template>
+<script setup>
+import { ref, onMounted } from "vue";
+
+const user = ref(null);
+const skills = ref([]);
+
+onMounted(async () => {
+  try {
+    const token = localStorage.getItem("token");
+
+    const res = await fetch(
+      "https://ant-g2-landf.ti.linkpc.net/api/v1/profile",
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    );
+
+    const json = await res.json();
+
+    user.value = json.data;
+    skills.value = json.data.skills || [];
+  } catch (err) {
+    console.error("Failed to load user", err);
+  }
+});
+</script>
 
 <style scoped>
 @import url("https://fonts.googleapis.com/css2?family=Koh+Santepheap:wght@700&family=Kantumruy+Pro:wght@400;600&display=swap");
