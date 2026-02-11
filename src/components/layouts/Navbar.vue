@@ -102,6 +102,7 @@
           </div>
         </div>
       </div>
+      </div>
     </div>
     </div>
   </nav>
@@ -221,7 +222,7 @@ const logout = () => {
   transform: translateX(-300px);
 }
 
-.navbar-brand-container, 
+/* .navbar-brand-container { */
 .search-input {
   width: 100%;
   padding: 10px 15px 10px 45px;
@@ -310,6 +311,8 @@ const logout = () => {
     width: calc(100% - 280px);
     margin-left: 280px;
   }
+}
+}
 
   .nav-glass-container {
     background: rgba(255, 255, 255, 0.8);

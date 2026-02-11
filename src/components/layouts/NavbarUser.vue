@@ -689,7 +689,8 @@ body {
 }
 
 .nav-link-custom.router-link-exact-active {
-  color: #7f23cf;
+  /* color: var(--surface-color); */
+  color: #9b5cff;
 }
 
 .nav-link-custom:before {
