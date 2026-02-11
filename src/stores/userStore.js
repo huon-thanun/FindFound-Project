@@ -13,7 +13,7 @@ export const useUserStore = defineStore('user', () => {
     try {
       const queryParams = {
         _page: params.page ?? 1,
-        _per_page: params.perPage ?? 10,
+        _per_page: params.perPage ?? 100,
         sortBy: params.sortBy ?? 'id',
         sortDir: params.sortDir ?? 'ASC',
       };
@@ -28,29 +28,24 @@ export const useUserStore = defineStore('user', () => {
         queryParams.status = params.status;
       }
 
-      console.log('Fetching users with params:', queryParams);
+      // console.log('Fetching users with params:', queryParams);
       const res = await api.get('/users', { params: queryParams });
-      console.log('Full API Response:', res.data);
+      // console.log('Full API Response:', res.data);
+      const items = res.data.data?.items || [];
 
-      const items = res.data.data?.items || res.data.data || [];
+      total.value = res.data.data?.meta?.totalItems ?? 0;
+      meta.value = res.data.data?.meta ?? null;
 
-      // Get total from multiple possible locations
-      let totalCount =
-        res.data.data?.total ||
-        res.data.data?.meta?.totalCount ||
-        res.data.data?.meta?.total ||
-        res.data?.meta?.totalCount ||
-        res.data?.total ||
-        items.length;
+      users.value = items;
 
-      total.value = totalCount;
-      meta.value = res.data.data?.meta || res.data?.meta || null;
+      // total.value = totalCount;
+      // meta.value = res.data.data?.meta || res.data?.meta || null;
 
-      console.log('Users API Response:', {
-        items: items.length,
-        total: total.value,
-        meta: meta.value,
-      });
+      // console.log('Users API Response:', {
+      //   items: items.length,
+      //   total: total.value,
+      //   meta: meta.value,
+      // });
 
       users.value = items;
     } catch (err) {
