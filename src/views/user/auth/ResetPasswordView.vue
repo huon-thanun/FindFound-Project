@@ -27,28 +27,35 @@
 
       <!-- FORM -->
       <form @submit.prevent="handleReset">
+        <!-- New Password -->
         <label>ពាក្យសម្ងាត់ថ្មី</label>
         <input
           type="password"
           v-model="password"
           placeholder="បញ្ចូលពាក្យសម្ងាត់ថ្មី"
-          required
+          @input="clearError('password')"
         />
+        <p v-if="errors.password" class="error">{{ errors.password }}</p>
 
+        <!-- Confirm Password -->
         <label>បញ្ជាក់ពាក្យសម្ងាត់</label>
         <input
           type="password"
           v-model="confirm"
           placeholder="បញ្ជាក់ពាក្យសម្ងាត់ម្តងទៀត"
-          required
+          @input="clearError('confirm')"
         />
+        <p v-if="errors.confirm" class="error">{{ errors.confirm }}</p>
+
+        <!-- General API Error -->
+        <p v-if="errors.general" class="error">{{ errors.general }}</p>
 
         <button type="submit" :disabled="loading">
           {{ loading ? "កំពុងដំណើរការ..." : "កំណត់ពាក្យសម្ងាត់ឡើងវិញ" }}
         </button>
 
+        <!-- Success message -->
         <p v-if="success" class="success">{{ success }}</p>
-        <p v-if="error" class="error">{{ error }}</p>
 
         <router-link to="/login" class="back-link">
           ← ត្រឡប់ទៅចូលគណនី
@@ -58,9 +65,8 @@
   </div>
 </template>
 
-
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, reactive, onMounted } from 'vue'
 import axios from 'axios'
 import { useRoute, useRouter } from 'vue-router'
 
@@ -69,9 +75,15 @@ const router = useRouter()
 
 const password = ref('')
 const confirm = ref('')
-const error = ref('')
 const success = ref('')
 const loading = ref(false)
+
+// Error object for inline validation
+const errors = reactive({
+  password: '',
+  confirm: '',
+  general: ''
+})
 
 const token = ref('')
 
@@ -79,26 +91,48 @@ onMounted(() => {
   token.value = route.query.token
 
   if (!token.value) {
-    error.value = 'Reset token not found. Please request a new reset link.'
+    errors.general = 'Reset token not found. Please request a new reset link.'
   }
 })
+
+// Clear individual field error on input
+const clearError = (field) => {
+  errors[field] = ''
+  errors.general = ''
+}
 
 const handleReset = async () => {
   if (!token.value) return
 
-  error.value = ''
+  // Clear previous messages
   success.value = ''
-  loading.value = true
+  Object.keys(errors).forEach(key => errors[key] = '')
 
-  if (password.value !== confirm.value) {
-    error.value = 'ពាក្យសម្ងាត់មិនដូចគ្នា'
-    loading.value = false
-    return
+  let hasError = false
+
+  // Client-side validation
+  if (!password.value) {
+    errors.password = 'សូមបញ្ចូលពាក្យសម្ងាត់ថ្មី'
+    hasError = true
   }
+
+  if (!confirm.value) {
+    errors.confirm = 'សូមបញ្ជាក់ពាក្យសម្ងាត់ម្តងទៀត'
+    hasError = true
+  }
+
+  if (password.value && confirm.value && password.value !== confirm.value) {
+    errors.confirm = 'ពាក្យសម្ងាត់មិនដូចគ្នា'
+    hasError = true
+  }
+
+  if (hasError) return
+
+  loading.value = true
 
   try {
     const res = await axios.post(
-      `${import.meta.env.VITE_API_BASE_URL }/auth/reset-password`,
+      `${import.meta.env.VITE_API_BASE_URL}/auth/reset-password`,
       {
         token: token.value,
         newPassword: password.value
@@ -106,20 +140,20 @@ const handleReset = async () => {
     )
 
     if (res.data?.result === true) {
-      success.value = res.data.message || 'Password reset successful'
+      success.value = res.data.message || 'កំណត់ពាក្យសម្ងាត់បានជោគជ័យ'
 
       password.value = ''
       confirm.value = ''
 
-      // Redirect to login after success
+      // Redirect to login after 2 seconds
       setTimeout(() => {
         router.push('/login')
       }, 2000)
     } else {
-      error.value = res.data?.message || 'Reset failed'
+      errors.general = res.data?.message || 'Reset failed'
     }
   } catch (err) {
-    error.value =
+    errors.general =
       err.response?.data?.details ||
       err.response?.data?.message ||
       'Reset token expired or invalid'
@@ -128,6 +162,7 @@ const handleReset = async () => {
   }
 }
 </script>
+
 
 
 <style scoped>

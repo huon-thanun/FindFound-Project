@@ -17,14 +17,17 @@
 
           <form @submit.prevent="register">
             <!-- Name row -->
-            <div class="row g-3 mb-3">
+            <div class="row g-3 mb-3" placeholder="ឧ. សុខា">
               <div class="col">
                 <label class="form-label">នាមខ្លួន</label>
                 <input
                   v-model="form.first_name"
                   class="form-control"
-                  placeholder="ឧ. សុខ"
+                  placeholder="ឧ. សុខា"
                 />
+                <span v-if="errors.first_name" class="field-error">
+                  {{ errors.first_name }}
+                </span>
               </div>
 
               <div class="col">
@@ -32,8 +35,11 @@
                 <input
                   v-model="form.last_name"
                   class="form-control"
-                  placeholder="ឧ. វីរៈ"
+                  placeholder="ឧ. វណ្ណា"
                 />
+                <span v-if="errors.last_name" class="field-error">
+                  {{ errors.last_name }}
+                </span>
               </div>
             </div>
 
@@ -44,8 +50,11 @@
                 v-model="form.email"
                 type="email"
                 class="form-control"
-                placeholder="អ៊ីមែលរបស់អ្នក@gmail.com"
+                placeholder="ឧ. អ៊ីមែលរបស់អ្នក@gmail.com"
               />
+              <span v-if="errors.email" class="field-error">
+                {{ errors.email }}
+              </span>
             </div>
 
             <!-- PASSWORD -->
@@ -54,11 +63,12 @@
               <div class="password-input">
                 <input
                   :type="showPassword ? 'text' : 'password'"
-                  placeholder="បញ្ចូលពាក្យសម្ងាត់របស់អ្នក"
                   v-model="form.password"
-                  @blur="touched.password = true"
-                  :class="{ error: passwordError }"
+                  placeholder="បញ្ចូលពាក្យសម្ងាត់របស់អ្នក"
                 />
+                <span v-if="errors.password" class="field-error">
+                  {{ errors.password }}
+                </span>
                 <button
                   type="button"
                   class="eye-btn"
@@ -114,11 +124,12 @@
                 <div class="password-input">
                   <input
                     :type="showConfirm ? 'text' : 'password'"
-                    placeholder="បញ្ចូលពាក្យសម្ងាត់ម្តងទៀត"
                     v-model="form.password_confirmation"
-                    @blur="touched.password_confirmation = true"
-                    :class="{ error: confirmPasswordError }"
+                    placeholder="បញ្ចូលពាក្យសម្ងាត់ម្តងទៀត"
                   />
+                  <span v-if="errors.password_confirmation" class="field-error">
+                    {{ errors.password_confirmation }}
+                  </span>
 
                   <button
                     type="button"
@@ -176,10 +187,20 @@
 
             <!-- Agreement -->
             <div class="form-check mb-4">
-              <input class="form-check-input" type="checkbox" id="agree" />
+              <input
+                class="form-check-input"
+                type="checkbox"
+                id="agree"
+                v-model="form.agree"
+              />
+
               <label class="form-check-label small" for="agree">
-                ខ្ញុំយល់ព្រមលក្ខខណ្ឌ និង គោលការណ៍ឯកជនភាព
+                ខ្ញុំបានអាន និងយល់ព្រម លក្ខខណ្ឌប្រើប្រាស់ និង គោលការណ៍ឯកជនភាព
               </label>
+
+              <span v-if="errors.agree" class="field-error">
+                {{ errors.agree }}
+              </span>
             </div>
 
             <!-- Submit -->
@@ -266,6 +287,7 @@ const form = reactive({
   email: "",
   password: "",
   password_confirmation: "",
+  agree: false,
 });
 
 const showPassword = ref(false);
@@ -277,19 +299,40 @@ const errors = ref({});
 const validate = () => {
   errors.value = {};
 
-  if (!form.first_name) errors.value.first_name = "សូមបញ្ចូលឈ្មោះ";
-  if (!form.last_name) errors.value.last_name = "សូមបញ្ចូលនាមត្រកូល";
-  if (!form.email) errors.value.email = "សូមបញ្ចូលអ៊ីមែល";
-  if (!form.password) errors.value.password = "សូមបញ្ចូលពាក្យសម្ងាត់";
-  if (!form.password_confirmation)
-    errors.value.password_confirmation = "សូមបញ្ជាក់ពាក្យសម្ងាត់";
+  // First name
+  if (!form.first_name) {
+    errors.value.first_name = "សូមបញ្ចូលនាមខ្លួនរបស់អ្នក";
+  }
 
-  if (
-    form.password &&
-    form.password_confirmation &&
-    form.password !== form.password_confirmation
-  ) {
-    errors.value.password_confirmation = "ពាក្យសម្ងាត់មិនដូចគ្នា";
+  // Last name
+  if (!form.last_name) {
+    errors.value.last_name = "សូមបញ្ចូលនាមត្រកូលរបស់អ្នក";
+  }
+
+  // Email
+  if (!form.email) {
+    errors.value.email = "សូមបញ្ចូលអ៊ីមែលរបស់អ្នក";
+  } else if (!/^\S+@\S+\.\S+$/.test(form.email)) {
+    errors.value.email = "សូមបញ្ចូលអ៊ីមែលឲ្យបានត្រឹមត្រូវ";
+  }
+
+  // Password
+  if (!form.password) {
+    errors.value.password = "សូមបញ្ចូលពាក្យសម្ងាត់";
+  } else if (form.password.length < 8) {
+    errors.value.password = "ពាក្យសម្ងាត់ត្រូវមានយ៉ាងតិច 8 តួអក្សរ";
+  }
+
+  // Confirm password
+  if (!form.password_confirmation) {
+    errors.value.password_confirmation = "សូមបញ្ជាក់ពាក្យសម្ងាត់ម្តងទៀត";
+  } else if (form.password !== form.password_confirmation) {
+    errors.value.password_confirmation = "ពាក្យសម្ងាត់មិនដូចគ្នាទេ";
+  }
+
+  // Agreement
+  if (!form.agree) {
+    errors.value.agree = "សូមយល់ព្រមលក្ខខណ្ឌ និង គោលការណ៍ឯកជនភាព";
   }
 
   return Object.keys(errors.value).length === 0;
@@ -302,7 +345,6 @@ const register = async () => {
   loading.value = true;
 
   try {
-    // REGISTER USER
     await registerUser({
       fullname: `${form.first_name} ${form.last_name}`,
       email: form.email,
@@ -310,29 +352,24 @@ const register = async () => {
       confirmPassword: form.password_confirmation,
     });
 
-    // SAVE EMAIL FOR OTP FLOW
     localStorage.setItem("otp_email", form.email);
 
-    // SEND OTP
-    await api.post("/otp/send", {
-      email: form.email,
-    });
+    await api.post("/otp/send", { email: form.email });
 
-    // REDIRECT
     router.replace({ name: "user.verify-otp" });
   } catch (err) {
-    console.error("Register error:", err);
+    console.error(err);
 
-    if (err.response?.status === 422) {
-      errors.value = err.response.data.errors || {};
-    } else {
-      alert(err.response?.data?.message || "Register failed");
-    }
+    alert(
+      err.response?.data?.message ||
+        "មានបញ្ហាក្នុងការចុះឈ្មោះ សូមព្យាយាមម្តងទៀត",
+    );
   } finally {
     loading.value = false;
   }
 };
 </script>
+
 <style scoped>
 /* =========================
    GLOBAL RESET + FONT
@@ -515,7 +552,7 @@ const register = async () => {
   font-size: 16px;
   font-weight: 600;
   font-family: inherit;
-  color: #ffffff !important; 
+  color: #ffffff !important;
   cursor: pointer;
   border: none;
 
@@ -537,7 +574,7 @@ const register = async () => {
 .btn:hover:not(:disabled) {
   background: linear-gradient(135deg, #9a4ef0, #8a3cf0);
   transform: translateY(-1px);
-  color: #ffffff !important; 
+  color: #ffffff !important;
 
   box-shadow:
     0 16px 36px rgba(116, 38, 195, 0.35),
@@ -727,5 +764,4 @@ const register = async () => {
     padding: 40px 28px;
   }
 }
-
 </style>
