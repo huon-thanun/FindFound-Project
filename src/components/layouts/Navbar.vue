@@ -69,49 +69,44 @@
               ></i>
             </div>
 
-            <Transition name="premium-slide">
-              <div v-if="isDropdownOpen" class="premium-dropdown">
-                <div class="dropdown-user-header">
-                  <img :src="admin.avatar" alt="avatar" class="header-avatar" />
-                  <div class="header-info">
-                    <strong>{{ admin.fullname }}</strong>
-                    <p class="small text-muted">admin@website.com</p>
-                  </div>
-                </div>
-                <div class="dropdown-divider-thin"></div>
-                <router-link
-                  class="p-item"
-                  to="/admin/profile"
-                  @click="isDropdownOpen = false"
-                >
-                  <div class="p-icon"><i class="bi bi-person"></i></div>
-                  <span>គណនីផ្ទាល់ខ្លួន</span>
-                </router-link>
-                <router-link
-                  class="p-item"
-                  to="/admin/profile-security"
-                  @click="isDropdownOpen = false"
-                >
-                  <div class="p-icon"><i class="bi bi-shield-check"></i></div>
-                  <span>សុវត្ថិភាព</span>
-                </router-link>
-                <div class="dropdown-divider-thin"></div>
-                <button
-                  class="p-item text-danger border-0 bg-transparent w-100"
-                  @click="openLogoutModal"
-                >
-                  <div class="p-icon">
-                    <i class="bi bi-box-arrow-right"></i>
-                  </div>
-                  <span>ចាកចេញ</span>
-                </button>
-              </div>
-            </Transition>
-          </div>
+          <ul class="dropdown-menu dropdown-menu-end shadow-lg animated-dropdown">
+            <li>
+              <router-link class="dropdown-item khmer-font" to="/admin/profile">
+                <i class="bi bi-person-circle"></i> គណនីផ្ទាល់ខ្លួន
+              </router-link>
+            </li>
+            <li>
+              <router-link class="dropdown-item khmer-font" to="/admin/profile-security">
+                <i class="bi bi-gear"></i> ការកំណត់
+              </router-link>
+            </li>
+            <li>
+              <hr class="dropdown-divider" />
+            </li>
+            <li>
+              <a class="dropdown-item khmer-font text-danger" href="javascript:void(0)"
+                @click.prevent="openLogoutModal">
+                <i class="bi bi-box-arrow-right"></i> ចាកចេញ
+              </a>
+            </li>
+          </ul>
         </div>
       </div>
     </div>
   </nav>
+
+  <BaseModal v-if="showLogoutModal" :title="'ចាកចេញពីគណនី'" icon="exclamation-triangle" theme="danger"
+    :isClose="showLogoutModal" @closeModal="closeLogoutModal">
+    <template #body>
+      <p class="khmer-font text-center mb-0">តើអ្នកពិតជាចង់ចាកចេញមែនទេ?</p>
+    </template>
+    <template #btnClose>
+      <BaseButton variant="cancel" class="col-6" @click="closeLogoutModal">បោះបង់</BaseButton>
+    </template>
+    <template #btnActive>
+      <BaseButton variant="danger" class="col-6" @click="logout">បញ្ជាក់</BaseButton>
+    </template>
+  </BaseModal>
 </template>
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from "vue";
@@ -201,6 +196,11 @@ const logout = () => {
   color: #94a3b8;
 }
 
+.sidebar.closed {
+  transform: translateX(-300px);
+}
+
+.navbar-brand-container {
 .search-input {
   width: 100%;
   padding: 10px 15px 10px 45px;
@@ -233,6 +233,15 @@ const logout = () => {
   transition: 0.3s;
 }
 
+.navbar-brand-container:hover {
+  transform: scale(1.05);
+  /* Slight pop when hovering logo */
+}
+
+.navbar-logo {
+  object-fit: contain;
+  max-width: 150px;
+  /* Adjust based on your logo width */
 .icon-action-btn:hover {
   background: #f5f3ff;
   color: #7c3aed;
@@ -266,6 +275,11 @@ const logout = () => {
   background: #f8fafc; /* Matches dashboard bg */
 }
 
+/* 2. Hover Bridge Strategy */
+.hover-dropdown {
+  position: relative;
+  padding: 10px 0;
+  /* Creates invisible hover area */
 @media (min-width: 992px) {
   .navbar-top {
     width: calc(100% - 280px);
@@ -380,6 +394,33 @@ const logout = () => {
   position: absolute;
   top: 110%;
   right: 0;
+  min-width: 220px;
+  border: none;
+  border-radius: 15px !important;
+  padding: 10px !important;
+  transform: translateY(15px);
+  transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+  pointer-events: none;
+}
+
+@media (max-width: 992px) {
+  .navbar-top {
+    width: 100% !important;
+  }
+}
+
+@media (min-width: 992px) {
+  .sidebar {
+    display: none !important;
+  }
+}
+
+/* Hover Action */
+.hover-dropdown:hover .animated-dropdown {
+  visibility: visible;
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
   width: 260px;
   background: white;
   border-radius: 20px;
@@ -422,6 +463,17 @@ const logout = () => {
   transition: 0.2s;
   font-size: 14px;
 }
+
+.dropdown-item i {
+  font-size: 18px;
+  color: #94a3b8;
+}
+
+.dropdown-item:hover {
+  background-color: #f1f0ff;
+  color: #3b1e54;
+  padding-left: 18px;
+  /* Slight slide effect */
 .p-item:hover {
   background: #f5f3ff;
   color: #7c3aed;

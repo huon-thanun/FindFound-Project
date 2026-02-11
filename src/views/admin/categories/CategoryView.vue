@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, watch } from "vue";
+import { ref, onMounted, watch, computed } from "vue";
 import { useCategoryStore } from "@/stores/categoryStore";
 import { formatDate } from '@/utils/formatDate';
 
@@ -8,19 +8,22 @@ const categoryStore = useCategoryStore();
 const search = ref("");
 let timeout = null;
 const isLoading = ref(false);
-const categories = ref([])
+const categories = computed(() => categoryStore.categories);
+const total = computed(() => categoryStore.total);
+const meta = computed(() => categoryStore.meta);
 const successMessage = ref('');
 const errorMessage = ref('');
 
-const gettoken = localStorage.getItem('token')
+const filters = {
+    page: ref(1),
+    perPage: ref(10),
+    sortBy: ref(null),
+    sortDir: ref(null),
+};
 
-const columns = [
-    { key: "id", label: "ល.រ" },
-    { key: "name", label: "ប្រភេទ" },
-    { key: 'description', label: 'ការពិពណ៌នា' },
-    { key: 'createdAt', label: 'ថ្ងៃបង្កើត' },
-    // { key: 'updatedAt', label: 'UpdatedAt' }
-];
+const shownCount = computed(() => {
+    return Math.min(filters.page.value * filters.perPage.value, total.value);
+});
 
 const showSuccess = (message) => {
     successMessage.value = message;
@@ -35,8 +38,12 @@ const showFieldError = (message) => {
     }, 3000);
 };
 
-const sortBy = ref(null);
-const sortDir = ref(null);
+const columns = [
+    { key: "id", label: "ល.រ" },
+    { key: "name", label: "ប្រភេទ" },
+    { key: 'description', label: 'ការពិពណ៌នា' },
+    { key: 'createdAt', label: 'ថ្ងៃបង្កើត' },
+];
 
 const SORT_BY_OPTIONS = [
     { id: "id", name: "ល.រ" },
@@ -97,12 +104,12 @@ const fetchCategories = async () => {
         isLoading.value = true;
 
         await categoryStore.fetchCategories({
+            page: filters.page.value,
+            perPage: filters.perPage.value,
             search: search.value,
-            sortBy: sortBy.value?.id,
-            sortDir: sortDir.value?.id,
+            sortBy: filters.sortBy.value?.id,
+            sortDir: filters.sortDir.value?.id,
         });
-
-        categories.value = categoryStore.categories;
     } catch (err) {
         throw err;
     } finally {
@@ -113,13 +120,15 @@ const fetchCategories = async () => {
 onMounted(async () => await fetchCategories());
 
 watch(search, () => {
+    filters.page.value = 1;
     clearTimeout(timeout);
     timeout = setTimeout(async () => {
         await fetchCategories();
     }, 500);
 });
 
-watch([sortBy, sortDir], async () => {
+watch([() => filters.sortBy.value, () => filters.sortDir.value], async () => {
+    filters.page.value = 1;
     await fetchCategories();
 });
 
@@ -138,11 +147,11 @@ const confirmDelete = async () => {
     try {
         isLoading.value = true
         await categoryStore.deleteCategory(selectedCategoryId.value)
-        categories.value = categories.value.filter(c => c.id !== selectedCategoryId.value);
 
         showDeleteModal.value = false
         selectedCategoryId.value = null
         showSuccess(`បានលុបប្រភេទរបាយការណ៍ដោយជោគជ័យ`);
+        await fetchCategories();
     } catch (err) {
         let errorMsg = '';
         if (err.response?.data?.message) {
@@ -194,15 +203,11 @@ const confirmEdit = async () => {
         // send payload to backend
         await categoryStore.updateCategory(selectedCategory.value.id, { name: editName.value, description: editDescription.value })
 
-        const index = categories.value.findIndex(c => c.id === selectedCategory.value.id);
-        if (index !== -1) {
-            categories.value[index] = { ...categories.value[index], name: editName.value, description: editDescription.value };
-        }
-
         showEditModal.value = false;
         editName.value = "";
         editDescription.value = "";
         showSuccess(`បានធ្វើបច្ចុប្បន្នភាពប្រភេទរបាយការណ៍ដោយជោគជ័យ`);
+        await fetchCategories();
     } catch (err) {
         let errorMsg = '';
         if (err.response?.data?.message) {
@@ -252,11 +257,11 @@ const confirmCreate = async () => {
         });
 
         if (res.result) {
-            categories.value = [...categories.value, res.data];
             showCreateModal.value = false;
             newCategoryName.value = "";
             newCategoryDescription.value = "";
             showSuccess(`បង្កើតប្រភេទរបាយការណ៍ដោយជោគជ័យ`);
+            await fetchCategories();
         }
 
     } catch (err) {
@@ -298,8 +303,25 @@ const openDetailModal = (category) => {
 // Clear Filter
 const clearFilter = () => {
     search.value = "";
-    sortBy.value = "";
-    sortDir.value = "";
+    filters.sortBy.value = null;
+    filters.sortDir.value = null;
+    filters.page.value = 1;
+    fetchCategories();
+};
+
+// Pagination
+const nextPage = async () => {
+    if (!meta.value?.hasNextPage) return;
+
+    filters.page.value++;
+    await fetchCategories();
+};
+
+const previousPage = async () => {
+    if (filters.page.value === 1) return;
+
+    filters.page.value--;
+    await fetchCategories();
 };
 
 </script>
@@ -334,7 +356,7 @@ const clearFilter = () => {
 
         <div class="card mb-3 shadow border-color">
             <div class="card-body row">
-                
+
                 <!-- Search -->
                 <div class="col-xxl-12">
                     <BaseInput class="" v-model="search" placeholder="ស្វែងរកតាមប្រភេទ​ និងការពិពណ៌នា..." />
@@ -345,14 +367,14 @@ const clearFilter = () => {
 
                         <!-- Sort By -->
                         <div class="col-lg-6 col-xxl-3" style="flex-wrap: nowrap;">
-                            <BaseSelect v-model="sortBy" :items="SORT_BY_OPTIONS" labelField="name" valueField="id"
-                                textField="តម្រៀបតាម" class="text-nowrap" />
+                            <BaseSelect v-model="filters.sortBy.value" :items="SORT_BY_OPTIONS" labelField="name"
+                                valueField="id" textField="តម្រៀបតាម" class="text-nowrap" />
                         </div>
 
                         <!-- Sort Direction -->
                         <div class="col-lg-6 col-xxl-4" style="flex-wrap: nowrap;">
-                            <BaseSelect v-model="sortDir" :items="SORT_DIR_OPTIONS" labelField="name" valueField="id"
-                                textField="ទិសដៅតម្រៀប" class="text-nowrap" />
+                            <BaseSelect v-model="filters.sortDir.value" :items="SORT_DIR_OPTIONS" labelField="name"
+                                valueField="id" textField="ទិសដៅតម្រៀប" class="text-nowrap" />
                         </div>
                     </div>
                 </div>
@@ -366,7 +388,12 @@ const clearFilter = () => {
             </div>
         </div>
 
-        <BaseTable :columns="columns" :items="categories" :isLoading="isLoading" @edit="openEditModal"
+        <div class="position-relative">
+      <!-- LOADING OVERLAY -->
+      <div v-if="isLoading" class="loading-overlay">
+        <div class="spinner-border spinner-color"></div>
+      </div>
+        <BaseTable :columns="columns" :items="categories" :isLoading="false" @edit="openEditModal"
             @delete="openDeleteModal" @rowClick="openDetailModal" class="shadow mt-4">
             <template #column-id="{ item }">
                 #{{ item.id }}
@@ -381,10 +408,30 @@ const clearFilter = () => {
                 {{ formatDate(item.updatedAt) }}
             </template>
         </BaseTable>
+    </div>
 
-        <!-- Category Count -->
         <div class="mt-3 text-muted">
-            <p class="mb-0">ស្ថិតិ: សរុបប្រភេទ <strong class="text-dark">{{ categories.length }}</strong> ប្រភេទ</p>
+            <p class="text-muted mb-0">
+                ស្ថិតិ:
+                បង្ហាញ
+                <strong class="text-dark">{{ shownCount }}</strong>
+                នៃ
+                <strong class="text-dark">{{ total }}</strong>
+                ប្រភេទ
+            </p>
+        </div>
+
+        <div class="card-footer text-center">
+            <div class="d-flex gap-2 justify-content-center my-3">
+                <BaseButton class="pointer" variant="danger" @click="previousPage"
+                    :isDisabled="filters.page.value === 1">
+                    មុន
+                </BaseButton>
+
+                <BaseButton class="pointer" variant="primary" @click="nextPage" :isDisabled="!meta?.hasNextPage">
+                    បន្ទាប់
+                </BaseButton>
+            </div>
         </div>
 
         <!-- DELETE MODAL -->
@@ -427,7 +474,7 @@ const clearFilter = () => {
         </BaseModal>
 
         <!-- CREATE MODAL -->
-        <BaseModal :isClose="showCreateModal" theme="success" title="បង្កើតប្រភេទថ្មី"
+        <BaseModal :isClose="showCreateModal" theme="primary" title="បង្កើតប្រភេទថ្មី"
             @closeModal="showCreateModal = false" icon="plus-circle">
             <template #body>
                 <BaseInput v-model="newCategoryName" label="ឈ្មោះប្រភេទ" placeholder="បញ្ចូលឈ្មោះប្រភេទ"
@@ -474,10 +521,10 @@ const clearFilter = () => {
 </template>
 
 <style scoped>
-
 .border-color {
-  border-color: var(--primary-color);
+    border-color: var(--tertiary-color);
 }
+
 /* Default (LG and up) */
 .filter-row>div {
     flex: 1;
@@ -508,5 +555,19 @@ const clearFilter = () => {
         flex: 1;
     }
 
+}
+
+.loading-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+
+.spinner-color{
+    color: var(--primary-color);
 }
 </style>

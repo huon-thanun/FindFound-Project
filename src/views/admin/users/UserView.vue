@@ -75,45 +75,50 @@
 
     <!-- Users Table -->
     <!-- <div class="card"> -->
-    <BaseTableUserPage :columns="tableColumns" :items="users" :isLoading="loading" @edit="viewUser"
-      @delete="openStatus" class="mt-4">
-      <template #column-id="{ item }"> #{{ item.id }} </template>
+    <div class="position-relative">
+      <!-- LOADING OVERLAY -->
+      <div v-if="loading" class="loading-overlay">
+        <div class="spinner-border spinner-color"></div>
+      </div>
 
-      <template #column-fullname="{ item }">
-        <div class="d-flex align-items-center gap-2">
-          <img :src="item.avatar || '/avatar.png'" width="40" height="40" class="rounded-circle" alt="avatar" />
-          <span>{{ item.fullname }}</span>
-        </div>
-      </template>
-
-      <template #column-role="{ item }">
-        {{ item.role?.name || '-' }}
-      </template>
-
-      <template #column-status="{ item }">
-        <span class="badge" :class="item.status === 'ACTIVATED' ? 'bg-success' : 'bg-danger'">
-          {{ item.status }}
-        </span>
-      </template>
-    </BaseTableUserPage>
+      <!-- USERS LIST (table or card) -->
+      <BaseTableUserPage :columns="tableColumns" :items="users" :isLoading="false" @edit="viewUser" @delete="openStatus"
+        class="mt-4">
+        <template #column-id="{ item }"> #{{ item.id }} </template>
+        <template #column-fullname="{ item }">
+          <div class="d-flex align-items-center gap-2"> <img :src="item.avatar || '/avatar.png'" width="40" height="40"
+              class="rounded-circle" alt="avatar" /> <span>{{ item.fullname }}</span> </div>
+        </template>
+        <template #column-role="{ item }"> {{ item.role?.name || '-' }} </template> <template #column-status="{ item }">
+          <span class="badge" :class="item.status === 'ACTIVATED' ? 'bg-success' : 'bg-danger'"> {{ item.status }}
+          </span>
+        </template>
+      </BaseTableUserPage>
+    </div>
 
     <div class="mt-3 text-muted">
-      <p class="text-muted mb-0">ស្ថិតិ: សរុបអ្នកប្រើប្រាស់ <strong class="text-dark">{{ users.length }}</strong> នាក់
+      <p class="text-muted mb-0">
+        ស្ថិតិ:
+        បង្ហាញ
+        <strong class="text-dark">{{ shownCount }}</strong>
+        នាក់ នៃ
+        <strong class="text-dark">{{ total }}</strong>
+        នាក់
       </p>
     </div>
 
-    <!-- <div class="card-footer text-center">
-        <div class="d-flex gap-2 justify-content-center my-3">
-          <BaseButton class="pointer" variant="danger" @click="previousPage" :isDisabled="filters.page === 1">
-            មុន
-          </BaseButton>
+    <div class="card-footer text-center">
+      <div class="d-flex gap-2 justify-content-center my-3">
+        <BaseButton class="pointer" variant="danger" @click="previousPage" :isDisabled="filters.page === 1">
+          មុន
+        </BaseButton>
 
-          <BaseButton class="pointer" variant="primary" @click="nextPage" :isDisabled="!meta?.hasNextPage">
-            បន្ទាប់
-          </BaseButton>
-        </div>
-        <p class="text-muted">Total: {{ total }} users</p>
-      </div> -->
+        <BaseButton class="pointer" variant="primary" @click="nextPage" :isDisabled="!meta?.hasNextPage">
+          បន្ទាប់
+        </BaseButton>
+      </div>
+      <!-- <p class="text-muted">Total: {{ total }} users</p> -->
+    </div>
     <!-- </div> -->
 
 
@@ -179,7 +184,7 @@
     </BaseModal>
 
     <!-- CREATE USER MODAL -->
-    <BaseModal title="បង្កើតអ្នកប្រើប្រាស់" icon="person-plus" :theme="'success'" :isClose="showCreateModal"
+    <BaseModal title="បង្កើតអ្នកប្រើប្រាស់" icon="person-plus" :theme="'primary'" :isClose="showCreateModal"
       @closeModal="showCreateModal = false">
       <template #body>
         <BaseInput type="text" label="ឈ្មោះពេញ" placeholder="បញ្ចូឈ្មោះពេញ" v-model="newUser.fullname"
@@ -233,7 +238,7 @@ const tableColumns = [
 
 const filters = reactive({
   page: 1,
-  perPage: 100,
+  perPage: 10,
   search: '',
   status: '',
   sortBy: null,
@@ -317,7 +322,9 @@ const resetAndLoadUsers = () => {
 };
 
 const viewUser = async (id) => {
+  loading.value = true;
   selectedUser.value = await store.getUser(id);
+  loading.value = false;
   showViewModal.value = true;
 };
 
@@ -437,13 +444,18 @@ const isValidEmail = (email) => {
 };
 
 // Watch filters for search, status, sort
-watch(
-  [() => filters.search, () => filters.status, () => filters.sortBy, () => filters.sortDir],
-  () => {
-    filters.page = 1;
-    loadUsers();
-  },
-);
+// watch(
+//   [() => filters.search, () => filters.status, () => filters.sortBy, () => filters.sortDir],
+//   () => {
+//     filters.page = 1;
+//     loadUsers();
+//   },
+// );
+
+const shownCount = computed(() => {
+  return Math.min(filters.page * filters.perPage, total.value);
+});
+//
 
 // Pagination
 const pagesPerGroup = 4;
@@ -525,7 +537,7 @@ onMounted(() => resetAndLoadUsers());
 }
 
 .border-color {
-  border-color: var(--primary-color);
+  border-color: var(--tertiary-color);
 }
 
 /* Default (LG and up) */
@@ -564,5 +576,19 @@ onMounted(() => resetAndLoadUsers());
   .filter-sort-1 {
     width: 100%;
   }
+}
+
+.loading-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+
+.spinner-color{
+  color: var(--primary-color);
 }
 </style>

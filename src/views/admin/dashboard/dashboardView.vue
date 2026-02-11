@@ -142,6 +142,8 @@
                 <span>បាត់បង់សរុប</span>
                 <span class="fw-bold">+5%</span>
               </div>
+              <div class="tab" :class="{ active: activeTab === 'Found' }" @click="activeTab = 'Found'">
+                ប្រទះឃើញ
               <div
                 class="progress"
                 style="height: 8px; background: rgba(255, 255, 255, 0.2)"
@@ -214,17 +216,9 @@
                     </p>
                   </div>
                 </div>
-                <div class="activity-right">
-                  <span
-                    :class="[
-                      'status-pill',
-                      item.reportType?.name?.toLowerCase(),
-                    ]"
-                  >
-                    {{
-                      item.reportType?.name === "FOUND" ? "រកឃើញ" : "បាត់បង់"
-                    }}
-                  </span>
+
+                <div class="transaction-status" :class="item.reportType?.name === 'FOUND' ? 'found' : 'lost'">
+                  {{ item.reportType?.name === "FOUND" ? "✓ ប្រទះឃើញ" : "⚠ បានបាត់" }}
                 </div>
               </div>
             </div>
