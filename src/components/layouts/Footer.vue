@@ -75,7 +75,7 @@ h3 {
     font-size: 16px;
     font-weight: bold;
     margin-bottom: 15px;
-    color: white;
+    color: black;
 }
 
 ul {
@@ -87,13 +87,17 @@ ul li {
     margin-bottom: 8px;
 }
 
-/* Hover underline effect (unchanged) */
 ul li a {
-    color: var(--light);
+    color: black;
     text-decoration: none;
     font-size: 14px;
     position: relative;
     display: inline-block;
+    transition: color 0.25s ease-out;
+}
+
+ul li a:hover {
+    color: #7f23cf;
 }
 
 ul li a::before {
@@ -103,7 +107,7 @@ ul li a::before {
     right: 100%;
     bottom: 0;
     height: 2px;
-    background: var(--light);
+    background: #7f23cf;
     transition: right 0.25s ease-out;
 }
 
@@ -111,17 +115,4 @@ ul li a:hover::before {
     right: 0;
 }
 
-.contact-info {
-    font-size: 14px;
-    color: var(--light);
-    line-height: 1.8;
-}
-
-.copyright {
-    text-align: center;
-    padding-top: 15px;
-    border-top: 1px solid #ffffff;
-    font-size: 13px;
-    color: var(--light);
-}
 </style>
