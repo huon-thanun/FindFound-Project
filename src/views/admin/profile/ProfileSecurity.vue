@@ -39,7 +39,7 @@
 
       <!-- Security Forms -->
       <div class="row g-4 mb-5">
-        <!-- Change Password -->
+        <!-- Password Form -->
         <div class="col-lg-6">
           <div class="card border border-gray-200 shadow-sm rounded-4 p-4 p-md-5 h-100">
             <h5 class="fw-bold mb-4 d-flex align-items-center">
@@ -85,9 +85,17 @@
               ធ្វើបច្ចុប្បន្នភាពលេខសម្ងាត់
             </button>
           </div>
+          <ChangePasswordCard
+            v-model:currentPassword="currentPassword"
+            v-model:newPassword="newPassword"
+            v-model:showCurrent="showCurrentPassword"
+            v-model:showNew="showNewPassword"
+            :loading="loadingPassword"
+            @update="updatePassword"
+          />
         </div>
 
-        <!-- Change Email -->
+        <!-- Email Form -->
         <div class="col-lg-6">
           <div class="card border border-gray-200 shadow-sm rounded-4 p-4 p-md-5 h-100">
             <h5 class="fw-bold mb-4 d-flex align-items-center">
@@ -129,6 +137,17 @@
               ស្នើសុំប្តូរអ៊ីមែល
             </button>
           </div>
+          <ChangeEmailCard
+            v-model:newEmail="newEmail"
+            v-model:password="emailPassword"
+            v-model:showPassword="showEmailPassword"
+            v-model:token="emailVerifyToken"
+            v-model:requested="emailRequested"
+            :loadingRequest="loadingEmail"
+            :loadingVerify="loadingVerify"
+            @request="requestEmailChange"
+            @verify="verifyEmailChange"
+          />
         </div>
       </div>
     </div>
@@ -138,97 +157,71 @@
       <div class="spinner-border text-purple mb-3"></div>
       <p class="khmer-font text-muted">កំពុងផ្ទុកព័ត៌មាន...</p>
     </div>
+
+    <!-- Popup Modal -->
+    <PopupModal
+      v-if="showPopup"
+      :message="popupMessage"
+      :type="popupType"
+      @close="showPopup = false"
+    />
   </ProfileLayout>
 </template>
 
 <script setup>
+import { ref, onMounted } from "vue";
 import ProfileHeader from "@/components/profile/ProfileHeader.vue";
 import ProfileSide from "@/components/profile/ProfileSide.vue";
-import { ref, onMounted, computed } from "vue";
-import { useRoute } from "vue-router";
 import ProfileTabsAdmin from "@/components/profile/ProfileTabsAdmin.vue";
+import ChangePasswordCard from "@/components/profile/ChangPasswordCard.vue";
+import ChangeEmailCard from "@/components/profile/ChangeEmailCard.vue";
+// import PopupModal from "@/components/profile/PopupModal.vue";
 
 const user = ref(null);
 const skills = ["HTML", "CSS", "Vue", "MySQL", "JavaScript"];
-const route = useRoute();
-const isActive = (name) => route.name === name;
 
-// Form fields
-const fullname = ref("");
-const email = ref("");
-const phoneNumber = ref("");
-const telegramLink = ref("");
-
-// Password & Email
+// Password
 const currentPassword = ref("");
 const newPassword = ref("");
-const emailPassword = ref("");
-const newEmail = ref("");
 const showCurrentPassword = ref(false);
 const showNewPassword = ref(false);
-const showEmailPassword = ref(false);
-const loadingProfile = ref(false);
 const loadingPassword = ref(false);
-const loadingEmail = ref(false);
 
-// Fetch profile
+// Email
+const newEmail = ref("");
+const emailPassword = ref("");
+const showEmailPassword = ref(false);
+const emailRequested = ref(false);
+const emailVerifyToken = ref("");
+const loadingEmail = ref(false);
+const loadingVerify = ref(false);
+
+// Popup
+const popupMessage = ref("");
+const popupType = ref("success");
+const showPopup = ref(false);
+const showPopupModal = (message, type = "success") => {
+  popupMessage.value = message;
+  popupType.value = type;
+  showPopup.value = true;
+};
+
+// Fetch user profile
 onMounted(async () => {
   try {
     const token = localStorage.getItem("token");
     const res = await fetch(
       "https://ant-g2-landf.ti.linkpc.net/api/v1/auth/profile",
-      { headers: { Authorization: `Bearer ${token}` } },
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      },
     );
     const json = await res.json();
-    if (json.result) {
-      user.value = json.data;
-      fullname.value = json.data.fullname;
-      email.value = json.data.email;
-      phoneNumber.value = json.data.phoneNumber;
-      telegramLink.value = json.data.telegramLink;
-    }
+    if (json.result) user.value = json.data;
   } catch (err) {
     console.error(err);
   }
 });
-
-// Update profile
-const updateProfile = async () => {
-  loadingProfile.value = true;
-  try {
-    const token = localStorage.getItem("token");
-    const res = await fetch(
-      "https://ant-g2-landf.ti.linkpc.net/api/v1/auth/update-profile",
-      {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          fullname: fullname.value,
-          email: email.value,
-          phoneNumber: phoneNumber.value,
-          telegramLink: telegramLink.value,
-        }),
-      },
-    );
-    const json = await res.json();
-    if (!res.ok) throw new Error(json.message || "Failed to update profile");
-    alert("Profile updated successfully!");
-    user.value = {
-      ...user.value,
-      fullname: fullname.value,
-      email: email.value,
-      phoneNumber: phoneNumber.value,
-      telegramLink: telegramLink.value,
-    };
-  } catch (err) {
-    alert(err.message || "Network error");
-  } finally {
-    loadingProfile.value = false;
-  }
-};
 
 // Update password
 const updatePassword = async () => {
@@ -249,13 +242,12 @@ const updatePassword = async () => {
         }),
       },
     );
-    const json = await res.json();
-    if (!res.ok) throw new Error(json.message || "Failed to update password");
-    alert("Password updated successfully!");
+    if (!res.ok) throw new Error("បរាជ័យក្នុងការប្តូរលេខសម្ងាត់");
+    showPopupModal("លេខសម្ងាត់បានប្តូរដោយជោគជ័យ! 🎉", "success");
     currentPassword.value = "";
     newPassword.value = "";
   } catch (err) {
-    alert(err.message || "Network error");
+    showPopupModal(err.message, "error");
   } finally {
     loadingPassword.value = false;
   }
@@ -280,23 +272,42 @@ const requestEmailChange = async () => {
         }),
       },
     );
-    const json = await res.json();
-    if (!res.ok)
-      throw new Error(json.message || "Failed to request email change");
-    alert("Email change requested! Check your inbox for the token.");
-    emailPassword.value = "";
-    newEmail.value = "";
+    if (!res.ok) throw new Error();
+    emailRequested.value = true;
+    showPopupModal("Token ផ្ទៀងផ្ទាត់ត្រូវបានផ្ញើទៅអ៊ីមែលថ្មី! 📩", "success");
   } catch (err) {
-    alert(err.message || "Network error");
+    showPopupModal("មានបញ្ហាក្នុងការស្នើសុំ", "error");
   } finally {
     loadingEmail.value = false;
+  }
+};
+
+// Verify email change
+const verifyEmailChange = async () => {
+  loadingVerify.value = true;
+  try {
+    const res = await fetch(
+      "https://ant-g2-landf.ti.linkpc.net/api/v1/auth/verify-change-email",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ token: emailVerifyToken.value.trim() }),
+      },
+    );
+    if (!res.ok) throw new Error();
+    user.value.email = newEmail.value;
+    emailRequested.value = false;
+    showPopupModal("អ៊ីមែលបានផ្ទៀងផ្ទាត់រួចរាល់! 🎉", "success");
+  } catch (err) {
+    showPopupModal("Token មិនត្រឹមត្រូវ", "error");
+  } finally {
+    loadingVerify.value = false;
   }
 };
 </script>
 
 <style scoped>
 @import url("https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@300;400;600;700&display=swap");
-
 .khmer-font {
   font-family: "Kantumruy Pro", sans-serif;
 }
@@ -317,20 +328,14 @@ const requestEmailChange = async () => {
   background: #3b1e54;
   color: #fff;
   border: none;
-  transition: all 0.3s ease;
 }
-
-.btn-purple:hover:not(:disabled) {
+.btn-purple:hover {
   background: #2a153d;
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(59, 30, 84, 0.25);
 }
-
 .btn-purple-outline {
-  background: transparent;
-  color: #3b1e54;
   border: 2px solid #3b1e54;
-  transition: all 0.3s ease;
+  color: #3b1e54;
+  background: transparent;
 }
 
 .btn-purple-outline:hover:not(:disabled) {
@@ -360,6 +365,11 @@ const requestEmailChange = async () => {
   background: #fff;
 }
 
+.btn-purple-outline:hover {
+  background: #3b1e54;
+  color: #fff;
+}
+
 .password-meter {
   height: 6px;
   flex: 1;
@@ -371,10 +381,5 @@ const requestEmailChange = async () => {
 .password-meter.active {
   background: #3b1e54;
   border-color: #2a153d;
-}
-
-/* Prevent horizontal scrollbar for tabs */
-.overflow-auto::-webkit-scrollbar {
-  display: none;
 }
 </style>

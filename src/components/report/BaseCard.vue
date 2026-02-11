@@ -79,7 +79,7 @@ const handleActionButton = () => {
 
 .post-card {
   background: white;
-  border-radius: 24px;
+  border-radius: 15px;
   overflow: hidden;
   border: 1px solid #a9c2db;
   transition: all 0.3s ease;
