@@ -171,8 +171,8 @@ export const useReportStore = defineStore("report", () => {
   const isLoadingPublicReports = ref(false);
   const metaPublicReports = ref(null);
   const getAllPublicReports = async (params = {}) => {
-    isLoadingPublicReports.value = true;
     try {
+      isLoadingPublicReports.value = true;
       // remove empty params
       const cleanParams = Object.fromEntries(
         Object.entries(params).filter(
