@@ -49,18 +49,21 @@
             type="email"
             placeholder="អ៊ីមែលរបស់អ្នក@gmail.com"
             v-model="email"
-            required
+            @input="error = ''"
           />
         </div>
 
+        <!-- INLINE ERROR MESSAGE -->
+        <p v-if="error && submitted" class="error">{{ error }}</p>
+
         <!-- BUTTON -->
         <button type="submit" :disabled="loading">
-          {{ loading ? "កំពុងផ្ញើ..." : "ផ្ញើតំណ  >" }}
+          {{ loading ? "កំពុងផ្ញើ..." : "ផ្ញើតំណ" }}
         </button>
 
         <!-- MESSAGES -->
         <p v-if="message" class="success">{{ message }}</p>
-        <p v-if="error" class="error">{{ error }}</p>
+        
       </form>
 
       <!-- BACK -->
@@ -80,24 +83,38 @@ const message = ref("");
 const error = ref("");
 const loading = ref(false);
 
+// Track whether user has tried to submit
+const submitted = ref(false);
+
 const submit = async () => {
-  error.value = "";
+  submitted.value = true;
   message.value = "";
+  error.value = "";
+
+  // Client-side validation
+  if (!email.value) {
+    error.value = "សូមបញ្ចូលអ៊ីមែលរបស់អ្នក"; // show under input
+    return;
+  }
+
   loading.value = true;
 
   try {
-    await api.post("/auth/forget-password", {
-      email: email.value,
-    });
+    await api.post("/auth/forget-password", { email: email.value });
 
-    message.value = "Check your email for the reset link.";
+    message.value =
+      "សូមពិនិត្យអ៊ីមែលរបស់អ្នក ដើម្បីទទួលបានតំណកំណត់ពាក្យសម្ងាត់ឡើងវិញ។";
+
     email.value = "";
+    submitted.value = false;
   } catch (err) {
-    error.value = err.response?.data?.message || "Failed to send reset email";
+    error.value =
+      err.response?.data?.message || "មិនអាចផ្ញើអ៊ីមែលកំណត់ពាក្យសម្ងាត់បាន";
   } finally {
     loading.value = false;
   }
 };
+
 </script>
 
 <style scoped>
@@ -148,7 +165,7 @@ h2 {
 
 .subtitle {
   font-size: 0.95rem;
-  color:#742adb;
+  color: #742adb;
   margin-bottom: 1.8rem;
   line-height: 1.6;
 }
@@ -201,7 +218,7 @@ button {
   width: 100%;
   margin-top: 0.6rem;
   padding: 0.85rem;
-  background: linear-gradient(135deg,#8c31e8, #742adb);
+  background: linear-gradient(135deg, #8c31e8, #742adb);
   color: #ffffff;
   border: none;
   border-radius: 14px;

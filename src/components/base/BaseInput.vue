@@ -127,7 +127,8 @@ const onInput = (event) => {
 .form-control {
   outline: none;
   box-shadow: none;
-  border: 1px solid #d1d5db;
+  /* border: 1px solid #d1d5db; */
+  border: 1px solid var(--tertiary-color);
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 

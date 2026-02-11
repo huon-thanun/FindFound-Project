@@ -1,881 +1,586 @@
 <template>
   <div class="main-contact">
-    <div class="container-fluid mx-0 p-0">
-      <div class="contact-header">
-        <div class="container">
-            <div class="content-wrapper">
-                <div class="hero-text text-center">
-                    <span class="label"><i class="bi-person"></i> ទំនាក់ទំនង</span>
-                    <h1 class="header-title">ទាក់ទងមកពួកយើង</h1>
-                    <p>ផ្ញើរសារមកកាន់ទីនេះយើងនឹងឆ្លើយតបយ៉ាងឆាប់រហ័សបំផុត</p>
-                    
-                    <div class="features mt-4">
-                        <div class="feature">
-                            <div class="checkmark">✓</div>
-                            <span>ឆ្លើយតបរហ័ស 24/7</span>
-                        </div>
-                        <div class="feature">
-                            <div class="checkmark">✓</div>
-                            <span>ជំនួយដោយអ្នកជំនាញ</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="hero-image-wrapper">
-                    <img src="@/assets/images/background/image-Photoroom (2).png" alt="Contact Us" class="hero-image">
-                </div>
+    <!-- Hero Banner -->
+    <section class="hero-section">
+      <div class="hero-bg"></div>
+
+      <!-- Very subtle floating shapes -->
+      <div class="floating-shapes">
+        <div class="shape shape-1"></div>
+        <div class="shape shape-2"></div>
+        <div class="shape shape-3"></div>
+      </div>
+
+      <div class="container position-relative">
+        <div class="row align-items-center g-5">
+          <!-- Text Column -->
+          <div class="col-lg-6 hero-text-col" data-aos="fade-right">
+            <div class="badge-modern mb-4">
+              <i class="bi bi-chat-dots-fill me-2"></i>
+              ទំនាក់ទំនង
             </div>
+            <h1 class="hero-title">
+              ទាក់ទងមក <span class="gradient-text">ពួកយើង</span>
+              <br class="d-none d-md-block" />
+              យើងរីករាយជួយអ្នកគ្រប់ពេល
+            </h1>
+            <p class="hero-subtitle">
+              ផ្ញើសារមកយើងឥឡូវនេះ យើងនឹងឆ្លើយតបក្នុងរយៈពេលខ្លីបំផុត
+              និងវិជ្ជាជីវៈ។ សេវាកម្ម 24/7 សុវត្ថិភាពខ្ពស់។
+            </p>
+          </div>
+
+          <!-- Illustration Column -->
+          <div
+            class="col-lg-6 hero-illustration"
+            data-aos="fade-left"
+            data-aos-delay="200"
+          >
+            <img
+              src="../../../assets/images/contact/hero-banner.png"
+              alt="Contact Us Illustration"
+              class="hero-img"
+            />
+          </div>
         </div>
-    </div>
-      
-      <div class="contact-content mt-lg-5 mt-4">
-        <div class="row g-4">
+      </div>
+    </section>
+
+    <!-- Main Contact Content -->
+    <section class="contact-content">
+      <div class="container">
+        <div class="row g-5 justify-content-center">
+          <!-- Info Sidebar -->
+          <div class="col-lg-4" data-aos="fade-up" data-aos-delay="100">
+            <div class="info-card glass-card">
+              <h3 class="card-title">ព័ត៌មានទំនាក់ទំនង</h3>
+
+              <div class="info-item">
+                <div class="icon-circle">
+                  <i class="bi bi-geo-alt-fill"></i>
+                </div>
+                <div>
+                  <div class="info-label">អាសយដ្ឋាន</div>
+                  <p>#ផ្ទះលេខ ៨៦បេ ផ្លូវ ៣១៣, ភ្នំពេញ</p>
+                </div>
+              </div>
+
+              <div class="info-item">
+                <div class="icon-circle">
+                  <i class="bi bi-telephone-fill"></i>
+                </div>
+                <div>
+                  <div class="info-label">ទូរស័ព្ទ</div>
+                  <p><a href="tel:+85512345678">+855 12 345 678</a></p>
+                </div>
+              </div>
+
+              <div class="info-item">
+                <div class="icon-circle">
+                  <i class="bi bi-envelope-fill"></i>
+                </div>
+                <div>
+                  <div class="info-label">អ៊ីមែល</div>
+                  <p>
+                    <a href="mailto:support@example.com">support@example.com</a>
+                  </p>
+                </div>
+              </div>
+
+              <div class="social-links mt-5">
+                <h5 class="social-title">តាមដានពួកយើង</h5>
+                <div class="d-flex gap-3">
+                  <a href="#" class="social-icon facebook"
+                    ><i class="bi bi-facebook"></i
+                  ></a>
+                  <a href="#" class="social-icon telegram"
+                    ><i class="bi bi-telegram"></i
+                  ></a>
+                  <a href="#" class="social-icon instagram"
+                    ><i class="bi bi-instagram"></i
+                  ></a>
+                </div>
+              </div>
+            </div>
+          </div>
+
           <!-- Contact Form -->
-          <div class="col-lg-6">
-            <div class="contact-form" data-aos="zoom-in-right" data-aos-duration="1000">
-              <h3 class="mb-4">
-                <i class="bi-envelope"></i> ផ្ញើសារមកយើង
-              </h3>
-              
-              <form @submit.prevent="handleSubmit" ref="contactForm">
-                <div class="row g-3">
+          <div class="col-lg-8" data-aos="fade-up" data-aos-delay="200">
+            <div class="form-card glass-card">
+              <h3 class="card-title mb-4">ផ្ញើសារមកយើង</h3>
+              <form @submit.prevent="handleSubmit">
+                <div class="row g-4">
                   <div class="col-md-6">
-                    <label for="lastName" class="form-label">នាមត្រកូល *</label>
-                    <input
-                      type="text"
-                      class="form-control"
-                      id="lastName"
-                      v-model="formData.lastName"
-                      placeholder="បញ្ចូលនាមត្រកូល"
-                      required
-                      :disabled="isSubmitting"
-                    />
+                    <div class="form-floating">
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="lastName"
+                        v-model="formData.lastName"
+                        placeholder="នាមត្រកូល"
+                        required
+                      />
+                      <label for="lastName">នាមត្រកូល</label>
+                    </div>
                   </div>
-                  
+
                   <div class="col-md-6">
-                    <label for="firstName" class="form-label">ឈ្មោះ *</label>
-                    <input
-                      type="text"
-                      class="form-control"
-                      id="firstName"
-                      v-model="formData.firstName"
-                      placeholder="បញ្ចូលឈ្មោះ"
-                      required
-                      :disabled="isSubmitting"
-                    />
+                    <div class="form-floating">
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="firstName"
+                        v-model="formData.firstName"
+                        placeholder="ឈ្មោះ"
+                        required
+                      />
+                      <label for="firstName">ឈ្មោះ</label>
+                    </div>
                   </div>
-                  
+
                   <div class="col-12">
-                    <label for="email" class="form-label">អ៊ីមែល *</label>
-                    <input
-                      type="email"
-                      class="form-control"
-                      id="email"
-                      v-model="formData.email"
-                      placeholder="findfound@gmail.com"
-                      required
-                      :disabled="isSubmitting"
-                    />
+                    <div class="form-floating">
+                      <input
+                        type="email"
+                        class="form-control"
+                        id="email"
+                        v-model="formData.email"
+                        placeholder="name@example.com"
+                        required
+                      />
+                      <label for="email">អ៊ីមែល</label>
+                    </div>
                   </div>
-                  
+
                   <div class="col-12">
-                    <label for="phone" class="form-label">លេខទូរស័ព្ទ</label>
-                    <input
-                      type="tel"
-                      class="form-control"
-                      id="phone"
-                      v-model="formData.phone"
-                      placeholder="+855 12 345 678"
-                      :disabled="isSubmitting"
-                    />
+                    <div class="form-floating">
+                      <textarea
+                        class="form-control"
+                        id="message"
+                        v-model="formData.message"
+                        placeholder="សាររបស់អ្នក..."
+                        style="height: 150px"
+                        maxlength="500"
+                        required
+                      ></textarea>
+                      <label for="message">សាររបស់អ្នក...</label>
+                    </div>
+                    <div class="char-counter mt-2 text-end">
+                      {{ formData.message.length }} / 500
+                    </div>
                   </div>
-                  
-                  <div class="col-12">
-                    <label for="message" class="form-label">សារ *</label>
-                    <textarea
-                      class="form-control"
-                      id="message"
-                      rows="5"
-                      v-model="formData.message"
-                      placeholder="សរសេរសាររបស់អ្នកនៅទីនេះ..."
-                      required
-                      :disabled="isSubmitting"
-                    ></textarea>
-                    <div class="char-count">{{ formData.message.length }} / 500</div>
-                  </div>
-                  
-                  <div class="col-12 mt-3">
+
+                  <div class="col-12 text-end">
                     <button
                       type="submit"
-                      class="btn p-0 btn-purple btn-lg w-100"
+                      class="btn btn-submit"
                       :disabled="isSubmitting"
                     >
                       <span v-if="!isSubmitting">
-                        <i class="fas fa-paper-plane me-2"></i>ផ្ញើសារ
+                        ផ្ញើសារ <i class="bi bi-arrow-right-short ms-2"></i>
                       </span>
                       <span v-else>
-                        <i class="fas fa-spinner fa-spin me-2"></i>កំពុងផ្ញើ...
+                        <span
+                          class="spinner-border spinner-border-sm me-2"
+                        ></span>
+                        កំពុងផ្ញើ...
                       </span>
                     </button>
-                  </div>
-                  
-                  <!-- Alert Messages -->
-                  <div class="col-12">
-                    <transition name="fade">
-                      <div
-                        v-if="alertMessage"
-                        :class="['alert', alertType === 'success' ? 'alert-success' : 'alert-danger', 'text-center']"
-                        role="alert"
-                      >
-                        <i :class="alertType === 'success' ? 'fas fa-check-circle' : 'fas fa-exclamation-circle'"></i>
-                        {{ alertMessage }}
-                      </div>
-                    </transition>
                   </div>
                 </div>
               </form>
             </div>
           </div>
-
-          <!-- Contact Info -->
-          <div class="col-lg-6">
-            <div class="contact-info" data-aos="zoom-in-left" data-aos-duration="1000">
-              <h3 class="mb-4">
-                <i class="fas fa-info-circle me-2"></i>ព័ត៌មានទំនាក់ទំនង
-              </h3>
-
-              <div class="contact-info-item">
-                <div class="contact-icon">
-                  <i class="fas fa-map-marker-alt"></i>
-                </div>
-                <div class="title-info-item">
-                  <h5>អាស័យដ្ឋាន</h5>
-                  <p>
-                    #ផ្ទះលេខ ៨៦បេ ផ្លូវ ៣១៣, រាជធានីភ្នំពេញ, កម្ពុជា
-                  </p>
-                </div>
-              </div>
-
-              <div class="contact-info-item">
-                <div class="contact-icon">
-                  <i class="fas fa-phone"></i>
-                </div>
-                <div class="title-info-item">
-                  <h5>លេខទូរស័ព្ទ</h5>
-                  <p><a href="tel:+85510584267">+855 12 345 678</a></p>
-                </div>
-              </div>
-
-              <div class="contact-info-item">
-                <div class="contact-icon">
-                  <i class="fas fa-envelope"></i>
-                </div>
-                <div class="title-info-item">
-                  <h5>អ៊ីមែល</h5>
-                  <p><a href="mailto:G13_eExam@gmail.com">findfound@gmail.com</a></p>
-                </div>
-              </div>
-
-              <div class="social-links gap-4">
-                <a href="#" class="social-link" aria-label="LinkedIn">
-                  <i class="fab fa-linkedin-in"></i>
-                </a>
-                <a href="#" class="social-link" aria-label="Facebook">
-                  <i class="fab fa-facebook-f"></i>
-                </a>
-                <a href="#" class="social-link" aria-label="Twitter">
-                  <i class="fab fa-tiktok"></i>
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Map Section -->
-        <div class="row mt-5">
-          <div class="col-12" data-aos="zoom-in" data-aos-duration="1000">
-            <div class="map-container">
-              <h3 class="mb-4">
-                <i class="fas fa-map-marked-alt me-2"></i>ស្វែងរកពួកយើងនៅទីនេះ
-              </h3>
-              <div class="map-wrapper">
-                <iframe
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3919.320764821367!2d104.8902602!3d11.5722131!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3109519e706d9cdf%3A0xb0bf13884e6cd05f!2sANT%20Technology%20Training%20Center!5e0!3m2!1sen!2skh!4v1693635000000!5m2!1sen!2skh"
-                  width="100%"
-                  height="400"
-                  style="border: 0; border-radius: 15px"
-                  loading="lazy"
-                  referrerpolicy="no-referrer-when-downgrade"
-                  title="ANT Technology Training Center Location"
-                >
-                </iframe>
-                <div class="map-overlay">
-                  <div class="map-info">
-                    <h5>
-                      <i class="fas fa-map-marker-alt me-2"></i>ទីតាំងរបស់យើង
-                    </h5>
-                    <p>
-                      #ផ្ទះលេខ ៨៦បេ ផ្លូវ ៣១៣, រាជធានីភ្នំពេញ, កម្ពុជា
-                    </p>
-                    <a href="https://www.google.com/maps/place/ANT+Technology+Training+Center/@11.5725147,104.8873555,17z/data=!4m6!3m5!1s0x3109519e706d9cdf:0xb0bf13884e6cd05f!8m2!3d11.5722131!4d104.8902602!16s%2Fg%2F1hdz7k133?hl=en-US&entry=ttu&g_ep=EgoyMDI2MDIwMS4wIKXMDSoASAFQAw%3D%3D" target="_blank" class="btn-directions">
-                      <i class="fas fa-directions me-2"></i>ទទួលបានទិសដៅ
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
-    </div>
+    </section>
+
+    <!-- Location Map Section -->
+    <section class="location-section py-5">
+      <div class="container">
+        <h2 class="section-title text-center mb-4" data-aos="fade-up">
+          ទីតាំងរបស់យើងនៅភ្នំពេញ
+        </h2>
+        <p class="text-center mb-5" data-aos="fade-up" data-aos-delay="100">
+          #ផ្ទះលេខ ៨៦បេ ផ្លូវ ៣១៣ — មកជួបយើងបានយ៉ាងងាយស្រួលនៅកណ្តាលទីក្រុង!
+        </p>
+
+        <div
+          class="map-wrapper glass-card overflow-hidden shadow-lg"
+          data-aos="zoom-in"
+          data-aos-delay="200"
+        >
+          <iframe
+            class="w-100"
+            style="height: 500px; border: 0"
+            loading="lazy"
+            allowfullscreen
+            referrerpolicy="no-referrer-when-downgrade"
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3908.783!2d104.891!3d11.573!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3109519a5c5d0001%3A0x0!2zU3RyZWV0IDMxMywgUGhub20gUGVuaCwgQ2FtYm9kaWE!5e0!3m2!1sen!2skh!4v1730000000000"
+          ></iframe>
+        </div>
+
+        <div class="text-center mt-5">
+          <a
+            href="https://www.google.com/maps/search/?api=1&query=Street+313%2C+Phnom+Penh%2C+Cambodia"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="btn btn-outline-primary btn-lg px-5 py-3"
+          >
+            បើកនៅក្នុង Google Maps <i class="bi bi-box-arrow-up-right ms-2"></i>
+          </a>
+        </div>
+      </div>
+    </section>
   </div>
 </template>
 
 <script setup>
-import { ref, reactive } from 'vue';
+import { reactive, ref } from "vue";
 
-// Reactive state
 const formData = reactive({
-  firstName: '',
-  lastName: '',
-  email: '',
-  phone: '',
-  subject: '',
-  message: ''
+  firstName: "",
+  lastName: "",
+  email: "",
+  message: "",
 });
 
 const isSubmitting = ref(false);
-const alertMessage = ref('');
-const alertType = ref('success');
-const contactForm = ref(null);
 
-// Validate form
-const validateForm = () => {
-  // Email validation
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (!emailRegex.test(formData.email)) {
-    alertType.value = 'error';
-    alertMessage.value = 'សូមបញ្ចូលអ៊ីមែលត្រឹមត្រូវ';
-    return false;
-  }
-  
-  // Message length validation
-  if (formData.message.length > 500) {
-    alertType.value = 'error';
-    alertMessage.value = 'សារមិនអាចលើសពី 500 តួអក្សរ';
-    return false;
-  }
-  
-  return true;
-};
-
-// Submit form to API
-const submitForm = async () => {
-  // Replace this with your actual API call
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      console.log('Form submitted:', formData);
-      resolve();
-    }, 1500);
-  });
-  
-  // Example API call:
-  // const response = await fetch('/api/contact', {
-  //   method: 'POST',
-  //   headers: { 'Content-Type': 'application/json' },
-  //   body: JSON.stringify(formData)
-  // });
-  // return response.json();
-};
-
-// Reset form
-const resetForm = () => {
-  formData.firstName = '';
-  formData.lastName = '';
-  formData.email = '';
-  formData.phone = '';
-  formData.subject = '';
-  formData.message = '';
-  
-  // Reset form validation state
-  if (contactForm.value) {
-    contactForm.value.classList.remove('was-validated');
-  }
-};
-
-// Handle form submission
 const handleSubmit = async () => {
-  if (isSubmitting.value) return;
-  
-  // Validate form
-  if (!validateForm()) {
-    return;
-  }
-  
   isSubmitting.value = true;
-  alertMessage.value = '';
-  
-  try {
-    // Simulate API call (replace with actual API endpoint)
-    await submitForm();
-    
-    alertType.value = 'success';
-    alertMessage.value = '✅ សារត្រូវបានផ្ញើដោយជោគជ័យ! យើងនឹងឆ្លើយតបក្នុងរយៈពេល 24 ម៉ោង។';
-    
-    // Reset form
-    resetForm();
-    
-  } catch (error) {
-    alertType.value = 'error';
-    alertMessage.value = '❌ មានបញ្ហាក្នុងការផ្ញើសារ។ សូមព្យាយាមម្តងទៀត។';
-    console.error('Form submission error:', error);
-  } finally {
-    isSubmitting.value = false;
-    
-    // Auto-hide alert after 5 seconds
-    setTimeout(() => {
-      alertMessage.value = '';
-    }, 5000);
-  }
+  await new Promise((resolve) => setTimeout(resolve, 1800));
+  alert("អរគុណ! សាររបស់អ្នកត្រូវបានផ្ញើជោគជ័យ។ យើងនឹងឆ្លើយតបឆាប់ៗនេះ។");
+  Object.assign(formData, {
+    firstName: "",
+    lastName: "",
+    email: "",
+    message: "",
+  });
+  isSubmitting.value = false;
 };
 </script>
 
 <style scoped>
-/* Main Container */
+@import url("https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@300;400;500;600;700&display=swap");
+
 .main-contact {
-  background: rgb(244,247,255);
-  min-height: 100vh;
-  padding-bottom: 50px;
+  font-family: "Kantumruy Pro", sans-serif;
+  background: #fcfaff;
+  padding-bottom: 120px;
 }
-.contact-header {
-            background: linear-gradient(135deg, var(--primary-color, #6366f1), #8b5cf6);
-            padding: 0px 20px;
-            overflow: hidden;
-            border-radius: 0 0 30px 30px;
-        }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
+/* ── Hero ── (shorter height) ── */
+.hero-section {
+  position: relative;
+  background: linear-gradient(
+    135deg,
+    #f5f0ff 0%,
+    #efe8ff 35%,
+    #e6d9ff 65%,
+    #d9ccff 100%
+  );
+  color: #111111;
+  padding: 140px 0 220px; /* Reduced height */
+  overflow: hidden;
+  border-radius: 0 0 80px 80px;
+}
 
-        .content-wrapper {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 60px;
-        }
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse at 40% 60%,
+    rgba(165, 180, 252, 0.06) 0%,
+    transparent 70%
+  );
+  opacity: 0.92;
+}
 
-        .hero-text {
-            flex: 1;
-            color: white;
-        }
+.floating-shapes {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
 
-        .label {
-            display: inline-block;
-            background: rgba(255, 255, 255, 0.2);
-            padding: 8px 20px;
-            border-radius: 50px;
-            font-size: 14px;
-            margin-bottom: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-        }
+.shape {
+  position: absolute;
+  background: rgba(139, 92, 246, 0.025);
+  backdrop-filter: blur(30px);
+  border-radius: 50%;
+  animation: float-slow 50s infinite ease-in-out;
+  pointer-events: none;
+}
 
-        h1 {
-            font-size: 48px;
-            margin-bottom: 20px;
-            font-weight: 700;
-        }
+.shape-1 {
+  width: 380px;
+  height: 380px;
+  top: -20%;
+  left: -25%;
+  animation-delay: 0s;
+}
+.shape-2 {
+  width: 500px;
+  height: 500px;
+  bottom: -30%;
+  right: -30%;
+  animation-delay: 20s;
+  border-radius: 60% 40% 55% 45%;
+}
+.shape-3 {
+  width: 320px;
+  height: 320px;
+  top: 60%;
+  left: -10%;
+  animation-delay: 35s;
+}
 
-        p {
-            font-size: 18px;
-            line-height: 1.6;
-            opacity: 0.95;
-            margin-bottom: 30px;
-        }
-
-        .features {
-            display: flex;
-            align-items: center;
-            flex-direction: column;
-            gap: 15px;
-        }
-
-        .feature {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .checkmark {
-            width: 32px;
-            height: 32px;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-        }
-
-        .hero-image-wrapper {
-            flex: 1;
-            text-align: center;
-        }
-
-        .hero-image {
-            max-width: 450px;
-            width: 100%;
-            height: auto;
-            filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.2));
-        }
-
-        @media (max-width: 768px) {
-            .content-wrapper {
-                flex-direction: column;
-                text-align: center;
-            }
-
-            h1 {
-                font-size: 36px;
-            }
-
-            .hero-image {
-                max-width: 300px;
-            }
-
-            .features {
-                align-items: center;
-            }
-        }
-@keyframes float {
-  0%, 100% {
-    transform: translateX(0) translateY(0) rotate(0deg);
+@keyframes float-slow {
+  0%,
+  100% {
+    transform: translate(0, 0) rotate(0deg);
   }
-  33% {
-    transform: translateX(10px) translateY(-10px) rotate(1deg);
+  25% {
+    transform: translate(40px, -60px) rotate(4deg);
   }
-  66% {
-    transform: translateX(-5px) translateY(5px) rotate(-1deg);
+  50% {
+    transform: translate(-50px, 70px) rotate(-4deg);
+  }
+  75% {
+    transform: translate(60px, 50px) rotate(3deg);
   }
 }
-.contact-header h1 {
-  font-size: 4rem;
-  font-weight: 700;
-  margin-bottom: 20px;
+
+/* Text on top */
+.hero-text-col,
+.hero-title,
+.hero-subtitle,
+.badge-modern {
   position: relative;
   z-index: 2;
-  text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
 }
 
-.contact-header p {
-  font-size: 1.2rem;
-  opacity: 0.95;
-  position: relative;
-  z-index: 2;
-  max-width: 600px;
-  margin: 0 auto;
+.hero-title {
+  font-size: 3.8rem; /* Slightly smaller for better proportion */
+  font-weight: 800;
+  line-height: 1.1;
+  margin-bottom: 1.4rem;
+  color: #111111;
 }
 
-/* Content Section */
+.gradient-text {
+  background: linear-gradient(to right, #8b5cf6, #a78bfa, #c4b5fd);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.hero-subtitle {
+  font-size: 1.3rem;
+  color: #222222;
+  max-width: 560px;
+  line-height: 1.7;
+}
+
+.badge-modern {
+  background: rgba(139, 92, 246, 0.12);
+  backdrop-filter: blur(14px);
+  border: 1px solid rgba(139, 92, 246, 0.22);
+  padding: 12px 28px;
+  border-radius: 60px;
+  font-size: 1.05rem;
+  color: #111111;
+}
+
+/* Hero image (large but fits shorter height) */
+.hero-illustration .hero-img {
+  width: 130%; /* Still big, but not overflowing */
+  max-width: none;
+  height: auto;
+  margin-left: -15%;
+  filter: drop-shadow(0 35px 80px rgba(0, 0, 0, 0.18)) brightness(1.04);
+  border-radius: 40px;
+  transition: all 0.7s ease;
+}
+
+.hero-illustration:hover .hero-img {
+  transform: scale(1.08) translateY(-20px);
+}
+
+/* ── Contact Content ── */
 .contact-content {
-  padding: 0 60px;
-  max-width: 1400px;
-  margin: 0 auto;
+  margin-top: -140px; /* Adjusted to match shorter hero */
+  position: relative;
+  z-index: 10;
 }
 
-/* Contact Form */
-.contact-form {
-  background: var(--white--secondary, #fff);
-  padding: 40px;
-  border-radius: 20px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-  height: 100%;
+.glass-card {
+  background: rgba(255, 255, 255, 0.97);
+  backdrop-filter: blur(18px);
+  border: 1px solid rgba(255, 255, 255, 0.65);
+  border-radius: 32px;
+  padding: 45px;
+  box-shadow:
+    0 25px 70px rgba(0, 0, 0, 0.09),
+    inset 0 0 20px rgba(139, 92, 246, 0.03);
+  transition: all 0.4s ease;
 }
 
-.contact-form h3 {
-  color: var(--primary--white, #333);
-  font-weight: 600;
+.glass-card:hover {
+  transform: translateY(-10px);
+  box-shadow:
+    0 40px 100px rgba(0, 0, 0, 0.14),
+    inset 0 0 30px rgba(139, 92, 246, 0.05);
+}
+
+.card-title {
+  font-weight: 700;
+  color: #111111;
+  margin-bottom: 2rem;
+  font-size: 1.6rem;
+}
+
+.info-item {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 1.8rem;
+}
+
+.icon-circle {
+  width: 56px;
+  height: 56px;
+  background: #f3e8ff;
+  color: #8b5cf6;
+  border-radius: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   font-size: 1.5rem;
 }
 
-.form-label {
+.info-label {
+  font-size: 0.85rem;
+  color: #444444;
   font-weight: 600;
-  color: var(--black--white, #333);
-  margin-bottom: 8px;
-  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
 }
 
-.form-control {
-  border: 2px solid #e9ecef;
-  border-radius: 10px;
-  padding: 12px 15px;
-  font-size: 1rem;
+.info-item p,
+.info-item a {
+  color: #111111;
+  font-weight: 500;
+  margin: 0;
+}
+
+.social-links .social-title {
+  color: #111111;
+  margin-bottom: 1.2rem;
+}
+
+.social-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 16px;
+  background: #f3e8ff;
+  color: #8b5cf6;
+  font-size: 1.4rem;
   transition: all 0.3s ease;
-  background: var(--white--grey, #f8f9fa);
 }
 
-.form-control::placeholder {
-  color: var(--grey--white, #adb5bd);
+.social-icon:hover {
+  background: #8b5cf6;
+  color: white;
+  transform: translateY(-5px) scale(1.1);
+}
+
+/* Form */
+.form-control {
+  color: #111111;
+  border-radius: 16px;
+  padding: 16px 20px;
 }
 
 .form-control:focus {
-  border-color: var(--primary-color, #5a189a);
-  box-shadow: 0 0 0 0.2rem rgba(90, 24, 154, 0.25);
-  background: #fff;
-  outline: none;
+  border-color: #8b5cf6;
+  box-shadow: 0 0 0 0.3rem rgba(139, 92, 246, 0.18);
 }
 
-.form-control:disabled {
-  background-color: #e9ecef;
-  cursor: not-allowed;
-  opacity: 0.7;
+.form-floating > label {
+  color: #444444;
+  padding: 16px 20px;
 }
 
-.char-count {
-  text-align: right;
-  font-size: 0.85rem;
-  color: #6c757d;
-  margin-top: 5px;
-}
-
-/* Submit Button */
-.btn-purple {
-  background: linear-gradient(135deg, var(--primary-color, #6366f1), #8b5cf6);
+.btn-submit {
+  background: linear-gradient(90deg, #8b5cf6, #a78bfa);
   border: none;
-  color: var(--surface-color) !important;
-  padding: 15px 30px !important;
-  font-size: 1.1rem;
-  font-weight: 600;
-  border-radius: 12px;
-  transition: all 0.3s ease;
-  position: relative;
-  overflow: hidden;
-  cursor: pointer;
-}
-
-.btn-purple:hover:not(:disabled) {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 25px rgba(90, 24, 154, 0.4);
-}
-
-.btn-purple:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-  transform: none;
-}
-
-.btn-purple::before {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 0;
-  height: 0;
-  border-radius: 50%;
-  background: rgba(255,255,255,0.3);
-  transform: translate(-50%, -50%);
-  transition: width 0.6s, height 0.6s;
-}
-
-.btn-purple:hover::before {
-  width: 300px;
-  height: 300px;
-}
-
-/* Alert Messages */
-.alert {
-  border-radius: 10px;
-  padding: 15px 20px;
-  font-weight: 500;
-  border: none;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-}
-
-.alert-success {
-  background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
-  color: #155724;
-}
-
-.alert-danger {
-  background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
-  color: #721c24;
-}
-
-.fade-enter-active, .fade-leave-active {
-  transition: opacity 0.3s ease;
-}
-
-.fade-enter-from, .fade-leave-to {
-  opacity: 0;
-}
-
-/* Contact Info */
-.contact-info {
-  background: var(--white--grey, #fff);
-  padding: 40px;
+  color: white;
+  padding: 16px 48px;
   border-radius: 20px;
-  height: 100%;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-}
-
-.contact-info h3 {
-  color: var(--primary--white, #333);
   font-weight: 600;
-  font-size: 1.5rem;
+  box-shadow: 0 14px 40px rgba(139, 92, 246, 0.4);
+  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-.contact-info-item {
-  display: flex;
-  align-items: flex-start;
-  margin-bottom: 25px;
-  padding: 20px;
-  background: #fff;
-  border-radius: 12px;
-  transition: all 0.3s ease;
-  box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+.btn-submit:hover {
+  background: linear-gradient(90deg, #7c3aed, #c4b5fd);
+  transform: translateY(-6px) scale(1.05);
+  box-shadow: 0 24px 60px rgba(139, 92, 246, 0.55);
 }
 
-.contact-info-item:hover {
-  transform: translateX(8px);
-  box-shadow: 0 5px 20px rgba(90, 24, 154, 0.15);
+.char-counter {
+  font-size: 0.9rem;
+  color: #555555;
 }
 
-.contact-icon {
-  width: 50px;
-  height: 50px;
-  background: linear-gradient(135deg, var(--primary-color, #6366f1), #8b5cf6);
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--text-white, #fff);
-  font-size: 1.2rem;
-  margin-right: 20px;
-  flex-shrink: 0;
-  box-shadow: 0 5px 15px rgba(90, 24, 154, 0.3);
+/* Location Section */
+.location-section {
+  background: linear-gradient(to bottom, #f9f7ff, #fcfaff);
 }
 
-.title-info-item h5 {
-  color: var(--black--white, #333);
-  font-weight: 600;
-  margin-bottom: 8px;
-  font-size: 1.1rem;
-}
-
-.title-info-item p {
-  color: #666;
-  margin: 0;
-  line-height: 1.6;
-}
-
-.title-info-item a {
-  color: var(--primary-color, #5a189a);
-  text-decoration: none;
-  transition: color 0.3s ease;
-}
-
-.title-info-item a:hover {
-  color: var(--primary1-color, #7b2cbf);
-  text-decoration: underline;
-}
-
-/* Social Links */
-.social-links {
-  display: flex;
-  justify-content: center;
-  gap: 15px;
-  margin-top: 30px;
-  padding-top: 30px;
-  border-top: 2px solid #e9ecef;
-}
-
-.social-link {
-  width: 50px;
-  height: 50px;
-  background: #fff;
-  border: 2px solid var(--primary-color, #5a189a);
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--primary-color, #5a189a);
-  text-decoration: none;
-  transition: all 0.3s ease;
-  font-size: 1.2rem;
-}
-
-.social-link:hover {
-  background: linear-gradient(135deg, var(--primary-color, #6366f1), #8b5cf6);
-  color: #fff !important;
-  transform: translateY(-5px) rotate(5deg);
-  box-shadow: 0 10px 20px rgba(90, 24, 154, 0.3);
-}
-
-/* Map Container */
-.map-container {
-  background: var(--color-white, #fff);
-  padding: 40px;
-  border-radius: 20px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-}
-
-.map-container h3 {
-  color: var(--primary--white, #333);
-  font-weight: 600;
-  font-size: 1.5rem;
+.section-title {
+  font-size: 2.8rem;
+  font-weight: 700;
+  color: #111111;
 }
 
 .map-wrapper {
-  position: relative;
-  border-radius: 15px;
+  border-radius: 32px;
   overflow: hidden;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-  transition: all 0.3s ease;
+  background: white;
+  box-shadow: 0 25px 70px rgba(0, 0, 0, 0.1);
 }
 
-.map-wrapper:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 15px 40px rgba(0,0,0,0.2);
-}
-
-.map-wrapper iframe {
-  width: 100%;
-  height: 450px;
-  border: none;
-  filter: grayscale(20%);
-  transition: filter 0.3s ease;
-}
-
-.map-wrapper:hover iframe {
-  filter: grayscale(0%);
-}
-
-.map-overlay {
-  position: absolute;
-  top: 5px;
-  left: 5px;
-  background: rgba(255, 255, 255, 0.97);
-  backdrop-filter: blur(10px);
-  border-radius: 15px;
-  padding: 25px;
-  border-left: 5px solid var(--primary-color, #5a189a);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-  max-width: 350px;
-  animation: slideInLeft 0.8s ease-out;
-}
-
-@keyframes slideInLeft {
-  from {
-    opacity: 0;
-    transform: translateX(-30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-.map-overlay h5 {
-  color: var(--primary-color, #5a189a);
+.btn-outline-primary {
+  border-color: #8b5cf6;
+  color: #111111;
   font-weight: 600;
-  margin-bottom: 12px;
-  font-size: 1.1rem;
+  padding: 14px 40px;
+  border-radius: 20px;
 }
 
-.map-overlay p {
-  color: #666;
-  margin: 0 0 15px 0;
-  font-size: 0.95rem;
-  line-height: 1.6;
+.btn-outline-primary:hover {
+  background: #8b5cf6;
+  color: white;
 }
 
-.btn-directions {
-  display: inline-block;
-  background: linear-gradient(135deg, var(--primary-color, #6366f1), #8b5cf6);
-  color: #fff;
-  padding: 10px 20px;
-  border-radius: 8px;
-  text-decoration: none;
-  font-size: 0.9rem;
-  font-weight: 600;
-  transition: all 0.3s ease;
-  box-shadow: 0 5px 15px rgba(90, 24, 154, 0.3);
-}
-
-.btn-directions:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(90, 24, 154, 0.4);
-  color: #fff;
-}
-
-/* Responsive Design */
-@media (max-width: 992px) {
-  .contact-content {
-    padding: 0 30px;
-  }
-  
-  .contact-header h1 {
-    font-size: 2.5rem;
-  }
-}
-
-@media (max-width: 768px) {
-  .contact-content {
-    padding: 0 20px;
-  }
-
-  .contact-form,
-  .contact-info,
-  .map-container {
-    padding: 30px 20px;
-  }
-
-  .contact-header {
-    padding: 60px 20px;
-  }
-
-  .contact-header h1 {
-    font-size: 2rem;
-  }
-
-  .contact-header p {
-    font-size: 1rem;
-  }
-
-  .contact-info-item {
-    flex-direction: column;
+/* Responsive */
+@media (max-width: 991px) {
+  .hero-section {
+    padding: 100px 0 160px; /* Shorter on mobile too */
     text-align: center;
   }
-
-  .contact-icon {
-    margin-right: 0;
-    margin-bottom: 15px;
+  .hero-title {
+    font-size: 3rem;
   }
-
+  .contact-content {
+    margin-top: -100px;
+  }
+  .glass-card {
+    padding: 35px 25px;
+  }
   .map-wrapper iframe {
-    height: 300px;
-  }
-
-  .social-links {
-    gap: 10px;
-  }
-
-  .social-link {
-    width: 45px;
-    height: 45px;
-    font-size: 1rem;
-  }
-}
-
-@media (max-width: 576px) {
-  .contact-header h1 {
-    font-size: 1.75rem;
-  }
-
-  .btn-purple {
-    font-size: 1rem;
-    padding: 12px 20px !important;
+    height: 400px;
   }
 }
 </style>

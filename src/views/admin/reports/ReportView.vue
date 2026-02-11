@@ -46,7 +46,7 @@
     </div>
 
     <div class="col-12 center2" v-if="reportStore.isLoadingGetAllReport">
-      <div class="spinner-border" role="status">
+      <div class="spinner-border spinner-color" role="status">
         <span class="visually-hidden">កំពុងផ្ទុក...</span>
       </div>
     </div>
@@ -345,7 +345,7 @@ const clearFilter = () => {
 }
 
 .border-color {
-  border-color: var(--primary-color);
+  border-color: var(--tertiary-color);
 }
 
 .image {
@@ -448,5 +448,9 @@ const clearFilter = () => {
   font-size: 0.75rem;
   font-weight: 700;
   color: #3b1e54;
+}
+
+.spinner-color{
+  color: var(--primary-color);
 }
 </style>

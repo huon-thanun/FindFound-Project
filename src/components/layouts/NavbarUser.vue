@@ -145,7 +145,7 @@
           <ul class="navbar-nav navbar-nav-custom">
             <li class="nav-item">
               <router-link
-                to="/"
+                :to="{name: 'home'}"
                 class="nav-link-custom"
                 :class="{ active: activeLink === 'home' }"
                 @click.prevent="setActive('home')"
@@ -189,7 +189,7 @@
 
             <li class="nav-item">
               <router-link
-                to="/contact_us"
+                :to="{name: 'contact_us'}"
                 class="nav-link-custom"
                 :class="{ active: activeLink === 'contact' }"
                 @click.prevent="setActive('contact')"
@@ -261,7 +261,7 @@
               </router-link>
 
               <router-link
-                to=""
+                to="/profile/security"
                 class="dropdown-item-custom"
                 :class="{ active: activeLink === 'setting' }"
                 @click.prevent="setActive('setting')"
@@ -348,7 +348,7 @@
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from "vue";
 import { useProfileStore } from "@/stores/profileStore";
-import { useRouter } from "vue-router";
+import { useRouter, useRoute } from "vue-router";
 import { useAuthStore } from "@/stores/authStore";
 
 const auth = useAuthStore();
@@ -364,7 +364,7 @@ const goRegister = () => {
 };
 import { storeToRefs } from "pinia";
 
-const activeLink = ref("home");
+// const activeLink = ref("home");
 const profileStore = useProfileStore();
 
 const { profile, isLoadingProfile, error } = storeToRefs(profileStore);
@@ -414,9 +414,11 @@ const showAuthButtons = computed(() => {
 });
 
 // Active link in navbar
-const setActive = (link) => {
-  activeLink.value = link;
-};
+const route = useRoute();
+
+const activeLink = computed(() => {
+  return route.name;
+});
 
 // LOGOUT function
 async function logout() {
@@ -636,7 +638,17 @@ body {
 
 .navbar-custom {
   height: 80px;
-  background-color: var(--tertiary-color);
+  background: linear-gradient(
+    90deg,
+    #cdbaeb 0%,
+    #faf8fc 40%,
+    #f7f5ff 50%,
+    #fbfafc 60%,
+    #d2c1ed 100%
+  );
+
+  color: transparent;
+
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
   position: sticky;
   top: 0;
@@ -656,7 +668,7 @@ body {
 
 /* Underline From Center */
 .nav-link-custom {
-  color: var(--surface-color);
+  color:#181212;
   text-decoration: none;
   font-size: 1rem;
   font-weight: 400;
@@ -673,6 +685,10 @@ body {
 
 .nav-link-custom.active,
 .nav-link-custom:hover {
+  color: #7f23cf;
+}
+
+.nav-link-custom.router-link-exact-active {
   color: var(--surface-color);
 }
 
@@ -684,7 +700,7 @@ body {
   right: 51%;
   bottom: 3px;
   border-radius: 10px;
-  background: var(--surface-color);
+  background: #7f23cf;
   height: 3px;
   -webkit-transition-property: left, right;
   transition-property: left, right;
@@ -702,7 +718,7 @@ body {
 }
 
 /* Active underline (STAYS visible) */
-.nav-link-custom.active::before {
+.nav-link-custom.router-link-exact-active::before {
   left: 0;
   right: 0;
 }
@@ -716,14 +732,24 @@ body {
   align-items: center;
 }
 
-.btn-register,
-.btn-login {
-  transition: all 0.3s ease;
+.btn-login button,
+.btn-register button {
+  background: transparent;
+  color: #7f23cf;
+  border: 1px solid rgba(127, 35, 207, 0.35);
+  border-radius: 999px;
+  padding: 10px 20px;
+  font-weight: 500;
+  transition: all 0.25s ease;
+}
+.btn-login button:hover {
+  background: rgba(127, 35, 207, 0.08);
+  border-color: #7f23cf;
 }
 
-.btn-register:hover,
-.btn-login:hover {
-  transform: translateY(-1px);
+.btn-register button:hover {
+  background: linear-gradient(135deg, #7f23cf, #9b5cff);
+  color: #ffffff;
 }
 
 /* User Profile Dropdown */

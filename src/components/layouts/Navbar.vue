@@ -1,66 +1,91 @@
 <template>
-  <SidebarAdmin class="sidebar d-lg-none" :class="{ closed: isOpen }" />
+  <SidebarAdmin
+    class="mobile-sidebar d-lg-none"
+    :class="{ 'sidebar-open': !isOpen }"
+  />
 
-  <nav class="navbar-top shadow-sm p-2 ms-auto">
+  <nav class="navbar-top">
     <div
-      class="container-fluid d-flex justify-content-between align-items-center h-100"
+      class="nav-glass-container d-flex justify-content-between align-items-center"
     >
-      <h1 class="pt-2 d-none d-lg-block">
-        <i class="bi-person-gear"></i> សូមស្វាគមន៍អ្នកគ្រប់គ្រង
-      </h1>
-      <div class="d-flex align-items-center d-lg-none gap-3">
-        <base-button @click="toggleSidebar">
-          <i :class="isOpen ? 'bi bi-list' : 'bi bi-x-lg'"></i>
-        </base-button>
-      </div>
+      <div class="d-flex align-items-center gap-3">
+        <button @click="toggleSidebar" class="modern-toggle d-lg-none">
+          <div class="hamburger" :class="{ active: !isOpen }">
+            <span></span><span></span><span></span>
+          </div>
+        </button>
 
-      <div class="logo-section d-lg-none">
-        <div class="d-flex align-items-center">
-          <img
-            src="../../assets/images/logo/logo.png"
-            class="object-fit-cover"
-            height="79px"
-            width="170px"
-            alt=""
-          />
+        <div class="welcome-box d-none d-lg-flex">
+          <div class="sparkle-icon"><i class="bi bi-stars"></i></div>
+          <div class="welcome-text-group">
+            <span class="top-label">ផ្ទាំងគ្រប់គ្រង</span>
+            <h1 class="main-welcome">
+              សួស្តី,
+              <span class="purple-gradient-text">{{ admin.fullname }}</span>
+            </h1>
+          </div>
         </div>
       </div>
 
-      <div class="navbar-user">
-        <div class="dropdown hover-dropdown">
-          <div class="user-profile shadow-sm">
-            <div class="user-profile-avatar">
-              <img :src="admin.avatar" class="avatar-img" alt="avatar" />
-            </div>
-            <div class="user-info d-none d-lg-block">
-              <span class="user-profile-name">{{ admin.fullname }}</span>
-            </div>
-            <i class="bi bi-chevron-down chevron-icon ms-1"></i>
-          </div>
+      <div class="search-container d-none d-xl-flex">
+        <i class="bi bi-search search-icon"></i>
+        <input
+          type="text"
+          placeholder="ស្វែងរកទិន្នន័យ..."
+          class="search-input"
+        />
+      </div>
 
-          <ul
-            class="dropdown-menu dropdown-menu-end shadow-lg animated-dropdown"
-          >
+      <div class="d-flex align-items-center gap-3">
+        <button class="icon-action-btn d-none d-md-flex">
+          <i class="bi bi-bell"></i>
+          <span class="notification-badge"></span>
+        </button>
+
+        <div class="navbar-user">
+          <div class="custom-dropdown-container">
+            <div
+              class="profile-pill"
+              :class="{ 'pill-active': isDropdownOpen }"
+              @click="toggleDropdown($event)"
+            >
+              <div class="avatar-wrapper">
+                <img
+                  :src="
+                    admin.avatar ||
+                    'https://ui-avatars.com/api/?name=Admin&background=8b5cf6&color=fff'
+                  "
+                  alt="avatar"
+                />
+                <div class="online-status"></div>
+              </div>
+              <div class="user-meta d-none d-lg-block">
+                <span class="name">{{ admin.fullname }}</span>
+                <span class="role">អ្នកគ្រប់គ្រង</span>
+              </div>
+              <i
+                class="bi bi-chevron-down arrow-ui"
+                :class="{ rotated: isDropdownOpen }"
+              ></i>
+            </div>
+
+          <ul class="dropdown-menu dropdown-menu-end shadow-lg animated-dropdown">
             <li>
               <router-link class="dropdown-item khmer-font" to="/admin/profile">
                 <i class="bi bi-person-circle"></i> គណនីផ្ទាល់ខ្លួន
               </router-link>
             </li>
             <li>
-              <router-link
-                class="dropdown-item khmer-font"
-                to="/admin/profile-security"
-              >
+              <router-link class="dropdown-item khmer-font" to="/admin/profile-security">
                 <i class="bi bi-gear"></i> ការកំណត់
               </router-link>
             </li>
-            <li><hr class="dropdown-divider" /></li>
             <li>
-              <a
-                class="dropdown-item khmer-font text-danger"
-                href="javascript:void(0)"
-                @click.prevent="openLogoutModal"
-              >
+              <hr class="dropdown-divider" />
+            </li>
+            <li>
+              <a class="dropdown-item khmer-font text-danger" href="javascript:void(0)"
+                @click.prevent="openLogoutModal">
                 <i class="bi bi-box-arrow-right"></i> ចាកចេញ
               </a>
             </li>
@@ -70,26 +95,16 @@
     </div>
   </nav>
 
-  <BaseModal
-    v-if="showLogoutModal"
-    :title="'ចាកចេញពីគណនី'"
-    icon="exclamation-triangle"
-    theme="danger"
-    :isClose="showLogoutModal"
-    @closeModal="closeLogoutModal"
-  >
+  <BaseModal v-if="showLogoutModal" :title="'ចាកចេញពីគណនី'" icon="exclamation-triangle" theme="danger"
+    :isClose="showLogoutModal" @closeModal="closeLogoutModal">
     <template #body>
       <p class="khmer-font text-center mb-0">តើអ្នកពិតជាចង់ចាកចេញមែនទេ?</p>
     </template>
     <template #btnClose>
-      <BaseButton variant="cancel" class="col-6" @click="closeLogoutModal"
-        >បោះបង់</BaseButton
-      >
+      <BaseButton variant="cancel" class="col-6" @click="closeLogoutModal">បោះបង់</BaseButton>
     </template>
     <template #btnActive>
-      <BaseButton variant="danger" class="col-6" @click="logout"
-        >បញ្ជាក់</BaseButton
-      >
+      <BaseButton variant="danger" class="col-6" @click="logout">បញ្ជាក់</BaseButton>
     </template>
   </BaseModal>
 </template>
@@ -101,8 +116,43 @@ import SidebarAdmin from "./Sidebar.vue";
 
 const auth = useAuthStore();
 const router = useRouter();
+
+// --- REFS ---
 const showLogoutModal = ref(false);
-const isOpen = ref(true);
+const isOpen = ref(true); // Sidebar state
+const isDropdownOpen = ref(false); // Dropdown state (MUST HAVE THIS)
+
+// --- COMPUTED ---
+const admin = computed(() => ({
+  fullname: auth.user?.fullname || "Admin User",
+  avatar: auth.user?.avatar || "",
+}));
+
+// --- FUNCTIONS ---
+const toggleSidebar = () => {
+  isOpen.value = !isOpen.value;
+};
+
+const toggleDropdown = (event) => {
+  // Prevent the click from bubbling up to the window listener immediately
+  event.stopPropagation();
+  isDropdownOpen.value = !isDropdownOpen.value;
+};
+
+const openLogoutModal = () => {
+  showLogoutModal.value = true;
+  isDropdownOpen.value = false; // Close menu when opening modal
+};
+
+const closeLogoutModal = () => (showLogoutModal.value = false);
+
+// Function to close dropdown when clicking outside
+const closeOutside = (e) => {
+  if (isDropdownOpen.value) {
+    isDropdownOpen.value = false;
+  }
+};
+
 const handleResize = () => {
   if (window.innerWidth <= 992) {
     isOpen.value = true;
@@ -111,24 +161,18 @@ const handleResize = () => {
   }
 };
 
+// --- LIFECYCLE ---
 onMounted(() => {
-  handleResize(); // run once on load
+  handleResize();
   window.addEventListener("resize", handleResize);
+  // Add listener to close dropdown when clicking anywhere else
+  window.addEventListener("click", closeOutside);
 });
 
 onUnmounted(() => {
   window.removeEventListener("resize", handleResize);
+  window.removeEventListener("click", closeOutside);
 });
-
-const admin = computed(() => ({
-  fullname: auth.user?.fullname || "Admin User",
-  avatar: auth.user?.avatar || "",
-}));
-const toggleSidebar = () => {
-  isOpen.value = !isOpen.value;
-};
-const openLogoutModal = () => (showLogoutModal.value = true);
-const closeLogoutModal = () => (showLogoutModal.value = false);
 
 const logout = () => {
   localStorage.clear();
@@ -138,110 +182,217 @@ const logout = () => {
 </script>
 
 <style scoped>
-.sidebar {
-  display: block !important;
-  width: 300px !important;
+/* New Search Bar Styles */
+.search-container {
+  position: relative;
+  width: 300px;
 }
+
+.search-icon {
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #94a3b8;
+}
+
 .sidebar.closed {
   transform: translateX(-300px);
 }
+
 .navbar-brand-container {
+.search-input {
+  width: 100%;
+  padding: 10px 15px 10px 45px;
+  border-radius: 14px;
+  border: 1px solid #e2e8f0;
+  background: #f8fafc;
+  font-size: 14px;
+  transition: all 0.3s;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: #8b5cf6;
+  background: white;
+  box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.1);
+}
+
+/* Icon Buttons (Bell, etc) */
+.icon-action-btn {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  background: white;
   display: flex;
   align-items: center;
-  transition: transform 0.3s ease;
+  justify-content: center;
+  position: relative;
+  color: #64748b;
+  transition: 0.3s;
 }
 
 .navbar-brand-container:hover {
-  transform: scale(1.05); /* Slight pop when hovering logo */
+  transform: scale(1.05);
+  /* Slight pop when hovering logo */
 }
 
 .navbar-logo {
   object-fit: contain;
-  max-width: 150px; /* Adjust based on your logo width */
+  max-width: 150px;
+  /* Adjust based on your logo width */
+.icon-action-btn:hover {
+  background: #f5f3ff;
+  color: #7c3aed;
+  border-color: #ddd6fe;
 }
 
-/* Ensure the navbar items don't feel cramped */
-.gap-4 {
-  gap: 1.5rem !important;
+.notification-badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 8px;
+  height: 8px;
+  background: #ef4444;
+  border-radius: 50%;
+  border: 2px solid white;
 }
 
-/* 1. Navbar Container */
+/* Ensure the divider is thin and clean */
+.dropdown-divider-thin {
+  height: 1px;
+  background: #f1f5f9;
+  margin: 10px 0;
+}
+/* 1. Navbar Container - Floating Glass Effect */
 .navbar-top {
-  background-color: rgba(255, 255, 255, 0.9);
-  backdrop-filter: blur(15px);
-  border-bottom: 1px solid #eef2f6;
-  height: 75px;
+  height: 90px;
   position: sticky;
   top: 0;
-  width: 79%;
-  height: 79px;
-  z-index: 1000;
-  padding: 0 1rem;
+  z-index: 999;
+  padding: 10px 25px;
+  background: #f8fafc; /* Matches dashboard bg */
 }
 
 /* 2. Hover Bridge Strategy */
 .hover-dropdown {
   position: relative;
-  padding: 10px 0; /* Creates invisible hover area */
+  padding: 10px 0;
+  /* Creates invisible hover area */
+@media (min-width: 992px) {
+  .navbar-top {
+    width: calc(100% - 280px);
+    margin-left: 280px;
+  }
 }
 
-/* 3. User Profile Trigger */
-.user-profile {
+.nav-glass-container {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(12px);
+  height: 100%;
+  border-radius: 20px;
+  padding: 0 20px;
+  border: 1px solid rgba(139, 92, 246, 0.1);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+}
+
+/* 2. Welcome Section */
+.welcome-box {
+  gap: 15px;
+}
+.sparkle-icon {
+  width: 45px;
+  height: 45px;
+  background: linear-gradient(135deg, #8b5cf6, #6d28d9);
+  border-radius: 12px;
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 5px 15px 5px 6px;
+  justify-content: center;
+  color: white;
+  font-size: 20px;
+}
+.top-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  color: #94a3b8;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+.main-welcome {
+  font-size: 1.2rem;
+  font-weight: 800;
+  margin: 0;
+  color: #1e1b4b;
+}
+.purple-gradient-text {
+  background: linear-gradient(90deg, #7c3aed, #db2777);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* 3. Profile Pill Design */
+.profile-pill {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: white;
+  padding: 6px 15px 6px 8px;
   border-radius: 50px;
-  background: #ffffff;
   border: 1px solid #f1f5f9;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.user-profile-avatar {
-  width: 38px;
-  height: 38px;
-  border-radius: 50%;
-  overflow: hidden;
-  border: 2px solid #fff;
+.profile-pill:hover,
+.pill-active {
+  border-color: #8b5cf6;
+  box-shadow: 0 10px 15px -3px rgba(139, 92, 246, 0.1);
+  transform: translateY(-2px);
 }
 
-.avatar-img {
+.avatar-wrapper {
+  position: relative;
+  width: 40px;
+  height: 40px;
+}
+.avatar-wrapper img {
   width: 100%;
   height: 100%;
+  border-radius: 50%;
   object-fit: cover;
+  border: 2px solid #8b5cf6;
+}
+.online-status {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 12px;
+  height: 12px;
+  background: #10b981;
+  border: 2px solid white;
+  border-radius: 50%;
 }
 
-.user-info {
-  display: flex;
-  flex-direction: column;
+.user-meta {
+  line-height: 1.1;
 }
-
-.user-profile-name {
-  font-size: 14px;
+.user-meta .name {
+  display: block;
   font-weight: 700;
   color: #1e293b;
-  line-height: 1.2;
+  font-size: 14px;
 }
-
-.admin-label {
+.user-meta .role {
   font-size: 10px;
   color: #94a3b8;
-  text-transform: uppercase;
+  font-weight: 600;
 }
 
-.chevron-icon {
-  font-size: 12px;
-  color: #cbd5e1;
-  transition: transform 0.3s ease;
-}
-
-/* 4. Dropdown Menu (The 'Show' Logic) */
-.animated-dropdown {
-  display: block;
-  visibility: hidden;
-  opacity: 0;
-  top: 100%;
+/* 4. Premium Dropdown Menu */
+.premium-dropdown {
+  position: absolute;
+  top: 110%;
   right: 0;
   min-width: 220px;
   border: none;
@@ -251,43 +402,66 @@ const logout = () => {
   transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
   pointer-events: none;
 }
+
 @media (max-width: 992px) {
   .navbar-top {
     width: 100% !important;
   }
 }
+
 @media (min-width: 992px) {
   .sidebar {
     display: none !important;
   }
 }
+
 /* Hover Action */
 .hover-dropdown:hover .animated-dropdown {
   visibility: visible;
   opacity: 1;
   transform: translateY(0);
   pointer-events: auto;
+  width: 260px;
+  background: white;
+  border-radius: 20px;
+  padding: 15px;
+  border: 1px solid rgba(139, 92, 246, 0.1);
+  box-shadow: 0 20px 40px rgba(46, 16, 101, 0.12);
 }
 
-.hover-dropdown:hover .user-profile {
-  background-color: #f8fafc;
-  border-color: #cbd5e1;
-}
-
-.hover-dropdown:hover .chevron-icon {
-  transform: rotate(180deg);
-}
-
-/* 5. Menu Items */
-.dropdown-item {
+.dropdown-user-header {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 10px 15px;
+  padding-bottom: 15px;
+}
+.header-avatar {
+  width: 45px;
+  height: 45px;
+  border-radius: 12px;
+}
+.header-info strong {
+  display: block;
   font-size: 14px;
+  color: #1e1b4b;
+}
+.header-info p {
+  font-size: 12px;
+  color: #94a3b8;
+  margin: 0;
+}
+
+.p-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px;
+  border-radius: 12px;
   color: #475569;
-  border-radius: 10px !important;
+  text-decoration: none;
+  font-weight: 600;
   transition: 0.2s;
+  font-size: 14px;
 }
 
 .dropdown-item i {
@@ -298,40 +472,59 @@ const logout = () => {
 .dropdown-item:hover {
   background-color: #f1f0ff;
   color: #3b1e54;
-  padding-left: 18px; /* Slight slide effect */
+  padding-left: 18px;
+  /* Slight slide effect */
+.p-item:hover {
+  background: #f5f3ff;
+  color: #7c3aed;
+  padding-left: 15px;
+}
+.p-icon {
+  width: 32px;
+  height: 32px;
+  background: #f8fafc;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.p-item:hover .p-icon {
+  background: white;
+  color: #7c3aed;
 }
 
-.dropdown-item:hover i {
-  color: #3b1e54;
-}
-
-/* 6. Utility Styles */
-.search-box {
-  position: relative;
-}
-
-.search-box input {
-  height: 40px;
-  width: 280px;
+/* 5. Mobile Toggle Styling */
+.modern-toggle {
+  background: white;
   border: 1px solid #e2e8f0;
+  width: 45px;
+  height: 45px;
   border-radius: 12px;
-  background-color: #f8fafc;
-  padding-left: 40px;
+}
+.hamburger span {
+  display: block;
+  width: 20px;
+  height: 2px;
+  background: #7c3aed;
+  margin: 4px auto;
   transition: 0.3s;
 }
 
-.search-box input:focus {
-  width: 320px;
-  background: #fff;
-  outline: none;
-  border-color: #3b1e54;
+/* Animations */
+.premium-slide-enter-active {
+  animation: p-slide-in 0.3s ease-out;
 }
-
-.search-icon {
-  position: absolute;
-  left: 14px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: #94a3b8;
+.premium-slide-leave-active {
+  animation: p-slide-in 0.2s ease-in reverse;
+}
+@keyframes p-slide-in {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 </style>

@@ -5,26 +5,39 @@ import api from "@/api/api";
 export const useCategoryStore = defineStore("category", () => {
     const categories = ref([]);
     const isLoading = ref(false);
+    const total = ref(0);
+    const meta = ref(null);
 
     const fetchCategories = async (params = {}) => {
-    try {
-        isLoading.value = true;
-        // Merge default params with any passed in params
-        // We set per_page to a higher number like 50 or 100
-        const res = await api.get("/categories", { 
-            params: { 
-                // _page: 1,
-                _per_page: 50, // This is the key change
-                ...params 
-            } 
-        });
-        categories.value = res.data.data.items;
-    } catch (err) {
-        console.error("Fetch categories error:", err);
-    } finally {
-        isLoading.value = false;
-    }
-};
+        try {
+            isLoading.value = true;
+            const queryParams = {
+                _page: params.page ?? 1,
+                _per_page: params.perPage ?? 100,
+                sortBy: params.sortBy ?? 'id',
+                sortDir: params.sortDir ?? 'ASC',
+            };
+
+            // Only send search if it exists
+            if (params.search && params.search.trim() !== '') {
+                queryParams.search = params.search.trim();
+            }
+
+            const res = await api.get("/categories", {
+                params: queryParams
+            });
+
+            const items = res.data.data?.items || [];
+            total.value = res.data.data?.meta?.totalItems ?? 0;
+            meta.value = res.data.data?.meta ?? null;
+
+            categories.value = items;
+        } catch (err) {
+            console.error("Fetch categories error:", err);
+        } finally {
+            isLoading.value = false;
+        }
+    };
 
     const createCategory = async (payload) => {
         // send payload to backend
@@ -47,6 +60,6 @@ export const useCategoryStore = defineStore("category", () => {
     };
 
     return {
-        categories, isLoading, fetchCategories, createCategory, updateCategory, deleteCategory
+        categories, isLoading, total, meta, fetchCategories, createCategory, updateCategory, deleteCategory
     };
 });

@@ -68,7 +68,6 @@
                   <SwiperSlide
                     v-for="image in reportStore.report?.reportImages || []"
                     :key="image.id"
-                    class="bg-danger"
                   >
                     <img :src="image.name" class="shadow" />
                   </SwiperSlide>
@@ -242,7 +241,6 @@ import { onMounted, watch, computed, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
 import { formatDate } from "@/utils/formatDate";
-import BaseReportCard from "@/components/base/BaseReportCard.vue";
 import BaseCard from "@/components/report/BaseCard.vue";
 
 import { Swiper, SwiperSlide } from "swiper/vue";
@@ -320,13 +318,10 @@ const btnHandleReportDetail = (reportId) => {
   max-width: 100%;
 }
 
-.mySwiper,
 .mySwiper2 {
   width: 100%;
 }
-
 .mySwiper {
-  border-top: 1px solid black;
   width: 100%;
   padding: 5px;
 }
