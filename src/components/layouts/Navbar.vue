@@ -310,189 +310,188 @@ const logout = () => {
     width: calc(100% - 280px);
     margin-left: 280px;
   }
-}
 
-.nav-glass-container {
-  background: rgba(255, 255, 255, 0.8);
-  backdrop-filter: blur(12px);
-  height: 100%;
-  border-radius: 20px;
-  padding: 0 20px;
-  border: 1px solid rgba(139, 92, 246, 0.1);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
-}
-
-/* 2. Welcome Section */
-.welcome-box {
-  gap: 15px;
-}
-.sparkle-icon {
-  width: 45px;
-  height: 45px;
-  background: linear-gradient(135deg, #8b5cf6, #6d28d9);
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  font-size: 20px;
-}
-.top-label {
-  font-size: 11px;
-  text-transform: uppercase;
-  color: #94a3b8;
-  font-weight: 700;
-  letter-spacing: 1px;
-}
-.main-welcome {
-  font-size: 1.2rem;
-  font-weight: 800;
-  margin: 0;
-  color: #1e1b4b;
-}
-.purple-gradient-text {
-  background: linear-gradient(90deg, #7c3aed, #db2777);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-/* 3. Profile Pill Design */
-.profile-pill {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  background: white;
-  padding: 6px 15px 6px 8px;
-  border-radius: 50px;
-  border: 1px solid #f1f5f9;
-  cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.profile-pill:hover,
-.pill-active {
-  border-color: #8b5cf6;
-  box-shadow: 0 10px 15px -3px rgba(139, 92, 246, 0.1);
-  transform: translateY(-2px);
-}
-
-.avatar-wrapper {
-  position: relative;
-  width: 40px;
-  height: 40px;
-}
-.avatar-wrapper img {
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 2px solid #8b5cf6;
-}
-.online-status {
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  width: 12px;
-  height: 12px;
-  background: #10b981;
-  border: 2px solid white;
-  border-radius: 50%;
-}
-
-.user-meta {
-  line-height: 1.1;
-}
-.user-meta .name {
-  display: block;
-  font-weight: 700;
-  color: #1e293b;
-  font-size: 14px;
-}
-.user-meta .role {
-  font-size: 10px;
-  color: #94a3b8;
-  font-weight: 600;
-}
-
-/* 4. Premium Dropdown Menu */
-.premium-dropdown {
-  position: absolute;
-  top: 110%;
-  right: 0;
-  min-width: 220px;
-  border: none;
-  border-radius: 15px !important;
-  padding: 10px !important;
-  transform: translateY(15px);
-  transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
-  pointer-events: none;
-}
-
-@media (max-width: 992px) {
-  .navbar-top {
-    width: 100% !important;
+  .nav-glass-container {
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(12px);
+    height: 100%;
+    border-radius: 20px;
+    padding: 0 20px;
+    border: 1px solid rgba(139, 92, 246, 0.1);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
   }
-}
 
-@media (min-width: 992px) {
-  .sidebar {
-    display: none !important;
+  /* 2. Welcome Section */
+  .welcome-box {
+    gap: 15px;
   }
-}
+  .sparkle-icon {
+    width: 45px;
+    height: 45px;
+    background: linear-gradient(135deg, #8b5cf6, #6d28d9);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 20px;
+  }
+  .top-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    color: #94a3b8;
+    font-weight: 700;
+    letter-spacing: 1px;
+  }
+  .main-welcome {
+    font-size: 1.2rem;
+    font-weight: 800;
+    margin: 0;
+    color: #1e1b4b;
+  }
+  .purple-gradient-text {
+    background: linear-gradient(90deg, #7c3aed, #db2777);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
 
-/* Hover Action */
-.hover-dropdown:hover .animated-dropdown {
-  visibility: visible;
-  opacity: 1;
-  transform: translateY(0);
-  pointer-events: auto;
-  width: 260px;
-  background: white;
-  border-radius: 20px;
-  padding: 15px;
-  border: 1px solid rgba(139, 92, 246, 0.1);
-  box-shadow: 0 20px 40px rgba(46, 16, 101, 0.12);
-}
+  /* 3. Profile Pill Design */
+  .profile-pill {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: white;
+    padding: 6px 15px 6px 8px;
+    border-radius: 50px;
+    border: 1px solid #f1f5f9;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
 
-.dropdown-user-header {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding-bottom: 15px;
-}
-.header-avatar {
-  width: 45px;
-  height: 45px;
-  border-radius: 12px;
-}
-.header-info strong {
-  display: block;
-  font-size: 14px;
-  color: #1e1b4b;
-}
-.header-info p {
-  font-size: 12px;
-  color: #94a3b8;
-  margin: 0;
-}
+  .profile-pill:hover,
+  .pill-active {
+    border-color: #8b5cf6;
+    box-shadow: 0 10px 15px -3px rgba(139, 92, 246, 0.1);
+    transform: translateY(-2px);
+  }
 
-.p-item {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 10px;
-  border-radius: 12px;
-  color: #475569;
-  text-decoration: none;
-  font-weight: 600;
-  transition: 0.2s;
-  font-size: 14px;
-}
+  .avatar-wrapper {
+    position: relative;
+    width: 40px;
+    height: 40px;
+  }
+  .avatar-wrapper img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #8b5cf6;
+  }
+  .online-status {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 12px;
+    height: 12px;
+    background: #10b981;
+    border: 2px solid white;
+    border-radius: 50%;
+  }
 
-.dropdown-item i {
-  font-size: 18px;
-  color: #94a3b8;
-}
+  .user-meta {
+    line-height: 1.1;
+  }
+  .user-meta .name {
+    display: block;
+    font-weight: 700;
+    color: #1e293b;
+    font-size: 14px;
+  }
+  .user-meta .role {
+    font-size: 10px;
+    color: #94a3b8;
+    font-weight: 600;
+  }
+
+  /* 4. Premium Dropdown Menu */
+  .premium-dropdown {
+    position: absolute;
+    top: 110%;
+    right: 0;
+    min-width: 220px;
+    border: none;
+    border-radius: 15px !important;
+    padding: 10px !important;
+    transform: translateY(15px);
+    transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+    pointer-events: none;
+  }
+
+  @media (max-width: 992px) {
+    .navbar-top {
+      width: 100% !important;
+    }
+  }
+
+  @media (min-width: 992px) {
+    .sidebar {
+      display: none !important;
+    }
+  }
+
+  /* Hover Action */
+  .hover-dropdown:hover .animated-dropdown {
+    visibility: visible;
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+    width: 260px;
+    background: white;
+    border-radius: 20px;
+    padding: 15px;
+    border: 1px solid rgba(139, 92, 246, 0.1);
+    box-shadow: 0 20px 40px rgba(46, 16, 101, 0.12);
+  }
+
+  .dropdown-user-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding-bottom: 15px;
+  }
+  .header-avatar {
+    width: 45px;
+    height: 45px;
+    border-radius: 12px;
+  }
+  .header-info strong {
+    display: block;
+    font-size: 14px;
+    color: #1e1b4b;
+  }
+  .header-info p {
+    font-size: 12px;
+    color: #94a3b8;
+    margin: 0;
+  }
+
+  .p-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px;
+    border-radius: 12px;
+    color: #475569;
+    text-decoration: none;
+    font-weight: 600;
+    transition: 0.2s;
+    font-size: 14px;
+  }
+
+  .dropdown-item i {
+    font-size: 18px;
+    color: #94a3b8;
+  }
 
 .dropdown-item:hover {
   background-color: #f1f0ff;
@@ -520,38 +519,39 @@ const logout = () => {
   color: #7c3aed;
 }
 
-/* 5. Mobile Toggle Styling */
-.modern-toggle {
-  background: white;
-  border: 1px solid #e2e8f0;
-  width: 45px;
-  height: 45px;
-  border-radius: 12px;
-}
-.hamburger span {
-  display: block;
-  width: 20px;
-  height: 2px;
-  background: #7c3aed;
-  margin: 4px auto;
-  transition: 0.3s;
-}
-
-/* Animations */
-.premium-slide-enter-active {
-  animation: p-slide-in 0.3s ease-out;
-}
-.premium-slide-leave-active {
-  animation: p-slide-in 0.2s ease-in reverse;
-}
-@keyframes p-slide-in {
-  from {
-    opacity: 0;
-    transform: translateY(20px) scale(0.95);
+  /* 5. Mobile Toggle Styling */
+  .modern-toggle {
+    background: white;
+    border: 1px solid #e2e8f0;
+    width: 45px;
+    height: 45px;
+    border-radius: 12px;
   }
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
+  .hamburger span {
+    display: block;
+    width: 20px;
+    height: 2px;
+    background: #7c3aed;
+    margin: 4px auto;
+    transition: 0.3s;
+  }
+
+  /* Animations */
+  .premium-slide-enter-active {
+    animation: p-slide-in 0.3s ease-out;
+  }
+  .premium-slide-leave-active {
+    animation: p-slide-in 0.2s ease-in reverse;
+  }
+  @keyframes p-slide-in {
+    from {
+      opacity: 0;
+      transform: translateY(20px) scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
   }
 }
 </style>
