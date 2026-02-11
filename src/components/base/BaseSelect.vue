@@ -141,7 +141,8 @@ watch(selectedRole, async (val) => {
   justify-content: space-between;
   align-items: center;
   padding: 0.375rem 0.75rem;
-  border: 1px solid #dee2e6;
+  /* border: 1px solid #dee2e6; */
+  border: 1px solid var(--tertiary-color);
   border-radius: 0.375rem;
   background: #fff;
   color: #71717a;

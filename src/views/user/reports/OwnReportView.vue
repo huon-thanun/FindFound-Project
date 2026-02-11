@@ -6,17 +6,13 @@
         សូមស្វាគមន៍, ទាំងនេះជាការរាយការណ៍ទាំងអស់របស់អ្នក។
       </p>
     </header>
-    <BaseReportCard>
-      <div class="row align-items-center">
-        <div class="m-0 py-0 px-3" style="flex: 4">
-          <BaseInput
-            v-model="search"
-            type="text"
-            placeholder="ស្វែងរក ការរាយការណ៍..."
-          />
+    <div class="card mb-3 shadow border-color">
+      <div class="card-body row">
+        <div class="col-xxl-12">
+          <BaseInput class="w-100" v-model="search" type="text" placeholder="ស្វែងរក ការរាយការណ៍..." />
         </div>
         <!-- CATEGORY -->
-        <div class="mt-2" style="flex: 2">
+        <div class="col-xxl-8 mt-2">
           <!-- <select class="form-select" v-model="cateValue">
             <option value="">All Category</option>
             <option
@@ -27,104 +23,71 @@
               {{ category.name }}
             </option>
           </select> -->
-          <BaseSelect
-            v-model="cateValue"
-            :items="categoryStore.categories"
-            textField="ប្រភេទនៃការរាយការណ៍ទំាងអស់"
-            labelField="name"
-            valueField="id"
-          />
+          <div class="row">
+            <div class="col-xxl-5">
+              <BaseSelect v-model="cateValue" :items="categoryStore.categories" textField="ប្រភេទនៃការរាយការណ៍ទំាងអស់"
+                labelField="name" valueField="id" />
+            </div>
+          </div>
         </div>
-        <div
-          class="d-flex justify-content-end align-items-center"
-          style="flex: 1"
-        >
-          <BaseButton variant="dark" @click="clearFilter">
-            សម្អាតការចម្រោះ
+        <div class="col-xxl-4 mt-1 text-end" style="flex: 1">
+          <BaseButton variant="outline_primary" icon="stars" @click="clearFilter">
+            សម្អាតការតម្រៀប
           </BaseButton>
         </div>
       </div>
-    </BaseReportCard>
-    <div
-      class="mt-3 mb-1 align-items-center d-flex justify-content-between flex-wrap"
-    >
+    </div>
+    <div class="mt-3 mb-1 align-items-center d-flex justify-content-between flex-wrap">
       <div class="btn-group bg-btn-group my-1">
-        <button
-          class="btn-filter"
-          :class="{ active: activeFilter === '' }"
-          @click="btnFilterAllReport"
-        >
+        <button class="btn-filter" :class="{ Active: activeFilter === '' }" @click="btnFilterAllReport">
           ទាំងអស់
         </button>
 
-        <button
-          class="btn-filter"
-          :class="{ active: activeFilter === 'LOST' }"
-          @click="btnFilterReportType('LOST')"
-        >
+        <button class="btn-filter" :class="{ Active: activeFilter === 'LOST' }" @click="btnFilterReportType('LOST')">
           បាត់
         </button>
 
-        <button
-          class="btn-filter"
-          :class="{ active: activeFilter === 'FOUND' }"
-          @click="btnFilterReportType('FOUND')"
-        >
+        <button class="btn-filter" :class="{ Active: activeFilter === 'FOUND' }" @click="btnFilterReportType('FOUND')">
           រកឃើញ
         </button>
       </div>
       <div class="d-flex gap-2 align-items-center my-1">
         <div class="mt-2" style="width: 150px">
-          <BaseSelect
-            class="w-100"
-            v-model="sortDir"
-            :items="sortDirData"
-            labelField="name"
-            valueField="id"
-          />
+          <BaseSelect class="w-100" v-model="sortDir" :items="sortDirData" labelField="name" valueField="id" />
         </div>
       </div>
     </div>
     <div class="card border-0 box-shadow p-4 mb-3">
       <div class="d-flex justify-content-between align-items-center mb-4">
         <h5 class="fw-bold mb-0">របាយការណ៍</h5>
-        <button
+        <!-- <button
           class="btn btn-dark px-4 py-2 rounded-3 fw-bold shadow-sm"
           @click="btnHandleCreateReport"
         >
           បង្កើតការរាយការណ៍
-        </button>
+        </button> -->
+        <BaseButton variant="primary" icon="file-earmark-plus" @click="btnHandleCreateReport">បង្កើតការរាយការណ៍
+        </BaseButton>
       </div>
       <div class="w-100 center2" v-if="reportStore.isLoadingGetOwnReports">
         <div class="spinner-border" role="status">
           <span class="visually-hidden">Loading...</span>
         </div>
       </div>
-      <div
-        v-else-if="reportStore.ownReports.length <= 0"
-        class="my-3 col-12 center2"
-      >
+      <div v-else-if="reportStore.ownReports.length <= 0" class="my-3 col-12 center2">
         <div class="w-100 d-flex flex-column align-items-center p-3 text-muted">
           <i class="bi bi-exclamation-circle" style="font-size: 35px"></i>
           <h3 class="m-0">No Reports Found</h3>
         </div>
       </div>
-      <div
-        v-else
-        class="report-item p-3 border rounded-3 bg-white mb-3 box-shadow"
-        v-for="report in reportStore.ownReports"
-        :key="report.id"
-      >
+      <div v-else class="report-item p-3 border rounded-3 bg-white mb-3 box-shadow"
+        v-for="report in reportStore.ownReports" :key="report.id">
         <div class="row align-items-center g-3">
           <div class="col-2 -md-2 col-xl-2">
-            <img
-              :src="
-                report.reportImages && report.reportImages.length > 0
-                  ? report.reportImages[0].name
-                  : defaultImage
-              "
-              style="width: 80px; height: 80px; border: 1px solid black"
-            />
+            <img :src="report.reportImages && report.reportImages.length > 0
+                ? report.reportImages[0].name
+                : defaultImage
+              " style="width: 80px; height: 80px; border: 1px solid black" />
           </div>
 
           <div class="col-10 col-md-5 col-xl-5 col-xxl-5">
@@ -132,19 +95,13 @@
               <div class="col-12 col-xl-6">
                 <h6 class="fw-bold mb-0 title">{{ report.title }}</h6>
               </div>
-              <div class="col-12 col-xl-6">
-                <span
-                  class="badge rounded-pill px-2"
-                  style="font-size: 0.7rem"
-                  :class="report.reportType?.name.toLowerCase()"
-                >
+              <div class="col-12 col-xl-6 d-flex">
+                <span class="badge rounded-pill px-2 me-2" style="font-size: 0.7rem"
+                  :class="report.reportType?.name.toLowerCase()">
                   {{ report.reportType?.name }}
                 </span>
-                <span
-                  class="badge border rounded-pill px-2"
-                  style="font-size: 0.7rem"
-                  :class="report.status?.toLowerCase()"
-                >
+                <span class="badge border rounded-pill px-2" style="font-size: 0.7rem"
+                  :class="report.status?.toLowerCase()">
                   {{ report.status }}
                 </span>
               </div>
@@ -154,8 +111,7 @@
                 <i class="bi bi-geo-alt me-1 text-danger"></i>
                 {{ report.locationText }}
               </span>
-              <span
-                ><i class="bi bi-calendar3 me-1"></i>
+              <span><i class="bi bi-calendar3 me-1"></i>
                 {{ formatDate(report.eventDate) }}
               </span>
             </div>
@@ -163,29 +119,20 @@
 
           <div class="col-12 col-md-5 col-xl-5 col-xxl-5">
             <div class="btn-group ms-5 shadow-sm">
-              <button
-                class="btn btn-action btn-outline-secondary"
-                @click="gotoDetailPage(report.id)"
-              >
+              <button class="btn btn-action btn-outline-secondary" @click="gotoDetailPage(report.id)">
                 <span class="icon text-warning me-2">
                   <i class="bi bi-eye"></i>
                 </span>
                 <span class="btn-title">មើល</span>
               </button>
-              <button
-                class="btn btn-action btn-outline-secondary"
-                @click="btnHandleEditReport(report.id)"
-              >
+              <button class="btn btn-action btn-outline-secondary" @click="btnHandleEditReport(report.id)">
                 <span class="icon text-primary me-2">
                   <i class="bi bi-pencil-square"></i>
                 </span>
 
                 <span class="btn-title"> កែសម្រួល </span>
               </button>
-              <button
-                class="btn btn-action btn-outline-secondary"
-                @click="btnHandleDeleteOwnReport(report.id)"
-              >
+              <button class="btn btn-action btn-outline-secondary" @click="btnHandleDeleteOwnReport(report.id)">
                 <span class="icon text text-danger me-2">
                   <i class="bi bi-trash"></i>
                 </span>
@@ -199,18 +146,11 @@
 
     <!-- pagination -->
 
-    <div
-      v-if="
-        reportStore.ownReportMeta?.totalPages > 1 &&
-        !reportStore.isLoadingGetOwnReports
-      "
-      class="d-flex gap-2 justify-content-center"
-    >
-      <BaseButton
-        variant="danger"
-        @click="PreviousPage"
-        :disabled="!reportStore.ownReportMeta?.hasPreviousPage"
-      >
+    <div v-if="
+      reportStore.ownReportMeta?.totalPages > 1 &&
+      !reportStore.isLoadingGetOwnReports
+    " class="d-flex gap-2 justify-content-center">
+      <BaseButton variant="danger" @click="PreviousPage" :disabled="!reportStore.ownReportMeta?.hasPreviousPage">
         Prev
       </BaseButton>
 
@@ -223,11 +163,7 @@
         {{ p }}
       </BaseButton> -->
 
-      <BaseButton
-        variant="primary"
-        @click="nextPage"
-        :disabled="!reportStore.ownReportMeta?.hasNextPage"
-      >
+      <BaseButton variant="primary" @click="nextPage" :disabled="!reportStore.ownReportMeta?.hasNextPage">
         Next
       </BaseButton>
     </div>
@@ -238,23 +174,13 @@
         <p>Do you want to delete?</p>
       </template>
       <template #btnClose>
-        <BaseButton
-          variant="cancel"
-          icon="x-circle"
-          class="col-6"
-          @click="showModal = false"
-        >
+        <BaseButton variant="cancel" icon="x-circle" class="col-6" @click="showModal = false">
           Close
         </BaseButton>
       </template>
       <template #btnActive>
-        <BaseButton
-          icon="box"
-          class="col-6"
-          variant="danger"
-          :isLoading="reportStore.isLoadingDeleteOwnReport"
-          @click="btnHandleConfirmDelete"
-        >
+        <BaseButton icon="box" class="col-6" variant="danger" :isLoading="reportStore.isLoadingDeleteOwnReport"
+          @click="btnHandleConfirmDelete">
           Delete
         </BaseButton>
       </template>
@@ -266,12 +192,7 @@
       </template>
 
       <template #btnActive>
-        <BaseButton
-          icon="box"
-          class="col-6"
-          variant="primary"
-          @click="showMessageModal = false"
-        >
+        <BaseButton icon="box" class="col-6" variant="primary" @click="showMessageModal = false">
           យល់ព្រម
         </BaseButton>
       </template>
@@ -287,6 +208,7 @@ import { formatDate } from "@/utils/formatDate";
 import { useRouter } from "vue-router";
 
 import BaseReportCard from "@/components/base/BaseReportCard.vue";
+import BaseButton from "@/components/base/BaseButton.vue";
 
 const reportStore = useReportStore();
 const categoryStore = useCategoryStore();
@@ -547,7 +469,8 @@ const PreviousPage = async () => {
   transition:
     transform 0.2s,
     box-shadow 0.2s;
-  background-color: #fafafa !important; /* Matches the slight grey contrast in the screenshot */
+  background-color: #fafafa !important;
+  /* Matches the slight grey contrast in the screenshot */
 }
 
 .report-item:hover {
@@ -564,6 +487,7 @@ const PreviousPage = async () => {
   background-color: #f8f9fa;
   color: #212529;
 }
+
 .btn-action {
   display: flex;
   justify-content: center !important;
@@ -575,27 +499,33 @@ const PreviousPage = async () => {
 .btn-action:hover {
   background-color: #dee2e6 !important;
 }
+
 .box-shadow {
   box-shadow:
     rgba(0, 0, 0, 0.05) 0px 6px 24px 0px,
     rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
 }
+
 .link-detail {
   text-decoration: none;
 }
+
 .center2 {
   display: flex !important;
   justify-content: center;
   align-items: center;
 }
+
 .lost {
   background: rgb(255, 0, 0);
   color: rgb(255, 255, 255);
 }
+
 .found {
   background: rgb(0, 211, 0);
   color: rgb(255, 255, 255);
 }
+
 .active {
   background: rgba(0, 0, 255, 0.2);
   color: rgba(0, 0, 255, 0.8);
@@ -604,6 +534,7 @@ const PreviousPage = async () => {
   background: rgba(92, 92, 92, 0.5);
   color: rgba(255, 255, 255, 0.8);
 }
+
 /* ----------- */
 .bg-btn-group {
   padding: 5px;
@@ -619,13 +550,20 @@ const PreviousPage = async () => {
   border-radius: 15px;
   cursor: pointer;
 }
-.bg-btn-group .btn-filter.active {
-  background-color: #fff;
+
+.bg-btn-group .btn-filter.Active {
+  background-color: #ffffff;
 }
+
 @media (max-width: 912px) {
+
   /* CSS rules for screens 650px or smaller */
   .btn-action .btn-title {
     display: none;
   }
+}
+
+.border-color{
+  border-color: var(--tertiary-color);
 }
 </style>
