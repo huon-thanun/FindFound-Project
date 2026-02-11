@@ -92,6 +92,7 @@
           </ul>
         </div>
       </div>
+      </div>
     </div>
   </nav>
 
@@ -200,7 +201,7 @@ const logout = () => {
   transform: translateX(-300px);
 }
 
-.navbar-brand-container {
+/* .navbar-brand-container { */
 .search-input {
   width: 100%;
   padding: 10px 15px 10px 45px;
@@ -242,6 +243,7 @@ const logout = () => {
   object-fit: contain;
   max-width: 150px;
   /* Adjust based on your logo width */
+}
 .icon-action-btn:hover {
   background: #f5f3ff;
   color: #7c3aed;
@@ -285,6 +287,7 @@ const logout = () => {
     width: calc(100% - 280px);
     margin-left: 280px;
   }
+}
 }
 
 .nav-glass-container {
@@ -474,6 +477,7 @@ const logout = () => {
   color: #3b1e54;
   padding-left: 18px;
   /* Slight slide effect */
+}
 .p-item:hover {
   background: #f5f3ff;
   color: #7c3aed;
