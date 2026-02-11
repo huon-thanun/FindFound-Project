@@ -180,7 +180,7 @@ const handleActionButton = () => {
 .btn-details {
   flex: 1;
   background: var(--primary-color);
-  color: var(--textOnPrimary);
+  color: #fff !important;
   border: none;
   padding: 12px;
   border-radius: 14px;

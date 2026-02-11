@@ -115,7 +115,6 @@
             </div>
           </div>
         </div>
-      </div>
 
       <div class="row g-4">
         <div class="col-xl-8">
@@ -136,7 +135,6 @@
                   }}
                 </button>
               </div>
-            </div>
 
             <div class="transaction-container mt-3">
               <div v-for="item in filteredItems" :key="item.id" class="activity-item">
@@ -157,31 +155,41 @@
                       }}</span>
                     </p>
                   </div>
-                </div>
 
-                <div class="transaction-status" :class="item.reportType?.name === 'FOUND' ? 'found' : 'lost'">
-                  {{ item.reportType?.name === "FOUND" ? "✓ ប្រទះឃើញ" : "⚠ បានបាត់" }}
+                  <div
+                    class="transaction-status"
+                    :class="
+                      item.reportType?.name === 'FOUND' ? 'found' : 'lost'
+                    "
+                  >
+                    {{
+                      item.reportType?.name === "FOUND"
+                        ? "✓ ប្រទះឃើញ"
+                        : "⚠ បានបាត់"
+                    }}
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
 
-        <div class="col-xl-4">
-          <div class="content-card">
-            <div class="content-card-header">
-              <h5 class="m-0"><i class="bi bi-pie-chart me-2"></i>តាមប្រភេទ</h5>
-            </div>
+          <div class="col-xl-4">
+            <div class="content-card">
+              <div class="content-card-header">
+                <h5 class="m-0">
+                  <i class="bi bi-pie-chart me-2"></i>តាមប្រភេទ
+                </h5>
+              </div>
 
-            <div class="chart-section">
-              <div class="donut-chart-wrapper">
-                <div class="donut-visual" :style="donutStyle">
-                  <div class="donut-inner">
-                    <span class="total-num">{{ totalItems }}</span>
-                    <span class="total-text">សរុប</span>
+              <div class="chart-section">
+                <div class="donut-chart-wrapper">
+                  <div class="donut-visual" :style="donutStyle">
+                    <div class="donut-inner">
+                      <span class="total-num">{{ totalItems }}</span>
+                      <span class="total-text">សរុប</span>
+                    </div>
                   </div>
                 </div>
-              </div>
 
               <div class="legend-list mt-4">
                 <div v-for="cat in categoryStats" :key="cat.category.name" class="legend-row">
@@ -197,6 +205,7 @@
             </div>
           </div>
         </div>
+      </div>
       </div>
     </main>
   </div>
