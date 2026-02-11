@@ -194,41 +194,51 @@ const prevTestimonial = () => {
 
 <template>
   <div class="about-page">
-    <!-- HERO -->
-    <div class="row container-fluid mx-auto align-items-center hero px-0">
-      <section class="col-xl-7 col-12">
-        <div class="container px-0 text-center">
-          <div class="hero-badge" data-aos="fade-down">
-            <i class="bi bi-stars"></i>
-            វេទិកាស្វែងរកវត្ថុបាត់បង់ល្អបំផុតនៅកម្ពុជា
-          </div>
-          <h1 class="hero-title" data-aos="fade-down" data-aos-delay="100">
-            អំពី <span>FindFound</span>
-          </h1>
-          <p class="hero-subtitle" data-aos="fade-up" data-aos-delay="200">
-            វេទិកាឆ្លាតវៃសម្រាប់ការស្វែងរក និងប្រគល់វត្ថុបាត់បង់<br />
-            ដែលតភ្ជាប់មនុស្សជាមួយអ្វីដែលពួកគេបានបាត់បង់
-          </p>
+    <!-- Hero Banner -->
+    <section class="hero-section">
+      <div class="hero-bg"></div>
 
-          <!-- Stats Section -->
-          <div class="stats-row" data-aos="zoom-in" data-aos-delay="400">
-            <div v-for="(stat, i) in stats" :key="i" class="stat-item">
-              <div class="stat-number">{{ stat.number }}{{ stat.suffix }}</div>
-              <div class="stat-label">{{ stat.label }}</div>
+      <!-- Very subtle floating shapes -->
+      <div class="floating-shapes">
+        <div class="shape shape-1"></div>
+        <div class="shape shape-2"></div>
+        <div class="shape shape-3"></div>
+      </div>
+
+      <div class="container position-relative">
+        <div class="row align-items-center g-5">
+          <!-- Text Column -->
+          <div class="col-lg-6 hero-text-col" data-aos="fade-right">
+            <div class="badge-modern mb-4">
+              <i class="bi bi-chat-dots-fill me-2"></i>
+              ទំនាក់ទំនង
             </div>
+            <h1 class="hero-title">
+              ទាក់ទងមក <span class="gradient-text">ពួកយើង</span>
+              <br class="d-none d-md-block" />
+              យើងរីករាយជួយអ្នកគ្រប់ពេល
+            </h1>
+            <p class="hero-subtitle">
+              ផ្ញើសារមកយើងឥឡូវនេះ យើងនឹងឆ្លើយតបក្នុងរយៈពេលខ្លីបំផុត
+              និងវិជ្ជាជីវៈ។ សេវាកម្ម 24/7 សុវត្ថិភាពខ្ពស់។
+            </p>
+          </div>
+
+          <!-- Illustration Column -->
+          <div
+            class="col-lg-6 hero-illustration"
+            data-aos="fade-left"
+            data-aos-delay="200"
+          >
+            <img
+              src="../../../assets/images/contact/hero-banner.png"
+              alt="Contact Us Illustration"
+              class="hero-img"
+            />
           </div>
         </div>
-      </section>
-      <section class="col-5 d-none d-xl-block text-center p-0">
-        <img
-          class="object-fit-cover"
-          src="@/assets/images/background/image-Photoroom (1).png"
-          width="500"
-          alt=""
-        />
-      </section>
-    </div>
-
+      </div>
+    </section>
     <!-- MISSION -->
     <section class="section col-8 mx-auto">
       <div class="container">
@@ -491,67 +501,125 @@ const prevTestimonial = () => {
   background: linear-gradient(135deg, #f4f7ff, #eef1ff);
   min-height: 100vh;
 }
-
-/* ===== HERO ===== */
-.hero {
-  padding: 60px 20px;
-  background: linear-gradient(135deg, var(--primary-color, #6366f1), #8b5cf6);
-  color: white;
-  border-radius: 0 0 30px 30px;
+/* ===== HERO SECTION ===== */
+.hero-section {
   position: relative;
+  min-height: 80vh;
+  padding: 80px 0;
   overflow: hidden;
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  color: white;
 }
 
-.hero::before {
-  content: "";
+.hero-bg {
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background:
-    radial-gradient(
-      circle at 20% 50%,
-      rgba(255, 255, 255, 0.1) 0%,
-      transparent 50%
-    ),
-    radial-gradient(
-      circle at 80% 80%,
-      rgba(255, 255, 255, 0.1) 0%,
-      transparent 50%
-    );
+  inset: 0;
+  background: radial-gradient(
+    circle at 30% 20%,
+    rgba(255, 255, 255, 0.12) 0%,
+    transparent 60%
+  );
   pointer-events: none;
 }
 
-.hero-badge {
-  display: inline-block;
-  background: rgba(255, 255, 255, 0.2);
-  backdrop-filter: blur(10px);
-  padding: 8px 20px;
-  border-radius: 25px;
-  font-size: 0.9rem;
-  margin-bottom: 20px;
-  border: 1px solid rgba(255, 255, 255, 0.3);
+.floating-shapes {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.shape {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(4px);
+  animation: float 18s infinite ease-in-out;
+}
+
+.shape-1 {
+  width: 180px;
+  height: 180px;
+  top: 15%;
+  left: 10%;
+  animation-delay: 0s;
+}
+.shape-2 {
+  width: 140px;
+  height: 140px;
+  bottom: 20%;
+  right: 12%;
+  animation-delay: 6s;
+}
+.shape-3 {
+  width: 220px;
+  height: 220px;
+  top: 55%;
+  right: 18%;
+  animation-delay: 12s;
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+  50% {
+    transform: translate(30px, -30px) rotate(10deg);
+  }
 }
 
 .hero-title {
-  font-size: clamp(2.5rem, 5vw, 4.5rem);
+  font-size: clamp(2.6rem, 6vw, 4.8rem);
   font-weight: 800;
-  position: relative;
-  margin-bottom: 20px;
+  line-height: 1.1;
+  margin-bottom: 1.2rem;
+  text-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
 }
 
-.hero-title span {
-  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2);
+.gradient-text {
+  background: linear-gradient(90deg, #ffffff, #e0e7ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .hero-subtitle {
-  max-width: 700px;
-  margin: 0 auto;
-  font-size: 1.2rem;
+  font-size: 1.25rem;
+  line-height: 1.7;
+  max-width: 520px;
   opacity: 0.95;
-  line-height: 1.8;
-  position: relative;
+  margin-bottom: 1.5rem;
+}
+
+.hero-img {
+  width: 100%;
+  max-width: 520px;
+  height: auto;
+  border-radius: 24px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.35);
+  background: rgba(255, 255, 255, 0.85);
+  padding: 20px;
+  object-fit: contain;
+  transition: all 0.5s ease;
+}
+
+.hero-illustration:hover .hero-img {
+  transform: scale(1.04) translateY(-10px);
+}
+
+/* Mobile adjustments */
+@media (max-width: 992px) {
+  .hero-section {
+    padding: 60px 0 80px;
+    min-height: auto;
+  }
+  .hero-title {
+    font-size: clamp(2.4rem, 8vw, 3.8rem);
+  }
+  .hero-img {
+    max-width: 420px;
+    margin: 0 auto;
+    display: block;
+  }
 }
 
 /* ===== STATS ===== */
