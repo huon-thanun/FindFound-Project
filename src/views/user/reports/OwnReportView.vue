@@ -121,105 +121,113 @@
           <h3 class="m-0">No Reports Found</h3>
         </div>
       </div>
-      <div v-else class="report-item p-3 border rounded-3 bg-white mb-3 box-shadow"
-        v-for="report in reportStore.ownReports" :key="report.id">
+      <div
+        v-else
+        class="report-item p-3 border rounded-3 bg-white mb-3 box-shadow"
+        v-for="report in reportStore.ownReports"
+        :key="report.id"
+      >
         <div class="row align-items-center g-3">
           <div class="col-2 -md-2 col-xl-2">
-            <img :src="report.reportImages && report.reportImages.length > 0
-              ? report.reportImages[0].name
-              : defaultImage
-              " style="width: 80px; height: 80px; border: 1px solid black" />
+            <img
+              :src="
+                report.reportImages && report.reportImages.length > 0
+                  ? report.reportImages[0].name
+                  : defaultImage
+              "
+              style="width: 80px; height: 80px; border: 1px solid black"
+            />
           </div>
 
-            <div>
-              <div class="row align-items-center mb-1">
-                <div class="col-12 col-xl-6">
-                  <h6 class="fw-bold mb-0 title">{{ report.title }}</h6>
-                </div>
-                <div class="col-12 col-xl-6 d-flex">
-                  <span
-                    class="badge rounded-pill px-2 me-2"
-                    style="font-size: 0.7rem"
-                    :class="report.reportType?.name.toLowerCase()"
-                  >
-                    {{ report.reportType?.name }}
-                  </span>
-                  <span
-                    class="badge border rounded-pill px-2"
-                    style="font-size: 0.7rem"
-                    :class="report.status?.toLowerCase()"
-                  >
-                    {{ report.status }}
-                  </span>
-                </div>
+          <div>
+            <div class="row align-items-center mb-1">
+              <div class="col-12 col-xl-6">
+                <h6 class="fw-bold mb-0 title">{{ report.title }}</h6>
               </div>
-              <div class="d-flex flex-wrap text-muted small mt-2">
-                <span>
-                  <i class="bi bi-geo-alt me-1 text-danger"></i>
-                  {{ report.locationText }}
+              <div class="col-12 col-xl-6 d-flex">
+                <span
+                  class="badge rounded-pill px-2 me-2"
+                  style="font-size: 0.7rem"
+                  :class="report.reportType?.name.toLowerCase()"
+                >
+                  {{ report.reportType?.name }}
                 </span>
                 <span
-                  ><i class="bi bi-calendar3 me-1"></i>
-                  {{ formatDate(report.eventDate) }}
+                  class="badge border rounded-pill px-2"
+                  style="font-size: 0.7rem"
+                  :class="report.status?.toLowerCase()"
+                >
+                  {{ report.status }}
                 </span>
               </div>
             </div>
-          </div>
-
-          <div class="btn-action-group">
-            <div class="btn-group ms-5 shadow-sm">
-              <button
-                class="btn btn-action btn-outline-secondary"
-                @click="gotoDetailPage(report.id)"
-              >
-                <span class="icon text-warning">
-                  <i class="bi bi-eye"></i>
-                </span>
-                <span class="btn-title">មើល</span>
-              </button>
-              <button
-                class="btn btn-action btn-outline-secondary"
-                @click="btnHandleEditReport(report.id)"
-              >
-                <span class="icon text-primary">
-                  <i class="bi bi-pencil-square"></i>
-                </span>
-
-                <span class="btn-title"> កែសម្រួល </span>
-              </button>
-              <button
-                class="btn btn-action btn-outline-secondary"
-                @click="btnHandleDeleteOwnReport(report.id)"
-              >
-                <span class="icon text text-danger">
-                  <i class="bi bi-trash"></i>
-                </span>
-                <span class="btn-title"> លុប </span>
-              </button>
+            <div class="d-flex flex-wrap text-muted small mt-2">
+              <span>
+                <i class="bi bi-geo-alt me-1 text-danger"></i>
+                {{ report.locationText }}
+              </span>
+              <span
+                ><i class="bi bi-calendar3 me-1"></i>
+                {{ formatDate(report.eventDate) }}
+              </span>
             </div>
+          </div>
+        </div>
+
+        <div class="btn-action-group">
+          <div class="btn-group ms-5 shadow-sm">
+            <button
+              class="btn btn-action btn-outline-secondary"
+              @click="gotoDetailPage(report.id)"
+            >
+              <span class="icon text-warning">
+                <i class="bi bi-eye"></i>
+              </span>
+              <span class="btn-title">មើល</span>
+            </button>
+            <button
+              class="btn btn-action btn-outline-secondary"
+              @click="btnHandleEditReport(report.id)"
+            >
+              <span class="icon text-primary">
+                <i class="bi bi-pencil-square"></i>
+              </span>
+
+              <span class="btn-title"> កែសម្រួល </span>
+            </button>
+            <button
+              class="btn btn-action btn-outline-secondary"
+              @click="btnHandleDeleteOwnReport(report.id)"
+            >
+              <span class="icon text text-danger">
+                <i class="bi bi-trash"></i>
+              </span>
+              <span class="btn-title"> លុប </span>
+            </button>
           </div>
         </div>
       </div>
     </div>
+  </div>
 
-    <!-- pagination -->
+  <!-- pagination -->
 
-    <div
-      v-if="
-        reportStore.ownReportMeta?.totalPages > 1 &&
-        !reportStore.isLoadingGetOwnReports
-      "
-      class="d-flex gap-2 justify-content-center"
+  <div
+    v-if="
+      reportStore.ownReportMeta?.totalPages > 1 &&
+      !reportStore.isLoadingGetOwnReports
+    "
+    class="d-flex gap-2 justify-content-center"
+  >
+    <BaseButton
+      variant="danger"
+      @click="PreviousPage"
+      :disabled="!reportStore.ownReportMeta?.hasPreviousPage"
     >
-      <BaseButton
-        variant="danger"
-        @click="PreviousPage"
-        :disabled="!reportStore.ownReportMeta?.hasPreviousPage"
-      >
-        Prev
-      </BaseButton>
+      Prev
+    </BaseButton>
 
-      <!-- <BaseButton
+    <!-- <BaseButton
         v-for="p in visiblePages"
         :key="p"
         :variant="p === page ? 'primary' : 'cancel'"
@@ -228,60 +236,60 @@
         {{ p }}
       </BaseButton> -->
 
-      <BaseButton
-        variant="primary"
-        @click="nextPage"
-        :disabled="!reportStore.ownReportMeta?.hasNextPage"
-      >
-        Next
-      </BaseButton>
-    </div>
-
-    <!--Confirm Message Modal -->
-    <BaseModal :icon="'trash'" :theme="'primary'" :isClose="showModal">
-      <template #body>
-        <p>Do you want to delete?</p>
-      </template>
-      <template #btnClose>
-        <BaseButton
-          variant="cancel"
-          icon="x-circle"
-          class="col-6"
-          @click="showModal = false"
-        >
-          Close
-        </BaseButton>
-      </template>
-      <template #btnActive>
-        <BaseButton
-          icon="box"
-          class="col-6"
-          variant="danger"
-          :isLoading="reportStore.isLoadingDeleteOwnReport"
-          @click="btnHandleConfirmDelete"
-        >
-          Delete
-        </BaseButton>
-      </template>
-    </BaseModal>
-    <!-- Message Model  -->
-    <BaseModal :icon="msgIcon" :theme="'primary'" :isClose="showMessageModal">
-      <template #body>
-        <p>{{ reportStore.deleteMessage.message }}</p>
-      </template>
-
-      <template #btnActive>
-        <BaseButton
-          icon="box"
-          class="col-6"
-          variant="primary"
-          @click="showMessageModal = false"
-        >
-          យល់ព្រម
-        </BaseButton>
-      </template>
-    </BaseModal>
+    <BaseButton
+      variant="primary"
+      @click="nextPage"
+      :disabled="!reportStore.ownReportMeta?.hasNextPage"
+    >
+      Next
+    </BaseButton>
   </div>
+
+  <!--Confirm Message Modal -->
+  <BaseModal :icon="'trash'" :theme="'primary'" :isClose="showModal">
+    <template #body>
+      <p>Do you want to delete?</p>
+    </template>
+    <template #btnClose>
+      <BaseButton
+        variant="cancel"
+        icon="x-circle"
+        class="col-6"
+        @click="showModal = false"
+      >
+        Close
+      </BaseButton>
+    </template>
+    <template #btnActive>
+      <BaseButton
+        icon="box"
+        class="col-6"
+        variant="danger"
+        :isLoading="reportStore.isLoadingDeleteOwnReport"
+        @click="btnHandleConfirmDelete"
+      >
+        Delete
+      </BaseButton>
+    </template>
+  </BaseModal>
+  <!-- Message Model  -->
+  <BaseModal :icon="msgIcon" :theme="'primary'" :isClose="showMessageModal">
+    <template #body>
+      <p>{{ reportStore.deleteMessage.message }}</p>
+    </template>
+
+    <template #btnActive>
+      <BaseButton
+        icon="box"
+        class="col-6"
+        variant="primary"
+        @click="showMessageModal = false"
+      >
+        យល់ព្រម
+      </BaseButton>
+    </template>
+  </BaseModal>
+  <!-- </div> -->
 </template>
 
 <script setup>

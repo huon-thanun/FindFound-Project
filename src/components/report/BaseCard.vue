@@ -23,19 +23,23 @@
         <i class="bi bi-geo-alt-fill text-danger"></i> {{ location }}
       </p>
       <div class="card-action">
-        <button
+        <!-- <button
           class="btn-details tag-box-shadow-out"
           @click="handleActionButton"
         >
           <i class="bi bi-arrow-right"></i>
           {{ btnTitle }}
-        </button>
+        </button> -->
+        <base-button icon="arrow-right" @click="handleActionButton">
+          {{ btnTitle }}
+        </base-button>
       </div>
     </div>
   </div>
 </template>
 <script setup>
 import { formatDate } from "@/utils/formatDate";
+import BaseButton from "../base/BaseButton.vue";
 const props = defineProps({
   category: {
     type: Object,
