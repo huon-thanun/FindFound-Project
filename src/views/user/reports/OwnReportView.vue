@@ -281,7 +281,6 @@
         </BaseButton>
       </template>
     </BaseModal>
-  </div>
 </template>
 
 <script setup>
