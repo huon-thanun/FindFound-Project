@@ -21,9 +21,7 @@
 
       <!-- TITLE -->
       <h2>កំណត់ពាក្យសម្ងាត់ឡើងវិញ</h2>
-      <p class="subtitle">
-        សូមបង្កើតពាក្យសម្ងាត់ថ្មីសម្រាប់គណនីរបស់អ្នក
-      </p>
+      <p class="subtitle">សូមបង្កើតពាក្យសម្ងាត់ថ្មីសម្រាប់គណនីរបស់អ្នក</p>
 
       <!-- FORM -->
       <form @submit.prevent="handleReset">
@@ -66,104 +64,106 @@
 </template>
 
 <script setup>
-import { ref, reactive, onMounted } from 'vue'
-import axios from 'axios'
-import { useRoute, useRouter } from 'vue-router'
+import { ref, reactive, onMounted } from "vue";
+import axios from "axios";
+import { useRoute, useRouter } from "vue-router";
 
-const route = useRoute()
-const router = useRouter()
+const route = useRoute();
+const router = useRouter();
 
-const password = ref('')
-const confirm = ref('')
-const success = ref('')
-const loading = ref(false)
+const password = ref("");
+const confirm = ref("");
+const success = ref("");
+const loading = ref(false);
 
 // Error object for inline validation
 const errors = reactive({
-  password: '',
-  confirm: '',
-  general: ''
-})
+  password: "",
+  confirm: "",
+  general: "",
+});
 
-const token = ref('')
+const token = ref("");
 
 onMounted(() => {
-  token.value = route.query.token
+  token.value = route.query.token;
 
   if (!token.value) {
-    errors.general = 'Reset token not found. Please request a new reset link.'
+    errors.general = "Reset token not found. Please request a new reset link.";
   }
-})
+});
 
 // Clear individual field error on input
 const clearError = (field) => {
-  errors[field] = ''
-  errors.general = ''
-}
+  errors[field] = "";
+  errors.general = "";
+};
 
 const handleReset = async () => {
-  if (!token.value) return
+  if (!token.value) return;
 
   // Clear previous messages
-  success.value = ''
-  Object.keys(errors).forEach(key => errors[key] = '')
+  success.value = "";
+  Object.keys(errors).forEach((key) => (errors[key] = ""));
 
-  let hasError = false
+  let hasError = false;
 
   // Client-side validation
   if (!password.value) {
-    errors.password = 'សូមបញ្ចូលពាក្យសម្ងាត់ថ្មី'
-    hasError = true
+    errors.password = "សូមបញ្ចូលពាក្យសម្ងាត់ថ្មី";
+    hasError = true;
   }
 
   if (!confirm.value) {
-    errors.confirm = 'សូមបញ្ជាក់ពាក្យសម្ងាត់ម្តងទៀត'
-    hasError = true
+    errors.confirm = "សូមបញ្ជាក់ពាក្យសម្ងាត់ម្តងទៀត";
+    hasError = true;
   }
 
   if (password.value && confirm.value && password.value !== confirm.value) {
-    errors.confirm = 'ពាក្យសម្ងាត់មិនដូចគ្នា'
-    hasError = true
+    errors.confirm = "ពាក្យសម្ងាត់មិនដូចគ្នា";
+    hasError = true;
   }
 
-  if (hasError) return
+  if (hasError) return;
 
-  loading.value = true
+  loading.value = true;
 
   try {
     const res = await axios.post(
       `${import.meta.env.VITE_API_BASE_URL}/auth/reset-password`,
       {
         token: token.value,
-        newPassword: password.value
-      }
-    )
+        newPassword: password.value,
+      },
+    );
 
     if (res.data?.result === true) {
-      success.value = res.data.message || 'កំណត់ពាក្យសម្ងាត់បានជោគជ័យ'
+      success.value = "កំណត់ពាក្យសម្ងាត់ថ្មីបានជោគជ័យ 🎉";
 
-      password.value = ''
-      confirm.value = ''
+      password.value = "";
+      confirm.value = "";
 
       // Redirect to login after 2 seconds
       setTimeout(() => {
-        router.push('/login')
-      }, 2000)
+        router.push("/login");
+      }, 2000);
     } else {
-      errors.general = res.data?.message || 'Reset failed'
+      errors.general = res.data?.message || "Reset failed";
     }
   } catch (err) {
-    errors.general =
-      err.response?.data?.details ||
-      err.response?.data?.message ||
-      'Reset token expired or invalid'
+    const message = err.response?.data?.message || "";
+
+    if (message.toLowerCase().includes("token")) {
+      errors.general =
+        "តំណភ្ជាប់កំណត់ពាក្យសម្ងាត់បានផុតកំណត់ ឬ មិនត្រឹមត្រូវ។ សូមស្នើសុំម្តងទៀត។";
+    } else {
+      errors.general = "មានបញ្ហាកើតឡើង។ សូមព្យាយាមម្តងទៀត។";
+    }
   } finally {
-    loading.value = false
+    loading.value = false;
   }
-}
+};
 </script>
-
-
 
 <style scoped>
 * {
@@ -213,7 +213,7 @@ h2 {
 
 .subtitle {
   font-size: 0.9rem;
-  color:#7c3aed;
+  color: #7c3aed;
   margin-bottom: 1.6rem;
   line-height: 1.6;
 }
@@ -250,14 +250,16 @@ input:focus {
 button {
   margin-top: 0.8rem;
   padding: 0.75rem;
-  background: linear-gradient(135deg,#8c31e8, #742adb);
+  background: linear-gradient(135deg, #8c31e8, #742adb);
   color: #ffffff;
   border: none;
   border-radius: 12px;
   font-size: 0.95rem;
   font-weight: 600;
   cursor: pointer;
-  transition: transform 0.15s ease, box-shadow 0.2s ease;
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.2s ease;
 }
 
 button:hover:not(:disabled) {
@@ -295,4 +297,3 @@ button:disabled {
   text-align: center;
 }
 </style>
-

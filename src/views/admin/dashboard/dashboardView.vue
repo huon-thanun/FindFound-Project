@@ -16,6 +16,8 @@
     </header>
 
     <main class="main-content p-0">
+
+      <!-- STAT CARDS -->
       <div class="row g-4 mb-5">
         <div
           v-for="(card, index) in Cards"
@@ -43,21 +45,19 @@
           </div>
         </div>
       </div>
+      <!-- ✅ CLOSED row properly -->
 
-      <div class="line-chart-wrapper purple-theme">
+      <!-- LINE CHART -->
+      <div class="line-chart-wrapper purple-theme mb-4">
         <div class="chart-header-mini">
-          <span class="trend-indicator"
-            ><i class="bi bi-arrow-up-short"></i> 12%</span
-          >
+          <span class="trend-indicator">
+            <i class="bi bi-arrow-up-short"></i> 12%
+          </span>
           <div class="v-number-purple">{{ totalItems }} របាយការណ៍</div>
         </div>
 
         <svg viewBox="0 0 1000 200" class="line-chart-svg">
-          <g
-            class="grid-lines"
-            stroke="rgba(139, 92, 246, 0.1)"
-            stroke-width="1"
-          >
+          <g stroke="rgba(139, 92, 246, 0.1)" stroke-width="1">
             <line x1="0" y1="50" x2="1000" y2="50" />
             <line x1="0" y1="150" x2="1000" y2="150" />
           </g>
@@ -68,58 +68,27 @@
             stroke="#8b5cf6"
             stroke-width="5"
             stroke-linecap="round"
-            class="purple-line-path"
           />
 
-          <circle cx="800" cy="150" r="6" fill="#8b5cf6" class="glow-point" />
+          <circle cx="800" cy="150" r="6" fill="#8b5cf6" />
         </svg>
 
         <div class="chart-labels-purple">
-          <span>ច័ន្ទ</span><span>អង្គារ</span><span>ពុធ</span
-          ><span>ព្រហស្បតិ៍</span><span>សុក្រ</span><span>សៅរ៍</span
-          ><span>អាទិត្យ</span>
+          <span>ច័ន្ទ</span><span>អង្គារ</span><span>ពុធ</span>
+          <span>ព្រហស្បតិ៍</span><span>សុក្រ</span>
+          <span>សៅរ៍</span><span>អាទិត្យ</span>
         </div>
       </div>
 
+      <!-- REPORT TREND + MONTH SUMMARY -->
       <div class="row g-4 mb-4">
         <div class="col-lg-8">
           <div class="content-card">
             <div class="content-card-header">
               <h5 class="m-0">
-                <i class="bi bi-graph-up-arrow me-2"></i>និន្នាការរបាយការណ៍
-                (៧ថ្ងៃចុងក្រោយ)
+                <i class="bi bi-graph-up-arrow me-2"></i>
+                និន្នាការរបាយការណ៍ (៧ថ្ងៃចុងក្រោយ)
               </h5>
-              <div class="dropdown">
-                <button
-                  class="btn btn-sm btn-outline-light text-dark border shadow-sm"
-                >
-                  ទាញយក PDF
-                </button>
-              </div>
-            </div>
-            <div
-              class="chart-container"
-              style="height: 300px; position: relative"
-            >
-              <div class="mock-graph">
-                <div class="graph-bar-wrapper">
-                  <div
-                    v-for="n in 7"
-                    :key="n"
-                    class="graph-bar"
-                    :style="{ height: Math.random() * 100 + '%' }"
-                  >
-                    <span class="bar-tooltip"
-                      >{{ Math.floor(Math.random() * 20) }} របាយការណ៍</span
-                    >
-                  </div>
-                </div>
-              </div>
-              <div class="graph-labels">
-                <span>ច័ន្ទ</span><span>អង្គារ</span><span>ពុធ</span
-                ><span>ព្រហស្បតិ៍</span><span>សុក្រ</span><span>សៅរ៍</span
-                ><span>អាទិត្យ</span>
-              </div>
             </div>
           </div>
         </div>
@@ -127,106 +96,88 @@
         <div class="col-lg-4">
           <div class="content-card bg-primary-gradient text-white">
             <h5>សង្ខេបប្រចាំខែ</h5>
-            <div class="mt-4">
-              <div class="d-flex justify-content-between mb-2">
-                <span>រកឃើញសរុប</span>
-                <span class="fw-bold">+12%</span>
-              </div>
-              <div
-                class="progress mb-4"
-                style="height: 8px; background: rgba(255, 255, 255, 0.2)"
-              >
-                <div class="progress-bar bg-white" style="width: 70%"></div>
-              </div>
-              <div class="d-flex justify-content-between mb-2">
-                <span>បាត់បង់សរុប</span>
-                <span class="fw-bold">+5%</span>
-              </div>
-              <div
-                class="tab"
-                :class="{ active: activeTab === 'Found' }"
-                @click="activeTab = 'Found'"
-              >
-                ប្រទះឃើញ
-                <div
-                  class="progress"
-                  style="height: 8px; background: rgba(255, 255, 255, 0.2)"
-                >
-                  <div class="progress-bar bg-warning" style="width: 40%"></div>
-                </div>
-              </div>
-              <hr class="my-4" />
-              <div class="text-center">
-                <small
-                  >អ្នកបានដោះស្រាយបញ្ហាចំនួន
-                  <strong>{{ foundReports }}</strong> ក្នុងខែនេះ!</small
-                >
-              </div>
+            <div class="mt-4 text-center">
+              <small>
+                អ្នកបានដោះស្រាយបញ្ហាចំនួន
+                <strong>{{ foundReports }}</strong>
+                ក្នុងខែនេះ!
+              </small>
             </div>
           </div>
         </div>
+      </div>
 
-        <div class="row g-4">
-          <div class="col-xl-8">
-            <div class="content-card">
-              <div class="content-card-header">
-                <h5 class="m-0">
-                  <i class="bi bi-clock-history me-2"></i>សកម្មភាពថ្មីៗ
-                </h5>
-                <div class="custom-tabs">
-                  <button
-                    v-for="tab in ['All', 'Lost', 'Found']"
-                    :key="tab"
-                    :class="['tab-btn', { active: activeTab === tab }]"
-                    @click="activeTab = tab"
-                  >
-                    {{
-                      tab === "All"
-                        ? "ទាំងអស់"
-                        : tab === "Lost"
-                          ? "បាត់"
-                          : "រកឃើញ"
-                    }}
-                  </button>
-                </div>
-              </div>
+      <!-- RECENT ACTIVITY + DONUT -->
+      <div class="row g-4">
+        <!-- LEFT COLUMN -->
+        <div class="col-xl-8">
+          <div class="content-card">
+            <div class="content-card-header">
+              <h5 class="m-0">
+                <i class="bi bi-clock-history me-2"></i>
+                សកម្មភាពថ្មីៗ
+              </h5>
 
-              <div class="transaction-container mt-3">
-                <div
-                  v-for="item in filteredItems"
-                  :key="item.id"
-                  class="activity-item"
+              <div class="custom-tabs">
+                <button
+                  v-for="tab in ['All', 'Lost', 'Found']"
+                  :key="tab"
+                  :class="['tab-btn', { active: activeTab === tab }]"
+                  @click="activeTab = tab"
                 >
-                  <div class="activity-left">
-                    <div class="img-wrapper">
-                      <img
-                        :src="
-                          item.reportImages?.[0]?.name || '/placeholder.png'
-                        "
-                        alt="item"
-                      />
-                    </div>
-                    <div class="activity-info">
-                      <h6 class="item-title">
-                        {{ item.title }}
-                        <span v-if="isRecent(item.createdAt)" class="badge-new"
-                          >ថ្មី</span
-                        >
-                      </h6>
-                      <p class="item-meta">
-                        <span class="cat-tag">{{ item.category?.name }}</span>
-                        <span class="dot"></span>
-                        <span class="time-tag">{{
-                          dayjs(item.createdAt).format("DD MMM, HH:mm")
-                        }}</span>
-                      </p>
-                    </div>
+                  {{
+                    tab === "All"
+                      ? "ទាំងអស់"
+                      : tab === "Lost"
+                      ? "បាត់"
+                      : "រកឃើញ"
+                  }}
+                </button>
+              </div>
+            </div>
+
+            <div class="transaction-container mt-3">
+              <div
+                v-for="item in filteredItems"
+                :key="item.id"
+                class="activity-item"
+              >
+                <div class="activity-left">
+                  <div class="img-wrapper">
+                    <img
+                      :src="item.reportImages?.[0]?.name || '/placeholder.png'"
+                      alt="item"
+                    />
+                  </div>
+
+                  <div class="activity-info">
+                    <h6 class="item-title">
+                      {{ item.title }}
+                      <span
+                        v-if="isRecent(item.createdAt)"
+                        class="badge-new"
+                      >
+                        ថ្មី
+                      </span>
+                    </h6>
+
+                    <p class="item-meta">
+                      <span class="cat-tag">
+                        {{ item.category?.name }}
+                      </span>
+                      <span class="dot"></span>
+                      <span class="time-tag">
+                        {{ dayjs(item.createdAt).format("DD MMM, HH:mm") }}
+                      </span>
+                    </p>
                   </div>
 
                   <div
                     class="transaction-status"
                     :class="
-                      item.reportType?.name === 'FOUND' ? 'found' : 'lost'
+                      item.reportType?.name === 'FOUND'
+                        ? 'found'
+                        : 'lost'
                     "
                   >
                     {{
@@ -239,41 +190,48 @@
               </div>
             </div>
           </div>
+        </div>
 
-          <div class="col-xl-4">
-            <div class="content-card">
-              <div class="content-card-header">
-                <h5 class="m-0">
-                  <i class="bi bi-pie-chart me-2"></i>តាមប្រភេទ
-                </h5>
-              </div>
+        <!-- RIGHT COLUMN -->
+        <div class="col-xl-4">
+          <div class="content-card">
+            <div class="content-card-header">
+              <h5 class="m-0">
+                <i class="bi bi-pie-chart me-2"></i>
+                តាមប្រភេទ
+              </h5>
+            </div>
 
-              <div class="chart-section">
-                <div class="donut-chart-wrapper">
-                  <div class="donut-visual" :style="donutStyle">
-                    <div class="donut-inner">
-                      <span class="total-num">{{ totalItems }}</span>
-                      <span class="total-text">សរុប</span>
-                    </div>
+            <div class="chart-section">
+              <div class="donut-chart-wrapper">
+                <div class="donut-visual" :style="donutStyle">
+                  <div class="donut-inner">
+                    <span class="total-num">{{ totalItems }}</span>
+                    <span class="total-text">សរុប</span>
                   </div>
                 </div>
+              </div>
 
-                <div class="legend-list mt-4">
-                  <div
-                    v-for="cat in categoryStats"
-                    :key="cat.category.name"
-                    class="legend-row"
-                  >
-                    <div class="legend-info">
-                      <span class="legend-name">{{ cat.category.name }}</span>
-                      <span class="legend-percent">{{ cat.percent }}%</span>
-                    </div>
-                    <div class="progress-thin">
-                      <div
-                        class="progress-bar-thin"
-                        :style="{ width: cat.percent + '%' }"
-                      ></div>
-                    </div>
+              <div class="legend-list mt-4">
+                <div
+                  v-for="cat in categoryStats"
+                  :key="cat.category.name"
+                  class="legend-row"
+                >
+                  <div class="legend-info">
+                    <span class="legend-name">
+                      {{ cat.category.name }}
+                    </span>
+                    <span class="legend-percent">
+                      {{ cat.percent }}%
+                    </span>
+                  </div>
+
+                  <div class="progress-thin">
+                    <div
+                      class="progress-bar-thin"
+                      :style="{ width: cat.percent + '%' }"
+                    ></div>
                   </div>
                 </div>
               </div>
@@ -281,10 +239,12 @@
           </div>
         </div>
       </div>
-      <!-- </div> -->
+      <!-- END ROW -->
+
     </main>
   </div>
 </template>
+
 
 <script setup>
 import { ref, computed, onMounted } from "vue";
@@ -323,7 +283,7 @@ const activeTab = ref("All");
 const filteredItems = computed(() => {
   if (activeTab.value === "All") return items.value;
   return items.value.filter(
-    (i) => i.reportType?.name === activeTab.value.toUpperCase(),
+    (i) => i.reportType?.name === activeTab.value.toUpperCase()
   );
 });
 
@@ -377,10 +337,10 @@ const fetchStats = async () => {
     totalItems.value = res.data.data.meta.totalItems;
 
     lostReports.value = allItems.value.filter(
-      (i) => i.reportType?.name === "LOST",
+      (i) => i.reportType?.name === "LOST"
     ).length;
     foundReports.value = allItems.value.filter(
-      (i) => i.reportType?.name === "FOUND",
+      (i) => i.reportType?.name === "FOUND"
     ).length;
 
     // Build category stats
@@ -470,7 +430,8 @@ onMounted(() => {
 .purple-theme {
   background: #ffffff;
   padding: 30px 20px;
-  border-radius: 24px; /* More rounded for a modern feel */
+  border-radius: 24px;
+  /* More rounded for a modern feel */
   border: 1px solid rgba(139, 92, 246, 0.1);
   position: relative;
   box-shadow: 0 10px 30px -15px rgba(139, 92, 246, 0.2);
@@ -483,7 +444,8 @@ onMounted(() => {
 .trend-indicator {
   font-size: 0.75rem;
   font-weight: 700;
-  color: #10b981; /* Keep success green for trends */
+  color: #10b981;
+  /* Keep success green for trends */
   background: rgba(16, 185, 129, 0.1);
   padding: 2px 8px;
   border-radius: 20px;
@@ -492,7 +454,8 @@ onMounted(() => {
 .v-number-purple {
   font-size: 1.5rem;
   font-weight: 800;
-  color: #4c1d95; /* Deep Purple */
+  color: #4c1d95;
+  /* Deep Purple */
   margin-top: 5px;
 }
 
@@ -523,7 +486,8 @@ onMounted(() => {
 .chart-labels-purple span {
   font-size: 0.8rem;
   font-weight: 500;
-  color: #a78bfa; /* Soft Purple-gray */
+  color: #a78bfa;
+  /* Soft Purple-gray */
 }
 
 /* Update your stat-card variants to match the purple brand */
@@ -531,14 +495,17 @@ onMounted(() => {
   background: #f5f3ff;
   color: #8b5cf6;
 }
+
 .variant-2 .stat-icon-box {
   background: #ede9fe;
   color: #7c3aed;
 }
+
 .variant-3 .stat-icon-box {
   background: #ddd6fe;
   color: #6d28d9;
 }
+
 .variant-4 .stat-icon-box {
   background: #c4b5fd;
   color: #5b21b6;
@@ -584,6 +551,7 @@ onMounted(() => {
   color: #64748b;
   opacity: 0.8;
 }
+
 :offset-root {
   --primary: #4f46e5;
   --bg-subtle: #f8fafc;
@@ -667,14 +635,17 @@ onMounted(() => {
   background: #e0e7ff;
   color: #4f46e5;
 }
+
 .variant-2 .stat-icon-box {
   background: #fef3c7;
   color: #d97706;
 }
+
 .variant-3 .stat-icon-box {
   background: #dcfce7;
   color: #16a34a;
 }
+
 .variant-4 .stat-icon-box {
   background: #fce7f3;
   color: #db2777;
@@ -794,6 +765,7 @@ onMounted(() => {
   background: #dcfce7;
   color: #166534;
 }
+
 .status-pill.lost {
   background: #fee2e2;
   color: #991b1b;
@@ -828,6 +800,7 @@ onMounted(() => {
   font-weight: 700;
   color: #1e293b;
 }
+
 .total-text {
   font-size: 0.85rem;
   color: #64748b;
@@ -837,23 +810,27 @@ onMounted(() => {
 .legend-row {
   margin-bottom: 16px;
 }
+
 .legend-info {
   display: flex;
   justify-content: space-between;
   margin-bottom: 6px;
   font-size: 0.85rem;
 }
+
 .progress-thin {
   height: 6px;
   background: #f1f5f9;
   border-radius: 10px;
   overflow: hidden;
 }
+
 .progress-bar-thin {
   height: 100%;
   background: var(--primary);
   border-radius: 10px;
 }
+
 /* Custom Bar Graph Styling */
 .mock-graph {
   display: flex;
@@ -950,9 +927,9 @@ onMounted(() => {
   transition: r 0.2s ease;
 }
 
-.chart-point:hover {
+/* .chart-point:hover {
   r: 8;
-}
+} */
 
 /* Labels below chart */
 .chart-labels {
@@ -972,10 +949,12 @@ onMounted(() => {
   padding: 4px 10px;
   border-radius: 6px;
 }
+
 .badge-legend.lost {
   color: #ef4444;
   background: #fee2e2;
 }
+
 .badge-legend.found {
   color: #4f46e5;
   background: #e0e7ff;
