@@ -9,7 +9,12 @@
     <div class="card mb-3 shadow border-color">
       <div class="card-body row">
         <div class="col-xxl-12">
-          <BaseInput class="w-100" v-model="search" type="text" placeholder="ស្វែងរក ការរាយការណ៍..." />
+          <BaseInput
+            class="w-100"
+            v-model="search"
+            type="text"
+            placeholder="ស្វែងរក ការរាយការណ៍..."
+          />
         </div>
         <!-- CATEGORY -->
         <div class="col-xxl-8 mt-2">
@@ -25,35 +30,64 @@
           </select> -->
           <div class="row">
             <div class="col-xxl-5">
-              <BaseSelect v-model="cateValue" :items="categoryStore.categories" textField="ប្រភេទនៃការរាយការណ៍ទំាងអស់"
-                labelField="name" valueField="id" />
+              <BaseSelect
+                v-model="cateValue"
+                :items="categoryStore.categories"
+                textField="ប្រភេទនៃការរាយការណ៍ទំាងអស់"
+                labelField="name"
+                valueField="id"
+              />
             </div>
           </div>
         </div>
         <div class="col-xxl-4 mt-1 text-end" style="flex: 1">
-          <BaseButton variant="outline_primary" icon="stars" @click="clearFilter">
+          <BaseButton
+            variant="outline_primary"
+            icon="stars"
+            @click="clearFilter"
+          >
             សម្អាតការតម្រៀប
           </BaseButton>
         </div>
       </div>
     </div>
-    <div class="mt-3 mb-1 align-items-center d-flex justify-content-between flex-wrap">
+    <div
+      class="mt-3 mb-1 align-items-center d-flex justify-content-between flex-wrap"
+    >
       <div class="btn-group bg-btn-group my-1">
-        <button class="btn-filter" :class="{ Active: activeFilter === '' }" @click="btnFilterAllReport">
+        <button
+          class="btn-filter"
+          :class="{ Active: activeFilter === '' }"
+          @click="btnFilterAllReport"
+        >
           ទាំងអស់
         </button>
 
-        <button class="btn-filter" :class="{ Active: activeFilter === 'LOST' }" @click="btnFilterReportType('LOST')">
+        <button
+          class="btn-filter"
+          :class="{ Active: activeFilter === 'LOST' }"
+          @click="btnFilterReportType('LOST')"
+        >
           បាត់
         </button>
 
-        <button class="btn-filter" :class="{ Active: activeFilter === 'FOUND' }" @click="btnFilterReportType('FOUND')">
+        <button
+          class="btn-filter"
+          :class="{ Active: activeFilter === 'FOUND' }"
+          @click="btnFilterReportType('FOUND')"
+        >
           រកឃើញ
         </button>
       </div>
       <div class="d-flex gap-2 align-items-center my-1">
         <div class="mt-2" style="width: 150px">
-          <BaseSelect class="w-100" v-model="sortDir" :items="sortDirData" labelField="name" valueField="id" />
+          <BaseSelect
+            class="w-100"
+            v-model="sortDir"
+            :items="sortDirData"
+            labelField="name"
+            valueField="id"
+          />
         </div>
       </div>
     </div>
@@ -66,7 +100,11 @@
         >
           បង្កើតការរាយការណ៍
         </button> -->
-        <BaseButton variant="primary" icon="file-earmark-plus" @click="btnHandleCreateReport">បង្កើតការរាយការណ៍
+        <BaseButton
+          variant="primary"
+          icon="file-earmark-plus"
+          @click="btnHandleCreateReport"
+          >បង្កើតការរាយការណ៍
         </BaseButton>
       </div>
       <div class="row g-3" v-if="reportStore.isLoadingGetOwnReports">
@@ -74,7 +112,10 @@
           <BaseSkeleton />
         </div>
       </div>
-      <div v-else-if="reportStore.ownReports.length <= 0" class="my-3 col-12 center2">
+      <div
+        v-else-if="reportStore.ownReports.length <= 0"
+        class="my-3 col-12 center2"
+      >
         <div class="w-100 d-flex flex-column align-items-center p-3 text-muted">
           <i class="bi bi-exclamation-circle" style="font-size: 35px"></i>
           <h3 class="m-0">No Reports Found</h3>
@@ -90,50 +131,67 @@
               " style="width: 80px; height: 80px; border: 1px solid black" />
           </div>
 
-          <div class="col-10 col-md-5 col-xl-5 col-xxl-5">
-            <div class="row align-items-center mb-1">
-              <div class="col-12 col-xl-6">
-                <h6 class="fw-bold mb-0 title">{{ report.title }}</h6>
+            <div>
+              <div class="row align-items-center mb-1">
+                <div class="col-12 col-xl-6">
+                  <h6 class="fw-bold mb-0 title">{{ report.title }}</h6>
+                </div>
+                <div class="col-12 col-xl-6 d-flex">
+                  <span
+                    class="badge rounded-pill px-2 me-2"
+                    style="font-size: 0.7rem"
+                    :class="report.reportType?.name.toLowerCase()"
+                  >
+                    {{ report.reportType?.name }}
+                  </span>
+                  <span
+                    class="badge border rounded-pill px-2"
+                    style="font-size: 0.7rem"
+                    :class="report.status?.toLowerCase()"
+                  >
+                    {{ report.status }}
+                  </span>
+                </div>
               </div>
-              <div class="col-12 col-xl-6 d-flex">
-                <span class="badge rounded-pill px-2 me-2" style="font-size: 0.7rem"
-                  :class="report.reportType?.name.toLowerCase()">
-                  {{ report.reportType?.name }}
+              <div class="d-flex flex-wrap text-muted small mt-2">
+                <span>
+                  <i class="bi bi-geo-alt me-1 text-danger"></i>
+                  {{ report.locationText }}
                 </span>
-                <span class="badge border rounded-pill px-2" style="font-size: 0.7rem"
-                  :class="report.status?.toLowerCase()">
-                  {{ report.status }}
+                <span
+                  ><i class="bi bi-calendar3 me-1"></i>
+                  {{ formatDate(report.eventDate) }}
                 </span>
               </div>
-            </div>
-            <div class="d-flex flex-wrap gap-3 text-muted small mt-2">
-              <span>
-                <i class="bi bi-geo-alt me-1 text-danger"></i>
-                {{ report.locationText }}
-              </span>
-              <span><i class="bi bi-calendar3 me-1"></i>
-                {{ formatDate(report.eventDate) }}
-              </span>
             </div>
           </div>
 
-          <div class="col-12 col-md-5 col-xl-5 col-xxl-5">
+          <div class="btn-action-group">
             <div class="btn-group ms-5 shadow-sm">
-              <button class="btn btn-action btn-outline-secondary" @click="gotoDetailPage(report.id)">
-                <span class="icon text-warning me-2">
+              <button
+                class="btn btn-action btn-outline-secondary"
+                @click="gotoDetailPage(report.id)"
+              >
+                <span class="icon text-warning">
                   <i class="bi bi-eye"></i>
                 </span>
                 <span class="btn-title">មើល</span>
               </button>
-              <button class="btn btn-action btn-outline-secondary" @click="btnHandleEditReport(report.id)">
-                <span class="icon text-primary me-2">
+              <button
+                class="btn btn-action btn-outline-secondary"
+                @click="btnHandleEditReport(report.id)"
+              >
+                <span class="icon text-primary">
                   <i class="bi bi-pencil-square"></i>
                 </span>
 
                 <span class="btn-title"> កែសម្រួល </span>
               </button>
-              <button class="btn btn-action btn-outline-secondary" @click="btnHandleDeleteOwnReport(report.id)">
-                <span class="icon text text-danger me-2">
+              <button
+                class="btn btn-action btn-outline-secondary"
+                @click="btnHandleDeleteOwnReport(report.id)"
+              >
+                <span class="icon text text-danger">
                   <i class="bi bi-trash"></i>
                 </span>
                 <span class="btn-title"> លុប </span>
@@ -146,11 +204,18 @@
 
     <!-- pagination -->
 
-    <div v-if="
-      reportStore.ownReportMeta?.totalPages > 1 &&
-      !reportStore.isLoadingGetOwnReports
-    " class="d-flex gap-2 justify-content-center">
-      <BaseButton variant="danger" @click="PreviousPage" :disabled="!reportStore.ownReportMeta?.hasPreviousPage">
+    <div
+      v-if="
+        reportStore.ownReportMeta?.totalPages > 1 &&
+        !reportStore.isLoadingGetOwnReports
+      "
+      class="d-flex gap-2 justify-content-center"
+    >
+      <BaseButton
+        variant="danger"
+        @click="PreviousPage"
+        :disabled="!reportStore.ownReportMeta?.hasPreviousPage"
+      >
         Prev
       </BaseButton>
 
@@ -163,7 +228,11 @@
         {{ p }}
       </BaseButton> -->
 
-      <BaseButton variant="primary" @click="nextPage" :disabled="!reportStore.ownReportMeta?.hasNextPage">
+      <BaseButton
+        variant="primary"
+        @click="nextPage"
+        :disabled="!reportStore.ownReportMeta?.hasNextPage"
+      >
         Next
       </BaseButton>
     </div>
@@ -174,13 +243,23 @@
         <p>Do you want to delete?</p>
       </template>
       <template #btnClose>
-        <BaseButton variant="cancel" icon="x-circle" class="col-6" @click="showModal = false">
+        <BaseButton
+          variant="cancel"
+          icon="x-circle"
+          class="col-6"
+          @click="showModal = false"
+        >
           Close
         </BaseButton>
       </template>
       <template #btnActive>
-        <BaseButton icon="box" class="col-6" variant="danger" :isLoading="reportStore.isLoadingDeleteOwnReport"
-          @click="btnHandleConfirmDelete">
+        <BaseButton
+          icon="box"
+          class="col-6"
+          variant="danger"
+          :isLoading="reportStore.isLoadingDeleteOwnReport"
+          @click="btnHandleConfirmDelete"
+        >
           Delete
         </BaseButton>
       </template>
@@ -192,7 +271,12 @@
       </template>
 
       <template #btnActive>
-        <BaseButton icon="box" class="col-6" variant="primary" @click="showMessageModal = false">
+        <BaseButton
+          icon="box"
+          class="col-6"
+          variant="primary"
+          @click="showMessageModal = false"
+        >
           យល់ព្រម
         </BaseButton>
       </template>
@@ -547,7 +631,6 @@ const PreviousPage = async () => {
 .bg-btn-group .btn-filter {
   background-color: transparent;
   border: none;
-  padding: 4px 15px;
   font-size: 16px;
   border-radius: 15px;
   cursor: pointer;
@@ -556,9 +639,11 @@ const PreviousPage = async () => {
 .bg-btn-group .btn-filter.Active {
   background-color: #ffffff;
 }
+/* .btn-action-group {
+  /* border: 1px solid red; 
+} */
 
 @media (max-width: 912px) {
-
   /* CSS rules for screens 650px or smaller */
   .btn-action .btn-title {
     display: none;
