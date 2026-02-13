@@ -7,19 +7,17 @@
     </router-link> -->
     <BaseButton variant="dark" @click="goBack"> ត្រឡប់ក្រោយ </BaseButton>
     <div class="py-3">
-      <div class="w-100 center2" v-if="reportStore.isLoadingGetAReport">
-        <div class="spinner-border" role="status">
-          <span class="visually-hidden">Loading...</span>
+      <div class="w-100 d-flex justify-content-center" v-if="reportStore.isLoadingGetAReport">
+        <div class="loading-full" style="height: 50vh; width: 100%;">
+          <div class="custom-loader"></div>
+          <p class="mt-4 khmer-font text-purple-accent">កំពុងផ្ទុកទិន្នន័យ...</p>
         </div>
       </div>
       <div v-else class="row g-4">
         <div class="col-lg-8">
           <div class="card border-1 mb-4 overflow-hidden position-relative">
-            <span
-              v-if="reportStore.report?.reportType?.name"
-              :class="reportTypeClass"
-              class="badge position-absolute top-0 end-0 m-3 px-3"
-            >
+            <span v-if="reportStore.report?.reportType?.name" :class="reportTypeClass"
+              class="badge position-absolute top-0 end-0 m-3 px-3">
               {{ reportStore.report.reportType?.name }}
             </span>
 
@@ -29,26 +27,15 @@
               alt="Found blue backpack"
             /> -->
 
-            <div
-              class="slider-wrapper"
-              v-if="reportStore.report?.reportImages?.length"
-            >
+            <div class="slider-wrapper" v-if="reportStore.report?.reportImages?.length">
               <!-- Main slider -->
               <div>
-                <Swiper
-                  :spaceBetween="10"
-                  :navigation="true"
-                  :thumbs="{ swiper: thumbsSwiper }"
-                  :modules="modules"
-                  class="mySwiper2"
-                >
+                <Swiper :spaceBetween="10" :navigation="true" :thumbs="{ swiper: thumbsSwiper }" :modules="modules"
+                  class="mySwiper2">
                   <!-- <SwiperSlide v-for="n in 10" :key="'main-' + n">
             <img :src="`https://swiperjs.com/demos/images/nature-${n}.jpg`" />
           </SwiperSlide> -->
-                  <SwiperSlide
-                    v-for="image in reportStore.report?.reportImages || []"
-                    :key="image.id"
-                  >
+                  <SwiperSlide v-for="image in reportStore.report?.reportImages || []" :key="image.id">
                     <img :src="image.name" />
                   </SwiperSlide>
                 </Swiper>
@@ -56,29 +43,16 @@
 
               <!-- Thumbnail slider -->
               <div>
-                <Swiper
-                  @swiper="setThumbsSwiper"
-                  :spaceBetween="10"
-                  :slidesPerView="4"
-                  :freeMode="true"
-                  :watchSlidesProgress="true"
-                  :modules="modules"
-                  class="mySwiper d-flex"
-                >
-                  <SwiperSlide
-                    v-for="image in reportStore.report?.reportImages || []"
-                    :key="image.id"
-                  >
+                <Swiper @swiper="setThumbsSwiper" :spaceBetween="10" :slidesPerView="4" :freeMode="true"
+                  :watchSlidesProgress="true" :modules="modules" class="mySwiper d-flex">
+                  <SwiperSlide v-for="image in reportStore.report?.reportImages || []" :key="image.id">
                     <img :src="image.name" class="shadow" />
                   </SwiperSlide>
                 </Swiper>
               </div>
             </div>
             <div v-else class="image">
-              <img
-                :src="defaultImage"
-                :alt="reportStore.report.title || 'Report Image'"
-              />
+              <img :src="defaultImage" :alt="reportStore.report.title || 'Report Image'" />
             </div>
           </div>
 
@@ -90,10 +64,7 @@
               <span class="badge bg-secondary-subtle text-dark me-2">
                 {{ reportStore.report.category?.name }}
               </span>
-              <span
-                class="badge"
-                :class="reportStore.report.status?.toLowerCase()"
-              >
+              <span class="badge" :class="reportStore.report.status?.toLowerCase()">
                 {{ reportStore.report.status }}
               </span>
             </div>
@@ -109,9 +80,7 @@
               <div class="col-md-6 d-flex align-items-center mb-3">
                 <i class="bi bi-calendar-event me-3 fs-4 text-muted"></i>
                 <div>
-                  <small class="text-muted d-block"
-                    >កាលបរិច្ឆេទ​ នៃព្រឹត្តិការណ៍</small
-                  >
+                  <small class="text-muted d-block">កាលបរិច្ឆេទ​ នៃព្រឹត្តិការណ៍</small>
                   <strong>{{
                     formatDate(reportStore.report.eventDate)
                   }}</strong>
@@ -158,10 +127,7 @@
               </div>
             </div>
 
-            <div
-              class="contact-item d-flex mb-4"
-              v-if="reportStore.report.contactInformation?.phoneNumber"
-            >
+            <div class="contact-item d-flex mb-4" v-if="reportStore.report.contactInformation?.phoneNumber">
               <i class="bi bi-telephone me-3 text-muted"></i>
               <div>
                 <small class="text-muted d-block">លេខទូរសព្ទ</small>
@@ -170,10 +136,7 @@
                 </span>
               </div>
             </div>
-            <div
-              class="contact-item d-flex mb-4"
-              v-if="reportStore.report.contactInformation?.telegramLink"
-            >
+            <div class="contact-item d-flex mb-4" v-if="reportStore.report.contactInformation?.telegramLink">
               <i class="bi bi-telegram me-3 fs-4 text-muted"></i>
               <div>
                 <small class="text-muted d-block">Telegram</small>
@@ -191,40 +154,24 @@
         <div class="col-12 py-3">
           <h2 class="fw-bold pb-2">របាយការណ៍ស្រដៀងគ្នា</h2>
           <div class="row">
-            <div
-              class="col-12"
-              v-if="reportStore.matchReports?.matchedReports?.length <= 0"
-            >
-              <div
-                class="w-100 d-flex flex-column align-items-center p-3 text-muted"
-              >
+            <div class="col-12" v-if="reportStore.matchReports?.matchedReports?.length <= 0">
+              <div class="w-100 d-flex flex-column align-items-center p-3 text-muted">
                 <i class="bi bi-exclamation-circle" style="font-size: 35px"></i>
                 <h3 class="m-0">មិនមាន​ របាយការណ៍ស្រដៀងគ្នា</h3>
               </div>
             </div>
-            <div
-              class="col-12 col-md-6 col-lg-3 mb-4"
-              v-for="item in reportStore.matchReports?.matchedReports || []"
-              :key="item?.matchedReport?.id"
-            >
-              <BaseCard
-                :category="item.matchedReport?.category"
-                :reportType="item.matchedReport?.reportType"
-                :eventDate="item.matchedReport?.eventDate"
-                :title="item.matchedReport?.title"
-                :location="item.matchedReport?.locationText"
-                btnTitle="ព័ត៌មានលម្អិត"
-                @onClick="btnHandleReportDetail(item?.matchedReport?.id)"
-              >
+            <div class="col-12 col-md-6 col-lg-3 mb-4" v-for="item in reportStore.matchReports?.matchedReports || []"
+              :key="item?.matchedReport?.id">
+              <BaseCard :category="item.matchedReport?.category" :reportType="item.matchedReport?.reportType"
+                :eventDate="item.matchedReport?.eventDate" :title="item.matchedReport?.title"
+                :location="item.matchedReport?.locationText" btnTitle="ព័ត៌មានលម្អិត"
+                @onClick="btnHandleReportDetail(item?.matchedReport?.id)">
                 <template #image>
                   <div class="recommendation-image">
-                    <img
-                      :src="
-                        item.reportImages && item.reportImages.length > 0
-                          ? item.reportImages[0].name
-                          : defaultImage
-                      "
-                    />
+                    <img :src="item.reportImages && item.reportImages.length > 0
+                      ? item.reportImages[0].name
+                      : defaultImage
+                      " />
                   </div>
                 </template>
               </BaseCard>
@@ -321,10 +268,12 @@ const btnHandleReportDetail = (reportId) => {
 .mySwiper2 {
   width: 100%;
 }
+
 .mySwiper {
   width: 100%;
   padding: 5px;
 }
+
 .mySwiper img {
   width: 100%;
   height: 80px;
@@ -332,6 +281,7 @@ const btnHandleReportDetail = (reportId) => {
   /* border-radius: 10px; */
   /* border: 1px solid black; */
 }
+
 .mySwiper img:hover {
   border: 1px solid red;
   cursor: pointer;
@@ -350,11 +300,13 @@ const btnHandleReportDetail = (reportId) => {
   width: 100%;
   height: 550px;
 }
+
 .image img {
   object-fit: cover;
   width: 100%;
   height: 100%;
 }
+
 .main-image {
   height: 450px;
   object-fit: cover;
@@ -381,14 +333,17 @@ const btnHandleReportDetail = (reportId) => {
   background: rgb(255, 0, 0);
   color: rgb(255, 255, 255);
 }
+
 .found {
   background: rgb(0, 211, 0);
   color: rgb(255, 255, 255);
 }
+
 .active {
   background: rgba(0, 0, 255, 0.2);
   color: rgba(0, 0, 255, 0.8);
 }
+
 .resolved {
   background: rgba(92, 92, 92, 0.5);
   color: rgba(255, 255, 255, 0.8);
@@ -398,16 +353,19 @@ const btnHandleReportDetail = (reportId) => {
 .contact-item i {
   width: 20px;
 }
+
 .box-shadow {
   box-shadow:
     rgba(0, 0, 0, 0.05) 0px 6px 24px 0px,
     rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
 }
+
 .center2 {
   display: flex !important;
   justify-content: center;
   align-items: center;
 }
+
 .match-card {
   border-radius: 14px;
   overflow: hidden;
@@ -460,10 +418,12 @@ const btnHandleReportDetail = (reportId) => {
   gap: 6px;
   margin-bottom: 4px;
 }
+
 .recommendation-image {
   width: 100%;
   height: 230px;
 }
+
 .recommendation-image img {
   width: 100%;
   height: 100%;

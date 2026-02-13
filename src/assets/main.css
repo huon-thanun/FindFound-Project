@@ -1,24 +1,30 @@
 :root {
   /* ===== Background & Surface ===== */
-  --background-color: #eadcf6;          /* main page bg (soft lavender) */
-  --surface-color: #ffffff;             /* cards, navbar text, surfaces */
+  --background-color: #eadcf6;
+  /* main page bg (soft lavender) */
+  --surface-color: #ffffff;
+  /* cards, navbar text, surfaces */
 
   /* ===== Text ===== */
-  --text-Primary: black;               /* main text on light bg */
-  --text-Secondary: #7b3fe4;             /* muted purple-gray */
- 
+  --text-Primary: black;
+  /* main text on light bg */
+  --text-Secondary: #7b3fe4;
+  /* muted purple-gray */
+
   /* ===== Brand / Primary ===== */
   --primary-color: #4b2b7f;         /* main purple (brand) */
   --primary-color-shadow: rgba(138, 77, 232, 0.35);
 
-  --button-primary: #7b3fe4;             /* button purple (slightly darker) */
+  --button-primary: #7b3fe4;
+  /* button purple (slightly darker) */
 
   /* ===== Secondary (deep purple) ===== */
   --secondary-color: #8a4de8;            /* deep royal purple */
   --secondary-color-shadow: rgba(75, 43, 127, 0.35);
 
   /* ===== Tertiary (soft purple areas) ===== */
-  --tertiary-color: #d9c6f3;              /* light purple sections */
+  --tertiary-color: #d9c6f3;
+  /* light purple sections */
   --tertiary-color-shadow: rgba(217, 198, 243, 0.45);
 
   /* ===== Borders ===== */
@@ -66,4 +72,57 @@
   font-family: "Hanuman", serif;
   font-optical-sizing: auto;
   font-style: normal;
+}
+
+/* ===== LOADING STYLES (Global) ===== */
+.loading-full {
+  height: 80vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.custom-loader {
+  width: 60px;
+  height: 60px;
+  border: 6px solid #f3f3f3;
+  border-top: 6px solid #7c3aed;
+  border-radius: 50%;
+  animation: spin 1s cubic-bezier(0.68, -0.55, 0.27, 1.55) infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* ===== SKELETON LOADER STYLES ===== */
+@keyframes pulse {
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.skeleton-circle {
+  background-color: #f0f0f0;
+  border-radius: 50%;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+.skeleton-line {
+  background-color: #f0f0f0;
+  border-radius: 8px;
+  animation: pulse 1.5s ease-in-out infinite;
 }
