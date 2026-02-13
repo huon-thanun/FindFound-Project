@@ -333,7 +333,7 @@ const btnHandleReportDetail = (reportId) => {
   /* border: 1px solid black; */
 }
 .mySwiper img:hover {
-  border: 1px solid red;
+  /* border: 1px solid red; */
   cursor: pointer;
 }
 
@@ -367,6 +367,7 @@ const btnHandleReportDetail = (reportId) => {
 .badge {
   font-weight: 500;
   border-radius: 6px;
+  z-index: 2;
 }
 
 .bi {
