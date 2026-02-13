@@ -1,16 +1,12 @@
 <template>
-  <div
-    class="vh-100 d-flex align-items-center justify-content-center bg-light khmer-font"
-  >
-    <div
-      class="card shadow-lg border-0 rounded-4 p-5 text-center"
-      style="max-width: 420px; width: 100%"
-    >
+  <div class="vh-100 d-flex align-items-center justify-content-center bg-light khmer-font">
+    <div class="card shadow-lg border-0 rounded-4 p-5 text-center" style="max-width: 420px; width: 100%">
       <!-- Loading -->
-      <div v-if="loading">
-        <div class="spinner-border text-purple mb-3"></div>
-        <h5 class="fw-bold">កំពុងផ្ទៀងផ្ទាត់អ៊ីមែល...</h5>
-        <p class="text-muted small">សូមរង់ចាំបន្តិច</p>
+      <div v-if="loading" class="d-flex flex-column align-items-center justify-content-center"
+        style="min-height: 300px;">
+        <div class="skeleton-circle mb-4" style="width: 80px; height: 80px;"></div>
+        <div class="skeleton-line mb-3" style="width: 60%; height: 20px;"></div>
+        <div class="skeleton-line" style="width: 50%; height: 16px;"></div>
       </div>
 
       <!-- Success -->
@@ -96,15 +92,18 @@ onMounted(async () => {
 .khmer-font {
   font-family: "Kantumruy Pro", sans-serif;
 }
+
 .text-purple {
   color: #3b1e54;
 }
+
 .btn-purple {
   background: #3b1e54;
   color: white;
   border-radius: 12px;
   padding: 10px;
 }
+
 .btn-purple:hover {
   background: #2a153d;
 }
