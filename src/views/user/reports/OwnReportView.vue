@@ -107,9 +107,9 @@
           >បង្កើតការរាយការណ៍
         </BaseButton>
       </div>
-      <div class="w-100 center2" v-if="reportStore.isLoadingGetOwnReports">
-        <div class="spinner-border" role="status">
-          <span class="visually-hidden">Loading...</span>
+      <div class="row g-3" v-if="reportStore.isLoadingGetOwnReports">
+        <div v-for="n in 3" :key="`skeleton-${n}`" class="col-lg-4 col-md-6">
+          <BaseSkeleton />
         </div>
       </div>
       <div
@@ -121,29 +121,15 @@
           <h3 class="m-0">No Reports Found</h3>
         </div>
       </div>
-      <div
-        v-else
-        class="report-item p-3 border rounded-3 bg-white mb-3 box-shadow"
-        v-for="report in reportStore.ownReports"
-        :key="report.id"
-      >
-        <div class="d-flex align-items-center justify-content-between gap-2">
-          <div class="d-flex align-items-center justify-content-between gap-2">
-            <div>
-              <img
-                :src="
-                  report.reportImages && report.reportImages.length > 0
-                    ? report.reportImages[0].name
-                    : defaultImage
-                "
-                style="
-                  width: 80px;
-                  height: 80px;
-                  border: 1px solid black;
-                  object-fit: contain;
-                "
-              />
-            </div>
+      <div v-else class="report-item p-3 border rounded-3 bg-white mb-3 box-shadow"
+        v-for="report in reportStore.ownReports" :key="report.id">
+        <div class="row align-items-center g-3">
+          <div class="col-2 -md-2 col-xl-2">
+            <img :src="report.reportImages && report.reportImages.length > 0
+              ? report.reportImages[0].name
+              : defaultImage
+              " style="width: 80px; height: 80px; border: 1px solid black" />
+          </div>
 
             <div>
               <div class="row align-items-center mb-1">
@@ -307,6 +293,7 @@ import { useRouter } from "vue-router";
 
 import BaseReportCard from "@/components/base/BaseReportCard.vue";
 import BaseButton from "@/components/base/BaseButton.vue";
+import BaseSkeleton from "@/components/base/BaseSkeleton.vue";
 
 const reportStore = useReportStore();
 const categoryStore = useCategoryStore();
@@ -628,6 +615,7 @@ const PreviousPage = async () => {
   background: rgba(0, 0, 255, 0.2);
   color: rgba(0, 0, 255, 0.8);
 }
+
 .resolved {
   background: rgba(92, 92, 92, 0.5);
   color: rgba(255, 255, 255, 0.8);
