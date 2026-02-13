@@ -389,8 +389,8 @@ const previousPage = async () => {
         </div>
 
         <div v-if="isLoading" class="loading-full" style="height: 50vh;">
-          <div class="custom-loader"></div>
-          <p class="mt-4 khmer-font text-purple-accent">កំពុងផ្ទុកទិន្នន័យ...</p>
+            <div class="custom-loader"></div>
+            <p class="mt-4 khmer-font text-purple-accent">កំពុងផ្ទុកទិន្នន័យ...</p>
         </div>
         <BaseTable v-else :columns="columns" :items="categories" :isLoading="false" @edit="openEditModal"
             @delete="openDeleteModal" @rowClick="openDetailModal" class="shadow mt-4">
@@ -503,7 +503,7 @@ const previousPage = async () => {
                         selectedCategoryDetail.name }}</span></p>
                     <p><strong class="text-dark">ការពិពណ៌នា:</strong> {{ selectedCategoryDetail.description }}</p>
                     <p><strong class="text-dark">បានបង្កើតនៅ:</strong> {{ formatDate(selectedCategoryDetail.createdAt)
-                        }}</p>
+                    }}</p>
                     <p><strong class="text-dark">បានធ្វើបច្ចុប្បន្នភាពនៅ:</strong> {{
                         formatDate(selectedCategoryDetail.updatedAt) }}</p>
                 </div>
