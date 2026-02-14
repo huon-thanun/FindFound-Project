@@ -78,6 +78,7 @@
           <span>ព្រហស្បតិ៍</span><span>សុក្រ</span>
           <span>សៅរ៍</span><span>អាទិត្យ</span>
         </div>
+      </div>
 
       <!-- REPORT TREND + MONTH SUMMARY -->
       <div class="row g-4 mb-4">
