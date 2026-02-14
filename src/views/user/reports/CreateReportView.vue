@@ -420,6 +420,15 @@
           </BaseButton>
         </template> -->
       </BaseModal>
+      <!-- message toast  -->
+
+      <BaseToast
+        v-model="showToast"
+        :message="message"
+        :theme="themeColor"
+        :icon="msgIcon"
+        :duration="3000"
+      />
     </div>
   </div>
 </template>
@@ -429,9 +438,8 @@ import { useCategoryStore } from "@/stores/categoryStore";
 import { useReportStore } from "@/stores/reportStore";
 import { onMounted, reactive, ref } from "vue";
 import { useRouter } from "vue-router";
-
-// import { VueDatePicker } from "@vuepic/vue-datepicker";
-// import "@vuepic/vue-datepicker/dist/main.css";
+import BaseToast from "@/components/base/BaseToast.vue";
+const showToast = ref(false);
 
 const data = reactive({
   reportTypeId: "1",
@@ -717,7 +725,7 @@ const handleSubmit = async () => {
     await fnHandleCreateReport(formData);
 
     if (reportStore.msgCreateOwnReport?.result) {
-      msgIcon.value = "check-lg";
+      msgIcon.value = "check-circle";
       themeColor.value = "success";
       message.value = "បង្កើតដោយជោគជ័យ";
     }
@@ -741,9 +749,11 @@ const handleSubmit = async () => {
     }
   } finally {
     isLoading.value = false;
-    showMessageModal.value = true;
+    // showMessageModal.value = true;
+    showToast.value = true;
     modalTimer.value = setTimeout(() => {
-      showMessageModal.value = false;
+      // showMessageModal.value = false;
+      // showToast.value = false;
       clearData();
       router.push({ name: "own-reports" });
     }, 3000);

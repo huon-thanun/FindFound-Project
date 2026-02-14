@@ -41,40 +41,23 @@
               class="slider-wrapper"
               v-if="reportStore.report?.reportImages?.length"
             >
-              <!-- Main slider -->
-
-              <Swiper
-                :spaceBetween="10"
-                :navigation="true"
-                :thumbs="{ swiper: thumbsSwiper }"
-                :modules="modules"
-                class="mySwiper2"
-              >
-                <SwiperSlide
-                  v-for="image in reportStore.report?.reportImages || []"
-                  :key="image.id"
+              <div class="d-flex">
+                <div
+                  class="image-selection-display"
+                  v-if="reportStore.report?.reportImages?.length > 1"
                 >
-                  <img :src="image.name" />
-                </SwiperSlide>
-              </Swiper>
-
-              <!-- Thumbnail slider -->
-              <Swiper
-                @swiper="setThumbsSwiper"
-                :spaceBetween="10"
-                :slidesPerView="4"
-                :freeMode="true"
-                :watchSlidesProgress="true"
-                :modules="modules"
-                class="mySwiper d-flex"
-              >
-                <SwiperSlide
-                  v-for="image in reportStore.report?.reportImages || []"
-                  :key="image.id"
-                >
-                  <img :src="image.name" />
-                </SwiperSlide>
-              </Swiper>
+                  <img
+                    v-for="image in images"
+                    @click="currentImage = image.name"
+                    :src="image.name"
+                    :key="image.id"
+                    class="image-selection"
+                  />
+                </div>
+                <div class="current-img-display">
+                  <img :src="currentImage" class="current-img" />
+                </div>
+              </div>
             </div>
             <div v-else class="image">
               <img
@@ -239,20 +222,16 @@
 </template>
 <script setup>
 import { useReportStore } from "@/stores/reportStore";
-import { onMounted, watch, computed, ref } from "vue";
+import { onMounted, watch, computed, ref, reactive } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
 import { formatDate } from "@/utils/formatDate";
 import BaseCard from "@/components/report/BaseCard.vue";
 
-import { Swiper, SwiperSlide } from "swiper/vue";
-
 import "swiper/css";
 import "swiper/css/free-mode";
 import "swiper/css/navigation";
 import "swiper/css/thumbs";
-
-import { FreeMode, Navigation, Thumbs } from "swiper/modules";
 
 const route = useRoute();
 const router = useRouter();
@@ -262,13 +241,9 @@ const defaultImage =
 
 const reportStore = useReportStore();
 
-const thumbsSwiper = ref(null);
+const images = ref([]);
+const currentImage = ref("");
 
-const setThumbsSwiper = (swiper) => {
-  thumbsSwiper.value = swiper;
-};
-
-const modules = [FreeMode, Navigation, Thumbs];
 const loadReport = async (id) => {
   try {
     await Promise.all([
@@ -276,6 +251,12 @@ const loadReport = async (id) => {
       reportStore.getMatchReportByid(id),
     ]);
     console.log(reportStore.report);
+    images.value = reportStore.report.reportImages || [];
+    if (images.value.length > 0) {
+      currentImage.value = images.value[0].name;
+    }
+    console.log(images.value);
+
     console.log(reportStore.matchReports);
   } catch (error) {
     console.error(error);
@@ -322,6 +303,47 @@ const btnHandleReportDetail = (reportId) => {
 </script>
 
 <style scoped>
+.image-selection-display {
+  border-top-left-radius: 12px;
+  border-bottom-left-radius: 12px;
+  /* border: 1px solid blue; */
+  border-right: 1px solid #eee;
+  width: 15%;
+}
+.image-selection-display .image-selection {
+  object-fit: contain;
+  width: 100%;
+  height: calc(100% / 3);
+  border-bottom: 1px solid #000;
+  cursor: pointer;
+  transition: 0.5s;
+}
+
+.image-selection-display .image-selection:nth-child(3) {
+  border-bottom: none;
+  border-bottom-left-radius: 12px;
+}
+.image-selection-display .image-selection:nth-child(1) {
+  border-top-left-radius: 12px;
+}
+.image-selection-display .image-selection:hover {
+  /* transform: translate(-2px, -3px); */
+  outline: 1px solid red;
+}
+.current-img-display {
+  overflow: hidden;
+  border-top-right-radius: 12px;
+  border-bottom-right-radius: 12px;
+  /* border: 1px solid red; */
+  width: 100%;
+  height: 350px;
+  display: flex;
+  justify-content: center;
+}
+.current-img-display .current-img {
+  height: 100%;
+  object-fit: contain;
+}
 /*swiper*/
 .slider-wrapper {
   width: 100%;
