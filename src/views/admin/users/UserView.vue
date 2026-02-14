@@ -76,24 +76,28 @@
     <!-- Users Table -->
     <!-- <div class="card"> -->
     <div class="position-relative">
-      <!-- LOADING OVERLAY -->
-      <div v-if="loading" class="loading-overlay">
-        <div class="spinner-border spinner-color"></div>
+      <!-- LOADING STATE -->
+      <div v-if="loading" class="loading-full" style="height: 50vh; width: 100%;">
+        <div class="custom-loader"></div>
+        <p class="mt-4 khmer-font text-purple-accent">កំពុងផ្ទុកទិន្នន័យ...</p>
       </div>
 
       <!-- USERS LIST (table or card) -->
-      <BaseTableUserPage :columns="tableColumns" :items="users" :isLoading="false" @edit="viewUser" @delete="openStatus"
-        class="mt-4">
-        <template #column-id="{ item }"> #{{ item.id }} </template>
-        <template #column-fullname="{ item }">
-          <div class="d-flex align-items-center gap-2"> <img :src="item.avatar || '/avatar.png'" width="40" height="40"
-              class="rounded-circle" alt="avatar" /> <span>{{ item.fullname }}</span> </div>
-        </template>
-        <template #column-role="{ item }"> {{ item.role?.name || '-' }} </template> <template #column-status="{ item }">
-          <span class="badge" :class="item.status === 'ACTIVATED' ? 'bg-success' : 'bg-danger'"> {{ item.status }}
-          </span>
-        </template>
-      </BaseTableUserPage>
+      <div v-else>
+        <BaseTableUserPage :columns="tableColumns" :items="users" :isLoading="false" @edit="viewUser"
+          @delete="openStatus" class="mt-4">
+          <template #column-id="{ item }"> #{{ item.id }} </template>
+          <template #column-fullname="{ item }">
+            <div class="d-flex align-items-center gap-2"> <img :src="item.avatar || '/avatar.png'" width="40"
+                height="40" class="rounded-circle" alt="avatar" /> <span>{{ item.fullname }}</span> </div>
+          </template>
+          <template #column-role="{ item }"> {{ item.role?.name || '-' }} </template> <template
+            #column-status="{ item }">
+            <span class="badge" :class="item.status === 'ACTIVATED' ? 'bg-success' : 'bg-danger'"> {{ item.status }}
+            </span>
+          </template>
+        </BaseTableUserPage>
+      </div>
     </div>
 
     <div class="mt-3 text-muted">
@@ -444,13 +448,13 @@ const isValidEmail = (email) => {
 };
 
 // Watch filters for search, status, sort
-// watch(
-//   [() => filters.search, () => filters.status, () => filters.sortBy, () => filters.sortDir],
-//   () => {
-//     filters.page = 1;
-//     loadUsers();
-//   },
-// );
+watch(
+  [() => filters.search, () => filters.status, () => filters.sortBy, () => filters.sortDir],
+  () => {
+    filters.page = 1;
+    loadUsers();
+  },
+);
 
 const shownCount = computed(() => {
   return Math.min(filters.page * filters.perPage, total.value);
@@ -586,9 +590,5 @@ onMounted(() => resetAndLoadUsers());
   align-items: center;
   justify-content: center;
   z-index: 10;
-}
-
-.spinner-color{
-  color: var(--primary-color);
 }
 </style>

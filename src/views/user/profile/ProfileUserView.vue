@@ -10,25 +10,15 @@
           <div class="row align-items-center pt-5 pb-5">
             <div class="col-md-auto text-center text-md-start">
               <div class="avatar-glow-wrapper" data-aos="zoom-in">
-                <img
-                  :src="user.avatar || 'https://ui-avatars.com/api/?name=Admin'"
-                  class="profile-img-premium shadow-lg"
-                  alt="Avatar"
-                />
+                <img :src="user.avatar || 'https://ui-avatars.com/api/?name=Admin'"
+                  class="profile-img-premium shadow-lg" alt="Avatar" />
                 <div class="status-indicator-online"></div>
               </div>
             </div>
 
-            <div
-              class="col-md ps-md-4 mt-4 mt-md-0 text-center text-md-start"
-              data-aos="fade-right"
-            >
-              <div
-                class="d-flex align-items-center justify-content-center justify-content-md-start gap-2 mb-2"
-              >
-                <h1
-                  class="display-6 fw-bold text-dark-indigo mb-0 khmer-font-title"
-                >
+            <div class="col-md ps-md-4 mt-4 mt-md-0 text-center text-md-start" data-aos="fade-right">
+              <div class="d-flex align-items-center justify-content-center justify-content-md-start gap-2 mb-2">
+                <h1 class="display-6 fw-bold text-dark-indigo mb-0 khmer-font-title">
                   {{ user.fullname }}
                 </h1>
                 <span class="badge-verified-glow">
@@ -37,9 +27,7 @@
               </div>
               <p class="text-muted fs-5 mb-3">{{ user.email }}</p>
 
-              <div
-                class="d-flex flex-wrap gap-2 justify-content-center justify-content-md-start"
-              >
+              <div class="d-flex flex-wrap gap-2 justify-content-center justify-content-md-start">
                 <span class="badge-status-premium">
                   {{
                     user.status === "ACTIVATED"
@@ -70,11 +58,7 @@
               </div>
 
               <div class="row g-4">
-                <div
-                  class="col-md-6"
-                  v-for="(item, key) in displayInfo"
-                  :key="key"
-                >
+                <div class="col-md-6" v-for="(item, key) in displayInfo" :key="key">
                   <div class="info-box-item">
                     <label class="info-label">{{ item.label }}</label>
                     <div class="info-value-wrap">
@@ -184,7 +168,8 @@ onMounted(async () => {
 .profile-img-premium {
   width: 160px;
   height: 160px;
-  border-radius: 42px; /* Smoother squircle */
+  border-radius: 42px;
+  /* Smoother squircle */
   object-fit: cover;
   border: 6px solid #ffffff;
   transition: transform 0.3s ease;
@@ -280,6 +265,7 @@ onMounted(async () => {
 .text-purple-accent {
   color: #7c3aed;
 }
+
 .text-dark-indigo {
   color: #1e1b4b;
 }
@@ -306,6 +292,7 @@ onMounted(async () => {
   0% {
     transform: rotate(0deg);
   }
+
   100% {
     transform: rotate(360deg);
   }
@@ -316,6 +303,7 @@ onMounted(async () => {
     margin-top: 0;
     padding-top: 30px;
   }
+
   .main-details-card {
     padding: 30px;
   }

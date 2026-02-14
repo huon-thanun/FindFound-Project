@@ -20,11 +20,7 @@
       <div class="row justify-content-center align-items-center">
         <div class="col-12 col-md-12 col-lg-11 col-xl-10 col-xxl-10">
           <div class="my-4">
-            <BaseButton
-              variant="dark"
-              class="w-auto rounded-pill fw-bold shadow-lg"
-              @click="goBack"
-            >
+            <BaseButton variant="outline_primary" @click="goBack">
               ត្រឡប់ក្រោយ
             </BaseButton>
           </div>
@@ -69,7 +65,7 @@
                                   : 'btn-no-border text-danger ',
                               ]"
                             >
-                              Lost
+                              បាត់
                             </button>
 
                             <button
@@ -82,7 +78,7 @@
                                   : 'btn-no-border text-success',
                               ]"
                             >
-                              Found
+                              រកឃើញ
                             </button>
                           </div>
                         </div>
@@ -102,7 +98,7 @@
                                   : 'btn-no-border text-primary ',
                               ]"
                             >
-                              Active
+                              កំពុងដំណើរការ
                             </button>
 
                             <button
@@ -115,7 +111,7 @@
                                   : 'btn-no-border text-secondary',
                               ]"
                             >
-                              Resolved
+                              បានដោះស្រាយ
                             </button>
                           </div>
                         </div>
@@ -320,7 +316,7 @@
                       <div class="col-3">
                         <div class="mb-4">
                           <label for="input-latitude" class="form-label">
-                            Latitude
+                            រយៈទទឹង
                           </label>
                           <input
                             v-model="data.latitude"
@@ -330,7 +326,7 @@
                               'form-control form-control-custom',
                               errorInput.latitude.error ? 'border-danger' : '',
                             ]"
-                            placeholder="បញ្ចូល Latitude"
+                            placeholder="123"
                           />
                           <span
                             v-if="errorInput.latitude.error"
@@ -345,7 +341,7 @@
                       <div class="col-3">
                         <div class="mb-4">
                           <label for="input-longitude" class="form-label">
-                            Longitude
+                            រយៈបណ្ដោយ
                           </label>
                           <input
                             v-model="data.longitude"
@@ -355,7 +351,7 @@
                               'form-control form-control-custom',
                               errorInput.longitude.error ? 'border-danger' : '',
                             ]"
-                            placeholder="បញ្ចូល Longitude"
+                            placeholder="123"
                           />
                           <span
                             v-if="errorInput.longitude.error"
@@ -383,7 +379,7 @@
                           'form-control form-control-custom',
                           errorInput.phone.error ? 'border-danger' : '',
                         ]"
-                        placeholder="បញ្ចូលលេខទូរសព្ទ"
+                        placeholder="0123456789"
                       />
                       <span
                         v-if="errorInput.phone.error"
@@ -398,7 +394,7 @@
                   <div class="col-12 col-xl-6">
                     <div class="mb-4">
                       <label for="input-telegram" class="form-label">
-                        Telegram Link
+                        តំណភ្ជាប់ Telegram
                         <span class="text-danger"> * </span>
                       </label>
                       <input
@@ -425,7 +421,7 @@
                       <BaseButton
                         variant="primary"
                         type="submit"
-                        class="w-100 rounded-pill fw-bold shadow-lg"
+                        class="w-100"
                         :isLoading="isLoading"
                       >
                         រក្សាទុកការកែប្រែ
@@ -448,7 +444,7 @@
           <p class="fs-3">{{ message }}</p>
         </template>
 
-        <template #btnActive>
+        <!-- <template #btnActive>
           <BaseButton
             icon="box"
             class="col-6"
@@ -457,7 +453,7 @@
           >
             យល់ព្រម
           </BaseButton>
-        </template>
+        </template> -->
       </BaseModal>
     </div>
   </div>
@@ -601,14 +597,14 @@ function validateForm() {
   // Latitude: number
   if (!regex.number.test(data.latitude)) {
     errorInput.latitude.error = true;
-    errorInput.latitude.msg = "Latitude ត្រូវតែជលេខ";
+    errorInput.latitude.msg = "រយៈទទឹង ត្រូវតែជលេខ";
     isValid = false;
   }
 
   // Longitude: number
   if (!regex.number.test(data.longitude)) {
     errorInput.longitude.error = true;
-    errorInput.longitude.msg = "Longitude ត្រូវតែជលេខ";
+    errorInput.longitude.msg = "រយៈបណ្ដោយ ត្រូវតែជលេខ";
     isValid = false;
   }
 
@@ -680,6 +676,7 @@ const fnHandleEditReport = async (formData) => {
   await reportStore.editOwnReport(reportId.value, formData);
 };
 
+const modalTimer = ref(null);
 const showMessageModal = ref(false);
 const msgIcon = ref("");
 const isLoading = ref(false);
@@ -744,6 +741,11 @@ const handleSubmit = async () => {
     } finally {
       isLoading.value = false;
       showMessageModal.value = true;
+      modalTimer.value = setTimeout(() => {
+        showMessageModal.value = false;
+        clearData();
+        router.push({ name: "own-reports" });
+      }, 3000);
     }
   } else {
     console.log("Validation errors:", errorInput);
@@ -870,7 +872,7 @@ const handleUploadImg = () => {
   position: absolute;
   top: -8px;
   right: -8px;
-  background: red;
+  background: #a7a5a5;
   color: white;
   width: 20px;
   height: 20px;

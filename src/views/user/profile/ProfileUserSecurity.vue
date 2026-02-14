@@ -19,34 +19,20 @@
           <div class="row align-items-center pt-5 pb-5">
             <div class="col-md-auto text-center text-md-start">
               <div class="avatar-glow-wrapper" data-aos="zoom-in">
-                <img
-                  :src="user.avatar || 'https://ui-avatars.com/api/?name=Admin'"
-                  class="profile-img-premium shadow-lg"
-                  alt="Avatar"
-                />
+                <img :src="user.avatar || 'https://ui-avatars.com/api/?name=Admin'"
+                  class="profile-img-premium shadow-lg" alt="Avatar" />
                 <div class="status-indicator-online"></div>
               </div>
             </div>
-            <div
-              class="col-md ps-md-4 mt-4 mt-md-0 text-center text-md-start"
-              data-aos="fade-right"
-            >
-              <div
-                class="d-flex align-items-center justify-content-center justify-content-md-start gap-2 mb-2"
-              >
-                <h1
-                  class="display-6 fw-bold text-dark-indigo mb-0 khmer-font-title"
-                >
+            <div class="col-md ps-md-4 mt-4 mt-md-0 text-center text-md-start" data-aos="fade-right">
+              <div class="d-flex align-items-center justify-content-center justify-content-md-start gap-2 mb-2">
+                <h1 class="display-6 fw-bold text-dark-indigo mb-0 khmer-font-title">
                   {{ user.fullname }}
                 </h1>
-                <span class="badge-verified-glow"
-                  ><i class="bi bi-patch-check-fill"></i
-                ></span>
+                <span class="badge-verified-glow"><i class="bi bi-patch-check-fill"></i></span>
               </div>
               <p class="text-muted fs-5 mb-3">{{ user.email }}</p>
-              <div
-                class="d-flex flex-wrap gap-2 justify-content-center justify-content-md-start"
-              >
+              <div class="d-flex flex-wrap gap-2 justify-content-center justify-content-md-start">
                 <span class="badge-status-premium">
                   {{
                     user.status === "ACTIVATED"
@@ -69,27 +55,15 @@
 
             <div class="row g-4">
               <!-- PASSWORD -->
-              <ChangePasswordCard
-                v-model:currentPassword="currentPassword"
-                v-model:newPassword="newPassword"
-                v-model:showCurrent="showCurrentPassword"
-                v-model:showNew="showNewPassword"
-                :loading="loadingPassword"
-                @update="updatePassword"
-              />
+              <ChangePasswordCard v-model:currentPassword="currentPassword" v-model:newPassword="newPassword"
+                v-model:showCurrent="showCurrentPassword" v-model:showNew="showNewPassword" :loading="loadingPassword"
+                @update="updatePassword" />
 
               <!-- EMAIL -->
-              <ChangeEmailCard
-                v-model:newEmail="newEmail"
-                v-model:password="emailPassword"
-                v-model:showPassword="showEmailPassword"
-                v-model:token="emailVerifyToken"
-                v-model:requested="emailRequested"
-                :loadingRequest="loadingEmail"
-                :loadingVerify="loadingVerify"
-                @request="requestEmailChange"
-                @verify="verifyEmailChange"
-              />
+              <ChangeEmailCard v-model:newEmail="newEmail" v-model:password="emailPassword"
+                v-model:showPassword="showEmailPassword" v-model:token="emailVerifyToken"
+                v-model:requested="emailRequested" :loadingRequest="loadingEmail" :loadingVerify="loadingVerify"
+                @request="requestEmailChange" @verify="verifyEmailChange" />
             </div>
           </div>
 
@@ -102,12 +76,7 @@
     </div>
 
     <!-- POPUP MODAL -->
-    <PopupModal
-      :show="showPopup"
-      :message="popupMessage"
-      :type="popupType"
-      @close="showPopup = false"
-    />
+    <PopupModal :show="showPopup" :message="popupMessage" :type="popupType" @close="showPopup = false" />
   </ProfileLayout>
 </template>
 
@@ -121,6 +90,7 @@
   min-height: 100vh;
   padding-bottom: 80px;
 }
+
 .khmer-font-title {
   font-family: "Koh Santepheap", sans-serif;
 }
@@ -133,6 +103,7 @@
     radial-gradient(at 50% 0%, rgba(59, 30, 84, 0.08) 0, transparent 50%);
   padding-bottom: 120px;
 }
+
 .profile-img-premium {
   width: 160px;
   height: 160px;
@@ -140,6 +111,7 @@
   object-fit: cover;
   border: 6px solid #fff;
 }
+
 .status-indicator-online {
   position: absolute;
   bottom: 12px;
@@ -156,17 +128,20 @@
 .content-overlap {
   margin-top: -80px;
 }
+
 .main-details-card {
   background: white;
   border-radius: 32px;
   padding: 40px;
   border: 1px solid rgba(124, 58, 237, 0.05);
 }
+
 .card-header-clean {
   display: flex;
   align-items: center;
   gap: 12px;
 }
+
 .accent-dot {
   width: 8px;
   height: 8px;
@@ -183,11 +158,13 @@
   transition: all 0.3s ease;
   position: relative;
 }
+
 .info-box-item-input:focus-within {
   background: white;
   border-color: #7c3aed;
   box-shadow: 0 8px 20px rgba(124, 58, 237, 0.06);
 }
+
 .info-label {
   font-size: 0.7rem;
   color: #94a3b8;
@@ -196,11 +173,13 @@
   margin-bottom: 2px;
   display: block;
 }
+
 .input-with-icon {
   display: flex;
   align-items: center;
   gap: 10px;
 }
+
 .clean-input {
   border: none;
   background: transparent;
@@ -210,12 +189,14 @@
   outline: none;
   padding: 5px 0;
 }
+
 .btn-eye {
   background: none;
   border: none;
   color: #adb5bd;
   padding: 0;
 }
+
 .btn-eye:hover {
   color: #7c3aed;
 }
@@ -228,6 +209,7 @@
   align-items: center;
   justify-content: center;
 }
+
 .custom-loader {
   width: 60px;
   height: 60px;
@@ -236,10 +218,12 @@
   border-radius: 50%;
   animation: spin 1s cubic-bezier(0.68, -0.55, 0.27, 1.55) infinite;
 }
+
 @keyframes spin {
   0% {
     transform: rotate(0deg);
   }
+
   100% {
     transform: rotate(360deg);
   }
@@ -255,11 +239,13 @@
   border: none;
   transition: 0.3s;
 }
+
 .btn-save-premium:hover:not(:disabled) {
   background: #7c3aed;
   transform: translateY(-2px);
   box-shadow: 0 10px 20px rgba(124, 58, 237, 0.2);
 }
+
 .btn-outline-premium {
   background: white;
   color: #3b1e54;
@@ -269,21 +255,26 @@
   font-weight: 700;
   transition: 0.3s;
 }
+
 .btn-outline-premium:hover:not(:disabled) {
   background: #f3eff7;
 }
+
 .pwd-meter {
   height: 4px;
   flex: 1;
   background: #eee;
   border-radius: 10px;
 }
+
 .pwd-meter.active {
   background: #7c3aed;
 }
+
 .text-purple-accent {
   color: #7c3aed;
 }
+
 .text-dark-indigo {
   color: #1e1b4b;
 }
@@ -301,6 +292,7 @@
   align-items: center;
   z-index: 9999;
 }
+
 .popup-card {
   background: white;
   padding: 30px 40px;
@@ -311,12 +303,15 @@
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
   animation: popup-zoom 0.3s ease-out;
 }
+
 .popup-card.success {
   border-top: 6px solid #00d084;
 }
+
 .popup-card.error {
   border-top: 6px solid #f44336;
 }
+
 .popup-card button {
   margin-top: 15px;
   padding: 8px 20px;
@@ -327,14 +322,17 @@
   cursor: pointer;
   font-weight: 700;
 }
+
 .popup-card button:hover {
   background: #3b1e54;
 }
+
 @keyframes popup-zoom {
   0% {
     transform: scale(0.7);
     opacity: 0;
   }
+
   100% {
     transform: scale(1);
     opacity: 1;
