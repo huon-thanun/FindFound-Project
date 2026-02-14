@@ -7,56 +7,243 @@
           ទិដ្ឋភាពទូទៅនៃទិន្នន័យក្នុងប្រព័ន្ធរបស់អ្នក
         </p>
       </div>
+      <button
+        class="btn btn-primary-custom d-none d-md-flex align-items-center"
+        @click="showCreateModal = true"
+      >
+        <i class="bi bi-plus-lg me-2"></i> បង្កើតអ្នកប្រើប្រាស់
+      </button>
     </header>
 
-    <main class="main-content">
-      <div v-if="loading" class="text-center py-5 my-5">
-        <div class="spinner-border text-primary" role="status"></div>
-        <p class="mt-3 text-muted">កំពុងផ្ទុកទិន្នន័យ...</p>
-      </div>
+    <main class="main-content p-0">
 
-      <div v-else>
-        <div class="row g-4 mb-5">
-          <StatCards :cards="cards" />
-        </div>
-        <div class="row g-4 mb-5">
-          <TrendLineChart :reports="allItems" />
-        </div>
-
-        <div class="row g-4">
-          <div class="col-xl-8">
-            <WeeklyReportChart :reports="allItems" />
-
-            <RecentActivities
-              :items="items"
-              v-model:active-tab="activeTab"
-              :is-recent="isRecent"
-            />
-          </div>
-
-          <div class="col-xl-4">
-            <MonthlySummary
-              :found-reports="foundReports"
-              :lost-reports="lostReports"
-              :found-growth="foundGrowth"
-              :lost-growth="lostGrowth"
-              :found-progress="foundProgress"
-              :lost-progress="lostProgress"
-            />
-
-            <div class="content-card mt-4">
-              <CategoryDonut
-                :total-items="totalItems"
-                :category-stats="categoryStats"
-                :donut-style="donutStyle"
-              />
+      <!-- STAT CARDS -->
+      <div class="row g-4 mb-5">
+        <div
+          v-for="(card, index) in Cards"
+          :key="index"
+          class="col-12 col-md-6 col-lg-3"
+        >
+          <div
+            class="stat-card-modern"
+            :class="['variant-1', 'variant-2', 'variant-3', 'variant-4'][index]"
+          >
+            <div class="stat-content">
+              <div class="stat-info">
+                <p class="stat-label-modern">{{ card.title }}</p>
+                <h3 class="stat-value-modern">
+                  {{ card.value.toLocaleString() }}
+                </h3>
+              </div>
+              <div class="stat-icon-box">
+                <i :class="['bi', card.icon]"></i>
+              </div>
+            </div>
+            <div class="stat-progress-bg">
+              <div class="stat-progress-fill"></div>
             </div>
           </div>
         </div>
       </div>
+      <!-- ✅ CLOSED row properly -->
+
+      <!-- LINE CHART -->
+      <div class="line-chart-wrapper purple-theme mb-4">
+        <div class="chart-header-mini">
+          <span class="trend-indicator">
+            <i class="bi bi-arrow-up-short"></i> 12%
+          </span>
+          <div class="v-number-purple">{{ totalItems }} របាយការណ៍</div>
+        </div>
+
+        <svg viewBox="0 0 1000 200" class="line-chart-svg">
+          <g stroke="rgba(139, 92, 246, 0.1)" stroke-width="1">
+            <line x1="0" y1="50" x2="1000" y2="50" />
+            <line x1="0" y1="150" x2="1000" y2="150" />
+          </g>
+
+          <path
+            d="M0,160 C 150,160 250,40 400,40 C 550,40 650,150 800,150 C 950,150 1000,80 1050,80"
+            fill="none"
+            stroke="#8b5cf6"
+            stroke-width="5"
+            stroke-linecap="round"
+          />
+
+          <circle cx="800" cy="150" r="6" fill="#8b5cf6" />
+        </svg>
+
+        <div class="chart-labels-purple">
+          <span>ច័ន្ទ</span><span>អង្គារ</span><span>ពុធ</span>
+          <span>ព្រហស្បតិ៍</span><span>សុក្រ</span>
+          <span>សៅរ៍</span><span>អាទិត្យ</span>
+        </div>
+
+      <!-- REPORT TREND + MONTH SUMMARY -->
+      <div class="row g-4 mb-4">
+        <div class="col-lg-8">
+          <div class="content-card">
+            <div class="content-card-header">
+              <h5 class="m-0">
+                <i class="bi bi-graph-up-arrow me-2"></i>
+                និន្នាការរបាយការណ៍ (៧ថ្ងៃចុងក្រោយ)
+              </h5>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-4">
+          <div class="content-card bg-primary-gradient text-white">
+            <h5>សង្ខេបប្រចាំខែ</h5>
+            <div class="mt-4 text-center">
+              <small>
+                អ្នកបានដោះស្រាយបញ្ហាចំនួន
+                <strong>{{ foundReports }}</strong>
+                ក្នុងខែនេះ!
+              </small>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RECENT ACTIVITY + DONUT -->
+      <div class="row g-4">
+        <!-- LEFT COLUMN -->
+        <div class="col-xl-8">
+          <div class="content-card">
+            <div class="content-card-header">
+              <h5 class="m-0">
+                <i class="bi bi-clock-history me-2"></i>
+                សកម្មភាពថ្មីៗ
+              </h5>
+
+              <div class="custom-tabs">
+                <button
+                  v-for="tab in ['All', 'Lost', 'Found']"
+                  :key="tab"
+                  :class="['tab-btn', { active: activeTab === tab }]"
+                  @click="activeTab = tab"
+                >
+                  {{
+                    tab === "All"
+                      ? "ទាំងអស់"
+                      : tab === "Lost"
+                      ? "បាត់"
+                      : "រកឃើញ"
+                  }}
+                </button>
+              </div>
+            </div>
+
+            <div class="transaction-container mt-3">
+              <div
+                v-for="item in filteredItems"
+                :key="item.id"
+                class="activity-item"
+              >
+                <div class="activity-left">
+                  <div class="img-wrapper">
+                    <img
+                      :src="item.reportImages?.[0]?.name || '/placeholder.png'"
+                      alt="item"
+                    />
+                  </div>
+
+                  <div class="activity-info">
+                    <h6 class="item-title">
+                      {{ item.title }}
+                      <span
+                        v-if="isRecent(item.createdAt)"
+                        class="badge-new"
+                      >
+                        ថ្មី
+                      </span>
+                    </h6>
+
+                    <p class="item-meta">
+                      <span class="cat-tag">
+                        {{ item.category?.name }}
+                      </span>
+                      <span class="dot"></span>
+                      <span class="time-tag">
+                        {{ dayjs(item.createdAt).format("DD MMM, HH:mm") }}
+                      </span>
+                    </p>
+                  </div>
+
+                  <div
+                    class="transaction-status"
+                    :class="
+                      item.reportType?.name === 'FOUND'
+                        ? 'found'
+                        : 'lost'
+                    "
+                  >
+                    {{
+                      item.reportType?.name === "FOUND"
+                        ? "✓ ប្រទះឃើញ"
+                        : "⚠ បានបាត់"
+                    }}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- RIGHT COLUMN -->
+        <div class="col-xl-4">
+          <div class="content-card">
+            <div class="content-card-header">
+              <h5 class="m-0">
+                <i class="bi bi-pie-chart me-2"></i>
+                តាមប្រភេទ
+              </h5>
+            </div>
+
+            <div class="chart-section">
+              <div class="donut-chart-wrapper">
+                <div class="donut-visual" :style="donutStyle">
+                  <div class="donut-inner">
+                    <span class="total-num">{{ totalItems }}</span>
+                    <span class="total-text">សរុប</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="legend-list mt-4">
+                <div
+                  v-for="cat in categoryStats"
+                  :key="cat.category.name"
+                  class="legend-row"
+                >
+                  <div class="legend-info">
+                    <span class="legend-name">
+                      {{ cat.category.name }}
+                    </span>
+                    <span class="legend-percent">
+                      {{ cat.percent }}%
+                    </span>
+                  </div>
+
+                  <div class="progress-thin">
+                    <div
+                      class="progress-bar-thin"
+                      :style="{ width: cat.percent + '%' }"
+                    ></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- END ROW -->
+
     </main>
   </div>
 </template>
+
 
 <script setup>
 import { ref, computed, onMounted } from "vue";
