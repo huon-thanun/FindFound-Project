@@ -448,13 +448,13 @@ const isValidEmail = (email) => {
 };
 
 // Watch filters for search, status, sort
-// watch(
-//   [() => filters.search, () => filters.status, () => filters.sortBy, () => filters.sortDir],
-//   () => {
-//     filters.page = 1;
-//     loadUsers();
-//   },
-// );
+watch(
+  [() => filters.search, () => filters.status, () => filters.sortBy, () => filters.sortDir],
+  () => {
+    filters.page = 1;
+    loadUsers();
+  },
+);
 
 const shownCount = computed(() => {
   return Math.min(filters.page * filters.perPage, total.value);
