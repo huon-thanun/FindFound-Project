@@ -47,6 +47,7 @@ import Card from "@/views/user/reports/Card.vue";
 import ProfileUserSecurity from "@/views/user/profile/ProfileUserSecurity.vue";
 import EditProfileUserView from "@/views/user/profile/EditProfileUserView.vue";
 import VerifyEmail from "@/views/user/auth/VerifyEmail.vue";
+import NotFound from "@/views/NotFound.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -216,6 +217,11 @@ const router = createRouter({
           name: "category",
           component: CategoryUser,
         },
+        {
+          path: '/notfound',
+          name: 'notfound',
+          component: NotFound
+        }
       ],
     },
 
@@ -270,7 +276,9 @@ const router = createRouter({
     /* ================= FALLBACK ================= */
     {
       path: "/:pathMatch(.*)*",
-      redirect: "/login",
+      redirect: "notfound",
+      // component: NotFound,
+      // meta: { public: true },
     },
   ],
   scrollBehavior(to, from, savedPosition) {

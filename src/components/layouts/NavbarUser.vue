@@ -70,7 +70,7 @@
           variant="secondary"
           @click="goLogin"
         >
-          ចូល
+          ចូលចូលគណនី
         </base-button>
         <base-button
           class="handle-btn"
@@ -302,7 +302,7 @@
             variant="secondary"
             class="btn-login"
           >
-            ចូល
+            ចូលគណនី
           </base-button>
         </router-link>
         <router-link :to="{ name: 'register' }">

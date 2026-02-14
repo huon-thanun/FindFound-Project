@@ -388,12 +388,11 @@ const previousPage = async () => {
             </div>
         </div>
 
-        <div class="position-relative">
-      <!-- LOADING OVERLAY -->
-      <div v-if="isLoading" class="loading-overlay">
-        <div class="spinner-border spinner-color"></div>
-      </div>
-        <BaseTable :columns="columns" :items="categories" :isLoading="false" @edit="openEditModal"
+        <div v-if="isLoading" class="loading-full" style="height: 50vh;">
+            <div class="custom-loader"></div>
+            <p class="mt-4 khmer-font text-purple-accent">កំពុងផ្ទុកទិន្នន័យ...</p>
+        </div>
+        <BaseTable v-else :columns="columns" :items="categories" :isLoading="false" @edit="openEditModal"
             @delete="openDeleteModal" @rowClick="openDetailModal" class="shadow mt-4">
             <template #column-id="{ item }">
                 #{{ item.id }}
@@ -408,7 +407,6 @@ const previousPage = async () => {
                 {{ formatDate(item.updatedAt) }}
             </template>
         </BaseTable>
-    </div>
 
         <div class="mt-3 text-muted">
             <p class="text-muted mb-0">
@@ -555,19 +553,5 @@ const previousPage = async () => {
         flex: 1;
     }
 
-}
-
-.loading-overlay {
-  position: absolute;
-  inset: 0;
-  background: rgba(255, 255, 255, 0.7);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 10;
-}
-
-.spinner-color{
-    color: var(--primary-color);
 }
 </style>
