@@ -50,8 +50,10 @@
                 v-model="form.email"
                 type="email"
                 class="form-control"
+                :class="{ 'is-invalid': errors.email }"
                 placeholder="ឧ. អ៊ីមែលរបស់អ្នក@gmail.com"
               />
+
               <span v-if="errors.email" class="field-error">
                 {{ errors.email }}
               </span>
@@ -360,10 +362,13 @@ const register = async () => {
   } catch (err) {
     console.error(err);
 
-    alert(
-      err.response?.data?.message ||
-        "មានបញ្ហាក្នុងការចុះឈ្មោះ សូមព្យាយាមម្តងទៀត",
-    );
+    if (err.response?.status === 409) {
+      errors.value.email =
+         "អ៊ីមែលនេះមានគណនីរួចហើយ។ សូមព្យាយាមប្រើអ៊ីមែលផ្សេង។";
+    } else {
+      errors.value.email =
+        err.response?.data?.message || "មានបញ្ហាមួយកើតឡើង។ សូមព្យាយាមម្តងទៀត។";
+    }
   } finally {
     loading.value = false;
   }
@@ -545,6 +550,17 @@ const register = async () => {
   line-height: 1.5;
   color: #ef4444;
 }
+/* Red border when invalid */
+.is-invalid {
+  border-color: #ef4444 !important;
+  background-color: #fff5f5;
+}
+
+.is-invalid:focus {
+  border-color: #ef4444 !important;
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.15);
+}
+
 
 /* PRIMARY BUTTON */
 .btn {

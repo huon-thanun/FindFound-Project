@@ -26,7 +26,7 @@
             <!-- Categories Grid -->
             <div class="row g-4">
                 <!-- Loading State - Skeleton Cards -->
-                <div v-if="categoryStore.isLoading" v-for="n in 4" :key="`skeleton-${n}`"
+                <div v-if="categoryStore.isLoadingl" v-for="n in 4" :key="`skeleton-${n}`"
                     class="col-lg-3 col-md-4 col-sm-6">
                     <BaseSkeleton imageHeight="150px" />
                 </div>
