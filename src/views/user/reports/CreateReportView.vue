@@ -20,11 +20,7 @@
       <div class="row g-0 justify-content-center align-items-center">
         <div class="col-12 col-md-12 col-lg-11 col-xl-10 col-xxl-10">
           <div class="my-4">
-            <BaseButton
-              variant="dark"
-              class="w-auto rounded-pill fw-bold shadow-lg"
-              @click="goBack"
-            >
+            <BaseButton variant="outline_primary" @click="goBack">
               ត្រឡប់ក្រោយ
             </BaseButton>
           </div>
@@ -223,7 +219,7 @@
                             variant="primary"
                             @click="handleUploadImg"
                           >
-                            Browse
+                            រកមើល
                           </BaseButton>
                           <span class="fs-5 py-2"
                             >ចុចប៊ូតុងដើម្បីបញ្ចូលរូបភាព</span
@@ -285,7 +281,7 @@
                       <div class="col-6 col-xl-3">
                         <div class="mb-4">
                           <label for="input-latitude" class="form-label">
-                            Latitude
+                            រយៈទទឹង
                           </label>
                           <input
                             v-model="data.latitude"
@@ -295,8 +291,14 @@
                               'form-control form-control-custom',
                               errorInput.latitude.error ? 'border-danger' : '',
                             ]"
-                            placeholder="បញ្ចូល Latitude"
+                            placeholder="123"
                           />
+                          <span
+                            v-if="errorInput.latitude.error"
+                            class="validation-msg text-danger"
+                          >
+                            {{ errorInput.latitude.msg }}
+                          </span>
                         </div>
                       </div>
 
@@ -304,7 +306,7 @@
                       <div class="col-6 col-xl-3">
                         <div class="mb-4">
                           <label for="input-longitude" class="form-label">
-                            Longitude
+                            រយៈបណ្តោយ
                           </label>
                           <input
                             v-model="data.longitude"
@@ -314,8 +316,14 @@
                               'form-control form-control-custom',
                               errorInput.longitude.error ? 'border-danger' : '',
                             ]"
-                            placeholder="បញ្ចូល Longitude"
+                            placeholder="123"
                           />
+                          <span
+                            v-if="errorInput.longitude.error"
+                            class="validation-msg text-danger"
+                          >
+                            {{ errorInput.longitude.msg }}
+                          </span>
                         </div>
                       </div>
                     </div>
@@ -351,7 +359,7 @@
                   <div class="col-12 col-xl-6">
                     <div class="mb-4">
                       <label for="input-telegram" class="form-label">
-                        Telegram Link
+                        តំណភ្ជាប់ Telegram
                         <span class="text-danger"> * </span>
                       </label>
                       <input
@@ -378,10 +386,10 @@
                       <BaseButton
                         variant="primary"
                         type="submit"
-                        class="w-100 rounded-pill fw-bold shadow-lg"
+                        class="w-100 fw-bold shadow-lg"
                         :isLoading="isLoading"
                       >
-                        បង្កើត
+                        បង្កើតការរាយការណ៍
                       </BaseButton>
                     </div>
                   </div>
@@ -401,7 +409,7 @@
           <p class="fs-3">{{ message }}</p>
         </template>
 
-        <template #btnActive>
+        <!-- <template #btnActive>
           <BaseButton
             icon="box"
             class="col-6"
@@ -410,7 +418,7 @@
           >
             យល់ព្រម
           </BaseButton>
-        </template>
+        </template> -->
       </BaseModal>
     </div>
   </div>
@@ -536,14 +544,14 @@ function validateForm() {
   // Latitude: number
   if (!regex.number.test(data.latitude)) {
     errorInput.latitude.error = true;
-    errorInput.latitude.msg = "Latitude ត្រូវតែជលេខ";
+    errorInput.latitude.msg = "រយៈទទឹង ត្រូវតែជលេខ";
     isValid = false;
   }
 
   // Longitude: required, number
   if (!regex.number.test(data.longitude)) {
     errorInput.longitude.error = true;
-    errorInput.longitude.msg = "Longitude ត្រូវតែជលេខ";
+    errorInput.longitude.msg = "រយៈបណ្ដោយ ត្រូវតែជលេខ";
     isValid = false;
   }
 
@@ -591,7 +599,7 @@ function handleFileUpload(event) {
 
   if (total > 3) {
     errorInput.images.error = true;
-    errorInput.images.msg = "You can upload maximum 3 images only";
+    errorInput.images.msg = "អ្នកអាចបង្ហោះរូបភាពបានច្រើនបំផុត ៣ ប៉ុណ្ណោះ";
     return;
   }
 
@@ -615,6 +623,7 @@ const fnHandleCreateReport = async (formData) => {
   }
 };
 
+const modalTimer = ref(null);
 const showMessageModal = ref(false);
 const msgIcon = ref("");
 const isLoading = ref(false);
@@ -710,7 +719,7 @@ const handleSubmit = async () => {
     if (reportStore.msgCreateOwnReport?.result) {
       msgIcon.value = "check-lg";
       themeColor.value = "success";
-      message.value = "Created successfully";
+      message.value = "បង្កើតដោយជោគជ័យ";
     }
   } catch (error) {
     console.error(error);
@@ -719,7 +728,7 @@ const handleSubmit = async () => {
 
     //NETWORK ERROR (lost internet)
     if (!error.response) {
-      message.value = "No internet connection. Please check your network.";
+      message.value = "មិនមានការតភ្ជាប់អ៊ីនធឺណេត។ សូមពិនិត្យមើលបណ្តាញរបស់អ្នក។";
     }
 
     // API error from server
@@ -728,11 +737,16 @@ const handleSubmit = async () => {
     }
     //  fallback
     else {
-      message.value = "Failed to create report. Please try again.";
+      message.value = "បរាជ័យក្នុងការបង្កើតរបាយការណ៍។ សូមព្យាយាមម្តងទៀត។";
     }
   } finally {
     isLoading.value = false;
     showMessageModal.value = true;
+    modalTimer.value = setTimeout(() => {
+      showMessageModal.value = false;
+      clearData();
+      router.push({ name: "own-reports" });
+    }, 3000);
   }
 };
 

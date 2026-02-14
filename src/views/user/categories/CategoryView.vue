@@ -13,10 +13,11 @@
                 </div>
                 <div class="col-lg-6">
                     <!-- <BaseInput v-model="searchQuery" type="text" placeholder="ស្វែងរកប្រភេទ..." /> -->
-                    <div
-                        class="search-bar-wrapper shadow-sm rounded-pill bg-white d-flex align-items-center border position-relative" style="height: 50px;">
+                    <div class="search-bar-wrapper shadow-sm rounded-pill bg-white d-flex align-items-center position-relative"
+                        style="height: 50px;">
                         <i class="bi bi-search text-muted me-2 ms-3"></i>
-                        <input type="text" v-model="searchQuery" class="form-control border-0 rounded-pill position-absolute ps-5 bg-transparent h-100 w-100 khmer-font"
+                        <input type="text" v-model="searchQuery"
+                            class="form-control border-0 rounded-pill position-absolute ps-5 bg-transparent h-100 w-100 khmer-font"
                             placeholder="ស្វែងរកប្រភេទ..." />
                     </div>
                 </div>
@@ -24,11 +25,10 @@
 
             <!-- Categories Grid -->
             <div class="row g-4">
-                <!-- Loading State -->
-                <div v-if="categoryStore.isLoading" class="col-12 text-center">
-                    <div class="spinner-border text-primary" role="status">
-                        <span class="visually-hidden">កំពុងផ្ទុក...</span>
-                    </div>
+                <!-- Loading State - Skeleton Cards -->
+                <div v-if="categoryStore.isLoadingl" v-for="n in 4" :key="`skeleton-${n}`"
+                    class="col-lg-3 col-md-4 col-sm-6">
+                    <BaseSkeleton imageHeight="150px" />
                 </div>
 
                 <!-- Empty State -->
@@ -40,7 +40,8 @@
                 </div>
 
                 <!-- Category Cards -->
-                <div v-for="category in filteredCategories" :key="category.id" class="col-lg-3 col-md-4 col-sm-6">
+                <div v-else v-for="category in filteredCategories" :key="category.id"
+                    class="col-lg-3 col-md-4 col-sm-6">
                     <BaseReportCard class="category-card h-100">
                         <div class="category-icon-wrapper">
                             <div class="category-icon">
@@ -102,6 +103,7 @@ import BaseButton from "@/components/base/BaseButton.vue";
 import BaseInput from "@/components/base/BaseInput.vue";
 import BaseReportCard from "@/components/base/BaseReportCard.vue";
 import BaseModal from "@/components/base/BaseModal.vue";
+import BaseSkeleton from "@/components/base/BaseSkeleton.vue";
 
 const router = useRouter();
 const categoryStore = useCategoryStore();
@@ -162,19 +164,21 @@ const navigateToGallery = () => {
 </script>
 
 <style scoped>
-.ca
-.form-control {
-  outline: none;
-  box-shadow: none;
-  border: 1px solid #d1d5db;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+.ca .form-control {
+    outline: none;
+    box-shadow: none;
+    border: 1px solid #d1d5db;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .form-control:focus {
-  border-color: var(--primary-color); /* primary */
-  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.25);
-  outline: none;
-}tegory-page {
+    border-color: var(--primary-color);
+    /* primary */
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.25);
+    outline: none;
+}
+
+tegory-page {
     min-height: 100vh;
     /* background: linear-gradient(135deg, #eaddf3 0%, #f5e6fb 100%); */
 }
@@ -226,6 +230,10 @@ const navigateToGallery = () => {
     color: var(--text-Primary);
     margin-bottom: 12px;
     font-size: 16px;
+}
+
+.search-bar-wrapper {
+    border: 1px solid var(--tertiary-color);
 }
 
 .category-card p {

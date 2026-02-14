@@ -45,9 +45,11 @@
       </div>
     </div>
 
-    <div class="col-12 center2" v-if="reportStore.isLoadingGetAllReport">
-      <div class="spinner-border spinner-color" role="status">
-        <span class="visually-hidden">កំពុងផ្ទុក...</span>
+    <div class="col-12 mt-4" v-if="reportStore.isLoadingGetAllReport">
+      <div class="row g-3">
+        <div v-for="n in 4" :key="`skeleton-${n}`" class="col-12 col-md-6 col-xl-4 col-xxl-3">
+          <BaseSkeleton />
+        </div>
       </div>
     </div>
 
@@ -161,6 +163,7 @@
 <script setup>
 import { ref, onMounted, watch } from "vue";
 import BaseReportCard from "@/components/base/BaseReportCard.vue";
+import BaseSkeleton from "@/components/base/BaseSkeleton.vue";
 import { useCategoryStore } from "@/stores/categoryStore";
 import { useReportStore } from "@/stores/reportStore";
 import { formatDate } from "@/utils/formatDate";
@@ -450,7 +453,7 @@ const clearFilter = () => {
   color: #3b1e54;
 }
 
-.spinner-color{
+.spinner-color {
   color: var(--primary-color);
 }
 </style>

@@ -4,7 +4,6 @@
     <section class="hero-section">
       <div class="hero-bg"></div>
 
-      <!-- Very subtle floating shapes -->
       <div class="floating-shapes">
         <div class="shape shape-1"></div>
         <div class="shape shape-2"></div>
@@ -12,7 +11,7 @@
       </div>
 
       <div class="container position-relative">
-        <div class="row align-items-center g-5">
+        <div class="row align-items-center g-5 py-5 py-lg-6">
           <!-- Text Column -->
           <div class="col-lg-6 hero-text-col" data-aos="fade-right">
             <div class="badge-modern mb-4">
@@ -22,11 +21,11 @@
             <h1 class="hero-title">
               ទាក់ទងមក <span class="gradient-text">ពួកយើង</span>
               <br class="d-none d-md-block" />
-              យើងរីករាយជួយអ្នកគ្រប់ពេល
+              យើងរីករាយជួយអ្នកគ្រប់ពេលវេលា
             </h1>
             <p class="hero-subtitle">
-              ផ្ញើសារមកយើងឥឡូវនេះ យើងនឹងឆ្លើយតបក្នុងរយៈពេលខ្លីបំផុត
-              និងវិជ្ជាជីវៈ។ សេវាកម្ម 24/7 សុវត្ថិភាពខ្ពស់។
+              ផ្ញើសារមកយើងឥឡូវនេះ — យើងនឹងឆ្លើយតបឆាប់បំផុត និងវិជ្ជាជីវៈបំផុត។
+              សេវាកម្ម 24/7 • សុវត្ថិភាពខ្ពស់ • ឆ្លើយតបក្នុងរយៈពេលខ្លី
             </p>
           </div>
 
@@ -37,9 +36,9 @@
             data-aos-delay="200"
           >
             <img
-              src="../../../assets/images/contact/hero-banner.png"
+              src="../../../assets/images/contact/hero-banner_removebg.png"
               alt="Contact Us Illustration"
-              class="hero-img"
+              class="hero-img img-fluid"
             />
           </div>
         </div>
@@ -51,8 +50,8 @@
       <div class="container">
         <div class="row g-5 justify-content-center">
           <!-- Info Sidebar -->
-          <div class="col-lg-4" data-aos="fade-up" data-aos-delay="100">
-            <div class="info-card glass-card">
+          <div class="col-lg-4 order-lg-1" data-aos="fade-up">
+            <div class="info-card glass-card h-100">
               <h3 class="card-title">ព័ត៌មានទំនាក់ទំនង</h3>
 
               <div class="info-item">
@@ -105,7 +104,11 @@
           </div>
 
           <!-- Contact Form -->
-          <div class="col-lg-8" data-aos="fade-up" data-aos-delay="200">
+          <div
+            class="col-lg-8 order-lg-2"
+            data-aos="fade-up"
+            data-aos-delay="150"
+          >
             <div class="form-card glass-card">
               <h3 class="card-title mb-4">ផ្ញើសារមកយើង</h3>
               <form @submit.prevent="handleSubmit">
@@ -145,7 +148,7 @@
                         class="form-control"
                         id="email"
                         v-model="formData.email"
-                        placeholder="name@example.com"
+                        placeholder="អ៊ីមែលរបស់អ្នក"
                         required
                       />
                       <label for="email">អ៊ីមែល</label>
@@ -159,13 +162,13 @@
                         id="message"
                         v-model="formData.message"
                         placeholder="សាររបស់អ្នក..."
-                        style="height: 150px"
+                        style="height: 160px"
                         maxlength="500"
                         required
                       ></textarea>
-                      <label for="message">សាររបស់អ្នក...</label>
+                      <label for="message">សាររបស់អ្នក</label>
                     </div>
-                    <div class="char-counter mt-2 text-end">
+                    <div class="char-counter mt-2 text-end small">
                       {{ formData.message.length }} / 500
                     </div>
                   </div>
@@ -177,7 +180,7 @@
                       :disabled="isSubmitting"
                     >
                       <span v-if="!isSubmitting">
-                        ផ្ញើសារ <i class="bi bi-arrow-right-short ms-2"></i>
+                        ផ្ញើសារ <i class="bi bi-send-fill ms-2"></i>
                       </span>
                       <span v-else>
                         <span
@@ -196,13 +199,17 @@
     </section>
 
     <!-- Location Map Section -->
-    <section class="location-section py-5">
+    <section class="location-section py-5 py-lg-6">
       <div class="container">
         <h2 class="section-title text-center mb-4" data-aos="fade-up">
           ទីតាំងរបស់យើងនៅភ្នំពេញ
         </h2>
-        <p class="text-center mb-5" data-aos="fade-up" data-aos-delay="100">
-          #ផ្ទះលេខ ៨៦បេ ផ្លូវ ៣១៣ — មកជួបយើងបានយ៉ាងងាយស្រួលនៅកណ្តាលទីក្រុង!
+        <p
+          class="text-center lead mb-5"
+          data-aos="fade-up"
+          data-aos-delay="100"
+        >
+          #ផ្ទះលេខ ៨៦បេ ផ្លូវ ៣១៣ — ស្ថិតនៅកណ្តាលទីក្រុង ងាយស្រួលមកជួប!
         </p>
 
         <div
@@ -212,7 +219,7 @@
         >
           <iframe
             class="w-100"
-            style="height: 500px; border: 0"
+            style="height: 520px; border: 0"
             loading="lazy"
             allowfullscreen
             referrerpolicy="no-referrer-when-downgrade"
@@ -224,7 +231,6 @@
           <a
             href="https://www.google.com/maps/search/?api=1&query=Street+313%2C+Phnom+Penh%2C+Cambodia"
             target="_blank"
-            rel="noopener noreferrer"
             class="btn btn-outline-primary btn-lg px-5 py-3"
           >
             បើកនៅក្នុង Google Maps <i class="bi bi-box-arrow-up-right ms-2"></i>
@@ -249,7 +255,8 @@ const isSubmitting = ref(false);
 
 const handleSubmit = async () => {
   isSubmitting.value = true;
-  await new Promise((resolve) => setTimeout(resolve, 1800));
+  // Simulate API call
+  await new Promise((r) => setTimeout(r, 1600));
   alert("អរគុណ! សាររបស់អ្នកត្រូវបានផ្ញើជោគជ័យ។ យើងនឹងឆ្លើយតបឆាប់ៗនេះ។");
   Object.assign(formData, {
     firstName: "",
@@ -262,78 +269,65 @@ const handleSubmit = async () => {
 </script>
 
 <style scoped>
-@import url("https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@300;400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@300;400;500;600;700;800&display=swap");
 
 .main-contact {
-  font-family: "Kantumruy Pro", sans-serif;
-  background: #fcfaff;
-  padding-bottom: 120px;
+  font-family: "Kantumruy Pro", system-ui, sans-serif;
+  background: #fdfaff;
+  color: #0f0f0f;
 }
 
-/* ── Hero ── (shorter height) ── */
+/* ── Hero ── */
 .hero-section {
   position: relative;
-  background: linear-gradient(
-    135deg,
-    #f5f0ff 0%,
-    #efe8ff 35%,
-    #e6d9ff 65%,
-    #d9ccff 100%
-  );
-  color: #111111;
-  padding: 140px 0 220px; /* Reduced height */
+  background: linear-gradient(135deg, #f8f2ff 0%, #f0e8ff 50%, #e8deff 100%);
   overflow: hidden;
-  border-radius: 0 0 80px 80px;
+  border-radius: 0 0 60px 60px;
+  /* padding: 100px 0 180px; */
+  margin: 0 0 120px;
 }
 
 .hero-bg {
   position: absolute;
   inset: 0;
   background: radial-gradient(
-    ellipse at 40% 60%,
-    rgba(165, 180, 252, 0.06) 0%,
-    transparent 70%
+    circle at 30% 70%,
+    rgba(168, 85, 247, 0.08) 0%,
+    transparent 60%
   );
-  opacity: 0.92;
-}
-
-.floating-shapes {
-  position: absolute;
-  inset: 0;
   pointer-events: none;
-  z-index: 0;
 }
 
-.shape {
+.floating-shapes .shape {
   position: absolute;
-  background: rgba(139, 92, 246, 0.025);
-  backdrop-filter: blur(30px);
+  background: rgba(139, 92, 246, 0.04);
+  backdrop-filter: blur(40px);
+  border: 1px solid rgba(139, 92, 246, 0.08);
   border-radius: 50%;
-  animation: float-slow 50s infinite ease-in-out;
-  pointer-events: none;
+  animation: float-slow 80s infinite ease-in-out;
 }
 
 .shape-1 {
-  width: 380px;
-  height: 380px;
-  top: -20%;
-  left: -25%;
+  width: 420px;
+  height: 420px;
+  top: -15%;
+  left: -20%;
   animation-delay: 0s;
 }
 .shape-2 {
-  width: 500px;
-  height: 500px;
-  bottom: -30%;
-  right: -30%;
-  animation-delay: 20s;
-  border-radius: 60% 40% 55% 45%;
+  width: 560px;
+  height: 560px;
+  bottom: -25%;
+  right: -25%;
+  animation-delay: 25s;
+  border-radius: 48% 52% 55% 45%;
 }
 .shape-3 {
-  width: 320px;
-  height: 320px;
-  top: 60%;
-  left: -10%;
-  animation-delay: 35s;
+  width: 360px;
+  height: 360px;
+  top: 55%;
+  left: -12%;
+  animation-delay: 45s;
 }
 
 @keyframes float-slow {
@@ -342,245 +336,229 @@ const handleSubmit = async () => {
     transform: translate(0, 0) rotate(0deg);
   }
   25% {
-    transform: translate(40px, -60px) rotate(4deg);
+    transform: translate(60px, -80px) rotate(5deg);
   }
   50% {
-    transform: translate(-50px, 70px) rotate(-4deg);
+    transform: translate(-70px, 90px) rotate(-6deg);
   }
   75% {
-    transform: translate(60px, 50px) rotate(3deg);
+    transform: translate(80px, 60px) rotate(4deg);
   }
-}
-
-/* Text on top */
-.hero-text-col,
-.hero-title,
-.hero-subtitle,
-.badge-modern {
-  position: relative;
-  z-index: 2;
 }
 
 .hero-title {
-  font-size: 3.8rem; /* Slightly smaller for better proportion */
+  font-size: clamp(2.6rem, 6vw, 4.2rem);
   font-weight: 800;
-  line-height: 1.1;
-  margin-bottom: 1.4rem;
-  color: #111111;
+  line-height: 1.08;
+  margin-bottom: 1.5rem;
 }
 
 .gradient-text {
-  background: linear-gradient(to right, #8b5cf6, #a78bfa, #c4b5fd);
+  background: linear-gradient(90deg, #7c3aed, #a78bfa, #c4b5fd);
   -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
 }
 
 .hero-subtitle {
-  font-size: 1.3rem;
-  color: #222222;
-  max-width: 560px;
+  font-size: clamp(1.15rem, 2.5vw, 1.35rem);
+  color: #222;
+  max-width: 580px;
   line-height: 1.7;
+  opacity: 0.95;
 }
 
 .badge-modern {
-  background: rgba(139, 92, 246, 0.12);
-  backdrop-filter: blur(14px);
-  border: 1px solid rgba(139, 92, 246, 0.22);
-  padding: 12px 28px;
-  border-radius: 60px;
-  font-size: 1.05rem;
-  color: #111111;
+  display: inline-flex;
+  align-items: center;
+  background: rgba(139, 92, 246, 0.14);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(139, 92, 246, 0.24);
+  padding: 0.75rem 1.8rem;
+  border-radius: 50rem;
+  font-weight: 600;
+  color: #111;
+  font-size: 1.1rem;
 }
 
-/* Hero image (large but fits shorter height) */
-.hero-illustration .hero-img {
-  width: 130%; /* Still big, but not overflowing */
-  max-width: none;
-  height: auto;
-  margin-left: -15%;
-  filter: drop-shadow(0 35px 80px rgba(0, 0, 0, 0.18)) brightness(1.04);
-  border-radius: 40px;
-  transition: all 0.7s ease;
+.hero-img {
+  max-width: 110%;
+  margin-left: -10%;
+  filter: drop-shadow(0 30px 70px rgba(0, 0, 0, 0.16)) brightness(1.03);
+  transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .hero-illustration:hover .hero-img {
-  transform: scale(1.08) translateY(-20px);
+  transform: scale(1.06) translateY(-15px);
 }
 
-/* ── Contact Content ── */
-.contact-content {
-  margin-top: -140px; /* Adjusted to match shorter hero */
-  position: relative;
-  z-index: 10;
-}
-
+/* ── Cards ── */
 .glass-card {
-  background: rgba(255, 255, 255, 0.97);
-  backdrop-filter: blur(18px);
-  border: 1px solid rgba(255, 255, 255, 0.65);
-  border-radius: 32px;
-  padding: 45px;
+  background: rgba(255, 255, 255, 0.96);
+  backdrop-filter: blur(22px);
+  -webkit-backdrop-filter: blur(22px);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  border-radius: 28px;
+  padding: 2.5rem;
   box-shadow:
-    0 25px 70px rgba(0, 0, 0, 0.09),
-    inset 0 0 20px rgba(139, 92, 246, 0.03);
+    0 20px 60px rgba(0, 0, 0, 0.08),
+    inset 0 0 24px rgba(139, 92, 246, 0.04);
   transition: all 0.4s ease;
 }
 
 .glass-card:hover {
-  transform: translateY(-10px);
+  transform: translateY(-8px);
   box-shadow:
-    0 40px 100px rgba(0, 0, 0, 0.14),
-    inset 0 0 30px rgba(139, 92, 246, 0.05);
+    0 35px 90px rgba(0, 0, 0, 0.12),
+    inset 0 0 32px rgba(139, 92, 246, 0.06);
 }
 
 .card-title {
   font-weight: 700;
-  color: #111111;
-  margin-bottom: 2rem;
-  font-size: 1.6rem;
+  color: #111;
+  font-size: 1.65rem;
+  margin-bottom: 1.8rem;
 }
 
 .info-item {
   display: flex;
-  gap: 20px;
-  margin-bottom: 1.8rem;
+  gap: 1.25rem;
+  margin-bottom: 1.6rem;
+  align-items: center;
 }
 
 .icon-circle {
-  width: 56px;
-  height: 56px;
-  background: #f3e8ff;
-  color: #8b5cf6;
-  border-radius: 18px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.5rem;
+  flex-shrink: 0;
+  width: 54px;
+  height: 54px;
+  background: rgba(139, 92, 246, 0.12);
+  color: #7c3aed;
+  border-radius: 16px;
+  display: grid;
+  place-items: center;
+  font-size: 1.4rem;
 }
 
 .info-label {
-  font-size: 0.85rem;
-  color: #444444;
+  font-size: 0.82rem;
   font-weight: 600;
+  color: #555;
   text-transform: uppercase;
-  letter-spacing: 0.6px;
+  letter-spacing: 0.5px;
+  margin-bottom: 0.3rem;
 }
 
 .info-item p,
 .info-item a {
-  color: #111111;
+  color: #111;
   font-weight: 500;
   margin: 0;
-}
-
-.social-links .social-title {
-  color: #111111;
-  margin-bottom: 1.2rem;
+  line-height: 1.5;
 }
 
 .social-icon {
-  width: 48px;
-  height: 48px;
-  border-radius: 16px;
-  background: #f3e8ff;
-  color: #8b5cf6;
-  font-size: 1.4rem;
-  transition: all 0.3s ease;
+  width: 46px;
+  height: 46px;
+  border-radius: 14px;
+  background: rgba(139, 92, 246, 0.1);
+  color: #7c3aed;
+  font-size: 1.35rem;
+  display: grid;
+  place-items: center;
+  transition: all 0.35s ease;
 }
 
 .social-icon:hover {
-  background: #8b5cf6;
+  background: #7c3aed;
   color: white;
-  transform: translateY(-5px) scale(1.1);
+  transform: translateY(-4px) scale(1.12);
 }
 
 /* Form */
 .form-control {
-  color: #111111;
-  border-radius: 16px;
-  padding: 16px 20px;
+  border-radius: 14px;
+  padding: 1.1rem 1.3rem;
+  border: 1px solid #d0c4e8;
+  background: rgba(255, 255, 255, 0.7);
+  color: #111;
 }
 
 .form-control:focus {
   border-color: #8b5cf6;
-  box-shadow: 0 0 0 0.3rem rgba(139, 92, 246, 0.18);
+  box-shadow: 0 0 0 0.35rem rgba(139, 92, 246, 0.16);
+  background: white;
 }
 
 .form-floating > label {
-  color: #444444;
-  padding: 16px 20px;
+  color: #555;
+  padding: 1.1rem 1.3rem;
 }
 
 .btn-submit {
-  background: linear-gradient(90deg, #8b5cf6, #a78bfa);
+  background: linear-gradient(90deg, #7c3aed, #a78bfa);
   border: none;
   color: white;
-  padding: 16px 48px;
-  border-radius: 20px;
+  padding: 0.9rem 2.8rem;
+  border-radius: 16px;
   font-weight: 600;
-  box-shadow: 0 14px 40px rgba(139, 92, 246, 0.4);
-  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  font-size: 1.05rem;
+  box-shadow: 0 12px 36px rgba(124, 58, 237, 0.35);
+  transition: all 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-.btn-submit:hover {
-  background: linear-gradient(90deg, #7c3aed, #c4b5fd);
-  transform: translateY(-6px) scale(1.05);
-  box-shadow: 0 24px 60px rgba(139, 92, 246, 0.55);
+.btn-submit:hover:not(:disabled) {
+  background: linear-gradient(90deg, #6d28d9, #c4b5fd);
+  transform: translateY(-5px) scale(1.04);
+  box-shadow: 0 20px 50px rgba(124, 58, 237, 0.5);
 }
 
 .char-counter {
+  color: #666;
   font-size: 0.9rem;
-  color: #555555;
 }
 
-/* Location Section */
-.location-section {
-  background: linear-gradient(to bottom, #f9f7ff, #fcfaff);
+/* Map */
+.map-wrapper {
+  border-radius: 28px;
+  overflow: hidden;
+  background: white;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.09);
 }
 
 .section-title {
-  font-size: 2.8rem;
-  font-weight: 700;
-  color: #111111;
-}
-
-.map-wrapper {
-  border-radius: 32px;
-  overflow: hidden;
-  background: white;
-  box-shadow: 0 25px 70px rgba(0, 0, 0, 0.1);
-}
-
-.btn-outline-primary {
-  border-color: #8b5cf6;
-  color: #111111;
-  font-weight: 600;
-  padding: 14px 40px;
-  border-radius: 20px;
-}
-
-.btn-outline-primary:hover {
-  background: #8b5cf6;
-  color: white;
+  font-size: clamp(2.2rem, 5vw, 3.2rem);
+  font-weight: 800;
+  color: #111;
 }
 
 /* Responsive */
 @media (max-width: 991px) {
   .hero-section {
-    padding: 100px 0 160px; /* Shorter on mobile too */
+    padding: 80px 0 220px;
+    border-radius: 0 0 40px 40px;
     text-align: center;
   }
-  .hero-title {
-    font-size: 3rem;
+  .hero-img {
+    margin: 0 auto;
+    max-width: 90%;
   }
   .contact-content {
-    margin-top: -100px;
+    margin-top: -140px;
   }
   .glass-card {
-    padding: 35px 25px;
+    padding: 2rem 1.5rem;
   }
   .map-wrapper iframe {
-    height: 400px;
+    height: 420px;
+  }
+}
+
+@media (max-width: 576px) {
+  .hero-title {
+    font-size: 2.4rem;
+  }
+  .btn-submit {
+    width: 100%;
   }
 }
 </style>

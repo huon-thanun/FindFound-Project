@@ -231,7 +231,7 @@ const prevTestimonial = () => {
             data-aos-delay="200"
           >
             <img
-              src="../../../assets/images/about/hero-banner.png"
+              src="../../../assets/images/about/hero-banner_removebg.png"
               alt="About Us Illustration"
               class="hero-img"
             />
@@ -515,7 +515,6 @@ const prevTestimonial = () => {
     #d9ccff 100%
   );
   color: #111111;
-  padding: 140px 0 220px; /* Reduced height */
   overflow: hidden;
   border-radius: 0 0 80px 80px;
 }
