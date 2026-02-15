@@ -11,9 +11,7 @@
       <div class="brand-accent-line"></div>
     </div>
 
-    <nav class="nav-container primary-color">
-      <div class="menu-label">មេនុយមេ</div>
-
+    <nav class="nav-container">
       <router-link
         :to="{ name: 'admin.dashboard' }"
         class="nav-link-custom"
@@ -48,7 +46,6 @@
     </nav>
 
     <div class="sidebar-footer">
-      <!-- You can keep security button or remove if not implemented -->
       <button class="action-btn security" title="Security Settings">
         <i class="bi bi-shield-lock"></i> ការកំណត់សុវត្ថិភាព
       </button>
@@ -58,7 +55,7 @@
       </button>
     </div>
 
-    <!-- Logout Confirmation Modal -->
+    <!-- Logout Confirmation Modal (unchanged) -->
     <BaseModal
       title="ចាកចេញពីគណនី"
       icon="box-arrow-right"
@@ -91,166 +88,163 @@
 
 <script setup>
 import { ref } from "vue";
-// import { useRouter } from 'vue-router'   // ← uncomment if needed
 
 const showLogoutModal = ref(false);
 
-// const router = useRouter()
-
 function handleLogout() {
-  // Put your real logout logic here
-  // e.g. await auth.signOut(), localStorage.clear(), etc...
-
-  console.log("User is logging out...");
-
-  // Example:
-  // await logoutApiCall()
-  // router.push({ name: 'login' })
-
+  // Add your real logout logic here (API call, clear storage, redirect, etc.)
+  console.log("User logging out...");
   showLogoutModal.value = false;
 }
 </script>
 
 <style scoped>
 .sidebar {
-  width: 280px;
+  width: 300px; /* Slightly wider for big logo comfort */
   height: 100vh;
-  background-color: #2e1065;
+  background: #ffffff;
+  border-right: 1px solid #e2e8f0;
   display: flex;
   flex-direction: column;
   position: fixed;
   left: 0;
   top: 0;
   z-index: 1000;
-  border-right: 1px solid rgba(167, 139, 250, 0.1);
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.04);
+  transition: all 0.3s ease;
 }
 
 .brand-header {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 20px 0 10px;
 }
 
 .large-logo-box {
   width: 100%;
-  height: 120px;
+  height: 200px; /* Very large logo area – adjust to 180–260px if needed */
   display: flex;
   justify-content: center;
   align-items: center;
+  padding: 0 32px; /* Side padding to prevent edge touching */
 }
 
 .brand-logo {
-  width: auto;
-  height: auto;
-  max-width: 85%;
+  max-width: 100%;
   max-height: 100%;
   object-fit: contain;
-  filter: brightness(0) invert(1);
-  transition: transform 0.3s ease;
+  transition: transform 0.28s ease;
 }
 
 .brand-logo:hover {
-  transform: scale(1.06);
+  transform: scale(1.04);
 }
 
 .brand-accent-line {
-  width: 60px;
+  width: 64px;
   height: 4px;
   background: linear-gradient(90deg, #a78bfa, #7c3aed);
-  margin: 12px 0 20px;
   border-radius: 2px;
-  box-shadow: 0 2px 8px rgba(139, 92, 246, 0.25);
+  margin: 20px 0 28px;
+  box-shadow: 0 2px 8px rgba(167, 139, 250, 0.15);
 }
 
 .nav-container {
   flex: 1;
-  padding: 0 16px;
+  padding: 12px 20px;
   overflow-y: auto;
-}
-
-.menu-label {
-  font-size: 11px;
-  text-transform: uppercase;
-  letter-spacing: 1.6px;
-  color: #c4b5fd;
-  font-weight: 700;
-  margin: 8px 12px 16px;
 }
 
 .nav-link-custom {
   display: flex;
   align-items: center;
-  gap: 14px;
-  padding: 12px 16px;
-  margin-bottom: 4px;
-  border-radius: 10px;
-  color: #e0d7ff;
+  gap: 16px;
+  padding: 14px 18px;
+  margin: 4px 0;
+  border-radius: 12px;
+  color: #475569;
   text-decoration: none;
   font-weight: 500;
   transition: all 0.22s ease;
 }
 
 .icon-box {
-  width: 38px;
-  height: 38px;
+  width: 44px;
+  height: 44px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 8px;
-  background: rgba(255, 255, 255, 0.06);
-  font-size: 19px;
+  border-radius: 10px;
+  background: #f8fafc;
+  color: #64748b;
+  font-size: 1.25rem;
   transition: all 0.22s ease;
 }
 
 .nav-link-custom:hover {
-  color: white;
-  background: rgba(139, 92, 246, 0.12);
+  background: rgba(124, 58, 237, 0.07);
+  color: #7c3aed;
+}
+
+.nav-link-custom:hover .icon-box {
+  background: rgba(124, 58, 237, 0.12);
+  color: #7c3aed;
 }
 
 .router-link-exact-active {
-  background: linear-gradient(90deg, #8b5cf6 0%, #7c3aed 100%) !important;
+  background: linear-gradient(90deg, #7c3aed 0%, #a78bfa 100%) !important;
   color: white !important;
   font-weight: 600;
-  box-shadow: 0 6px 16px rgba(124, 58, 237, 0.28);
+  box-shadow: 0 6px 16px rgba(124, 58, 237, 0.25);
 }
 
 .router-link-exact-active .icon-box {
-  background: rgba(255, 255, 255, 0.22);
+  background: rgba(255, 255, 255, 0.25);
+  color: white;
 }
 
 .sidebar-footer {
-  padding: 20px 16px 28px;
-  border-top: 1px solid rgba(167, 139, 250, 0.09);
+  padding: 24px 20px 40px;
+  border-top: 1px solid #f1f5f9;
 }
 
 .action-btn {
   width: 100%;
-  padding: 12px 16px;
+  padding: 13px 18px;
   border: none;
-  border-radius: 10px;
+  border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
-  font-size: 14px;
+  gap: 12px;
+  font-size: 0.95rem;
   font-weight: 600;
-  margin-bottom: 10px;
-  transition: all 0.2s ease;
+  margin-bottom: 12px;
+  transition: all 0.22s ease;
 }
 
 .action-btn:hover {
-  transform: translateY(-1px);
-  filter: brightness(1.08);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.07);
 }
 
 .action-btn.security {
-  background: rgba(16, 185, 129, 0.12);
-  color: #34d399;
+  background: rgba(16, 185, 129, 0.09);
+  color: #10b981;
 }
 
 .action-btn.logout {
-  background: rgba(239, 68, 68, 0.12);
-  color: #f87171;
+  background: rgba(239, 68, 68, 0.09);
+  color: #ef4444;
+}
+
+/* Mobile behavior (slide out) */
+@media (max-width: 992px) {
+  .sidebar {
+    transform: translateX(-100%);
+  }
+  .sidebar.mobile-open {
+    transform: translateX(0);
+  }
 }
 </style>

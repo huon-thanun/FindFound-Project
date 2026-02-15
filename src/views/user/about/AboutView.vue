@@ -210,17 +210,17 @@ const prevTestimonial = () => {
           <!-- Text Column -->
           <div class="col-lg-6 hero-text-col" data-aos="fade-right">
             <div class="badge-modern mb-4">
-              <i class="bi bi-chat-dots-fill me-2"></i>
-              ទំនាក់ទំនង
+              <i class="bi bi-people-fill me-2"></i>
+              អំពីពួកយើង
             </div>
             <h1 class="hero-title">
-              ទាក់ទងមក <span class="gradient-text">ពួកយើង</span>
+              ស្វែងយល់បន្ថែមអំពី <span class="gradient-text">FindFound</span>
               <br class="d-none d-md-block" />
-              យើងរីករាយជួយអ្នកគ្រប់ពេល
+              ក្រុមការងារនិងបេសកកម្មរបស់យើង
             </h1>
             <p class="hero-subtitle">
-              ផ្ញើសារមកយើងឥឡូវនេះ យើងនឹងឆ្លើយតបក្នុងរយៈពេលខ្លីបំផុត
-              និងវិជ្ជាជីវៈ។ សេវាកម្ម 24/7 សុវត្ថិភាពខ្ពស់។
+              យើងជាក្រុមអ្នកអភិវឌ្ឍន៍វ័យក្មេងដែលចង់ប្រើបច្ចេកវិទ្យាដើម្បីជួយសហគមន៍
+              និងធ្វើឱ្យការស្វែងរកវត្ថុបាត់បង់កាន់តែងាយស្រួលសម្រាប់គ្រប់គ្នា។
             </p>
           </div>
 

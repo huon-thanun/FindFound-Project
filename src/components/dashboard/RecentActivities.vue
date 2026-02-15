@@ -1,11 +1,10 @@
-<!-- src/components/dashboard/RecentActivities.vue -->
 <template>
   <div class="content-card">
     <div
       class="content-card-header d-flex justify-content-between align-items-center flex-wrap gap-3"
     >
-      <h5 class="m-0">
-        <i class="bi bi-clock-history me-2"></i>
+      <h5 class="m-0 fw-bold text-dark">
+        <i class="bi bi-clock-history me-2 text-primary"></i>
         សកម្មភាពថ្មីៗ
       </h5>
 
@@ -23,85 +22,85 @@
     </div>
 
     <div class="transaction-container mt-3">
-      <!-- Empty / No data state -->
-      <div v-if="!paginatedItems.length" class="text-center py-5 text-muted">
-        <i class="bi bi-inbox fs-1 d-block mb-3 opacity-50"></i>
+      <div v-if="loading">
+        <div v-for="n in 5" :key="n" class="skeleton-item mb-2 rounded-3"></div>
+      </div>
+
+      <div
+        v-else-if="!paginatedItems.length"
+        class="text-center py-5 text-muted"
+      >
+        <i class="bi bi-inbox fs-1 d-block mb-3 opacity-25"></i>
         <p class="mb-1 fw-medium">មិនមានទិន្នន័យសម្រាប់ប្រភេទនេះទេ</p>
         <small>សូមពិនិត្យម្តងទៀត ឬប្តូរប្រភេទ</small>
       </div>
 
-      <!-- Activity list -->
       <div
+        v-else
         v-for="item in paginatedItems"
         :key="item.id"
-        class="activity-item px-3 py-3 rounded-3 transition-all"
+        class="activity-item p-2 rounded-3 mb-2 d-flex align-items-center justify-content-between transition-all"
       >
-        <div class="activity-left d-flex align-items-center flex-grow-1 gap-3">
-          <div class="img-wrapper rounded overflow-hidden">
+        <div
+          class="d-flex align-items-center gap-3 flex-grow-1 overflow-hidden"
+        >
+          <div
+            class="img-wrapper rounded-3 flex-shrink-0 bg-light d-flex align-items-center justify-content-center"
+          >
             <img
+              v-if="item.reportImages?.length > 0"
               :src="getImageUrl(item)"
-              alt="រូបភាពរបាយការណ៍"
-              class="w-100 h-100 object-cover"
+              class="activity-img"
+              alt="Report Image"
               loading="lazy"
               @error="handleImageError"
             />
+            <i v-else class="bi bi-image text-muted fs-4"></i>
           </div>
 
-          <div class="activity-info flex-grow-1">
-            <h6 class="item-title mb-1 text-truncate">
+          <div class="info-block text-truncate">
+            <h6 class="item-title mb-1 text-truncate fw-bold">
               {{ item.title || "គ្មានចំណងជើង" }}
-              <span
-                v-if="isRecent(item.createdAt)"
-                class="badge-new ms-2 align-middle"
+              <span v-if="isRecent(item.createdAt)" class="badge-new ms-1"
+                >ថ្មី</span
               >
-                ថ្មី
-              </span>
             </h6>
-
-            <p class="item-meta mb-0 d-flex align-items-center gap-2 flex-wrap">
-              <span class="cat-tag px-2 py-1 rounded small">
-                {{ item.category?.name || "ផ្សេងៗ" }}
-              </span>
+            <div class="item-meta d-flex align-items-center gap-2">
+              <span class="cat-tag">{{ item.category?.name || "ផ្សេងៗ" }}</span>
               <span class="dot">•</span>
-              <span class="time-tag small">
-                {{ formatDate(item.createdAt) }}
-              </span>
-            </p>
+              <span class="time-tag">{{ formatDate(item.createdAt) }}</span>
+            </div>
           </div>
         </div>
 
-        <div
-          class="transaction-status px-3 py-1 rounded-pill fw-semibold text-center"
-          :class="getStatusClass(item)"
-        >
+        <div class="status-badge ms-3" :class="getStatusClass(item)">
           {{ getStatusText(item) }}
         </div>
       </div>
     </div>
 
-    <!-- Pagination (only show if more than 1 page) -->
     <div
-      v-if="totalPages > 1"
+      v-if="totalPages > 1 && !loading"
       class="pagination-controls d-flex justify-content-between align-items-center mt-4 pt-3 border-top"
     >
       <button
-        class="btn btn-sm btn-outline-secondary px-3"
+        class="btn btn-sm btn-light border px-3"
         :disabled="currentPage === 1"
         @click="currentPage--"
       >
-        <i class="bi bi-chevron-left me-1"></i> មុន
+        <i class="bi bi-chevron-left"></i> មុន
       </button>
 
-      <span class="small text-muted">
-        ទំព័រ {{ currentPage }} នៃ {{ totalPages }}
+      <span class="page-info">
+        ទំព័រ <strong>{{ currentPage }}</strong> នៃ {{ totalPages }}
       </span>
 
       <button
-        class="btn btn-sm btn-outline-secondary px-3"
+        class="btn btn-sm btn-light border px-3"
         :disabled="currentPage === totalPages"
         @click="currentPage++"
       >
-        បន្ទាប់ <i class="bi bi-chevron-right ms-1"></i>
+        បន្ទាប់ <i class="bi bi-chevron-right"></i>
       </button>
     </div>
   </div>
@@ -112,20 +111,14 @@ import { ref, computed, watch } from "vue";
 import dayjs from "dayjs";
 
 const props = defineProps({
-  items: {
-    type: Array,
-    default: () => [],
-    required: true,
-  },
-  isRecent: {
-    type: Function,
-    required: true,
-  },
+  items: { type: Array, default: () => [], required: true },
+  isRecent: { type: Function, required: true },
+  loading: { type: Boolean, default: false },
 });
 
 const activeTab = defineModel({ default: "All" });
 const currentPage = ref(1);
-const itemsPerPage = 8; // adjust this number as you like (6–12 recommended)
+const itemsPerPage = 8;
 
 const tabs = [
   { value: "All", label: "ទាំងអស់" },
@@ -133,15 +126,14 @@ const tabs = [
   { value: "Found", label: "រកឃើញ" },
 ];
 
-// Filtered by tab first
+// 1. Filter items based on active tab
 const filteredItems = computed(() => {
   if (activeTab.value === "All") return props.items;
-
-  const targetType = activeTab.value.toUpperCase();
-  return props.items.filter((item) => item?.reportType?.name === targetType);
+  const target = activeTab.value.toUpperCase();
+  return props.items.filter((item) => item?.reportType?.name === target);
 });
 
-// Then apply pagination
+// 2. Paginate the filtered items
 const paginatedItems = computed(() => {
   const start = (currentPage.value - 1) * itemsPerPage;
   return filteredItems.value.slice(start, start + itemsPerPage);
@@ -151,208 +143,150 @@ const totalPages = computed(() =>
   Math.max(1, Math.ceil(filteredItems.value.length / itemsPerPage)),
 );
 
-// Reset page when tab changes
 watch(activeTab, () => {
   currentPage.value = 1;
 });
 
+// 3. Image Handling Logic (Mapping to your JSON "name" field)
 const getImageUrl = (item) => {
   if (!item?.reportImages?.length) return "/placeholder.png";
-  const img = item.reportImages[0];
-  return img.url || img.thumbnail || img.path || img.name || "/placeholder.png";
+  // Your API stores the URL in the .name property
+  const imgData = item.reportImages[0];
+  return imgData.name || imgData.url || "/placeholder.png";
 };
 
 const handleImageError = (e) => {
-  if (e.target.src !== "/placeholder.png") {
+  if (!e.target.src.includes("/placeholder.png")) {
     e.target.src = "/placeholder.png";
   }
 };
 
-const formatDate = (date) => {
-  return date ? dayjs(date).format("DD MMM YYYY, HH:mm") : "—";
-};
-
+const formatDate = (date) => (date ? dayjs(date).format("DD MMM YYYY") : "—");
 const getStatusClass = (item) =>
-  item?.reportType?.name === "FOUND" ? "found" : "lost";
-
+  item?.reportType?.name === "FOUND" ? "status-found" : "status-lost";
 const getStatusText = (item) =>
-  item?.reportType?.name === "FOUND" ? "✓ ប្រទះឃើញ" : "⚠ បានបាត់";
+  item?.reportType?.name === "FOUND" ? "✓ រកឃើញ" : "⚠ បានបាត់";
 </script>
 
 <style scoped>
 .content-card {
-  background: white;
-  border-radius: 16px;
-  border: 1px solid #e2e8f0;
-  padding: 24px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
-  display: flex;
-  flex-direction: column;
+  background: #ffffff;
+  border-radius: 1.25rem;
+  border: 1px solid #eef2f6;
+  padding: 1.5rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
 }
 
-.content-card-header {
-  margin-bottom: 20px;
-}
-
+/* Tabs Styling */
 .custom-tabs {
   background: #f1f5f9;
   padding: 4px;
-  border-radius: 10px;
+  border-radius: 12px;
   display: flex;
-  gap: 4px;
-  flex-wrap: wrap;
 }
 
 .tab-btn {
   border: none;
   background: transparent;
-  padding: 8px 18px;
-  border-radius: 8px;
-  font-weight: 500;
+  padding: 6px 16px;
+  border-radius: 10px;
+  font-size: 0.85rem;
+  font-weight: 600;
   color: #64748b;
-  transition: all 0.2s ease;
-  white-space: nowrap;
-}
-
-.tab-btn:hover:not(.active) {
-  background: rgba(79, 70, 229, 0.08);
+  transition: all 0.2s;
 }
 
 .tab-btn.active {
-  background: white;
+  background: #ffffff;
   color: #4f46e5;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
 }
 
-.transaction-container {
-  /* flex: 1; */
-  overflow-y: auto;
-  padding-right: 6px;
-  scrollbar-width: thin;
-  scrollbar-color: #cbd5e1 transparent;
-}
-
-.transaction-container::-webkit-scrollbar {
-  width: 6px;
-}
-
-.transaction-container::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
-  border-radius: 3px;
-}
-
+/* Activity Items */
 .activity-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 14px 16px;
-  border-radius: 12px;
-  transition: all 0.18s ease;
-  margin-bottom: 8px;
-  background: #fafafa;
+  border: 1px solid transparent;
+  background: #ffffff;
 }
 
 .activity-item:hover {
-  background: #f0f4ff;
-  transform: translateY(-1px);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-}
-
-.activity-left {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  flex: 1;
-  min-width: 0;
+  background: #f8faff;
+  border-color: #e0e7ff;
+  transform: translateX(4px);
 }
 
 .img-wrapper {
-  width: 60px;
-  height: 60px;
-  border-radius: 12px;
+  width: 58px;
+  height: 58px;
   overflow: hidden;
-  background: #f1f5f9;
-  flex-shrink: 0;
-  border: 1px solid #e2e8f0;
+  border: 1px solid #f1f5f9;
 }
 
-.img-wrapper img {
+.activity-img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
 .item-title {
-  font-size: 1.05rem;
-  font-weight: 600;
+  font-size: 1rem;
   color: #1e293b;
-  margin: 0 0 4px 0;
-  line-height: 1.3;
-}
-
-.item-meta {
-  font-size: 0.85rem;
-  color: #64748b;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex-wrap: wrap;
 }
 
 .cat-tag {
-  background: #e2e8f0;
+  background: #f1f5f9;
   color: #475569;
-  padding: 3px 10px;
+  padding: 2px 8px;
   border-radius: 6px;
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   font-weight: 500;
 }
 
-.dot {
-  color: #94a3b8;
-  font-size: 0.9rem;
-}
-
-.time-tag {
-  font-size: 0.85rem;
-}
-
 .badge-new {
-  font-size: 0.75rem;
-  background: #22c55e;
+  background: #10b981;
   color: white;
-  padding: 3px 8px;
-  border-radius: 6px;
-  vertical-align: middle;
+  font-size: 0.65rem;
+  padding: 2px 6px;
+  border-radius: 4px;
 }
 
-.transaction-status {
-  font-size: 0.88rem;
-  font-weight: 600;
-  padding: 6px 16px;
-  border-radius: 999px;
-  white-space: nowrap;
-  flex-shrink: 0;
-  min-width: 110px;
+/* Status Pills */
+.status-badge {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  min-width: 95px;
   text-align: center;
 }
 
-.transaction-status.found {
-  background: #dcfce7;
-  color: #166534;
+.status-found {
+  background: #ecfdf5;
+  color: #065f46;
+}
+.status-lost {
+  background: #fff1f2;
+  color: #9f1239;
 }
 
-.transaction-status.lost {
-  background: #fee2e2;
-  color: #991b1b;
+/* Skeleton Shimmer */
+.skeleton-item {
+  height: 74px;
+  background: linear-gradient(90deg, #f0f0f0 25%, #f8f8f8 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
 }
 
-.pagination-controls {
-  border-top: 1px solid #e2e8f0;
-  padding-top: 16px;
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
 }
 
-.btn-outline-secondary {
-  transition: all 0.2s;
+.page-info {
+  font-size: 0.85rem;
+  color: #64748b;
 }
 </style>
