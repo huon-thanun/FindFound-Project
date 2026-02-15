@@ -26,7 +26,7 @@
             <!-- Categories Grid -->
             <div class="row g-4">
                 <!-- Loading State - Skeleton Cards -->
-                <div v-if="categoryStore.isLoadingl" v-for="n in 4" :key="`skeleton-${n}`"
+                <div v-if="categoryStore.isLoading" v-for="n in 4" :key="`skeleton-${n}`"
                     class="col-lg-3 col-md-4 col-sm-6">
                     <BaseSkeleton imageHeight="150px" />
                 </div>
@@ -56,7 +56,8 @@
                                 {{ category.description || "គ្មានលម្អិត" }}
                             </p>
                             <div class="d-flex gap-2">
-                                <BaseButton variant="primary" class="flex-grow-1" icon="arrow-right"
+                                <BaseButton variant="primary" class="flex-grow-1" :icon="loadingId === category.id ? '' : 'arrow-right'"
+                                    :isLoading="loadingId === category.id"
                                     @click="openModal(category)">
                                     មើលលម្អិត
                                 </BaseButton>
@@ -110,6 +111,7 @@ const categoryStore = useCategoryStore();
 const searchQuery = ref("");
 const showModal = ref(false);
 const selectedCategory = ref(null);
+const loadingId = ref(null);
 
 // Fetch categories on mount
 onMounted(async () => {
@@ -143,9 +145,18 @@ const getCategoryIcon = (categoryName) => {
 };
 
 // Open modal with selected category
-const openModal = (category) => {
-    selectedCategory.value = category;
-    showModal.value = true;
+const openModal = async (category) => {
+    loadingId.value = category.id;
+
+    try {
+        // simulate delay (optional)
+        await new Promise(resolve => setTimeout(resolve, 300));
+
+        selectedCategory.value = category;
+        showModal.value = true;
+    } finally {
+        loadingId.value = null;
+    }
 };
 
 // Close modal

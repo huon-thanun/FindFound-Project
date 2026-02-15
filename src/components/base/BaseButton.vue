@@ -47,10 +47,11 @@ defineEmits(["click"]);
   font-weight: 600;
   color: white !important;
   text-decoration: none !important;
+  transition: 0.3s;
 }
 .btn:hover {
-  opacity: 0.8;
-  transition: 0.2s;
+  opacity: 0.9;
+  transform: scale(1.03) translate(0, -5%)
 }
 .btn_primary {
   background-color: var(--primary-color) !important;
