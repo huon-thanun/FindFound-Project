@@ -1,4 +1,6 @@
 <script setup>
+// import Member from "@/components/about/member.vue";
+import MemberSection from "@/components/about/MemberSection.vue";
 import { ref, onMounted } from "vue";
 
 const leader = {
@@ -311,40 +313,7 @@ const prevTestimonial = () => {
 
     <!-- MEMBERS -->
     <section class="section">
-      <div class="container">
-        <h2 class="section-title text-center mb-5" data-aos="fade-up">
-          ក្រុមការងាររបស់យើង
-        </h2>
-
-        <!-- Leader -->
-        <div class="leader-card glass-card mb-5" data-aos="fade-right">
-          <img :src="leader.avatar" class="leader-avatar" />
-          <div class="leader-info">
-            <h3>{{ leader.name }}</h3>
-            <span class="role">{{ leader.role }}</span>
-            <p class="mt-3">{{ leader.desc }}</p>
-          </div>
-        </div>
-
-        <!-- Team Members -->
-        <div class="row justify-content-center g-4">
-          <div
-            v-for="(m, i) in members"
-            :key="i"
-            class="col-12 col-sm-6 col-lg-4"
-          >
-            <div
-              class="member-card glass-card"
-              data-aos="fade-up"
-              :data-aos-delay="i * 100"
-            >
-              <img :src="m.avatar" />
-              <h5 class="mt-3">{{ m.name }}</h5>
-              <span class="role">{{ m.role }}</span>
-            </div>
-          </div>
-        </div>
-      </div>
+      <MemberSection></MemberSection>
     </section>
 
     <!-- TESTIMONIALS -->

@@ -1,5 +1,6 @@
 <template>
   <div class="sidebar d-none d-lg-flex">
+    <!-- Logo -->
     <div class="brand-header">
       <div class="large-logo-box">
         <img
@@ -11,6 +12,7 @@
       <div class="brand-accent-line"></div>
     </div>
 
+    <!-- Navigation -->
     <nav class="nav-container">
       <router-link
         :to="{ name: 'admin.dashboard' }"
@@ -45,17 +47,14 @@
       </router-link>
     </nav>
 
+    <!-- Footer -->
     <div class="sidebar-footer">
-      <button class="action-btn security" title="Security Settings">
+      <button class="action-btn security" @click="goToSecurity">
         <i class="bi bi-shield-lock"></i> ការកំណត់សុវត្ថិភាព
-      </button>
-
-      <button class="action-btn logout" @click="showLogoutModal = true">
-        <i class="bi bi-box-arrow-right"></i> ចាកចេញ
       </button>
     </div>
 
-    <!-- Logout Confirmation Modal (unchanged) -->
+    <!-- Logout Modal -->
     <BaseModal
       title="ចាកចេញពីគណនី"
       icon="box-arrow-right"
@@ -88,13 +87,23 @@
 
 <script setup>
 import { ref } from "vue";
+import { useRouter } from "vue-router";
 
+const router = useRouter();
 const showLogoutModal = ref(false);
 
+/* Go to Profile Security page */
+function goToSecurity() {
+  router.push({ name: "admin.profile.security" });
+}
+
+/* Logout */
 function handleLogout() {
-  // Add your real logout logic here (API call, clear storage, redirect, etc.)
-  console.log("User logging out...");
+  localStorage.removeItem("token");
+  localStorage.removeItem("user");
+
   showLogoutModal.value = false;
+  router.replace({ name: "login" });
 }
 </script>
 
