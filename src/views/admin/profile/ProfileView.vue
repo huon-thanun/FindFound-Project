@@ -1,112 +1,141 @@
 <template>
   <ProfileLayout>
-    <!-- Header Slot -->
     <template #header>
       <ProfileHeader :user="user" />
     </template>
 
-    <!-- Left Sidebar Slot -->
-    <template #left>
-      <ProfileSide :user="user" :skills="skills" />
-    </template>
-    <ProfileTabsAdmin />
+    <div v-if="user" class="profile-page">
+      <section class="hero-lavender">
+        <div class="container-fluid px-lg-5">
+          <div class="row align-items-center pt-5 pb-5">
+            <div class="col-md-auto text-center text-md-start">
+              <div class="avatar-glow-wrapper" data-aos="zoom-in">
+                <img
+                  :src="user.avatar || 'https://ui-avatars.com/api/?name=Admin'"
+                  class="profile-img-premium shadow-lg"
+                  alt="Avatar"
+                />
+                <div class="status-indicator-online"></div>
+              </div>
+            </div>
 
-    <!-- Main Profile Card -->
-    <div
-      v-if="user"
-      class="card border-2 shadow-sm rounded-4 mt-4 overflow-hidden align-content-center"
-    >
-      <!-- Profile Body -->
-      <div class="card-body p-5 m-5">
-        <!-- Avatar & Info -->
-        <div class="row align-items-center mb-5">
-          <div class="col-md-auto text-center text-md-start mb-4 mb-md-0">
             <div
-              class="avatar-upload-container position-relative d-inline-block"
+              class="col-md ps-md-4 mt-4 mt-md-0 text-center text-md-start"
+              data-aos="fade-right"
             >
-              <img
-                :src="user.avatar || 'https://ui-avatars.com/api/?name=Admin'"
-                class="main-profile-img shadow"
-                alt="User Avatar"
-              />
-            </div>
-          </div>
-
-          <div class="col-md ps-md-4">
-            <h2 class="fw-bold mb-1">{{ user.fullname }}</h2>
-            <p class="text-muted mb-0">{{ user.email }}</p>
-            <div class="mt-2">
-              <span
-                class="badge bg-primary-subtle text-primary border border-primary-subtle px-3 py-2 rounded-pill"
+              <div
+                class="d-flex align-items-center justify-content-center justify-content-md-start gap-2 mb-2"
               >
-                {{ user.status === "ACTIVATED" ? "Active Admin" : "Inactive" }}
-              </span>
+                <h1
+                  class="display-6 fw-bold text-dark-indigo mb-0 khmer-font-title"
+                >
+                  {{ user.fullname }}
+                </h1>
+                <span class="badge-verified-glow">
+                  <i class="bi bi-patch-check-fill"></i>
+                </span>
+              </div>
+              <p class="text-muted fs-5 mb-3">{{ user.email }}</p>
+
+              <div
+                class="d-flex flex-wrap gap-2 justify-content-center justify-content-md-start"
+              >
+                <span class="badge-status-premium">
+                  {{
+                    user.status === "ACTIVATED"
+                      ? "អ្នកគ្រប់គ្រងប្រព័ន្ធ"
+                      : "មិនទាន់ដំណើរការ"
+                  }}
+                </span>
+                <button class="btn-edit-profile">
+                  <i class="bi bi-pencil-square me-2"></i> កែប្រែព័ត៌មាន
+                </button>
+              </div>
             </div>
           </div>
         </div>
+      </section>
 
-        <!-- Account Details -->
-        <div class="section-title">
-          <h2>ព័ត៌មានលម្អិតអំពីគណនី</h2>
-        </div>
-
+      <div class="container-fluid px-lg-5 content-overlap">
         <div class="row g-4">
-          <!-- Full Name -->
-          <div class="col-md-6 col-lg-3">
-            <div class="info-card p-3 rounded-3 bg-light border-0">
-              <label class="small text-muted d-block mb-1">Full Name</label>
-              <span class="fw-semibold fs-5">{{ user.fullname }}</span>
+          <div class="col-lg-" data-aos="fade-up">
+            <ProfileTabsAdmin class="mb-4" />
+
+            <div class="main-details-card mb-4 shadow-sm">
+              <div class="card-header-clean mb-4">
+                <div class="accent-dot"></div>
+                <h5 class="fw-bold mb-0 text-dark-indigo khmer-font-title">
+                  ព័ត៌មានលម្អិតអំពីគណនី
+                </h5>
+              </div>
+
+              <div class="row g-4">
+                <div
+                  class="col-md-6"
+                  v-for="(item, key) in displayInfo"
+                  :key="key"
+                >
+                  <div class="info-box-item">
+                    <label class="info-label">{{ item.label }}</label>
+                    <div class="info-value-wrap">
+                      <i :class="item.icon" class="me-2 text-purple-accent"></i>
+                      <span class="info-value">{{
+                        item.value || "មិនទាន់មាន"
+                      }}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
+
+            <MyPostSection :userId="user.id" />
           </div>
 
-          <!-- Email -->
-          <div class="col-md-6 col-lg-3">
-            <div class="info-card p-3 rounded-3 bg-light border-0">
-              <label class="small text-muted d-block mb-1">Email Address</label>
-              <span class="fw-semibold fs-5">{{ user.email }}</span>
-            </div>
-          </div>
-
-          <!-- Phone Number -->
-          <div class="col-md-6 col-lg-3">
-            <div class="info-card p-3 rounded-3 bg-light border-0">
-              <label class="small text-muted d-block mb-1">Phone Number</label>
-              <span class="fw-semibold fs-5">{{ user.phoneNumber }}</span>
-            </div>
-          </div>
-
-          <!-- Telegram Link -->
-          <div class="col-md-6 col-lg-3">
-            <div class="info-card p-3 rounded-3 bg-light border-0">
-              <label class="small text-muted d-block mb-1">Telegram</label>
-              <a
-                :href="user.telegramLink || '#'"
-                target="_blank"
-                class="fw-semibold fs-5 text-decoration-none"
-              >
-                {{ user.telegramLink || "N/A" }}
-              </a>
+          <div class="col-lg-4" data-aos="fade-left">
+            <div class="sidebar-sticky">
+              <ProfileSide :user="user" :skills="skills" />
             </div>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Loading Placeholder -->
-    <div v-else class="text-center py-5">Loading profile...</div>
+    <div v-else class="loading-full">
+      <div class="custom-loader"></div>
+      <p class="mt-4 khmer-font text-purple-accent">កំពុងផ្ទុកទិន្នន័យ...</p>
+    </div>
   </ProfileLayout>
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
-import { useRoute } from "vue-router";
+import { ref, onMounted, computed } from "vue";
+// import ProfileTabs from "@/components/profile/ProfileTabs.vue";
+// import ProfileSide from "@/components/profile/ProfileSide.vue";
+import MyPostSection from "@/components/profile/MyPostSection.vue";
 import ProfileTabsAdmin from "@/components/profile/ProfileTabsAdmin.vue";
 
 const user = ref(null);
+const activeTab = ref("overview");
 const skills = ["HTML", "CSS", "Vue", "MySQL", "JavaScript"];
-const route = useRoute();
 
-const isActive = (routeName) => route.name === routeName;
+const displayInfo = computed(() => [
+  { label: "ឈ្មោះពេញ", value: user.value?.fullname, icon: "bi bi-person" },
+  {
+    label: "អាសយដ្ឋានអ៊ីមែល",
+    value: user.value?.email,
+    icon: "bi bi-envelope",
+  },
+  { label: "លេខទូរស័ព្ទ", value: user.value?.phoneNumber, icon: "bi bi-phone" },
+  {
+    label: "តំណភ្ជាប់តេឡេក្រាម",
+    value: user.value?.telegramLink,
+    icon: "bi bi-send",
+  },
+]);
+
+const handleTabChange = (tab) => {
+  activeTab.value = tab;
+};
 
 onMounted(async () => {
   try {
@@ -118,97 +147,182 @@ onMounted(async () => {
       },
     );
     const json = await res.json();
-    console.log("Fetched profile:", json.data); // debug
-    if (json.result) {
-      user.value = json.data;
-    }
+    if (json.result) user.value = json.data;
   } catch (error) {
-    console.error("Failed to fetch profile:", error);
+    console.error("Fetch Error:", error);
   }
 });
 </script>
 
 <style scoped>
-@import url("https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@400;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@300;400;600;700&family=Koh+Santepheap:wght@700&display=swap");
 
-* {
+.profile-page {
   font-family: "Kantumruy Pro", sans-serif;
-}
-.section-title {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 25px;
+  background-color: #f9f8ff;
+  min-height: 100vh;
+  padding-bottom: 80px;
 }
 
-.section-title h2 {
-  font-size: 22px;
-  font-weight: 700;
-  letter-spacing: 1px;
-  color: #1e0469; /* Purple theme */
-  text-transform: uppercase;
-  margin: 0;
+.khmer-font-title {
+  font-family: "Koh Santepheap", sans-serif;
+}
+
+/* HERO SECTION - Premium Lavender */
+.hero-lavender {
+  background-color: #f1edff;
+  background-image:
+    radial-gradient(at 0% 0%, rgba(124, 58, 237, 0.08) 0, transparent 50%),
+    radial-gradient(at 50% 0%, rgba(59, 30, 84, 0.08) 0, transparent 50%);
+  padding-bottom: 120px;
+}
+
+.avatar-glow-wrapper {
   position: relative;
+  display: inline-block;
 }
 
-/* Avatar Upload Styling */
-
-.main-profile-img {
-  width: 130px;
-  height: 130px;
-  border-radius: 35px;
+.profile-img-premium {
+  width: 160px;
+  height: 160px;
+  border-radius: 42px;
+  /* Smoother squircle */
   object-fit: cover;
-  border: 5px solid #fff;
-}
-
-.avatar-upload-container {
+  border: 6px solid #ffffff;
   transition: transform 0.3s ease;
 }
 
-.avatar-upload-container:hover {
-  transform: scale(1.03);
+.profile-img-premium:hover {
+  transform: scale(1.02);
 }
 
-.avatar-edit-badge {
+.status-indicator-online {
   position: absolute;
-  bottom: 5px;
-  right: 5px;
-  background: #3b1e54;
-  color: white;
-  width: 35px;
-  height: 35px;
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 3px solid #fff;
-  cursor: pointer;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  bottom: 12px;
+  right: 12px;
+  width: 22px;
+  height: 22px;
+  background: #00d084;
+  border: 4px solid #ffffff;
+  border-radius: 50%;
+  box-shadow: 0 0 15px rgba(0, 208, 132, 0.4);
 }
 
-/* Nav Tab Styling */
-.nav-tab {
-  padding: 12px 4px;
+/* BADGES & ACTION BUTTONS */
+.badge-status-premium {
+  background: #3b1e54;
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 14px;
+  font-size: 0.85rem;
   font-weight: 600;
-  text-decoration: none;
-  color: #6c757d;
-  border-bottom: 3px solid transparent;
+  letter-spacing: 0.3px;
+}
+
+.btn-edit-profile {
+  background: #ffffff;
+  color: #3b1e54;
+  border: 1px solid #e2e8f0;
+  padding: 10px 22px;
+  border-radius: 14px;
+  font-weight: 600;
   transition: all 0.3s ease;
 }
 
-.nav-tab.active {
-  color: #3b1e54;
-  border-bottom-color: #2b0151;
-}
-.card {
-  margin: 80px;
-}
-/* Info Card Hover */
-.info-card {
-  transition: background 0.3s ease;
+.btn-edit-profile:hover {
+  background: #7c3aed;
+  color: white;
+  border-color: #7c3aed;
+  transform: translateY(-3px);
+  box-shadow: 0 10px 20px rgba(124, 58, 237, 0.15);
 }
 
-.info-card:hover {
-  background: #e9ecef !important;
+/* CONTENT BOXES */
+.content-overlap {
+  margin-top: -80px;
+}
+
+.main-details-card {
+  background: white;
+  border-radius: 32px;
+  padding: 45px;
+  border: 1px solid rgba(124, 58, 237, 0.05);
+}
+
+.info-box-item {
+  background: #fcfaff;
+  padding: 24px;
+  border-radius: 22px;
+  border: 1px solid #f1efff;
+  transition: all 0.3s ease;
+}
+
+.info-box-item:hover {
+  background: #ffffff;
+  border-color: #7c3aed;
+  box-shadow: 0 12px 24px rgba(124, 58, 237, 0.06);
+}
+
+.info-label {
+  font-size: 0.75rem;
+  color: #94a3b8;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 8px;
+  display: block;
+}
+
+.info-value {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #1e1b4b;
+}
+
+.text-purple-accent {
+  color: #7c3aed;
+}
+
+.text-dark-indigo {
+  color: #1e1b4b;
+}
+
+/* LOADING COMPONENT */
+.loading-full {
+  height: 80vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.custom-loader {
+  width: 60px;
+  height: 60px;
+  border: 6px solid #f3f3f3;
+  border-top: 6px solid #7c3aed;
+  border-radius: 50%;
+  animation: spin 1s cubic-bezier(0.68, -0.55, 0.27, 1.55) infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@media (max-width: 991px) {
+  .content-overlap {
+    margin-top: 0;
+    padding-top: 30px;
+  }
+
+  .main-details-card {
+    padding: 30px;
+  }
 }
 </style>
