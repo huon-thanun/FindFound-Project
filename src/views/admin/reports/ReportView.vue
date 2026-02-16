@@ -109,9 +109,9 @@
               </ul>
 
               <div class="button-group">
-                <BaseButton icon="bi-eye" variant="primary w-100" @click="fetchReportDetail(report.id)"
+                <BaseButton :icon="isLoading === report.id ? '' : 'arrow-right'" variant="primary w-100" @click="fetchReportDetail(report.id)"
                   :isLoading="isLoading === report.id">
-                  <i class="bi bi-arrow-right me-2"></i>
+                  <!-- <i class="bi bi-arrow-right me-2"></i> -->
                   <span>មើលលម្អិត</span>
                 </BaseButton>
               </div>
@@ -275,6 +275,7 @@ const pagesPerGroup = 4;
 const currentGroup = ref(1);
 
 import { computed } from "vue";
+import BaseButton from "@/components/base/BaseButton.vue";
 
 const totalPages = computed(() => reportStore.meta?.totalPages || 1);
 
