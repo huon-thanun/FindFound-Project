@@ -337,11 +337,14 @@ const btnHandleReportDetail = (reportId) => {
   /* border: 1px solid red; */
   width: 100%;
   height: 350px;
-  display: flex;
-  justify-content: center;
+  /* display: flex;
+  justify-content: center; */
+  align-content: center;
+  background-color: #eee;
 }
 .current-img-display .current-img {
-  height: 100%;
+  /* height: 100%; */
+  width: 100%;
   object-fit: contain;
 }
 /*swiper*/

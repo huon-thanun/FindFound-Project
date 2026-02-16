@@ -118,7 +118,7 @@
       >
         <div class="w-100 d-flex flex-column align-items-center p-3 text-muted">
           <i class="bi bi-exclamation-circle" style="font-size: 35px"></i>
-          <h3 class="m-0">No Reports Found</h3>
+          <h3 class="m-0">រកមិនឃើញរបាយការណ៍</h3>
         </div>
       </div>
       <div
@@ -127,41 +127,48 @@
         v-for="report in reportStore.ownReports"
         :key="report.id"
       >
-        <div class="row align-items-center g-3">
-          <div class="col-2 -md-2 col-xl-2">
-            <img
-              :src="
-                report.reportImages && report.reportImages.length > 0
-                  ? report.reportImages[0].name
-                  : defaultImage
-              "
-              style="width: 80px; height: 80px; border: 1px solid black"
-            />
-          </div>
-
-          <div>
-            <div class="row align-items-center mb-1">
-              <div class="col-12 col-xl-6">
-                <h6 class="fw-bold mb-0 title">{{ report.title }}</h6>
-              </div>
-              <div class="col-12 col-xl-6 d-flex">
-                <span
-                  class="badge rounded-pill px-2 me-2"
-                  style="font-size: 0.7rem"
-                  :class="report.reportType?.name.toLowerCase()"
-                >
-                  {{ report.reportType?.name }}
-                </span>
-                <span
-                  class="badge border rounded-pill px-2"
-                  style="font-size: 0.7rem"
-                  :class="report.status?.toLowerCase()"
-                >
-                  {{ report.status }}
-                </span>
-              </div>
+        <div class="d-flex justify-content-between align-items-center">
+          <div class="d-flex align-items-center g-3">
+            <div class="me-2">
+              <img
+                :src="
+                  report.reportImages && report.reportImages.length > 0
+                    ? report.reportImages[0].name
+                    : defaultImage
+                "
+                style="width: 80px; height: 80px; border: 1px solid black"
+              />
             </div>
-            <div class="d-flex flex-wrap text-muted small mt-2">
+
+            <div class="d-flex justify-content-evenly align-items-center r">
+              <div style="max-width: 350px" class="me-2">
+                <h6 class="fw-bold mb-0 title">{{ report.title }}</h6>
+                <span class="me-2 text-muted">
+                  <i class="bi bi-geo-alt me-1 text-danger"></i>
+                  {{ report.locationText }}
+                </span>
+                <span class="text-muted">
+                  <i class="bi bi-calendar3 me-1"></i>
+                  {{ formatDate(report.eventDate) }}
+                </span>
+              </div>
+
+              <span
+                class="badge rounded-pill px-2 me-2"
+                style="font-size: 0.7rem"
+                :class="report.reportType?.name.toLowerCase()"
+              >
+                {{ report.reportType?.name }}
+              </span>
+              <span
+                class="badge border rounded-pill px-2"
+                style="font-size: 0.7rem"
+                :class="report.status?.toLowerCase()"
+              >
+                {{ report.status }}
+              </span>
+            </div>
+            <!-- <div class="d-flex flex-column text-muted small mt-2">
               <span>
                 <i class="bi bi-geo-alt me-1 text-danger"></i>
                 {{ report.locationText }}
@@ -170,40 +177,79 @@
                 ><i class="bi bi-calendar3 me-1"></i>
                 {{ formatDate(report.eventDate) }}
               </span>
-            </div>
+            </div> -->
           </div>
-        </div>
 
-        <div class="btn-action-group">
-          <div class="btn-group ms-5 shadow-sm">
-            <button
-              class="btn btn-action btn-outline-secondary"
-              @click="gotoDetailPage(report.id)"
-            >
-              <span class="icon text-warning">
-                <i class="bi bi-eye"></i>
-              </span>
-              <span class="btn-title">មើល</span>
-            </button>
-            <button
-              class="btn btn-action btn-outline-secondary"
-              @click="btnHandleEditReport(report.id)"
-            >
-              <span class="icon text-primary">
-                <i class="bi bi-pencil-square"></i>
-              </span>
+          <div class="btn-action-group d-flex justify-content-end">
+            <div class="btn-group action-btn shadow-sm">
+              <button
+                class="btn btn-action btn-outline-secondary"
+                @click="gotoDetailPage(report.id)"
+              >
+                <span class="icon text-warning">
+                  <i class="bi bi-eye"></i>
+                </span>
+                <span class="btn-title">មើល</span>
+              </button>
+              <button
+                class="btn btn-action btn-outline-secondary"
+                @click="btnHandleEditReport(report.id)"
+              >
+                <span class="icon text-primary">
+                  <i class="bi bi-pencil-square"></i>
+                </span>
 
-              <span class="btn-title"> កែសម្រួល </span>
-            </button>
-            <button
-              class="btn btn-action btn-outline-secondary"
-              @click="btnHandleDeleteOwnReport(report.id)"
-            >
-              <span class="icon text text-danger">
-                <i class="bi bi-trash"></i>
-              </span>
-              <span class="btn-title"> លុប </span>
-            </button>
+                <span class="btn-title"> កែសម្រួល </span>
+              </button>
+              <button
+                class="btn btn-action btn-outline-secondary"
+                @click="btnHandleDeleteOwnReport(report.id)"
+              >
+                <span class="icon text text-danger">
+                  <i class="bi bi-trash"></i>
+                </span>
+                <span class="btn-title"> លុប </span>
+              </button>
+            </div>
+            <div class="more me-5">
+              <div
+                class="more-action"
+                v-if="actionBtn !== report.id"
+                @click="actionBtn = report.id"
+              >
+                <i class="bi bi-three-dots"></i>
+              </div>
+              <div class="btn-group shadow-sm" v-if="actionBtn === report.id">
+                <button
+                  class="btn btn-action btn-outline-secondary"
+                  @click="gotoDetailPage(report.id)"
+                >
+                  <span class="icon text-warning">
+                    <i class="bi bi-eye"></i>
+                  </span>
+                  <span class="btn-title d-none">មើល</span>
+                </button>
+                <button
+                  class="btn btn-action btn-outline-secondary"
+                  @click="btnHandleEditReport(report.id)"
+                >
+                  <span class="icon text-primary">
+                    <i class="bi bi-pencil-square"></i>
+                  </span>
+
+                  <span class="btn-title d-none"> កែសម្រួល </span>
+                </button>
+                <button
+                  class="btn btn-action btn-outline-secondary"
+                  @click="btnHandleDeleteOwnReport(report.id)"
+                >
+                  <span class="icon text text-danger">
+                    <i class="bi bi-trash"></i>
+                  </span>
+                  <span class="btn-title d-none"> លុប </span>
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -217,14 +263,14 @@
       reportStore.ownReportMeta?.totalPages > 1 &&
       !reportStore.isLoadingGetOwnReports
     "
-    class="d-flex gap-2 justify-content-center"
+    class="d-flex gap-2 justify-content-center mb-3"
   >
     <BaseButton
       variant="danger"
       @click="PreviousPage"
       :disabled="!reportStore.ownReportMeta?.hasPreviousPage"
     >
-      Prev
+      ថយក្រោយ
     </BaseButton>
 
     <!-- <BaseButton
@@ -241,14 +287,14 @@
       @click="nextPage"
       :disabled="!reportStore.ownReportMeta?.hasNextPage"
     >
-      Next
+      បន្ទាប់
     </BaseButton>
   </div>
 
   <!--Confirm Message Modal -->
   <BaseModal :icon="'trash'" :theme="'primary'" :isClose="showModal">
     <template #body>
-      <p>Do you want to delete?</p>
+      <p>តើអ្នកពិតជាចង់លុបការរាយការណ៍នេះឬ?</p>
     </template>
     <template #btnClose>
       <BaseButton
@@ -257,18 +303,18 @@
         class="col-6"
         @click="showModal = false"
       >
-        Close
+        បោះបង់
       </BaseButton>
     </template>
     <template #btnActive>
       <BaseButton
-        icon="box"
+        icon="trash"
         class="col-6"
         variant="danger"
         :isLoading="reportStore.isLoadingDeleteOwnReport"
         @click="btnHandleConfirmDelete"
       >
-        Delete
+        លុប
       </BaseButton>
     </template>
   </BaseModal>
@@ -322,6 +368,7 @@ const sortDir = ref(sortDirData[0]);
 
 const page = ref(1);
 let timeout = ref(null);
+const actionBtn = ref(false);
 
 const fetchOwnReports = async () => {
   const params = {
@@ -649,7 +696,21 @@ const PreviousPage = async () => {
 /* .btn-action-group {
   /* border: 1px solid red; 
 } */
-
+.more-action {
+  color: #808080;
+  cursor: pointer;
+}
+.more {
+  display: none;
+}
+@media (max-width: 912px) {
+  .action-btn {
+    display: none;
+  }
+  .more {
+    display: block;
+  }
+}
 @media (max-width: 912px) {
   /* CSS rules for screens 650px or smaller */
   .btn-action .btn-title {
