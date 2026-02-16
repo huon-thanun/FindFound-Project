@@ -206,7 +206,6 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import ProfileHeader from "@/components/profile/ProfileHeader.vue";
-import ProfileSide from "@/components/profile/ProfileSide.vue";
 import ProfileTabsAdmin from "@/components/profile/ProfileTabsAdmin.vue";
 
 const user = ref(null);

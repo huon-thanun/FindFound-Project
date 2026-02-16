@@ -1,6 +1,6 @@
 <script setup>
 // import Member from "@/components/about/member.vue";
-import MemberSection from "@/components/about/MemberSection.vue";
+import MemberSection from "@/components/user/about/MemberSection.vue";
 import { ref, onMounted } from "vue";
 
 const leader = {

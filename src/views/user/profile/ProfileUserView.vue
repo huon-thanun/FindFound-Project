@@ -10,15 +10,25 @@
           <div class="row align-items-center pt-5 pb-5">
             <div class="col-md-auto text-center text-md-start">
               <div class="avatar-glow-wrapper" data-aos="zoom-in">
-                <img :src="user.avatar || 'https://ui-avatars.com/api/?name=Admin'"
-                  class="profile-img-premium shadow-lg" alt="Avatar" />
+                <img
+                  :src="user.avatar || 'https://ui-avatars.com/api/?name=Admin'"
+                  class="profile-img-premium shadow-lg"
+                  alt="Avatar"
+                />
                 <div class="status-indicator-online"></div>
               </div>
             </div>
 
-            <div class="col-md ps-md-4 mt-4 mt-md-0 text-center text-md-start" data-aos="fade-right">
-              <div class="d-flex align-items-center justify-content-center justify-content-md-start gap-2 mb-2">
-                <h1 class="display-6 fw-bold text-dark-indigo mb-0 khmer-font-title">
+            <div
+              class="col-md ps-md-4 mt-4 mt-md-0 text-center text-md-start"
+              data-aos="fade-right"
+            >
+              <div
+                class="d-flex align-items-center justify-content-center justify-content-md-start gap-2 mb-2"
+              >
+                <h1
+                  class="display-6 fw-bold text-dark-indigo mb-0 khmer-font-title"
+                >
                   {{ user.fullname }}
                 </h1>
                 <span class="badge-verified-glow">
@@ -27,7 +37,9 @@
               </div>
               <p class="text-muted fs-5 mb-3">{{ user.email }}</p>
 
-              <div class="d-flex flex-wrap gap-2 justify-content-center justify-content-md-start">
+              <div
+                class="d-flex flex-wrap gap-2 justify-content-center justify-content-md-start"
+              >
                 <span class="badge-status-premium">
                   {{
                     user.status === "ACTIVATED"
@@ -58,7 +70,11 @@
               </div>
 
               <div class="row g-4">
-                <div class="col-md-6" v-for="(item, key) in displayInfo" :key="key">
+                <div
+                  class="col-md-6"
+                  v-for="(item, key) in displayInfo"
+                  :key="key"
+                >
                   <div class="info-box-item">
                     <label class="info-label">{{ item.label }}</label>
                     <div class="info-value-wrap">
@@ -94,8 +110,6 @@
 <script setup>
 import { ref, onMounted, computed } from "vue";
 import ProfileTabs from "@/components/profile/ProfileTabs.vue";
-import ProfileSide from "@/components/profile/ProfileSide.vue";
-import MyPostSection from "@/components/profile/MyPostSection.vue";
 
 const user = ref(null);
 const activeTab = ref("overview");
