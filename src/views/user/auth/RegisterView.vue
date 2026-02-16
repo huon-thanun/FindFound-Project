@@ -66,11 +66,12 @@
                 <input
                   :type="showPassword ? 'text' : 'password'"
                   v-model="form.password"
+                  :class="{ 'is-invalid': errors.password }"
                   placeholder="បញ្ចូលពាក្យសម្ងាត់របស់អ្នក"
                 />
-                <span v-if="errors.password" class="field-error">
+                <!-- <span v-if="errors.password" class="field-error">
                   {{ errors.password }}
-                </span>
+                </span> -->
                 <button
                   type="button"
                   class="eye-btn"
@@ -118,6 +119,10 @@
                   </svg>
                 </button>
               </div>
+              <span v-if="errors.password" class="field-error">
+                {{ errors.password }}
+              </span>
+            </div>
 
               <!-- CONFIRM PASSWORD -->
               <div class="form-group-confirm">
@@ -127,12 +132,9 @@
                   <input
                     :type="showConfirm ? 'text' : 'password'"
                     v-model="form.password_confirmation"
+                    :class="{ 'is-invalid': errors.password_confirmation }"
                     placeholder="បញ្ចូលពាក្យសម្ងាត់ម្តងទៀត"
                   />
-                  <span v-if="errors.password_confirmation" class="field-error">
-                    {{ errors.password_confirmation }}
-                  </span>
-
                   <button
                     type="button"
                     class="eye-btn"
@@ -184,11 +186,10 @@
                 <span v-if="confirmPasswordError" class="field-error">
                   {{ confirmPasswordError }}
                 </span>
-              </div>
             </div>
 
             <!-- Agreement -->
-            <div class="form-check mb-4">
+            <div class="form-check mb-4 mt-3">
               <input
                 class="form-check-input"
                 type="checkbox"
@@ -363,8 +364,7 @@ const register = async () => {
     console.error(err);
 
     if (err.response?.status === 409) {
-      errors.value.email =
-         "អ៊ីមែលនេះមានគណនីរួចហើយ។ សូមព្យាយាមប្រើអ៊ីមែលផ្សេង។";
+      errors.value.email = "អ៊ីមែលនេះមានគណនីរួចហើយ។ សូមព្យាយាមប្រើអ៊ីមែលផ្សេង។";
     } else {
       errors.value.email =
         err.response?.data?.message || "មានបញ្ហាមួយកើតឡើង។ សូមព្យាយាមម្តងទៀត។";
@@ -454,6 +454,11 @@ const register = async () => {
 .form-group-confirm {
   margin-top: 13px;
 }
+.form-group-confirm label {
+  display: block;
+  margin-bottom: 5px;
+}
+
 
 /* =========================
    INPUTS
@@ -494,27 +499,28 @@ const register = async () => {
 
 /* Eye Button */
 .eye-btn {
-  position: absolute;
-  right: 35px;
-  top: 35%;
+  position: absolute;    
+  top: 50%;        
   transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
   background: none;
   border: none;
-  padding: 0;
   cursor: pointer;
+  right: 14px;
+  width: 32px;
+  height: 32px;
 }
 
 /* Eye Icons (KEEP STYLE) */
 .eye {
-  width: 18px;
-  height: 18px;
-  stroke: #9ca3af;
-  stroke-width: 2;
-  position: absolute;
+  width: 20px;
+  height: 20px;
+  stroke: #6b7280; /* darker gray */
+  stroke-width: 2.2; /* thicker */
   opacity: 0;
-  transition:
-    opacity 0.15s ease,
-    stroke 0.2s ease;
+  transition: opacity 0.15s ease, stroke 0.2s ease;
 }
 
 .eye.active {
@@ -560,7 +566,6 @@ const register = async () => {
   border-color: #ef4444 !important;
   box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.15);
 }
-
 
 /* PRIMARY BUTTON */
 .btn {
