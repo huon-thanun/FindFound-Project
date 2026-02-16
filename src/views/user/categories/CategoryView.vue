@@ -189,10 +189,10 @@ const navigateToGallery = () => {
     outline: none;
 }
 
-tegory-page {
-    min-height: 100vh;
+/* .category-page {
+    min-height: 100vh; */
     /* background: linear-gradient(135deg, #eaddf3 0%, #f5e6fb 100%); */
-}
+/* } */
 
 .category-card {
     background: var(--surface-color);

@@ -75,8 +75,8 @@
       </div>
     </div>
 
-    <!-- POPUP MODAL -->
-    <PopupModal :show="showPopup" :message="popupMessage" :type="popupType" @close="showPopup = false" />
+    <!-- Message Toast -->
+    <BaseToast v-model="showToast" :message="toastMessage" :theme="toastTheme" :icon="toastIcon" :duration="3000" />
   </ProfileLayout>
 </template>
 
@@ -351,12 +351,11 @@ import { ref, onMounted } from "vue";
 import ProfileHeader from "@/components/profile/ProfileHeader.vue";
 import ProfileSide from "@/components/profile/ProfileSide.vue";
 import ProfileTabs from "@/components/profile/ProfileTabs.vue";
+import BaseToast from "@/components/base/BaseToast.vue";
 
 // Child components
 import ChangePasswordCard from "@/components/profile/ChangPasswordCard.vue";
 import ChangeEmailCard from "@/components/profile/ChangeEmailCard.vue";
-// import PopupModal from "@/components/ui/PopupModal.vue";
-import PopupModal from "./PopupModal.vue";
 
 const user = ref(null);
 const skills = ["HTML", "CSS", "Vue", "MySQL", "JavaScript"];
@@ -377,14 +376,17 @@ const emailVerifyToken = ref("");
 const loadingEmail = ref(false);
 const loadingVerify = ref(false);
 
-// Popup
-const popupMessage = ref("");
-const popupType = ref("success");
-const showPopup = ref(false);
-const showPopupModal = (message, type = "success") => {
-  popupMessage.value = message;
-  popupType.value = type;
-  showPopup.value = true;
+// Toast
+const showToast = ref(false);
+const toastMessage = ref("");
+const toastTheme = ref("success");
+const toastIcon = ref("check-circle");
+
+const showBaseToast = (message, theme = "success") => {
+  toastMessage.value = message;
+  toastTheme.value = theme;
+  toastIcon.value = theme === "success" ? "check-circle" : "x-circle";
+  showToast.value = true;
 };
 
 // Fetch user
@@ -422,13 +424,13 @@ const updatePassword = async () => {
       },
     );
     if (!res.ok) throw new Error("បរាជ័យក្នុងការប្តូរលេខសម្ងាត់");
-    showPopupModal("លេខសម្ងាត់បានប្តូរដោយជោគជ័យ! 🎉", "success");
+    showBaseToast("លេខសម្ងាត់បានប្តូរដោយជោគជ័យ! 🎉", "success");
     currentPassword.value = "";
     newPassword.value = "";
     localStorage.removeItem("token");
     setTimeout(() => (window.location.href = "/login"), 500);
   } catch (err) {
-    showPopupModal(err.message, "error");
+    showBaseToast(err.message, "error");
   } finally {
     loadingPassword.value = false;
   }
@@ -455,9 +457,9 @@ const requestEmailChange = async () => {
     );
     if (!res.ok) throw new Error();
     emailRequested.value = true;
-    showPopupModal("Token ផ្ទៀងផ្ទាត់ត្រូវបានផ្ញើទៅអ៊ីមែលថ្មី! 📩", "success");
+    showBaseToast("Token ផ្ទៀងផ្ទាត់ត្រូវបានផ្ញើទៅអ៊ីមែលថ្មី! 📩", "success");
   } catch (err) {
-    showPopupModal("មានបញ្ហាក្នុងការស្នើសុំ", "error");
+    showBaseToast("មានបញ្ហាក្នុងការស្នើសុំ", "error");
   } finally {
     loadingEmail.value = false;
   }
@@ -478,9 +480,9 @@ const verifyEmailChange = async () => {
     if (!res.ok) throw new Error();
     user.value.email = newEmail.value;
     emailRequested.value = false;
-    showPopupModal("អ៊ីមែលបានផ្ទៀងផ្ទាត់រួចរាល់! 🎉", "success");
+    showBaseToast("អ៊ីមែលបានផ្ទៀងផ្ទាត់រួចរាល់! 🎉", "success");
   } catch (err) {
-    showPopupModal("Token មិនត្រឹមត្រូវ", "error");
+    showBaseToast("Token មិនត្រឹមត្រូវ", "error");
   } finally {
     loadingVerify.value = false;
   }
