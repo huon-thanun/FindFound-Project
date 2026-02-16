@@ -21,14 +21,21 @@
           </p>
 
           <div class="action-buttons d-flex flex-wrap gap-3">
-            <button class="btn-main-action">
+            <router-link
+              to="/reports/own/create"
+              class="btn-main-action text-decoration-none"
+            >
               <i class="bi bi-plus-lg"></i>
               <span>ប្រកាសបាត់របស់</span>
-            </button>
-            <button class="btn-secondary-action">
+            </router-link>
+
+            <router-link
+              to="/reports/user"
+              class="btn-secondary-action text-decoration-none"
+            >
               <i class="bi bi-eye"></i>
               <span>មើលរបស់រើសបាន</span>
-            </button>
+            </router-link>
           </div>
         </div>
 

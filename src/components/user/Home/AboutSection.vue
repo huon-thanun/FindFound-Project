@@ -6,14 +6,14 @@
 
     <div class="container py-5">
       <div class="text-center mb-5 pb-lg-4">
-        <span class="text-overline mb-2">សហគមន៍ជួយគ្នា</span>
+        <span class="text-overline mb-2">ចូលរួមក្នុងសហគមន៍យើង</span>
         <h2 class="display-5 fw-bold khmer-title text-purple-dark">
-          អំពី <span class="text-highlight">បេសកកម្ម</span> របស់យើង
+          អំពី <span class="text-highlight">គោលបំណង</span> របស់យើង
         </h2>
         <p class="khmer-body text-muted mx-auto mt-3" style="max-width: 650px">
-          យើងជឿជាក់លើភាពស្មោះត្រង់។
-          វេទិកានេះត្រូវបានបង្កើតឡើងដើម្បីនាំយកអ្វីៗដែលបានបាត់បង់
-          ត្រឡប់ទៅកាន់ម្ចាស់ដើមវិញប្រកបដោយសុវត្ថិភាព។
+          យើងផ្តល់ជូនលើសពីសេវាកម្មស្វែងរក។ វេទិកានេះគឺជាទីកន្លែងដែល ទំនុកចិត្ត
+          និងសមានចិត្តត្រូវបានផ្សារភ្ជាប់ ដើម្បីនាំយករបស់ដែលបាត់បង់
+          ត្រឡប់ទៅកាន់ម្ចាស់ដើមវិញដោយស្នាមញញឹម។
         </p>
       </div>
 
@@ -23,36 +23,40 @@
             <img
               src="https://i.pinimg.com/1200x/c0/76/f5/c076f5e99914587b7b33d4c81dd463cb.jpg"
               class="img-main"
-              alt="Community"
+              alt="Community Connection"
             />
           </div>
         </div>
         <div class="col-lg-6">
           <div class="ps-lg-5">
-            <h3 class="khmer-title h2 mb-4 fw-bold">ស្ពាននៃភាពស្មោះត្រង់</h3>
+            <h3 class="khmer-title h2 mb-4 fw-bold">បណ្តាញនៃទំនុកចិត្ត</h3>
             <p class="khmer-body text-secondary mb-4">
-              រាល់ការបង្ហោះព័ត៌មានត្រូវបានគ្រប់គ្រងដោយប្រព័ន្ធវៃឆ្លាត
-              ដើម្បីធានាថាព័ត៌មានពិតត្រូវបានទៅដល់ដៃសហគមន៍បានលឿនបំផុត។
-              យើងជួយសម្រួលការផ្ទៀងផ្ទាត់ឱ្យមានតម្លាភាព។
+              រាល់ការផ្ទៀងផ្ទាត់ព័ត៌មានត្រូវបានរៀបចំឡើងយ៉ាងហ្មត់ចត់បំផុត។
+              យើងប្រើប្រាស់បច្ចេកវិទ្យាដើម្បីធ្វើជាជំនួយការដ៏ឆ្លាតវៃ
+              ក្នុងការតភ្ជាប់ រវាងអ្នករើសបាន និងអ្នកបាត់បង់
+              ឱ្យជួបគ្នាដោយភាពជឿជាក់ និងតម្លាភាព។
             </p>
 
             <div class="feature-list">
               <div class="f-item">
                 <div class="f-icon"><i class="bi bi-patch-check"></i></div>
                 <span class="khmer-body-bold"
-                  >សុវត្ថិភាព និងទំនុកចិត្តខ្ពស់</span
+                  >ប្រព័ន្ធផ្ទៀងផ្ទាត់ច្បាស់លាស់</span
                 >
               </div>
               <div class="f-item">
                 <div class="f-icon"><i class="bi bi-lightning-charge"></i></div>
-                <span class="khmer-body-bold">ការផ្សព្វផ្សាយរហ័សទាន់ចិត្ត</span>
+                <span class="khmer-body-bold">ជូនដំណឹងរហ័សបំផុត</span>
               </div>
             </div>
 
-            <button class="btn-premium-purple mt-4">
-              <span>អានបន្ត</span>
+            <router-link
+              to="/about"
+              class="btn-premium-purple mt-4 text-decoration-none d-inline-flex align-items-center"
+            >
+              <span>ស្វែងយល់បន្ថែម</span>
               <i class="bi bi-arrow-right ms-2"></i>
-            </button>
+            </router-link>
           </div>
         </div>
       </div>
@@ -71,7 +75,6 @@
     </div>
   </section>
 </template>
-
 <script setup>
 const values = [
   {
@@ -91,153 +94,128 @@ const values = [
   },
 ];
 </script>
-
 <style scoped>
-@import url("https://fonts.googleapis.com/css2?family=Koh+Santepheap:wght@400;700&family=Noto+Sans+Khmer:wght@200;300;400;600&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Koh+Santepheap:wght@400;700&family=Noto+Sans+Khmer:wght@300;400;600&display=swap");
 
 .about-premium {
-  background-color: #f9f8ff; /* Clean light purple tint */
+  background-color: #ffffff; /* Clean white background */
   position: relative;
-  overflow: hidden;
+  padding: 80px 0;
 }
 
-/* --- TYPOGRAPHY SYSTEM --- */
+/* --- TYPOGRAPHY --- */
 .khmer-title {
   font-family: "Koh Santepheap", cursive;
-  line-height: 1.4;
-  letter-spacing: -0.02em;
-}
-
-.khmer-title-small {
-  font-family: "Koh Santepheap", cursive;
-  font-weight: 700;
-  color: #3b1e54;
+  line-height: 1.3;
 }
 
 .khmer-body {
   font-family: "Noto Sans Khmer", sans-serif;
-  font-weight: 300; /* Ultra light for clean look */
-  font-size: 1.05rem;
-  line-height: 1.9;
+  font-size: 1.1rem;
+  line-height: 1.8;
+  color: #5f6368;
 }
 
-.khmer-body-bold {
-  font-family: "Noto Sans Khmer", sans-serif;
-  font-weight: 600;
-  font-size: 0.95rem;
-  color: #3b1e54;
-}
-
-.khmer-body-sm {
-  font-family: "Noto Sans Khmer", sans-serif;
-  font-weight: 400;
-  font-size: 0.9rem;
-  line-height: 1.7;
-}
-
-.text-overline {
-  font-family: "Noto Sans Khmer", sans-serif;
-  font-weight: 600;
-  font-size: 0.8rem;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  color: #7c3aed;
-  display: block;
-}
-
-/* --- VISUAL ELEMENTS --- */
-.text-purple-dark {
-  color: #2a1b3d;
-}
 .text-highlight {
-  color: #7c3aed;
-  font-weight: 700;
+  color: #6366f1; /* Modern Indigo */
+  position: relative;
+  z-index: 1;
 }
 
+/* --- IMAGE WRAPPER --- */
 .image-premium-wrapper {
-  background: white;
-  padding: 12px;
-  border-radius: 30px;
-  box-shadow: 0 20px 40px rgba(124, 58, 237, 0.08);
+  position: relative;
+  padding: 15px;
+  background: rgba(99, 102, 241, 0.03);
+  border-radius: 40px;
+  border: 1px solid rgba(99, 102, 241, 0.1);
 }
 
 .img-main {
   width: 100%;
-  border-radius: 20px;
-  object-fit: cover;
+  border-radius: 30px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+  transition: transform 0.5s ease;
 }
 
+.image-premium-wrapper:hover .img-main {
+  transform: scale(1.02);
+}
+
+/* --- CARDS --- */
 .card-clean-purple {
-  background: white;
-  padding: 40px;
+  background: #ffffff;
+  padding: 35px;
   border-radius: 24px;
-  border: 1px solid rgba(124, 58, 237, 0.05);
-  transition: all 0.4s ease;
+  border: 1px solid #f0f0f0;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   height: 100%;
 }
 
 .card-clean-purple:hover {
-  background: #7c3aed;
-  transform: translateY(-10px);
+  border-color: #6366f1;
+  background: #6366f1;
+  box-shadow: 0 20px 25px -5px rgba(99, 102, 241, 0.2);
+  transform: translateY(-8px);
 }
 
+/* Change text color to white on hover */
 .card-clean-purple:hover .khmer-title-small,
-.card-clean-purple:hover .khmer-body-sm {
-  color: white !important;
+.card-clean-purple:hover .khmer-body-sm,
+.card-clean-purple:hover .card-icon-wrapper {
+  color: #ffffff !important;
 }
 
 .card-icon-wrapper {
-  width: 50px;
-  height: 50px;
-  background: #f3f0ff;
-  color: #7c3aed;
+  width: 56px;
+  height: 56px;
+  background: #f5f3ff;
+  color: #6366f1;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 12px;
+  border-radius: 16px;
   font-size: 1.5rem;
+  transition: all 0.3s ease;
 }
 
+.card-clean-purple:hover .card-icon-wrapper {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* --- BUTTON --- */
 .btn-premium-purple {
-  background: #3b1e54;
+  background: #1e1b4b; /* Deep Navy */
   color: white;
   border: none;
-  padding: 14px 35px;
-  border-radius: 12px;
+  padding: 16px 32px;
+  border-radius: 16px;
   font-family: "Noto Sans Khmer", sans-serif;
-  font-weight: 500;
-  transition: 0.3s;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: 0.3s all;
 }
 
 .btn-premium-purple:hover {
-  background: #7c3aed;
-  transform: scale(1.05);
+  background: #6366f1;
+  box-shadow: 0 10px 15px -3px rgba(99, 102, 241, 0.3);
+  transform: translateX(5px);
 }
 
-.f-item {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 15px;
-}
-
-.f-icon {
-  color: #7c3aed;
-  font-size: 1.2rem;
-}
-
-/* Background Glow */
+/* --- DECORATIVE GLOW --- */
 .glow-1 {
   position: absolute;
-  top: -10%;
-  right: -5%;
-  width: 400px;
-  height: 400px;
+  top: 0;
+  right: 0;
+  width: 500px;
+  height: 500px;
   background: radial-gradient(
     circle,
-    rgba(124, 58, 237, 0.1) 0%,
+    rgba(99, 102, 241, 0.05) 0%,
     transparent 70%
   );
-  z-index: 0;
+  pointer-events: none;
 }
 </style>

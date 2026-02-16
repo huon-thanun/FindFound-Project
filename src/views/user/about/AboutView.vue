@@ -1,4 +1,6 @@
 <script setup>
+// import Member from "@/components/about/member.vue";
+import MemberSection from "@/components/about/MemberSection.vue";
 import { ref, onMounted } from "vue";
 
 const leader = {
@@ -210,17 +212,17 @@ const prevTestimonial = () => {
           <!-- Text Column -->
           <div class="col-lg-6 hero-text-col" data-aos="fade-right">
             <div class="badge-modern mb-4">
-              <i class="bi bi-chat-dots-fill me-2"></i>
-              ទំនាក់ទំនង
+              <i class="bi bi-people-fill me-2"></i>
+              អំពីពួកយើង
             </div>
             <h1 class="hero-title">
-              ទាក់ទងមក <span class="gradient-text">ពួកយើង</span>
+              ស្វែងយល់បន្ថែមអំពី <span class="gradient-text">FindFound</span>
               <br class="d-none d-md-block" />
-              យើងរីករាយជួយអ្នកគ្រប់ពេល
+              ក្រុមការងារនិងបេសកកម្មរបស់យើង
             </h1>
             <p class="hero-subtitle">
-              ផ្ញើសារមកយើងឥឡូវនេះ យើងនឹងឆ្លើយតបក្នុងរយៈពេលខ្លីបំផុត
-              និងវិជ្ជាជីវៈ។ សេវាកម្ម 24/7 សុវត្ថិភាពខ្ពស់។
+              យើងជាក្រុមអ្នកអភិវឌ្ឍន៍វ័យក្មេងដែលចង់ប្រើបច្ចេកវិទ្យាដើម្បីជួយសហគមន៍
+              និងធ្វើឱ្យការស្វែងរកវត្ថុបាត់បង់កាន់តែងាយស្រួលសម្រាប់គ្រប់គ្នា។
             </p>
           </div>
 
@@ -311,40 +313,7 @@ const prevTestimonial = () => {
 
     <!-- MEMBERS -->
     <section class="section">
-      <div class="container">
-        <h2 class="section-title text-center mb-5" data-aos="fade-up">
-          ក្រុមការងាររបស់យើង
-        </h2>
-
-        <!-- Leader -->
-        <div class="leader-card glass-card mb-5" data-aos="fade-right">
-          <img :src="leader.avatar" class="leader-avatar" />
-          <div class="leader-info">
-            <h3>{{ leader.name }}</h3>
-            <span class="role">{{ leader.role }}</span>
-            <p class="mt-3">{{ leader.desc }}</p>
-          </div>
-        </div>
-
-        <!-- Team Members -->
-        <div class="row justify-content-center g-4">
-          <div
-            v-for="(m, i) in members"
-            :key="i"
-            class="col-12 col-sm-6 col-lg-4"
-          >
-            <div
-              class="member-card glass-card"
-              data-aos="fade-up"
-              :data-aos-delay="i * 100"
-            >
-              <img :src="m.avatar" />
-              <h5 class="mt-3">{{ m.name }}</h5>
-              <span class="role">{{ m.role }}</span>
-            </div>
-          </div>
-        </div>
-      </div>
+      <MemberSection></MemberSection>
     </section>
 
     <!-- TESTIMONIALS -->

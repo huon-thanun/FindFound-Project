@@ -1,4 +1,3 @@
-<!-- src/components/dashboard/CategoryDonut.vue -->
 <template>
   <div class="content-card h-100">
     <div class="content-card-header">
@@ -9,29 +8,35 @@
     </div>
 
     <div class="chart-section pt-3 pb-4">
-      <!-- Donut Chart -->
-      <div class="donut-chart-wrapper mx-auto">
-        <div class="donut-visual" :style="donutStyle">
-          <div class="donut-inner">
-            <div class="total-num">
-              {{ totalItems.toLocaleString("km-KH") }}
-            </div>
-            <div class="total-text">សរុប</div>
-          </div>
+      <!-- Loading -->
+      <div v-if="categoryStore.loading" class="text-center py-5">
+        <div class="spinner-border text-primary" role="status"></div>
+        <p class="mt-3 text-muted">កំពុងផ្ទុកទិន្នន័យ...</p>
+      </div>
+
+      <!-- No data -->
+      <div
+        v-else-if="categoryStats.length === 0"
+        class="text-center py-5 text-muted"
+      >
+        មិនទាន់មានទិន្នន័យប្រភេទនៅឡើយ
+      </div>
+
+      <!-- Donut chart -->
+      <div v-else class="donut-chart-wrapper mx-auto" :style="donutStyle">
+        <div class="donut-inner">
+          <div class="total-num">{{ totalItems.toLocaleString("km-KH") }}</div>
+          <div class="total-text">សរុប</div>
         </div>
       </div>
 
       <!-- Legend -->
       <div v-if="categoryStats.length" class="legend-list mt-5 px-2">
-        <div
-          v-for="(cat, index) in categoryStats"
-          :key="cat.category.name"
-          class="legend-row mb-3"
-        >
+        <div v-for="cat in categoryStats" :key="cat.id" class="legend-row mb-3">
           <div
             class="legend-info d-flex justify-content-between align-items-center"
           >
-            <span class="legend-name">{{ cat.category.name }}</span>
+            <span class="legend-name">{{ cat.name }}</span>
             <span class="legend-percent fw-bold">{{ cat.percent }}%</span>
           </div>
           <div class="progress-thin mt-1">
@@ -42,55 +47,64 @@
           </div>
         </div>
       </div>
-
-      <!-- No data state -->
-      <div v-else class="text-center py-5 text-muted">
-        មិនទាន់មានទិន្នន័យប្រភេទនៅឡើយ
-      </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { computed } from "vue"; // ← This line was missing!
+import { computed, onMounted } from "vue";
+import { useCategoryStore } from "@/stores/categoryStore";
 
-defineProps({
-  totalItems: {
-    type: Number,
-    default: 0,
-  },
-  categoryStats: {
-    type: Array,
-    default: () => [],
-  },
-  donutStyle: {
-    type: Object,
-    default: () => ({}),
-  },
+const categoryStore = useCategoryStore();
+
+// Fetch categories when component mounts
+onMounted(() => {
+  if (!categoryStore.categories.length) {
+    categoryStore.fetchCategories();
+  }
 });
 
-// Optional: show something only if we have real data
-const hasData = computed(
-  () => categoryStats.value.length > 0 && totalItems.value > 0,
+// Total items (sum of counts)
+const totalItems = computed(
+  () =>
+    categoryStore.categories?.reduce((sum, cat) => sum + (cat.count ?? 0), 0) ||
+    0,
 );
+
+// Percentage stats for legend
+const categoryStats = computed(() => {
+  const total = totalItems.value || 1; // avoid division by zero
+  return (
+    categoryStore.categories?.map((cat) => ({
+      id: cat.id,
+      name: cat.name,
+      count: cat.count ?? 0,
+      percent: (((cat.count ?? 0) / total) * 100).toFixed(1),
+    })) || []
+  );
+});
+
+// Optional: you can customize donut style
+const donutStyle = {
+  width: "200px",
+  height: "200px",
+  borderRadius: "50%",
+  background: "#f3f4f6",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  margin: "0 auto",
+  position: "relative",
+};
 </script>
 
 <style scoped>
-/* Your existing styles remain unchanged */
-.donut-chart-wrapper {
-  max-width: 240px;
-  margin: 0 auto;
-}
-
-.donut-visual {
-  width: 200px;
-  height: 200px;
-  border-radius: 50%;
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0 auto;
+.content-card {
+  background: white;
+  border-radius: 16px;
+  border: 1px solid #e2e8f0;
+  padding: 24px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
 }
 
 .donut-inner {
@@ -147,20 +161,5 @@ const hasData = computed(
   transition: width 0.6s ease;
   background: linear-gradient(90deg, #4f46e5, #7c3aed);
   border-radius: 10px;
-}
-
-/* Responsive adjustments */
-@media (max-width: 992px) {
-  .donut-visual {
-    width: 180px;
-    height: 180px;
-  }
-  .donut-inner {
-    width: 120px;
-    height: 120px;
-  }
-  .total-num {
-    font-size: 2rem;
-  }
 }
 </style>
