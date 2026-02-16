@@ -130,8 +130,9 @@
     <BaseModal title="User Detail" icon="person-circle" :theme="'primary'" :isClose="showViewModal"
       @closeModal="showViewModal = false">
       <template #body>
-        <div v-if="selectedUser" class="text-start">
-          <p><b class="text-dark">ល.រ:</b> #{{ selectedUser?.id }}</p>
+        <div v-if="selectedUser" class="user-modal-body">
+          <div class="user-description">
+            <p><b class="text-dark">ល.រ:</b> #{{ selectedUser?.id }}</p>
           <p><b class="text-dark">ឈ្មោះ:</b> {{ selectedUser?.fullname }}</p>
           <p><b class="text-dark">អុីមែល:</b> {{ selectedUser?.email }}</p>
           <p><b class="text-dark">លេខទូរស័ព្ទ:</b> {{ selectedUser?.phoneNumber || '-' }}</p>
@@ -140,6 +141,7 @@
               }}</span></p>
           <p><b class="text-dark">តួនាទី:</b> {{ selectedUser?.role?.name }}</p>
           <p><b class="text-dark">បានចុះឈ្មោះ:</b> {{ formatDate(selectedUser?.registeredAt) }}</p>
+          </div>
         </div>
       </template>
       <template #btnClose>
@@ -542,6 +544,18 @@ onMounted(() => resetAndLoadUsers());
 
 .border-color {
   border-color: var(--tertiary-color);
+}
+
+.user-modal-body {
+    text-align: left;
+    padding: 16px 0;
+}
+
+.user-description {
+    background-color: rgba(59, 30, 84, 0.05);
+    border-left: 4px solid var(--primary-color);
+    padding: 16px;
+    border-radius: 8px;
 }
 
 /* Default (LG and up) */

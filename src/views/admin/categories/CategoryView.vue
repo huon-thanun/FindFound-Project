@@ -2,6 +2,7 @@
 import { ref, onMounted, watch, computed } from "vue";
 import { useCategoryStore } from "@/stores/categoryStore";
 import { formatDate } from '@/utils/formatDate';
+import BaseToast from "@/components/base/BaseToast.vue";
 
 const categoryStore = useCategoryStore();
 
@@ -11,8 +12,12 @@ const isLoading = ref(false);
 const categories = computed(() => categoryStore.categories);
 const total = computed(() => categoryStore.total);
 const meta = computed(() => categoryStore.meta);
-const successMessage = ref('');
-const errorMessage = ref('');
+
+// Toast configuration
+const showToast = ref(false);
+const toastMessage = ref('');
+const toastTheme = ref('success');
+const toastIcon = ref('check-circle');
 
 const filters = {
     page: ref(1),
@@ -26,16 +31,17 @@ const shownCount = computed(() => {
 });
 
 const showSuccess = (message) => {
-    successMessage.value = message;
-    setTimeout(() => {
-        successMessage.value = '';
-    }, 3000);
+    toastMessage.value = message;
+    toastTheme.value = 'success';
+    toastIcon.value = 'check-circle';
+    showToast.value = true;
 };
+
 const showFieldError = (message) => {
-    errorMessage.value = message;
-    setTimeout(() => {
-        errorMessage.value = '';
-    }, 3000);
+    toastMessage.value = message;
+    toastTheme.value = 'danger';
+    toastIcon.value = 'x-circle';
+    showToast.value = true;
 };
 
 const columns = [
@@ -328,19 +334,6 @@ const previousPage = async () => {
 
 <template>
     <div class="p-3">
-
-        <!-- Success Alert -->
-        <div v-if="successMessage" class="alert alert-success alert-dismissible fade show mb-4" role="alert">
-            {{ successMessage }}
-            <button type="button" class="btn-close" @click="successMessage = ''"></button>
-        </div>
-
-        <!-- Error Alert -->
-        <div v-if="errorMessage" class="alert alert-danger alert-dismissible fade show mb-4" role="alert">
-            {{ errorMessage }}
-            <button type="button" class="btn-close" @click="errorMessage = ''"></button>
-        </div>
-
         <div class="d-flex justify-content-between align-items-center mb-3">
             <div>
                 <h2 class="fw-bold">ប្រភេទរបាយការណ៍</h2>
@@ -349,9 +342,6 @@ const previousPage = async () => {
             <BaseButton variant="primary" @click="openCreateModal" icon="plus-circle">
                 បង្កើតប្រភេទថ្មី
             </BaseButton>
-            <!-- <BaseButton class="d-block d-md-none d-flex" variant="primary" @click="openCreateModal" icon="plus-circle">
-                បង្កើត
-            </BaseButton> -->
         </div>
 
         <div class="card mb-3 shadow border-color">
@@ -487,7 +477,8 @@ const previousPage = async () => {
                 </BaseButton>
             </template>
             <template #btnActive>
-                <BaseButton variant="primary" :isLoading="isLoading" @click="confirmCreate" icon="check-circle">
+                <BaseButton variant="primary" :isLoading="isLoading" @click="confirmCreate"
+                    :icon="isLoading ? '' : 'check-circle'">
                     បង្កើត
                 </BaseButton>
             </template>
@@ -497,15 +488,18 @@ const previousPage = async () => {
         <BaseModal :isClose="showDetailModal" title="ព័ត៌មានលម្អិតអំពីប្រភេទ" icon="info-circle" theme="primary"
             @closeModal="showDetailModal = false">
             <template #body>
-                <div v-if="selectedCategoryDetail" class="text-start">
-                    <p><strong class="text-dark">ល.រ:</strong> #{{ selectedCategoryDetail.id }}</p>
-                    <p><strong class="text-dark">ប្រភេទ:</strong><span class="badge bg-success ms-2 fw-normal"> {{
-                        selectedCategoryDetail.name }}</span></p>
-                    <p><strong class="text-dark">ការពិពណ៌នា:</strong> {{ selectedCategoryDetail.description }}</p>
-                    <p><strong class="text-dark">បានបង្កើតនៅ:</strong> {{ formatDate(selectedCategoryDetail.createdAt)
-                    }}</p>
-                    <p><strong class="text-dark">បានធ្វើបច្ចុប្បន្នភាពនៅ:</strong> {{
-                        formatDate(selectedCategoryDetail.updatedAt) }}</p>
+                <div v-if="selectedCategoryDetail" class="category-modal-body">
+                    <div class="category-description">
+                        <p><strong class="text-dark">ល.រ:</strong> #{{ selectedCategoryDetail.id }}</p>
+                        <p><strong class="text-dark">ប្រភេទ:</strong><span class="badge bg-success ms-2 fw-normal"> {{
+                            selectedCategoryDetail.name }}</span></p>
+                        <p><strong class="text-dark">ការពិពណ៌នា:</strong> {{ selectedCategoryDetail.description }}</p>
+                        <p><strong class="text-dark">បានបង្កើតនៅ:</strong> {{
+                            formatDate(selectedCategoryDetail.createdAt)
+                            }}</p>
+                        <p><strong class="text-dark">បានធ្វើបច្ចុប្បន្នភាពនៅ:</strong> {{
+                            formatDate(selectedCategoryDetail.updatedAt) }}</p>
+                    </div>
                 </div>
             </template>
 
@@ -515,10 +509,26 @@ const previousPage = async () => {
                 </BaseButton>
             </template>
         </BaseModal>
+
+        <!-- Toast Notification -->
+        <BaseToast v-model="showToast" :message="toastMessage" :theme="toastTheme" :icon="toastIcon" :duration="3000" />
     </div>
 </template>
 
 <style scoped>
+/* Modal Styles */
+.category-modal-body {
+    text-align: left;
+    padding: 16px 0;
+}
+
+.category-description {
+    background-color: rgba(59, 30, 84, 0.05);
+    border-left: 4px solid var(--primary-color);
+    padding: 16px;
+    border-radius: 8px;
+}
+
 .border-color {
     border-color: var(--tertiary-color);
 }

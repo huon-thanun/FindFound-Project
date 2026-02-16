@@ -325,23 +325,23 @@ const nextImage = () => {
 }
 
 .status-lost {
-  background-color: #dc3545;
+  background-color:  rgb(255, 0, 0);
   color: #fff;
 }
 
 .status-found {
-  background-color: #198754;
-  color: #fff;
+  background-color: rgb(0, 211, 0);
+  color: rgb(255, 255, 255);
 }
 
 .status-active {
-  background-color: rgba(13, 110, 253, 0.1);
-  color: #0d6efd;
+  background-color: rgba(0, 0, 255, 0.2);
+  color: rgba(0, 0, 255, 0.8);
 }
 
 .status-resolved {
-  background-color: #6c757d;
-  color: #fff;
+  background-color: rgba(92, 92, 92, 0.5);
+  color: rgba(255, 255, 255, 0.8);
 }
 
 .status-hidden {
