@@ -61,7 +61,8 @@
 </template>
 
 <style scoped>
-@import url("https://fonts.googleapis.com/css2?family=Koh+Santepheap:wght@700&family=Noto+Sans+Khmer:wght@400;500;700&display=swap");
+/* @import url("https://fonts.googleapis.com/css2?family=Koh+Santepheap:wght@700&family=Noto+Sans+Khmer:wght@400;500;700&display=swap"); */
+@import url("https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@300;400;500;600;700;800&display=swap");
 
 .hero-section {
   position: relative;
@@ -233,7 +234,7 @@
     width: 100%;
   }
 }
-@import url("https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@300;400;500;600;700;800&display=swap");
+
 
 .main-contact {
   font-family: "Kantumruy Pro", system-ui, sans-serif;

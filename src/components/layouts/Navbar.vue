@@ -107,12 +107,12 @@
       <p class="khmer-font text-center mb-0">តើអ្នកពិតជាចង់ចាកចេញមែនទេ?</p>
     </template>
     <template #btnClose>
-      <BaseButton variant="cancel" class="col-6" @click="closeLogoutModal">
+      <BaseButton variant="cancel" icon="x-circle" class="col-6" @click="closeLogoutModal">
         បោះបង់
       </BaseButton>
     </template>
     <template #btnActive>
-      <BaseButton variant="danger" class="col-6" @click="logout">
+      <BaseButton variant="danger" :isLoading="auth.loading" icon="box-arrow-left" class="col-6" @click="logout">
         បញ្ជាក់
       </BaseButton>
     </template>

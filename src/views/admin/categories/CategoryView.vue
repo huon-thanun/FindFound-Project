@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, watch, computed } from "vue";
+import { ref, onMounted, watch, computed, reactive } from "vue";
 import { useCategoryStore } from "@/stores/categoryStore";
 import { formatDate } from '@/utils/formatDate';
 import BaseToast from "@/components/base/BaseToast.vue";
@@ -63,7 +63,7 @@ const SORT_DIR_OPTIONS = [
 ];
 
 // ===== Validation =====
-const errors = ref({
+const errors = reactive({
     create: {
         name: "",
         description: "",
@@ -75,33 +75,33 @@ const errors = ref({
 });
 
 const validateCreate = () => {
-    errors.value.create.name = "";
-    errors.value.create.description = "";
+    errors.create.name = "";
+    errors.create.description = "";
 
     if (!newCategoryName.value.trim()) {
-        errors.value.create.name = "សូមបញ្ចូលឈ្មោះប្រភេទ";
+        errors.create.name = "សូមបញ្ចូលឈ្មោះប្រភេទ";
     }
 
     if (!newCategoryDescription.value.trim()) {
-        errors.value.create.description = "សូមបញ្ចូលការពិពណ៌នា";
+        errors.create.description = "សូមបញ្ចូលការពិពណ៌នា";
     }
 
-    return !errors.value.create.name && !errors.value.create.description;
+    return !errors.create.name && !errors.create.description;
 };
 
 const validateEdit = () => {
-    errors.value.edit.name = "";
-    errors.value.edit.description = "";
+    errors.edit.name = "";
+    errors.edit.description = "";
 
     if (!editName.value.trim()) {
-        errors.value.edit.name = "សូមបញ្ចូលឈ្មោះប្រភេទ";
+        errors.edit.name = "សូមបញ្ចូលឈ្មោះប្រភេទ";
     }
 
     if (!editDescription.value.trim()) {
-        errors.value.edit.description = "សូមបញ្ចូលការពិពណ៌នា";
+        errors.edit.description = "សូមបញ្ចូលការពិពណ៌នា";
     }
 
-    return !errors.value.edit.name && !errors.value.edit.description;
+    return !errors.edit.name && !errors.edit.description;
 };
 
 
@@ -156,7 +156,7 @@ const confirmDelete = async () => {
 
         showDeleteModal.value = false
         selectedCategoryId.value = null
-        showSuccess(`បានលុបប្រភេទរបាយការណ៍ដោយជោគជ័យ`);
+        showSuccess(`បានលុបប្រភេទវត្ថុដោយជោគជ័យ`);
         await fetchCategories();
     } catch (err) {
         let errorMsg = '';
@@ -177,7 +177,7 @@ const confirmDelete = async () => {
         } else if (err.message) {
             errorMsg = err.message;
         };
-        showFieldError(`បរាជ័យក្នុងការលុបប្រភេទរបាយការណ៍, ${errorMsg ? `${errorMsg}` : ''}, សូមព្យាយាមម្តងទៀត`);
+        showFieldError(`បរាជ័យក្នុងការលុបប្រភេទវត្ថុ, ${errorMsg ? `${errorMsg}` : ''}, សូមព្យាយាមម្តងទៀត`);
         throw err
     } finally {
         isLoading.value = false
@@ -212,7 +212,7 @@ const confirmEdit = async () => {
         showEditModal.value = false;
         editName.value = "";
         editDescription.value = "";
-        showSuccess(`បានធ្វើបច្ចុប្បន្នភាពប្រភេទរបាយការណ៍ដោយជោគជ័យ`);
+        showSuccess(`បានធ្វើបច្ចុប្បន្នភាពប្រភេទវត្ថុដោយជោគជ័យ`);
         await fetchCategories();
     } catch (err) {
         let errorMsg = '';
@@ -233,7 +233,7 @@ const confirmEdit = async () => {
         } else if (err.message) {
             errorMsg = err.message;
         };
-        showFieldError(`បរាជ័យក្នុងការធ្វើបច្ចុប្បន្នភាពប្រភេទរបាយការណ៍, ${errorMsg ? `${errorMsg}` : ''}, សូមព្យាយាមម្តងទៀត`);
+        showFieldError(`បរាជ័យក្នុងការធ្វើបច្ចុប្បន្នភាពប្រភេទវត្ថុ, ${errorMsg ? `${errorMsg}` : ''}, សូមព្យាយាមម្តងទៀត`);
         throw err
     } finally {
         isLoading.value = false;
@@ -266,7 +266,7 @@ const confirmCreate = async () => {
             showCreateModal.value = false;
             newCategoryName.value = "";
             newCategoryDescription.value = "";
-            showSuccess(`បង្កើតប្រភេទរបាយការណ៍ដោយជោគជ័យ`);
+            showSuccess(`បង្កើតប្រភេទវត្ថុដោយជោគជ័យ`);
             await fetchCategories();
         }
 
@@ -289,7 +289,7 @@ const confirmCreate = async () => {
         } else if (err.message) {
             errorMsg = err.message;
         }
-        showFieldError(`បរាជ័យក្នុងការបង្កើតប្រភេទរបាយការណ៍, ${errorMsg ? ` ${errorMsg}` : ''}, សូមព្យាយាមម្តងទៀត`);
+        showFieldError(`បរាជ័យក្នុងការបង្កើតប្រភេទវត្ថុ, ${errorMsg ? ` ${errorMsg}` : ''}, សូមព្យាយាមម្តងទៀត`);
         throw err
     } finally {
         isLoading.value = false
@@ -336,7 +336,7 @@ const previousPage = async () => {
     <div class="p-3">
         <div class="d-flex justify-content-between align-items-center mb-3">
             <div>
-                <h2 class="fw-bold">ប្រភេទរបាយការណ៍</h2>
+                <h2 class="fw-bold">ប្រភេទវត្ថុ</h2>
                 <p class="text-muted">បង្កើត និងគ្រប់គ្រងប្រភេទនៃរបាយការណ៍ផ្សេងៗ</p>
             </div>
             <BaseButton variant="primary" @click="openCreateModal" icon="plus-circle">
@@ -349,7 +349,7 @@ const previousPage = async () => {
 
                 <!-- Search -->
                 <div class="col-xxl-12">
-                    <BaseInput class="" v-model="search" placeholder="ស្វែងរកតាមប្រភេទ​ និងការពិពណ៌នា..." />
+                    <BaseInput class="" v-model="search" placeholder="ស្វែងរកតាមប្រភេទ​វត្ថុ និងការពិពណ៌នា..." />
                 </div>
 
                 <div class="col-xxl-8 mt-2">
@@ -444,9 +444,9 @@ const previousPage = async () => {
         <BaseModal :isClose="showEditModal" theme="warning" title="កែសម្រួល​ប្រភេទនៃរបាយការណ៌"
             @closeModal="showEditModal = false" icon="pencil-square">
             <template #body>
-                <BaseInput v-model="editName" label="ឈ្មោះប្រភេទ" placeholder="បញ្ចូលឈ្មោះប្រភេទ"
+                <BaseInput v-model="editName" label="ឈ្មោះប្រភេទ" unOptional placeholder="បញ្ចូលឈ្មោះប្រភេទ"
                     :error="errors.edit.name" />
-                <BaseInput v-model="editDescription" label="ការពិពណ៌នា" placeholder="បញ្ចូលការពិពណ៌នា"
+                <BaseInput v-model="editDescription" label="ការពិពណ៌នា" unOptional placeholder="បញ្ចូលការពិពណ៌នា"
                     :error="errors.edit.description" />
             </template>
             <template #btnClose>
@@ -455,7 +455,7 @@ const previousPage = async () => {
                 </BaseButton>
             </template>
             <template #btnActive>
-                <BaseButton variant="primary" :isLoading="isLoading" @click="confirmEdit" icon="check-circle">
+                <BaseButton variant="primary" :isLoading="isLoading" @click="confirmEdit" :icon="isLoading ? '' : 'check-circle'">
                     រក្សាទុក
                 </BaseButton>
             </template>
@@ -465,9 +465,9 @@ const previousPage = async () => {
         <BaseModal :isClose="showCreateModal" theme="primary" title="បង្កើតប្រភេទថ្មី"
             @closeModal="showCreateModal = false" icon="plus-circle">
             <template #body>
-                <BaseInput v-model="newCategoryName" label="ឈ្មោះប្រភេទ" placeholder="បញ្ចូលឈ្មោះប្រភេទ"
+                <BaseInput v-model="newCategoryName" label="ឈ្មោះប្រភេទ" unOptional placeholder="បញ្ចូលឈ្មោះប្រភេទ"
                     :error="errors.create.name" />
-                <BaseInput v-model="newCategoryDescription" label="ការពិពណ៌នា" placeholder="បញ្ចូលការពិពណ៌នា"
+                <BaseInput v-model="newCategoryDescription" label="ការពិពណ៌នា" unOptional placeholder="បញ្ចូលការពិពណ៌នា"
                     :error="errors.create.description" />
             </template>
 
