@@ -79,11 +79,6 @@
               />
             </div>
           </div>
-          <div class="col-xxl-4 mt-1 text-end">
-            <BaseButton icon="stars" variant="outline_primary" @click="clearFilter">
-              សម្អាតការតម្រៀប
-            </BaseButton>
-          </div>
         </div>
         <div class="col-xxl-4 mt-1 text-end">
           <BaseButton
@@ -135,8 +130,6 @@
           />
         </div>
       </div>
-      <SectionPublicReports :page="1" :perPage="20" :search="search" :reportTypeId="typeValue"
-        :categoryId="cateValue?.id" :sortDir="sortDir"></SectionPublicReports>
     </div>
     <SectionPublicReports
       :page="1"
@@ -147,6 +140,7 @@
       :categoryId="cateValue?.id"
       :sortDir="sortDir"
     ></SectionPublicReports>
+  </div>
   </div>
 </template>
 <script setup>

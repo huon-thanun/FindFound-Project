@@ -9,14 +9,14 @@
     </div>
 
     <div class="container position-relative">
-      <div class="row align-items-center g-5 py-lg-6">
+      <div class="row align-items-center pt-4 py-0 g-5 ">
         <!-- Text Column -->
         <div class="col-lg-6 py-5 px-5 m-0 hero-text-col" data-aos="fade-right">
           <div class="badge-modern mb-4">
             <i class="bi bi-people-fill me-2"></i>
             ទីកន្លែងដែលអាចទុកចិត្តបាន
           </div>
-          <h1 class="gradient-text fw-bold mb-3">
+          <h1 class="gradient-text pt-2 fw-bold mb-3">
             បាត់របស់របរមែនទេ?<br />
             <span class="text-highlight">ពួកយើងជួយអ្នកបាន</span>
           </h1>
@@ -65,7 +65,6 @@
 
 .hero-section {
   position: relative;
-  padding: 100px 0 100px;
   background: linear-gradient(
     135deg,
     #f5f0ff 0%,
@@ -125,13 +124,24 @@
   color: white;
   border: none;
   box-shadow: 0 4px 12px rgba(124, 58, 237, 0.2);
+  padding: 16px 32px;
+  border: 2px solid transparent;
+  border-radius: 18px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  transition: 0.3s;
 }
-
+.btn-main-action:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 25px rgba(59, 30, 84, 0.25);
+}
 .btn-secondary-action {
   background: white;
-  color: #3b1e54;
+  color: var(--secondary-color);
   padding: 16px 32px;
-  border: 2px solid #f1f5f9;
+  border: 2px solid transparent;
   border-radius: 18px;
   font-weight: 700;
   display: flex;
@@ -192,10 +202,6 @@
 
 /* Responsive */
 @media (max-width: 991px) {
-  .hero-section {
-    padding: 80px 0 100px;
-    text-align: center;
-  }
 
   .hero-title {
     font-size: clamp(2.4rem, 8vw, 4rem);
@@ -319,6 +325,7 @@
 .gradient-text {
   background: linear-gradient(90deg, #7c3aed, #a78bfa, #c4b5fd);
   -webkit-background-clip: text;
+  font-size: clamp(2.6rem, 6vw, 4rem);
   background-clip: text;
   color: transparent;
 }
