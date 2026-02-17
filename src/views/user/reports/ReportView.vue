@@ -1,23 +1,63 @@
 <template>
-  <div class="container py-4">
-    <div class="d-flex justify-content-between flex-wrap mb-3 align-items-center">
-      <div>
-        <h2>ការរាយការណ៍</h2>
-        <p>រុករក និងមើលវត្ថុបាត់បង់ និងវត្ថុដែលបានរកឃើញទាំងអស់នៅក្នុងសហគមន៍</p>
+  <div>
+    <section class="hero-section">
+      <div class="hero-bg"></div>
+
+      <div class="floating-shapes">
+        <div class="shape shape-1"></div>
+        <div class="shape shape-2"></div>
+        <div class="shape shape-3"></div>
       </div>
 
-      <BaseButton variant="primary" icon="file-earmark-plus" @click="btnHandleToCreatePage">
-        បង្កើតការរាយការណ៍
-      </BaseButton>
-    </div>
-    <div class="card mb-3 shadow border-color">
-      <div class="card-body row">
-        <div class="col-xxl-12">
-          <BaseInput class="w-100" v-model="search" type="text" placeholder="ស្វែងរក ការរាយការណ៍..." />
+      <div class="container position-relative">
+        <div class="row align-items-center pt-5 g-5 py-lg-6">
+          <!-- Text Column -->
+          <div class="col-lg-7 py-5 px-5 m-0 hero-text-col" data-aos="fade-right">
+            <div class="badge-modern mb-4">
+              <i class="bi bi-flag-fill me-2"></i>
+              រាយការណ៍ពីបញ្ហា
+            </div>
+            <h1 class="hero-title">
+              រាយការណ៍ <span class="gradient-text">វត្ថុបាត់</span>
+              <br class="d-none d-md-block" />
+              ឬរកឃើញនៅលើគេហទំព័រ
+            </h1>
+            <p class="hero-subtitle">
+              ជួយរក្សាសហគមន៍យើងអោយមានសុវត្ថិភាព។ ប្រសិនបើអ្នកបាត់បង់វត្ថុ ឬរកឃើញវត្ថុអ្វីមួយ
+              សូមរាយការណ៍មកយើងខ្ញុំឥឡូវនេះ។
+            </p>
+          </div>
+
+          <!-- Illustration Column -->
+          <div class="col-lg-5 hero-illustration d-flex justify-content-center m-0 p-0" data-aos="fade-left"
+            data-aos-delay="200">
+            <img
+              src="../../../assets/images/report/Flat vector illustration of two people meeting and (2)-Photoroom (1).png"
+              alt="Contact Us Illustration" class="hero-img m-0 img-fluid" />
+          </div>
         </div>
-        <!-- CATEGORY -->
-        <div class="col-xxl-8 mt-2">
-          <!-- <select class="form-select" v-model="cateValue">
+      </div>
+    </section>
+    <div class="container py-4">
+      <!-- Hero Banner -->
+      <div class="d-flex justify-content-between flex-wrap mb-3 align-items-center">
+        <div>
+          <h2>ការរាយការណ៍</h2>
+          <p>រុករក និងមើលវត្ថុបាត់បង់ និងវត្ថុដែលបានរកឃើញទាំងអស់នៅក្នុងសហគមន៍</p>
+        </div>
+
+        <BaseButton variant="primary" icon="file-earmark-plus" @click="btnHandleToCreatePage">
+          បង្កើតការរាយការណ៍
+        </BaseButton>
+      </div>
+      <div class="card mb-3 shadow border-color">
+        <div class="card-body row">
+          <div class="col-xxl-12">
+            <BaseInput class="w-100" v-model="search" type="text" placeholder="ស្វែងរក ការរាយការណ៍..." />
+          </div>
+          <!-- CATEGORY -->
+          <div class="col-xxl-8 mt-2">
+            <!-- <select class="form-select" v-model="cateValue">
             <option value="">All Category</option>
             <option
               v-for="category in categoryStore.categories"
@@ -27,42 +67,43 @@
               {{ category.name }}
             </option>
           </select> -->
-          <div class="row">
-            <div class="col-xxl-5" style=" flex-wrap: nowrap;">
-              <BaseSelect class="w-100" v-model="cateValue" :items="categoryStore.categories" textField="ប្រភេទនៃការរាយការណ៍ទំាងអស់"
-                labelField="name" valueField="id" />
+            <div class="row">
+              <div class="col-xxl-5" style=" flex-wrap: nowrap;">
+                <BaseSelect class="w-100" v-model="cateValue" :items="categoryStore.categories"
+                  textField="ប្រភេទនៃការរាយការណ៍ទំាងអស់" labelField="name" valueField="id" />
+              </div>
             </div>
           </div>
-        </div>
-        <div class="col-xxl-4 mt-1 text-end">
-          <BaseButton icon="stars" variant="outline_primary" @click="clearFilter">
-            សម្អាតការតម្រៀប
-          </BaseButton>
+          <div class="col-xxl-4 mt-1 text-end">
+            <BaseButton icon="stars" variant="outline_primary" @click="clearFilter">
+              សម្អាតការតម្រៀប
+            </BaseButton>
+          </div>
         </div>
       </div>
-    </div>
-    <div class="mt-3 mb-5 align-items-center d-flex justify-content-between flex-wrap">
-      <div class="btn-group bg-btn-group my-1">
-        <button class="btn-filter" :class="{ active: activeFilter === '' }" @click="btnFilterAllReport">
-          ទាំងអស់
-        </button>
+      <div class="mt-3 mb-5 align-items-center d-flex justify-content-between flex-wrap">
+        <div class="btn-group bg-btn-group my-1">
+          <button class="btn-filter" :class="{ active: activeFilter === '' }" @click="btnFilterAllReport">
+            ទាំងអស់
+          </button>
 
-        <button class="btn-filter" :class="{ active: activeFilter === '1' }" @click="btnFilterReportType('1')">
-          បាត់
-        </button>
+          <button class="btn-filter" :class="{ active: activeFilter === '1' }" @click="btnFilterReportType('1')">
+            បាត់
+          </button>
 
-        <button class="btn-filter" :class="{ active: activeFilter === '2' }" @click="btnFilterReportType('2')">
-          រកឃើញ
-        </button>
-      </div>
-      <div class="d-flex gap-2 align-items-center my-1">
-        <div class="mt-2" style="width: 150px">
-          <BaseSelect class="w-100" v-model="sortDir" :items="sortDirData" labelField="name" valueField="id" />
+          <button class="btn-filter" :class="{ active: activeFilter === '2' }" @click="btnFilterReportType('2')">
+            រកឃើញ
+          </button>
+        </div>
+        <div class="d-flex gap-2 align-items-center my-1">
+          <div class="mt-2" style="width: 150px">
+            <BaseSelect class="w-100" v-model="sortDir" :items="sortDirData" labelField="name" valueField="id" />
+          </div>
         </div>
       </div>
+      <SectionPublicReports :page="1" :perPage="20" :search="search" :reportTypeId="typeValue"
+        :categoryId="cateValue?.id" :sortDir="sortDir"></SectionPublicReports>
     </div>
-    <SectionPublicReports :page="1" :perPage="20" :search="search" :reportTypeId="typeValue" :categoryId="cateValue?.id"
-      :sortDir="sortDir"></SectionPublicReports>
   </div>
 </template>
 <script setup>
@@ -156,21 +197,23 @@ const btnHandleToCreatePage = () => {
 } */
 .bg-btn-group {
   padding: 5px;
-  background-color: rgba(226, 226, 226, 0.877);
-  border-radius: 20px;
+  background-color: var(--primary-color);
+  border-radius: 10px;
 }
 
 .bg-btn-group .btn-filter {
   background-color: transparent;
   border: none;
-  padding: 4px 15px;
+  padding: 6px 15px 4px;
   font-size: 16px;
-  border-radius: 15px;
+  border-radius: 6px;
+  color: white;
   cursor: pointer;
 }
 
 .bg-btn-group .btn-filter.active {
-  background-color: #fff;
+  background-color: white;
+  color: var(--secondary-color)
 }
 
 .tag {
@@ -244,5 +287,132 @@ const btnHandleToCreatePage = () => {
 
 .border-color {
   border-color: var(--tertiary-color);
+}
+
+@import url("https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@300;400;500;600;700;800&display=swap");
+
+.main-contact {
+  font-family: "Kantumruy Pro", system-ui, sans-serif;
+  background: #fdfaff;
+  color: #0f0f0f;
+}
+
+/* ── Hero ── */
+.hero-section {
+  position: relative;
+  background: linear-gradient(135deg, #f8f2ff 0%, #f0e8ff 50%, #e8deff 100%);
+  overflow: hidden;
+  border-radius: 0 0 60px 60px;
+  /* padding: 100px 0 180px; */
+  margin: 0 0 20px;
+}
+
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 30% 70%,
+      rgba(168, 85, 247, 0.08) 0%,
+      transparent 60%);
+  pointer-events: none;
+}
+
+.floating-shapes .shape {
+  position: absolute;
+  background: rgba(139, 92, 246, 0.04);
+  backdrop-filter: blur(40px);
+  border: 1px solid rgba(139, 92, 246, 0.08);
+  border-radius: 50%;
+  animation: float-slow 80s infinite ease-in-out;
+}
+
+.shape-1 {
+  width: 420px;
+  height: 420px;
+  top: -15%;
+  left: -20%;
+  animation-delay: 0s;
+}
+
+.shape-2 {
+  width: 560px;
+  height: 560px;
+  bottom: -25%;
+  right: -25%;
+  animation-delay: 25s;
+  border-radius: 48% 52% 55% 45%;
+}
+
+.shape-3 {
+  width: 360px;
+  height: 360px;
+  top: 55%;
+  left: -12%;
+  animation-delay: 45s;
+}
+
+@keyframes float-slow {
+
+  0%,
+  100% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+
+  25% {
+    transform: translate(60px, -80px) rotate(5deg);
+  }
+
+  50% {
+    transform: translate(-70px, 90px) rotate(-6deg);
+  }
+
+  75% {
+    transform: translate(80px, 60px) rotate(4deg);
+  }
+}
+
+.hero-title {
+  font-size: clamp(2.6rem, 6vw, 4rem);
+  font-weight: 800;
+  line-height: 1.3;
+  margin-bottom: 1.5rem;
+}
+
+.gradient-text {
+  background: linear-gradient(90deg, #7c3aed, #a78bfa, #c4b5fd);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.hero-subtitle {
+  font-size: clamp(1.15rem, 2.5vw, 1.35rem);
+  color: #222;
+  max-width: 580px;
+  line-height: 1.7;
+  opacity: 0.95;
+}
+
+.badge-modern {
+  display: inline-flex;
+  align-items: center;
+  background: rgba(139, 92, 246, 0.14);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(139, 92, 246, 0.24);
+  padding: 0.75rem 1.8rem;
+  border-radius: 50rem;
+  font-weight: 600;
+  color: #111;
+  font-size: 1.1rem;
+}
+
+.hero-img {
+  max-width: 100%;
+  margin-left: -10%;
+  filter: drop-shadow(0 30px 70px rgba(0, 0, 0, 0.16)) brightness(1.03);
+  transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.hero-illustration:hover .hero-img {
+  transform: scale(1.06) translateY(-15px);
 }
 </style>

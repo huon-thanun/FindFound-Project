@@ -43,7 +43,7 @@
           <div class="image-experience">
             <div class="main-image-wrapper">
               <img
-                src="../../../assets/images/home/hero/hero-img.png"
+                src="../../../assets/images/home/hero/hero-banner.png"
                 alt="Lost and Found"
                 class="hero-img"
               />

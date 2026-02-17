@@ -1,11 +1,50 @@
 <template>
-    <section class="category-page py-5 bg-light">
+    <div>
+    <section class="hero-section">
+      <div class="hero-bg"></div>
+
+      <div class="floating-shapes">
+        <div class="shape shape-1"></div>
+        <div class="shape shape-2"></div>
+        <div class="shape shape-3"></div>
+      </div>
+
+      <div class="container position-relative">
+        <div class="row align-items-center pt-5 g-5 py-lg-6">
+          <!-- Text Column -->
+          <div class="col-lg-7 py-5 px-5 m-0 hero-text-col" data-aos="fade-right">
+            <div class="badge-modern mb-4">
+              <i class="bi bi-grid-fill me-2"></i>
+              ប្រភេទវត្ថុ
+            </div>
+            <h1 class="hero-title">
+              ជ្រើសរើស <span class="gradient-text">ប្រភេទវត្ថុ</span>
+              <br class="d-none d-md-block" />
+              ដែលអ្នកចង់រាយការណ៍
+            </h1>
+            <p class="hero-subtitle">
+              យើងមានប្រភេទវត្ថុជាច្រើនសម្រាប់អ្នកជ្រើសរើស។ សូមជ្រើសរើសប្រភេទវត្ថុដែលសមស្រប 
+              ដើម្បីជួយសម្រួលដល់ការស្វែងរក។
+            </p>
+          </div>
+
+          <!-- Illustration Column -->
+          <div class="col-lg-5 hero-illustration d-flex justify-content-center m-0 p-0" data-aos="fade-left"
+            data-aos-delay="200">
+            <img
+              src="../../../assets/images/category/category.png"
+              alt="Category Selection Illustration" class="hero-img m-0 img-fluid" />
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="category-page py-4 bg-light">
         <div class="container py-4">
             <!-- Header Section -->
             <div class="row align-items-center mb-5">
                 <div class="col-lg-6 text-center text-lg-start">
-                    <h2 class="khmer-font-title fw-bold mb-2">
-                        ប្រភេទសម្ភារៈ
+                    <h2 class="khmer-font-title fw-bold mb-3">
+                        <i class="bi bi-grid-fill me-2"></i> ប្រភេទវត្ថុ
                     </h2>
                     <p class="khmer-font text-muted">
                         រកស្វែងសម្ភារៈបាត់បង់ និងរើសបាននូវទាង់ប្រភេទផ្សេងៗ
@@ -26,10 +65,12 @@
             <!-- Categories Grid -->
             <div class="row g-4">
                 <!-- Loading State - Skeleton Cards -->
-                <div v-if="categoryStore.isLoading" v-for="n in 4" :key="`skeleton-${n}`"
-                    class="col-lg-3 col-md-4 col-sm-6">
-                    <BaseSkeleton imageHeight="150px" />
-                </div>
+                <template v-if="categoryStore.isLoading">
+                    <div v-for="n in 4" :key="`skeleton-${n}`"
+                        class="col-lg-3 col-md-4 col-sm-6">
+                        <BaseSkeleton imageHeight="150px" />
+                    </div>
+                </template>
 
                 <!-- Empty State -->
                 <div v-else-if="filteredCategories.length === 0" class="col-12">
@@ -40,7 +81,7 @@
                 </div>
 
                 <!-- Category Cards -->
-                <div v-else v-for="category in filteredCategories" :key="category.id"
+                <div v-for="category in filteredCategories" v-else :key="category.id"
                     class="col-lg-3 col-md-4 col-sm-6">
                     <BaseReportCard class="category-card h-100">
                         <div class="category-icon-wrapper">
@@ -94,6 +135,7 @@
             </template> -->
         </BaseModal>
     </section>
+   </div>
 </template>
 
 <script setup>
@@ -253,6 +295,7 @@ tegory-page {
     min-height: 40px;
     display: -webkit-box;
     -webkit-line-clamp: 2;
+    line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
 }
@@ -310,5 +353,130 @@ tegory-page {
     margin: 0;
     font-size: 14px;
     line-height: 1.6;
+}
+@import url("https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@300;400;500;600;700;800&display=swap");
+
+.main-contact {
+  font-family: "Kantumruy Pro", system-ui, sans-serif;
+  background: #fdfaff;
+  color: #0f0f0f;
+}
+
+/* ── Hero ── */
+.hero-section {
+  position: relative;
+  background: linear-gradient(135deg, #f8f2ff 0%, #f0e8ff 50%, #e8deff 100%);
+  overflow: hidden;
+  border-radius: 0 0 60px 60px;
+  /* padding: 100px 0 180px; */
+}
+
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 30% 70%,
+      rgba(168, 85, 247, 0.08) 0%,
+      transparent 60%);
+  pointer-events: none;
+}
+
+.floating-shapes .shape {
+  position: absolute;
+  background: rgba(139, 92, 246, 0.04);
+  backdrop-filter: blur(40px);
+  border: 1px solid rgba(139, 92, 246, 0.08);
+  border-radius: 50%;
+  animation: float-slow 80s infinite ease-in-out;
+}
+
+.shape-1 {
+  width: 420px;
+  height: 420px;
+  top: -15%;
+  left: -20%;
+  animation-delay: 0s;
+}
+
+.shape-2 {
+  width: 560px;
+  height: 560px;
+  bottom: -25%;
+  right: -25%;
+  animation-delay: 25s;
+  border-radius: 48% 52% 55% 45%;
+}
+
+.shape-3 {
+  width: 360px;
+  height: 360px;
+  top: 55%;
+  left: -12%;
+  animation-delay: 45s;
+}
+
+@keyframes float-slow {
+
+  0%,
+  100% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+
+  25% {
+    transform: translate(60px, -80px) rotate(5deg);
+  }
+
+  50% {
+    transform: translate(-70px, 90px) rotate(-6deg);
+  }
+
+  75% {
+    transform: translate(80px, 60px) rotate(4deg);
+  }
+}
+
+.hero-title {
+  font-size: clamp(2.6rem, 6vw, 4rem);
+  font-weight: 800;
+  line-height: 1.3;
+  margin-bottom: 1.5rem;
+}
+
+.gradient-text {
+  background: linear-gradient(90deg, #7c3aed, #a78bfa, #c4b5fd);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.hero-subtitle {
+  font-size: clamp(1.15rem, 2.5vw, 1.35rem);
+  color: #222;
+  max-width: 580px;
+  line-height: 1.7;
+  opacity: 0.95;
+}
+
+.badge-modern {
+  display: inline-flex;
+  align-items: center;
+  background: rgba(139, 92, 246, 0.14);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(139, 92, 246, 0.24);
+  padding: 0.75rem 1.8rem;
+  border-radius: 50rem;
+  font-weight: 600;
+  color: #111;
+  font-size: 1.1rem;
+}
+
+.hero-img {
+  max-width: 100%;
+  margin-left: -10%;
+  filter: drop-shadow(0 30px 70px rgba(0, 0, 0, 0.16)) brightness(1.03);
+  transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.hero-illustration:hover .hero-img {
+  transform: scale(1.06) translateY(-15px);
 }
 </style>
