@@ -109,8 +109,6 @@
 
 <script setup>
 import { ref, onMounted, computed } from "vue";
-// import ProfileTabs from "@/components/profile/ProfileTabs.vue";
-// import ProfileSide from "@/components/profile/ProfileSide.vue";
 import ProfileTabsAdmin from "@/components/profile/ProfileTabsAdmin.vue";
 
 const user = ref(null);
