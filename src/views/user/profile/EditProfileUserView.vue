@@ -223,7 +223,6 @@
 <script setup>
 import { ref, onMounted, computed } from "vue";
 import ProfileHeader from "@/components/profile/ProfileHeader.vue";
-import ProfileTabsAdmin from "@/components/profile/ProfileTabsAdmin.vue";
 import BaseToast from "@/components/base/BaseToast.vue";
 import ProfileTabs from "@/components/profile/ProfileTabs.vue";
 
@@ -469,8 +468,6 @@ const updateProfile = async () => {
 </script>
 
 <style scoped>
-@import url("https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@300;400;600;700&family=Koh+Santepheap:wght@700&display=swap");
-
 /* Your original styles + loading-inside to match profile view */
 .loading-inside {
   min-height: 400px;

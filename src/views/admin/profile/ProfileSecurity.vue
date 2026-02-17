@@ -117,7 +117,6 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import ProfileHeader from "@/components/profile/ProfileHeader.vue";
-import ProfileTabs from "@/components/profile/ProfileTabs.vue";
 import BaseToast from "@/components/base/BaseToast.vue";
 import ChangePasswordCard from "@/components/profile/ChangPasswordCard.vue";
 import ChangeEmailCard from "@/components/profile/ChangeEmailCard.vue";

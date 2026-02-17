@@ -490,8 +490,6 @@ const updateProfile = async () => {
 </script>
 
 <style scoped>
-@import url("https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@300;400;600;700&family=Koh+Santepheap:wght@700&display=swap");
-
 .loading-inside {
   min-height: 400px;
   display: flex;

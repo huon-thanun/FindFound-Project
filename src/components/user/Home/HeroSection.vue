@@ -9,7 +9,7 @@
     </div>
 
     <div class="container position-relative">
-      <div class="row align-items-center pt-4 py-0 g-5 ">
+      <div class="row align-items-center pt-4 py-0 g-5">
         <!-- Text Column -->
         <div class="col-lg-6 py-5 px-5 m-0 hero-text-col" data-aos="fade-right">
           <div class="badge-modern mb-4">
@@ -61,8 +61,6 @@
 </template>
 
 <style scoped>
-@import url("https://fonts.googleapis.com/css2?family=Koh+Santepheap:wght@700&family=Noto+Sans+Khmer:wght@400;500;700&display=swap");
-
 .hero-section {
   position: relative;
   background: linear-gradient(
@@ -202,7 +200,6 @@
 
 /* Responsive */
 @media (max-width: 991px) {
-
   .hero-title {
     font-size: clamp(2.4rem, 8vw, 4rem);
   }

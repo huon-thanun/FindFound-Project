@@ -175,9 +175,6 @@ onMounted(async () => {
 </script>
 
 <style scoped>
-/* Your original styles remain unchanged */
-@import url("https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@300;400;600;700&family=Koh+Santepheap:wght@700&display=swap");
-
 .profile-page {
   font-family: "Kantumruy Pro", sans-serif;
   background-color: #f9f8ff;

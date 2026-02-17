@@ -28,12 +28,19 @@
             <div
               class="d-flex gap-3 justify-content-center justify-content-lg-start flex-wrap"
             >
-              <button class="btn-cta-primary px-5 py-3 rounded-pill khmer-font">
+              <router-link
+                to="/reports/own/create"
+                class="btn-cta-primary px-5 py-3 rounded-pill khmer-font text-decoration-none"
+              >
                 <i class="bi bi-plus-circle-fill me-2"></i> បង្ហោះរបស់រើសបាន
-              </button>
-              <button class="btn-cta-outline px-5 py-3 rounded-pill khmer-font">
+              </router-link>
+
+              <router-link
+                to="/reports/user"
+                class="btn-cta-outline px-5 py-3 rounded-pill khmer-font text-decoration-none"
+              >
                 ស្វែងរករបស់បាត់
-              </button>
+              </router-link>
             </div>
           </div>
 
