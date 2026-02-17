@@ -1,46 +1,55 @@
+<!-- src/components/user/about/MemberSection.vue -->
 <template>
-  <div class="about-page">
-    <!-- TEAM / MEMBERS - Updated modern cards -->
-    <section class="member py-5">
-      <div class="container">
-        <div class="text-center mb-5">
-          <h2 class="fw-bold">សមាជិក</h2>
-          <div class="title-underline"></div>
-        </div>
+  <section class="team-section py-5">
+    <div class="container">
+      <div class="text-center mb-5">
+        <h2 class="fw-bold section-title">សមាជិកក្រុម</h2>
+        <div class="title-underline mx-auto"></div>
+        <p class="text-muted mt-3">
+          ក្រុមការងារដែលខិតខំបង្កើត FindFound ដើម្បីជួយសហគមន៍ខ្មែរ
+        </p>
+      </div>
 
-        <div class="row g-4 justify-content-center">
-          <div v-for="(m, i) in team" :key="i" class="col-6 col-md-4">
-            <div
-              class="member-card modern"
-              :class="{ leader: m.isLeader }"
-              data-aos="fade-up"
-              :data-aos-delay="i * 80"
-            >
-              <div class="photo-wrapper">
-                <img
-                  :src="m.avatar"
-                  class="member-photo"
-                  alt=""
-                  loading="lazy"
-                />
-                <div class="social-overlay">
-                  <div class="social-icons">
-                    <a href="#"><i class="bi bi-github"></i></a>
-                    <a href="#"><i class="bi bi-telegram"></i></a>
-                  </div>
+      <div class="row g-4 justify-content-center">
+        <div
+          v-for="(member, index) in team"
+          :key="index"
+          class="col-6 col-md-6 col-lg-4"
+        >
+          <div
+            class="member-card"
+            :class="{ 'leader-card': member.isLeader }"
+            data-aos="fade-up"
+            :data-aos-delay="index * 100"
+          >
+            <div class="photo-wrapper">
+              <img
+                :src="member.avatar"
+                :alt="member.name"
+                class="member-photo"
+                loading="lazy"
+              />
+              <div class="social-overlay">
+                <div class="social-icons">
+                  <a href="#" aria-label="GitHub">
+                    <i class="bi bi-github"></i>
+                  </a>
+                  <a href="#" aria-label="Telegram">
+                    <i class="bi bi-telegram"></i>
+                  </a>
                 </div>
               </div>
+            </div>
 
-              <div class="member-info">
-                <h6 class="member-name">{{ m.name }}</h6>
-                <p class="member-role">{{ m.role }}</p>
-              </div>
+            <div class="member-info">
+              <h5 class="member-name">{{ member.name }}</h5>
+              <p class="member-role">{{ member.role }}</p>
             </div>
           </div>
         </div>
       </div>
-    </section>
-  </div>
+    </div>
+  </section>
 </template>
 
 <script setup>
@@ -87,29 +96,48 @@ const team = [
 </script>
 
 <style scoped>
-.member-card.modern {
+.team-section {
+  background: linear-gradient(135deg, #f9f7ff 0%, #f0eaff 100%);
+}
+
+.section-title {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: #1e1b4b;
+}
+
+.title-underline {
+  width: 80px;
+  height: 4px;
+  background: linear-gradient(90deg, #7c3aed, #a855f7);
+  margin: 12px auto 0;
+  border-radius: 2px;
+}
+
+.member-card {
   background: white;
   border-radius: 16px;
   overflow: hidden;
-  border: 1px solid rgba(99, 102, 241, 0.08);
-  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-  box-shadow: 0 6px 22px rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(168, 85, 247, 0.1);
+  transition: all 0.28s ease-out;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+  will-change: transform, box-shadow;
 }
 
-.member-card.modern:hover {
+.member-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 20px 50px rgba(124, 58, 237, 0.15);
+  border-color: rgba(168, 85, 247, 0.3);
+}
+
+.leader-card {
+  border-color: #a855f7;
+  box-shadow: 0 10px 32px rgba(168, 85, 247, 0.12);
+}
+
+.leader-card:hover {
+  box-shadow: 0 24px 60px rgba(168, 85, 247, 0.22);
   transform: translateY(-12px);
-  box-shadow: 0 20px 50px rgba(139, 92, 246, 0.18); /* purple shadow on hover */
-  border-color: #a78bfa; /* purple border */
-}
-
-.member-card.modern.leader {
-  border-color: #a78bfa;
-  box-shadow: 0 8px 32px rgba(139, 92, 246, 0.15);
-}
-
-.member-card.modern.leader:hover {
-  box-shadow: 0 24px 60px rgba(139, 92, 246, 0.28);
-  transform: translateY(-14px);
 }
 
 .photo-wrapper {
@@ -123,14 +151,11 @@ const team = [
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition:
-    transform 0.5s ease,
-    filter 0.5s ease;
+  transition: transform 0.35s ease-out;
 }
 
 .member-card:hover .member-photo {
-  transform: scale(1.1);
-  filter: brightness(1.05);
+  transform: scale(1.08);
 }
 
 .social-overlay {
@@ -139,16 +164,16 @@ const team = [
   background: linear-gradient(
     to bottom,
     transparent 60%,
-    rgba(30, 30, 46, 0.85)
+    rgba(30, 30, 46, 0.8)
   );
   display: flex;
   align-items: flex-end;
   justify-content: center;
   opacity: 0;
   transition:
-    opacity 0.4s ease,
-    transform 0.4s ease;
-  transform: translateY(25px);
+    opacity 0.3s ease-out,
+    transform 0.3s ease-out;
+  transform: translateY(20px);
 }
 
 .member-card:hover .social-overlay {
@@ -157,20 +182,22 @@ const team = [
 }
 
 .social-icons {
-  margin-bottom: 18px;
+  margin-bottom: 16px;
   display: flex;
-  gap: 28px;
+  gap: 24px;
 }
 
 .social-icons a {
   color: white;
   font-size: 1.5rem;
-  transition: all 0.3s ease;
+  transition:
+    transform 0.25s ease,
+    color 0.25s ease;
 }
 
 .social-icons a:hover {
-  transform: scale(1.4) rotate(10deg);
-  color: #a78bfa; /* purple on icon hover */
+  transform: scale(1.3);
+  color: #a78bfa;
 }
 
 .member-info {
@@ -179,27 +206,33 @@ const team = [
 }
 
 .member-name {
-  font-size: 1.15rem;
+  font-size: 1.18rem;
   font-weight: 700;
   margin-bottom: 6px;
   color: #111827;
-  transition: color 0.35s ease;
+  transition: color 0.25s ease;
 }
 
 .member-card:hover .member-name {
-  color: #7c3aed; /* main purple on name hover */
+  color: #7c3aed;
 }
 
 .member-role {
-  font-size: 0.92rem;
-  color: #6d28d9; /* purple role text */
+  font-size: 0.95rem;
+  color: #6d28d9;
   font-weight: 500;
 }
 
-/* Spacing adjustment for 3-column layout */
-@media (min-width: 768px) {
-  .member-card.modern {
-    margin-bottom: 2rem;
+/* Responsive */
+@media (max-width: 992px) {
+  .member-card {
+    margin-bottom: 1.5rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .section-title {
+    font-size: 2rem;
   }
 }
 </style>

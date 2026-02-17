@@ -1,42 +1,16 @@
 <script setup>
 // import Member from "@/components/about/member.vue";
 import MemberSection from "@/components/user/about/MemberSection.vue";
+import TestimonialsSection from "@/components/user/about/TestimonialsSection.vue";
 import { ref, onMounted } from "vue";
-
-const leader = {
-  name: "ហេង ល័ងឈ័រ",
-  role: "ប្រធានក្រុម",
-  desc: "ទទួលខុសត្រូវលើស្ថាបត្យកម្មប្រព័ន្ធ ការសម្របសម្រួលក្រុម និងការប្រគល់ផលិតផលចុងក្រោយ។",
-  avatar: "https://i.pravatar.cc/300?img=12",
-};
-
-const members = [
-  {
-    name: "អុី វិសាល",
-    role: "សមាជិក",
-    avatar: "https://i.pravatar.cc/300?img=32",
-  },
-  {
-    name: "ហួន ថានុន",
-    role: "សមាជិក",
-    avatar: "https://i.pravatar.cc/300?img=45",
-  },
-  {
-    name: "អាន ម៉េងហួ",
-    role: "សមាជិក",
-    avatar: "https://i.pravatar.cc/300?img=56",
-  },
-  {
-    name: "អន សម្បត្តិ",
-    role: "សមាជិក",
-    avatar: "https://i.pravatar.cc/300?img=67",
-  },
-  {
-    name: "ប៊ូ លក្ខិណា",
-    role: "សមាជិក",
-    avatar: "https://i.pravatar.cc/300?img=68",
-  },
-];
+import person1Img from "@/assets/images/about/feedback/person1.png";
+import person2Img from "@/assets/images/about/feedback/person2.png";
+import person3Img from "@/assets/images/about/feedback/person3.png";
+import person4Img from "@/assets/images/about/feedback/person4.png";
+import person5Img from "@/assets/images/about/feedback/person5.png";
+import person6Img from "@/assets/images/about/feedback/person6.png";
+import person7Img from "@/assets/images/about/feedback/person7.png";
+import person8Img from "@/assets/images/about/feedback/person8.png";
 
 const features = [
   {
@@ -68,52 +42,51 @@ const stats = ref([
   { number: "0", target: 24, label: "សេវាកម្ម", suffix: "/7" },
 ]);
 
-// Testimonials
+// In your <script setup> – replace the testimonials array with this:
 const testimonials = [
   {
     name: "សុខ ចាន់ថា",
     role: "អ្នកប្រើប្រាស់",
-    avatar: "https://i.pravatar.cc/150?img=1",
+    avatar: person1Img,
     text: "FindFound ជួយខ្ញុំរកកាបូបដែលបាត់បង់មកវិញបានយ៉ាងរហ័ស។ សេវាកម្មល្អណាស់!",
   },
   {
     name: "ពេជ្រ សុភា",
     role: "អ្នកប្រើប្រាស់",
-    avatar: "https://i.pravatar.cc/150?img=5",
+    avatar: person8Img,
     text: "ប្រព័ន្ធងាយស្រួលប្រើប្រាស់ និងមានប្រសិទ្ធភាព។ សូមអរគុណក្រុមការងារ!",
   },
   {
     name: "វិចិត្រា មករា",
     role: "អ្នកប្រើប្រាស់",
-    avatar: "https://i.pravatar.cc/150?img=9",
+    avatar: person3Img,
     text: "គេហទំព័រដ៏ល្អមួយសម្រាប់ការស្វែងរកវត្ថុបាត់បង់។ ខ្ញុំពេញចិត្តណាស់!",
   },
   {
     name: "លី សុវណ្ណ",
     role: "អ្នកប្រើប្រាស់",
-    avatar: "https://i.pravatar.cc/150?img=12",
+    avatar: person4Img,
     text: "ខ្ញុំអាចប្រកាសវត្ថុបាត់បង់បានយ៉ាងងាយស្រួល ហើយទទួលបានការឆ្លើយតបលឿន។",
   },
   {
     name: "ចាន់ ដារ៉ា",
     role: "អ្នកប្រើប្រាស់",
-    avatar: "https://i.pravatar.cc/150?img=15",
+    avatar: person5Img,
     text: "FindFound ជួយភ្ជាប់អ្នកបាត់វត្ថុ និងអ្នកឃើញវត្ថុបានល្អណាស់។",
   },
   {
     name: "មុំ ស្រីនាង",
     role: "អ្នកប្រើប្រាស់",
-    avatar: "https://i.pravatar.cc/150?img=20",
+    avatar: person6Img,
     text: "UI ស្អាត ប្រើងាយ និងមានប្រយោជន៍ខ្លាំងសម្រាប់សង្គម។",
   },
   {
     name: "ហេង វិសាល",
     role: "អ្នកប្រើប្រាស់",
-    avatar: "https://i.pravatar.cc/150?img=25",
+    avatar: person7Img,
     text: "សេវាកម្មនេះជួយសន្សំពេលវេលា និងកាត់បន្ថយការព្រួយបារម្ភបានច្រើន។",
   },
 ];
-
 // Core values
 const values = [
   {
@@ -182,16 +155,6 @@ const animateCounter = () => {
 onMounted(() => {
   animateCounter();
 });
-
-// Active testimonial
-const activeTestimonial = ref(0);
-const nextTestimonial = () => {
-  activeTestimonial.value = (activeTestimonial.value + 1) % testimonials.length;
-};
-const prevTestimonial = () => {
-  activeTestimonial.value =
-    (activeTestimonial.value - 1 + testimonials.length) % testimonials.length;
-};
 </script>
 
 <template>
@@ -316,54 +279,10 @@ const prevTestimonial = () => {
       <MemberSection></MemberSection>
     </section>
 
-    <!-- TESTIMONIALS -->
-    <section class="section">
+    <!-- TESTIMONIALS – now using the component with props -->
+    <section class="section bg-light">
       <div class="container">
-        <h2 class="section-title text-center mb-5" data-aos="fade-up">
-          មតិពីអ្នកប្រើប្រាស់
-        </h2>
-        <div class="testimonial-container" data-aos="fade-up">
-          <button
-            @click="prevTestimonial"
-            class="testimonial-nav testimonial-prev"
-          >
-            ‹
-          </button>
-          <div class="testimonial-card glass-card">
-            <div class="testimonial-avatar">
-              <img :src="testimonials[activeTestimonial].avatar" alt="avatar" />
-            </div>
-            <div class="stars">
-              <span v-for="n in testimonials[activeTestimonial].rating" :key="n"
-                >⭐</span
-              >
-            </div>
-            <p class="testimonial-text">
-              "{{ testimonials[activeTestimonial].text }}"
-            </p>
-            <h5 class="testimonial-name">
-              {{ testimonials[activeTestimonial].name }}
-            </h5>
-            <p class="testimonial-role">
-              {{ testimonials[activeTestimonial].role }}
-            </p>
-          </div>
-          <button
-            @click="nextTestimonial"
-            class="testimonial-nav testimonial-next"
-          >
-            ›
-          </button>
-        </div>
-        <div class="testimonial-dots">
-          <span
-            v-for="(t, i) in testimonials"
-            :key="i"
-            class="dot"
-            :class="{ active: i === activeTestimonial }"
-            @click="activeTestimonial = i"
-          ></span>
-        </div>
+        <TestimonialsSection :testimonials="testimonials" />
       </div>
     </section>
 
@@ -400,7 +319,7 @@ const prevTestimonial = () => {
             សេចក្ដីថ្លែងអំណរគុណ
           </h3>
           <p class="thank-content mb-5">
-            ពួកយើង​ សូមថ្លែងអំណរគុណយ៉ាងជ្រាលជ្រៅដល់
+            ពួកយើង សូមថ្លែងអំណរគុណយ៉ាងជ្រាលជ្រៅដល់
             <span class="fw-bold highlight"
               >ក្រសួងប្រៃសណីយ៍ និងទូរគមនាគមន៍ មូលនិធិ ស.អ</span
             >
