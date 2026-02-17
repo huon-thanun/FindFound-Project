@@ -1,166 +1,113 @@
 <template>
   <ProfileLayout>
-    <!-- Header -->
+    <!-- HEADER -->
     <template #header>
       <ProfileHeader :user="user" />
     </template>
 
-    <!-- Sidebar -->
-    <template #left>
-      <ProfileSide :user="user" :skills="skills" />
-    </template>
+    <!-- LOADING STATE -->
+    <div v-if="!user" class="loading-full">
+      <div class="custom-loader"></div>
+      <p class="mt-4 khmer-font text-purple-accent">កំពុងផ្ទុកទិន្នន័យ...</p>
+    </div>
 
-    <!-- Main Content -->
-    <div v-if="user" class="profile-security-wrapper khmer-font py-4 px-3 px-md-5">
-      <!-- Title + Back Button -->
-      <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
-        <h4 class="fw-bold text-purple mb-0">ការកំណត់សុវត្ថិភាព</h4>
-      </div>
-
-      <ProfileTabsAdmin />
-
-      <!-- Profile Card -->
-      <div class="card border border-gray-300 shadow-sm rounded-4 mb-5 overflow-hidden">
-        <div class="card-body p-4 d-flex align-items-center gap-4">
-          <img :src="user.avatar || 'https://ui-avatars.com/api/?name=Admin'"
-            class="rounded-4 shadow-sm border border-2 border-white"
-            style="width: 80px; height: 80px; object-fit: cover" />
-          <div>
-            <h5 class="fw-bold mb-1">{{ user.fullname }}</h5>
-            <p class="text-muted mb-0 small">{{ user.email }}</p>
-            <span class="badge bg-purple-subtle text-purple mt-2">
-              {{
-                user.status === "ACTIVATED" ? "អ្នកគ្រប់គ្រងសកម្ម" : "មិនសកម្ម"
-              }}
-            </span>
+    <!-- PROFILE PAGE -->
+    <div v-else class="profile-page">
+      <section class="hero-lavender">
+        <!-- Avatar + Name -->
+        <div class="container-fluid px-lg-5">
+          <div class="row align-items-center pt-5 pb-5">
+            <div class="col-md-auto text-center text-md-start">
+              <div class="avatar-glow-wrapper" data-aos="zoom-in">
+                <img
+                  :src="user.avatar || 'https://ui-avatars.com/api/?name=Admin'"
+                  class="profile-img-premium shadow-lg"
+                  alt="Avatar"
+                />
+                <div class="status-indicator-online"></div>
+              </div>
+            </div>
+            <div
+              class="col-md ps-md-4 mt-4 mt-md-0 text-center text-md-start"
+              data-aos="fade-right"
+            >
+              <div
+                class="d-flex align-items-center justify-content-center justify-content-md-start gap-2 mb-2"
+              >
+                <h1
+                  class="display-6 fw-bold text-dark-indigo mb-0 khmer-font-title"
+                >
+                  {{ user.fullname }}
+                </h1>
+                <span class="badge-verified-glow"
+                  ><i class="bi bi-patch-check-fill"></i
+                ></span>
+              </div>
+              <p class="text-muted fs-5 mb-3">{{ user.email }}</p>
+              <div
+                class="d-flex flex-wrap gap-2 justify-content-center justify-content-md-start"
+              >
+                <span class="badge-status-premium">
+                  {{
+                    user.status === "ACTIVATED"
+                      ? "អ្នកគ្រប់គ្រងប្រព័ន្ធ"
+                      : "មិនទាន់ដំណើរការ"
+                  }}
+                </span>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
+      </section>
 
-      <!-- Security Forms -->
-      <div class="row g-4 mb-5">
-        <!-- Password Form -->
-        <div class="col-lg-6">
-          <div class="card border border-gray-200 shadow-sm rounded-4 p-4 p-md-5 h-100">
-            <h5 class="fw-bold mb-4 d-flex align-items-center">
-              <i class="bi bi-shield-lock me-2 text-purple"></i> ប្តូរលេខសម្ងាត់
-            </h5>
+      <!-- CONTENT: Password + Email -->
+      <div class="container-fluid px-lg-5 content-overlap">
+        <div class="row g-4">
+          <!-- LEFT: Password + Email -->
+          <div class="col-lg-12" data-aos="fade-up">
+            <ProfileTabsAdmin class="mb-4" />
 
-            <!-- Current Password -->
-            <div class="mb-4">
-              <label class="form-label small fw-bold text-muted mb-2">លេខសម្ងាត់បច្ចុប្បន្ន</label>
-              <div class="input-group custom-group shadow-sm">
-                <span class="input-group-text bg-light border-0"><i class="bi bi-lock"></i></span>
-                <input :type="showCurrentPassword ? 'text' : 'password'" v-model="currentPassword"
-                  class="form-control border-0 bg-light py-2" placeholder="បញ្ចូលលេខសម្ងាត់ចាស់" />
-                <button class="btn btn-light border-0" @click="showCurrentPassword = !showCurrentPassword">
-                  <i :class="showCurrentPassword ? 'bi bi-eye-slash' : 'bi bi-eye'
-                    "></i>
-                </button>
+            <div class="row g-4">
+              <!-- PASSWORD -->
+              <div class="col-lg-6">
+                <ChangePasswordCard
+                  v-model:currentPassword="currentPassword"
+                  v-model:newPassword="newPassword"
+                  v-model:showCurrent="showCurrentPassword"
+                  v-model:showNew="showNewPassword"
+                  :loading="loadingPassword"
+                  @update="updatePassword"
+                />
+              </div>
+
+              <!-- EMAIL -->
+              <div class="col-lg-6">
+                <ChangeEmailCard
+                  v-model:newEmail="newEmail"
+                  v-model:password="emailPassword"
+                  v-model:showPassword="showEmailPassword"
+                  v-model:token="emailVerifyToken"
+                  v-model:requested="emailRequested"
+                  :loadingRequest="loadingEmail"
+                  :loadingVerify="loadingVerify"
+                  @request="requestEmailChange"
+                  @verify="verifyEmailChange"
+                />
               </div>
             </div>
-
-            <!-- New Password -->
-            <div class="mb-4">
-              <label class="form-label small fw-bold text-muted mb-2">លេខសម្ងាត់ថ្មី</label>
-              <div class="input-group custom-group shadow-sm">
-                <span class="input-group-text bg-light border-0"><i class="bi bi-shield-plus"></i></span>
-                <input :type="showNewPassword ? 'text' : 'password'" v-model="newPassword"
-                  class="form-control border-0 bg-light py-2" placeholder="បញ្ចូលលេខសម្ងាត់ថ្មី" />
-                <button class="btn btn-light border-0" @click="showNewPassword = !showNewPassword">
-                  <i :class="showNewPassword ? 'bi bi-eye-slash' : 'bi bi-eye'"></i>
-                </button>
-              </div>
-
-              <!-- Password Strength Meter -->
-              <div class="mt-3 d-flex gap-1">
-                <div v-for="i in 4" :key="i" class="password-meter" :class="{ active: newPassword.length > i * 2 }">
-                </div>
-              </div>
-            </div>
-
-            <button @click="updatePassword" class="btn btn-purple w-100 py-3 mt-2 fw-bold"
-              :disabled="loadingPassword || !currentPassword || !newPassword">
-              <span v-if="loadingPassword" class="spinner-border spinner-border-sm me-2"></span>
-              ធ្វើបច្ចុប្បន្នភាពលេខសម្ងាត់
-            </button>
           </div>
-          <ChangePasswordCard
-            v-model:currentPassword="currentPassword"
-            v-model:newPassword="newPassword"
-            v-model:showCurrent="showCurrentPassword"
-            v-model:showNew="showNewPassword"
-            :loading="loadingPassword"
-            @update="updatePassword"
-          />
-        </div>
 
-        <!-- Email Form -->
-        <div class="col-lg-6">
-          <div class="card border border-gray-200 shadow-sm rounded-4 p-4 p-md-5 h-100">
-            <h5 class="fw-bold mb-4 d-flex align-items-center">
-              <i class="bi bi-envelope-at me-2 text-purple"></i>
-              ប្តូរអាសយដ្ឋានអ៊ីមែល
-            </h5>
-
-            <!-- New Email -->
-            <div class="mb-4">
-              <label class="form-label small fw-bold text-muted mb-2">អ៊ីមែលថ្មី</label>
-              <div class="input-group custom-group shadow-sm">
-                <span class="input-group-text bg-light border-0"><i class="bi bi-envelope"></i></span>
-                <input v-model="newEmail" type="email" class="form-control border-0 bg-light py-2"
-                  placeholder="ឧទាហរណ៍: name@mail.com" />
-              </div>
-            </div>
-
-            <!-- Confirm Password -->
-            <div class="mb-4">
-              <label class="form-label small fw-bold text-muted mb-2">បញ្ជាក់លេខសម្ងាត់</label>
-              <div class="input-group custom-group shadow-sm">
-                <span class="input-group-text bg-light border-0"><i class="bi bi-shield-check"></i></span>
-                <input :type="showEmailPassword ? 'text' : 'password'" v-model="emailPassword"
-                  class="form-control border-0 bg-light py-2" placeholder="បញ្ចូលលេខសម្ងាត់ដើម្បីបញ្ជាក់" />
-                <button class="btn btn-light border-0" @click="showEmailPassword = !showEmailPassword">
-                  <i :class="showEmailPassword ? 'bi bi-eye-slash' : 'bi bi-eye'"></i>
-                </button>
-              </div>
-            </div>
-
-            <div class="alert alert-warning border-0 small mb-4 py-3 shadow-sm">
-              <i class="bi bi-exclamation-triangle-fill me-2"></i>
-              យើងនឹងផ្ញើតំណភ្ជាប់ទៅកាន់អ៊ីមែលថ្មីរបស់អ្នកដើម្បីបញ្ជាក់។
-            </div>
-
-            <button @click="requestEmailChange" class="btn btn-purple-outline w-100 py-3 mt-auto fw-bold"
-              :disabled="loadingEmail || !newEmail || !emailPassword">
-              <span v-if="loadingEmail" class="spinner-border spinner-border-sm me-2"></span>
-              ស្នើសុំប្តូរអ៊ីមែល
-            </button>
+          <!-- RIGHT: Sidebar -->
+          <div class="col-lg-4" data-aos="fade-left">
+            <ProfileSide :user="user" :skills="skills" />
           </div>
-          <ChangeEmailCard
-            v-model:newEmail="newEmail"
-            v-model:password="emailPassword"
-            v-model:showPassword="showEmailPassword"
-            v-model:token="emailVerifyToken"
-            v-model:requested="emailRequested"
-            :loadingRequest="loadingEmail"
-            :loadingVerify="loadingVerify"
-            @request="requestEmailChange"
-            @verify="verifyEmailChange"
-          />
         </div>
       </div>
     </div>
 
-    <!-- Loading -->
-    <div v-else class="text-center py-5">
-      <div class="spinner-border text-purple mb-3"></div>
-      <p class="khmer-font text-muted">កំពុងផ្ទុកព័ត៌មាន...</p>
-    </div>
-
-    <!-- Popup Modal -->
+    <!-- POPUP MODAL -->
     <PopupModal
-      v-if="showPopup"
+      :show="showPopup"
       :message="popupMessage"
       :type="popupType"
       @close="showPopup = false"
@@ -168,14 +115,282 @@
   </ProfileLayout>
 </template>
 
+<style scoped>
+/* --- Fonts & Page --- */
+@import url("https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@300;400;600;700&family=Koh+Santepheap:wght@700&display=swap");
+
+.profile-page {
+  font-family: "Kantumruy Pro", sans-serif;
+  background-color: #f9f8ff;
+  min-height: 100vh;
+  padding-bottom: 80px;
+}
+
+.khmer-font-title {
+  font-family: "Koh Santepheap", sans-serif;
+}
+
+/* --- HERO --- */
+.hero-lavender {
+  background-color: #f1edff;
+  background-image:
+    radial-gradient(at 0% 0%, rgba(124, 58, 237, 0.08) 0, transparent 50%),
+    radial-gradient(at 50% 0%, rgba(59, 30, 84, 0.08) 0, transparent 50%);
+  padding-bottom: 120px;
+}
+
+.profile-img-premium {
+  width: 160px;
+  height: 160px;
+  border-radius: 42px;
+  object-fit: cover;
+  border: 6px solid #fff;
+}
+
+.status-indicator-online {
+  position: absolute;
+  bottom: 12px;
+  right: 12px;
+  width: 22px;
+  height: 22px;
+  background: #00d084;
+  border: 4px solid #fff;
+  border-radius: 50%;
+  box-shadow: 0 0 15px rgba(0, 208, 132, 0.4);
+}
+
+/* --- CONTENT BOXES --- */
+.content-overlap {
+  margin-top: -80px;
+}
+
+.main-details-card {
+  background: white;
+  border-radius: 32px;
+  padding: 40px;
+  border: 1px solid rgba(124, 58, 237, 0.05);
+}
+
+.card-header-clean {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.accent-dot {
+  width: 8px;
+  height: 8px;
+  background: #7c3aed;
+  border-radius: 50%;
+}
+
+/* --- INPUTS --- */
+.info-box-item-input {
+  background: #fcfaff;
+  padding: 12px 20px;
+  border-radius: 18px;
+  border: 1px solid #f1efff;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.info-box-item-input:focus-within {
+  background: white;
+  border-color: #7c3aed;
+  box-shadow: 0 8px 20px rgba(124, 58, 237, 0.06);
+}
+
+.info-label {
+  font-size: 0.7rem;
+  color: #94a3b8;
+  font-weight: 700;
+  text-transform: uppercase;
+  margin-bottom: 2px;
+  display: block;
+}
+
+.input-with-icon {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.clean-input {
+  border: none;
+  background: transparent;
+  width: 100%;
+  font-weight: 600;
+  color: #1e1b4b;
+  outline: none;
+  padding: 5px 0;
+}
+
+.btn-eye {
+  background: none;
+  border: none;
+  color: #adb5bd;
+  padding: 0;
+}
+
+.btn-eye:hover {
+  color: #7c3aed;
+}
+
+/* --- LOADER --- */
+.loading-full {
+  height: 80vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.custom-loader {
+  width: 60px;
+  height: 60px;
+  border: 6px solid #f3f3f3;
+  border-top: 6px solid #7c3aed;
+  border-radius: 50%;
+  animation: spin 1s cubic-bezier(0.68, -0.55, 0.27, 1.55) infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* --- BUTTONS --- */
+.btn-save-premium {
+  background: #3b1e54;
+  color: white;
+  padding: 14px;
+  border-radius: 15px;
+  font-weight: 700;
+  border: none;
+  transition: 0.3s;
+}
+
+.btn-save-premium:hover:not(:disabled) {
+  background: #7c3aed;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(124, 58, 237, 0.2);
+}
+
+.btn-outline-premium {
+  background: white;
+  color: #3b1e54;
+  border: 2px solid #3b1e54;
+  padding: 12px;
+  border-radius: 15px;
+  font-weight: 700;
+  transition: 0.3s;
+}
+
+.btn-outline-premium:hover:not(:disabled) {
+  background: #f3eff7;
+}
+
+.pwd-meter {
+  height: 4px;
+  flex: 1;
+  background: #eee;
+  border-radius: 10px;
+}
+
+.pwd-meter.active {
+  background: #7c3aed;
+}
+
+.text-purple-accent {
+  color: #7c3aed;
+}
+
+.text-dark-indigo {
+  color: #1e1b4b;
+}
+
+/* --- POPUP MODAL --- */
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.popup-card {
+  background: white;
+  padding: 30px 40px;
+  border-radius: 20px;
+  min-width: 300px;
+  text-align: center;
+  font-weight: 600;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  animation: popup-zoom 0.3s ease-out;
+}
+
+.popup-card.success {
+  border-top: 6px solid #00d084;
+}
+
+.popup-card.error {
+  border-top: 6px solid #f44336;
+}
+
+.popup-card button {
+  margin-top: 15px;
+  padding: 8px 20px;
+  border: none;
+  background: #7c3aed;
+  color: white;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.popup-card button:hover {
+  background: #3b1e54;
+}
+
+@keyframes popup-zoom {
+  0% {
+    transform: scale(0.7);
+    opacity: 0;
+  }
+
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@media (max-width: 991px) {
+  .content-overlap {
+    margin-top: 0;
+    padding-top: 30px;
+  }
+}
+</style>
 <script setup>
 import { ref, onMounted } from "vue";
 import ProfileHeader from "@/components/profile/ProfileHeader.vue";
-import ProfileSide from "@/components/profile/ProfileSide.vue";
-import ProfileTabsAdmin from "@/components/profile/ProfileTabsAdmin.vue";
+import ProfileTabs from "@/components/profile/ProfileTabs.vue";
+
+// Child components
 import ChangePasswordCard from "@/components/profile/ChangPasswordCard.vue";
 import ChangeEmailCard from "@/components/profile/ChangeEmailCard.vue";
-// import PopupModal from "@/components/profile/PopupModal.vue";
+import ProfileTabsAdmin from "@/components/profile/ProfileTabsAdmin.vue";
+// import PopupModal from "./PopupModal.vue";
 
 const user = ref(null);
 const skills = ["HTML", "CSS", "Vue", "MySQL", "JavaScript"];
@@ -206,15 +421,13 @@ const showPopupModal = (message, type = "success") => {
   showPopup.value = true;
 };
 
-// Fetch user profile
+// Fetch user
 onMounted(async () => {
   try {
     const token = localStorage.getItem("token");
     const res = await fetch(
       "https://ant-g2-landf.ti.linkpc.net/api/v1/auth/profile",
-      {
-        headers: { Authorization: `Bearer ${token}` },
-      },
+      { headers: { Authorization: `Bearer ${token}` } },
     );
     const json = await res.json();
     if (json.result) user.value = json.data;
@@ -246,6 +459,8 @@ const updatePassword = async () => {
     showPopupModal("លេខសម្ងាត់បានប្តូរដោយជោគជ័យ! 🎉", "success");
     currentPassword.value = "";
     newPassword.value = "";
+    localStorage.removeItem("token");
+    setTimeout(() => (window.location.href = "/login"), 500);
   } catch (err) {
     showPopupModal(err.message, "error");
   } finally {
@@ -267,8 +482,8 @@ const requestEmailChange = async () => {
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
-          password: emailPassword.value,
           newEmail: newEmail.value,
+          password: emailPassword.value,
         }),
       },
     );
@@ -305,81 +520,3 @@ const verifyEmailChange = async () => {
   }
 };
 </script>
-
-<style scoped>
-@import url("https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@300;400;600;700&display=swap");
-.khmer-font {
-  font-family: "Kantumruy Pro", sans-serif;
-}
-
-.text-purple {
-  color: #3b1e54 !important;
-}
-
-.bg-purple-subtle {
-  background-color: #f3eff7 !important;
-}
-
-.border-purple {
-  border-color: #3b1e54 !important;
-}
-
-.btn-purple {
-  background: #3b1e54;
-  color: #fff;
-  border: none;
-}
-.btn-purple:hover {
-  background: #2a153d;
-}
-.btn-purple-outline {
-  border: 2px solid #3b1e54;
-  color: #3b1e54;
-  background: transparent;
-}
-
-.btn-purple-outline:hover:not(:disabled) {
-  background: #3b1e54;
-  color: white;
-}
-
-.nav-tab {
-  padding: 10px 16px;
-  font-weight: 600;
-  text-decoration: none;
-  color: #6c757d;
-  border: 1px solid transparent;
-  border-radius: 12px 12px 0 0;
-  transition: all 0.3s ease;
-}
-
-.nav-tab.active {
-  color: #3b1e54;
-  border-color: #3b1e54;
-  border-bottom-color: #fff;
-}
-
-.custom-group {
-  border-radius: 12px;
-  border: 1px solid #ddd;
-  background: #fff;
-}
-
-.btn-purple-outline:hover {
-  background: #3b1e54;
-  color: #fff;
-}
-
-.password-meter {
-  height: 6px;
-  flex: 1;
-  background: #e9ecef;
-  border-radius: 10px;
-  border: 1px solid #ccc;
-}
-
-.password-meter.active {
-  background: #3b1e54;
-  border-color: #2a153d;
-}
-</style>

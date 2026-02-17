@@ -19,20 +19,34 @@
           <div class="row align-items-center pt-5 pb-5">
             <div class="col-md-auto text-center text-md-start">
               <div class="avatar-glow-wrapper" data-aos="zoom-in">
-                <img :src="user.avatar || 'https://ui-avatars.com/api/?name=Admin'"
-                  class="profile-img-premium shadow-lg" alt="Avatar" />
+                <img
+                  :src="user.avatar || 'https://ui-avatars.com/api/?name=Admin'"
+                  class="profile-img-premium shadow-lg"
+                  alt="Avatar"
+                />
                 <div class="status-indicator-online"></div>
               </div>
             </div>
-            <div class="col-md ps-md-4 mt-4 mt-md-0 text-center text-md-start" data-aos="fade-right">
-              <div class="d-flex align-items-center justify-content-center justify-content-md-start gap-2 mb-2">
-                <h1 class="display-6 fw-bold text-dark-indigo mb-0 khmer-font-title">
+            <div
+              class="col-md ps-md-4 mt-4 mt-md-0 text-center text-md-start"
+              data-aos="fade-right"
+            >
+              <div
+                class="d-flex align-items-center justify-content-center justify-content-md-start gap-2 mb-2"
+              >
+                <h1
+                  class="display-6 fw-bold text-dark-indigo mb-0 khmer-font-title"
+                >
                   {{ user.fullname }}
                 </h1>
-                <span class="badge-verified-glow"><i class="bi bi-patch-check-fill"></i></span>
+                <span class="badge-verified-glow"
+                  ><i class="bi bi-patch-check-fill"></i
+                ></span>
               </div>
               <p class="text-muted fs-5 mb-3">{{ user.email }}</p>
-              <div class="d-flex flex-wrap gap-2 justify-content-center justify-content-md-start">
+              <div
+                class="d-flex flex-wrap gap-2 justify-content-center justify-content-md-start"
+              >
                 <span class="badge-status-premium">
                   {{
                     user.status === "ACTIVATED"
@@ -50,20 +64,36 @@
       <div class="container-fluid px-lg-5 content-overlap">
         <div class="row g-4">
           <!-- LEFT: Password + Email -->
-          <div class="col-lg-8" data-aos="fade-up">
+          <div class="col-lg-12" data-aos="fade-up">
             <ProfileTabs class="mb-4" />
 
             <div class="row g-4">
               <!-- PASSWORD -->
-              <ChangePasswordCard v-model:currentPassword="currentPassword" v-model:newPassword="newPassword"
-                v-model:showCurrent="showCurrentPassword" v-model:showNew="showNewPassword" :loading="loadingPassword"
-                @update="updatePassword" />
+              <div class="col-lg-6">
+                <ChangePasswordCard
+                  v-model:currentPassword="currentPassword"
+                  v-model:newPassword="newPassword"
+                  v-model:showCurrent="showCurrentPassword"
+                  v-model:showNew="showNewPassword"
+                  :loading="loadingPassword"
+                  @update="updatePassword"
+                />
+              </div>
 
               <!-- EMAIL -->
-              <ChangeEmailCard v-model:newEmail="newEmail" v-model:password="emailPassword"
-                v-model:showPassword="showEmailPassword" v-model:token="emailVerifyToken"
-                v-model:requested="emailRequested" :loadingRequest="loadingEmail" :loadingVerify="loadingVerify"
-                @request="requestEmailChange" @verify="verifyEmailChange" />
+              <div class="col-lg-6">
+                <ChangeEmailCard
+                  v-model:newEmail="newEmail"
+                  v-model:password="emailPassword"
+                  v-model:showPassword="showEmailPassword"
+                  v-model:token="emailVerifyToken"
+                  v-model:requested="emailRequested"
+                  :loadingRequest="loadingEmail"
+                  :loadingVerify="loadingVerify"
+                  @request="requestEmailChange"
+                  @verify="verifyEmailChange"
+                />
+              </div>
             </div>
           </div>
 
@@ -349,7 +379,6 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import ProfileHeader from "@/components/profile/ProfileHeader.vue";
-import ProfileSide from "@/components/profile/ProfileSide.vue";
 import ProfileTabs from "@/components/profile/ProfileTabs.vue";
 import BaseToast from "@/components/base/BaseToast.vue";
 

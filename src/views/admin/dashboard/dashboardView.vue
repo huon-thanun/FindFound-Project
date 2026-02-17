@@ -33,13 +33,11 @@
           </div>
 
           <div class="col-xl-4">
-            <div class="content-card mt-4">
-              <CategoryDonut
-                :total-items="totalItems"
-                :category-stats="categoryStats"
-                :donut-style="donutStyle"
-              />
-            </div>
+            <CategoryDonut
+              :total-items="totalItems"
+              :category-stats="categoryStats"
+              :donut-style="donutStyle"
+            />
           </div>
         </div>
       </div>

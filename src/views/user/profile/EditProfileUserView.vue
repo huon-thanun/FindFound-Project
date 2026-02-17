@@ -15,24 +15,42 @@
           <div class="row align-items-center pt-5 pb-5">
             <div class="col-md-auto text-center text-md-start">
               <div class="avatar-glow-wrapper" data-aos="zoom-in">
-                <img :src="form.avatar ||
-                  user.avatar ||
-                  `https://ui-avatars.com/api/?name=${form.fullname}`
-                  " class="profile-img-premium shadow-lg" alt="Avatar" />
+                <img
+                  :src="
+                    form.avatar ||
+                    user.avatar ||
+                    `https://ui-avatars.com/api/?name=${form.fullname}`
+                  "
+                  class="profile-img-premium shadow-lg"
+                  alt="Avatar"
+                />
                 <label for="avatarInput" class="avatar-edit-badge">
                   <i class="bi bi-camera-fill"></i>
                 </label>
-                <input type="file" id="avatarInput" class="d-none" @change="onAvatarChange" accept="image/*" />
+                <input
+                  type="file"
+                  id="avatarInput"
+                  class="d-none"
+                  @change="onAvatarChange"
+                  accept="image/*"
+                />
               </div>
             </div>
 
-            <div class="col-md ps-md-4 mt-4 mt-md-0 text-center text-md-start" data-aos="fade-right">
-              <h1 class="display-6 fw-bold text-dark-indigo mb-1 khmer-font-title">
+            <div
+              class="col-md ps-md-4 mt-4 mt-md-0 text-center text-md-start"
+              data-aos="fade-right"
+            >
+              <h1
+                class="display-6 fw-bold text-dark-indigo mb-1 khmer-font-title"
+              >
                 {{ user.fullname }}
               </h1>
               <p class="text-muted fs-5 mb-3">{{ user.email }}</p>
 
-              <div class="d-flex flex-wrap gap-2 justify-content-center justify-content-md-start">
+              <div
+                class="d-flex flex-wrap gap-2 justify-content-center justify-content-md-start"
+              >
                 <button class="btn-delete-simple" @click="deleteAvatar">
                   <i class="bi bi-trash3 me-2"></i> លុបរូបភាពប្រើប្រាស់
                 </button>
@@ -61,17 +79,29 @@
                     <label class="info-label">ឈ្មោះពេញ</label>
                     <div class="input-with-icon">
                       <i class="bi bi-person text-purple-accent"></i>
-                      <input v-model="form.fullname" type="text" class="clean-input" placeholder="ឈ្មោះពេញ" />
+                      <input
+                        v-model="form.fullname"
+                        type="text"
+                        class="clean-input"
+                        placeholder="ឈ្មោះពេញ"
+                      />
                     </div>
                   </div>
                 </div>
 
                 <div class="col-md-6">
                   <div class="info-box-item-input disabled-box">
-                    <label class="info-label">អាសយដ្ឋានអ៊ីមែល (មិនអាចប្តូរបាន)</label>
+                    <label class="info-label"
+                      >អាសយដ្ឋានអ៊ីមែល (មិនអាចប្តូរបាន)</label
+                    >
                     <div class="input-with-icon">
                       <i class="bi bi-envelope text-muted"></i>
-                      <input :value="user.email" type="email" class="clean-input" disabled />
+                      <input
+                        :value="user.email"
+                        type="email"
+                        class="clean-input"
+                        disabled
+                      />
                     </div>
                   </div>
                 </div>
@@ -81,8 +111,12 @@
                     <label class="info-label">លេខទូរស័ព្ទ</label>
                     <div class="input-with-icon">
                       <i class="bi bi-phone text-purple-accent"></i>
-                      <input v-model="form.phoneNumber" type="text" class="clean-input"
-                        placeholder="បញ្ចូលលេខទូរស័ព្ទ" />
+                      <input
+                        v-model="form.phoneNumber"
+                        type="text"
+                        class="clean-input"
+                        placeholder="បញ្ចូលលេខទូរស័ព្ទ"
+                      />
                     </div>
                   </div>
                 </div>
@@ -92,15 +126,26 @@
                     <label class="info-label">តំណភ្ជាប់ Telegram</label>
                     <div class="input-with-icon">
                       <i class="bi bi-send text-purple-accent"></i>
-                      <input v-model="form.telegramLink" type="text" class="clean-input"
-                        placeholder="ឧទាហរណ៍: https://t.me/username" />
+                      <input
+                        v-model="form.telegramLink"
+                        type="text"
+                        class="clean-input"
+                        placeholder="ឧទាហរណ៍: https://t.me/username"
+                      />
                     </div>
                   </div>
                 </div>
 
                 <div class="col-12 mt-4">
-                  <button @click="updateProfile" class="btn-save-premium" :disabled="loading">
-                    <span v-if="loading" class="spinner-border spinner-border-sm me-2"></span>
+                  <button
+                    @click="updateProfile"
+                    class="btn-save-premium"
+                    :disabled="loading"
+                  >
+                    <span
+                      v-if="loading"
+                      class="spinner-border spinner-border-sm me-2"
+                    ></span>
                     <i v-else class="bi bi-cloud-arrow-up-fill me-2"></i>
                     រក្សាទុកការផ្លាស់ប្តូរ
                   </button>
@@ -129,7 +174,10 @@
         <h5 class="fw-bold">បញ្ជាក់ការលុប</h5>
         <p class="text-muted">តើអ្នកពិតជាចង់លុបរូបភាពប្រើប្រាស់មែនទេ?</p>
         <div class="d-flex justify-content-center gap-2 mt-4">
-          <button class="btn btn-light px-4 rounded-3" @click="showConfirmPopup = false">
+          <button
+            class="btn btn-light px-4 rounded-3"
+            @click="showConfirmPopup = false"
+          >
             បោះបង់
           </button>
           <button class="btn btn-danger px-4 rounded-3" @click="confirmYes">

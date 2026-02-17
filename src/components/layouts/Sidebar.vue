@@ -195,11 +195,6 @@ function handleLogout() {
   color: #7c3aed;
 }
 
-.nav-link-custom:hover .icon-box {
-  background: rgba(124, 58, 237, 0.12);
-  color: #7c3aed;
-}
-
 .router-link-exact-active {
   background: linear-gradient(90deg, #7c3aed 0%, #a78bfa 100%) !important;
   color: white !important;
