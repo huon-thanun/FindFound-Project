@@ -1,15 +1,19 @@
 <template>
   <ProfileLayout>
+    <!-- Header -->
     <template #header>
       <ProfileHeader :user="user" />
     </template>
 
+    <!-- Loading -->
     <div v-if="!user" class="loading-full">
       <div class="custom-loader"></div>
       <p class="mt-4 khmer-font text-purple-accent">កំពុងផ្ទុកទិន្នន័យ...</p>
     </div>
 
+    <!-- Profile Page -->
     <div v-else class="profile-page">
+      <!-- Hero / Avatar -->
       <section class="hero-lavender">
         <div class="container-fluid px-lg-5">
           <div class="row align-items-center pt-5 pb-5">
@@ -60,9 +64,10 @@
         </div>
       </section>
 
+      <!-- Profile Form -->
       <div class="container-fluid px-lg-5 content-overlap">
         <div class="row g-4">
-          <div class="col-lg-8" data-aos="fade-up">
+          <div class="col-lg-12" data-aos="fade-up">
             <ProfileTabs class="mb-4" />
 
             <div class="main-details-card mb-4 shadow-sm">
@@ -74,21 +79,28 @@
               </div>
 
               <div class="row g-4">
+                <!-- Full Name -->
                 <div class="col-md-6">
                   <div class="info-box-item-input">
-                    <label class="info-label">ឈ្មោះពេញ</label>
+                    <label class="info-label">ឈ្មោះពេញ *</label>
                     <div class="input-with-icon">
                       <i class="bi bi-person text-purple-accent"></i>
                       <input
                         v-model="form.fullname"
+                        @input="validateFullname"
                         type="text"
                         class="clean-input"
+                        :class="{ 'is-invalid': errors.fullname }"
                         placeholder="ឈ្មោះពេញ"
                       />
                     </div>
+                    <small v-if="errors.fullname" class="text-danger">{{
+                      errors.fullname
+                    }}</small>
                   </div>
                 </div>
 
+                <!-- Email -->
                 <div class="col-md-6">
                   <div class="info-box-item-input disabled-box">
                     <label class="info-label"
@@ -106,6 +118,7 @@
                   </div>
                 </div>
 
+                <!-- Phone -->
                 <div class="col-md-6">
                   <div class="info-box-item-input">
                     <label class="info-label">លេខទូរស័ព្ទ</label>
@@ -113,14 +126,20 @@
                       <i class="bi bi-phone text-purple-accent"></i>
                       <input
                         v-model="form.phoneNumber"
+                        @input="validatePhone"
                         type="text"
                         class="clean-input"
-                        placeholder="បញ្ចូលលេខទូរស័ព្ទ"
+                        :class="{ 'is-invalid': errors.phoneNumber }"
+                        placeholder="012345678"
                       />
                     </div>
+                    <small v-if="errors.phoneNumber" class="text-danger">{{
+                      errors.phoneNumber
+                    }}</small>
                   </div>
                 </div>
 
+                <!-- Telegram -->
                 <div class="col-md-6">
                   <div class="info-box-item-input">
                     <label class="info-label">តំណភ្ជាប់ Telegram</label>
@@ -128,32 +147,39 @@
                       <i class="bi bi-send text-purple-accent"></i>
                       <input
                         v-model="form.telegramLink"
+                        @input="validateTelegram"
                         type="text"
                         class="clean-input"
-                        placeholder="ឧទាហរណ៍: https://t.me/username"
+                        :class="{ 'is-invalid': errors.telegramLink }"
+                        placeholder="https://t.me/username"
                       />
                     </div>
+                    <small v-if="errors.telegramLink" class="text-danger">{{
+                      errors.telegramLink
+                    }}</small>
                   </div>
                 </div>
 
+                <!-- Save Button -->
                 <div class="col-12 mt-4">
                   <button
                     @click="updateProfile"
                     class="btn-save-premium"
-                    :disabled="loading"
+                    :disabled="loading || !isFormValid || !isDirty"
                   >
                     <span
                       v-if="loading"
                       class="spinner-border spinner-border-sm me-2"
                     ></span>
                     <i v-else class="bi bi-cloud-arrow-up-fill me-2"></i>
-                    រក្សាទុកការផ្លាស់ប្តូរ
+                    រក្សាទុក
                   </button>
                 </div>
               </div>
             </div>
           </div>
 
+          <!-- Sidebar -->
           <div class="col-lg-4" data-aos="fade-left">
             <div class="sidebar-sticky">
               <ProfileSide :user="user" :skills="skills" />
@@ -163,9 +189,16 @@
       </div>
     </div>
 
-    <!-- Message Toast -->
-    <BaseToast v-model="showToast" :message="toastMessage" :theme="toastTheme" :icon="toastIcon" :duration="3000" />
+    <!-- Toast -->
+    <BaseToast
+      v-model="showToast"
+      :message="toastMessage"
+      :theme="toastTheme"
+      :icon="toastIcon"
+      :duration="3000"
+    />
 
+    <!-- Confirm Delete Avatar -->
     <div v-if="showConfirmPopup" class="popup-backdrop">
       <div class="popup-card animate-zoom">
         <div class="popup-icon text-warning">
@@ -190,21 +223,22 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, computed } from "vue";
 import ProfileTabs from "@/components/profile/ProfileTabs.vue";
 import ProfileHeader from "@/components/profile/ProfileHeader.vue";
-import ProfileSide from "@/components/profile/ProfileSide.vue";
 import BaseToast from "@/components/base/BaseToast.vue";
 
+// State
 const user = ref(null);
 const skills = ["HTML", "CSS", "Vue", "MySQL", "JavaScript"];
+
 const form = ref({
   fullname: "",
-  email: "",
   phoneNumber: "",
   telegramLink: "",
   avatar: "",
 });
+
 const loading = ref(false);
 
 // Toast
@@ -220,39 +254,106 @@ const showBaseToast = (message, theme = "success") => {
   showToast.value = true;
 };
 
-const showConfirmPopup = ref(false);
-let confirmAction = null;
-const confirmYes = async () => {
-  showConfirmPopup.value = false;
-  if (confirmAction) await confirmAction();
+// Validation
+const errors = ref({
+  fullname: "",
+  phoneNumber: "",
+  telegramLink: "",
+});
+
+const validateFullname = () => {
+  errors.value.fullname = !form.value.fullname.trim()
+    ? "សូមបញ្ចូលឈ្មោះពេញ"
+    : "";
 };
 
+const validatePhone = () => {
+  errors.value.phoneNumber =
+    form.value.phoneNumber && !/^[0-9]{8,12}$/.test(form.value.phoneNumber)
+      ? "លេខទូរស័ព្ទមិនត្រឹមត្រូវ (៨-១២ ខ្ទង់)"
+      : "";
+};
+
+const validateTelegram = () => {
+  const link = form.value.telegramLink?.trim();
+  errors.value.telegramLink =
+    link && !link.startsWith("https://t.me/")
+      ? "តំណ Telegram ត្រូវចាប់ផ្តើមដោយ https://t.me/"
+      : "";
+};
+
+const isFormValid = computed(() => {
+  return (
+    !errors.value.fullname &&
+    !errors.value.phoneNumber &&
+    !errors.value.telegramLink &&
+    form.value.fullname.trim() !== ""
+  );
+});
+
+// Improved Dirty Check – handles null/undefined from backend properly
+const isDirty = computed(() => {
+  if (!user.value) return false;
+
+  const normalize = (value) => {
+    if (value == null) return "";
+    return String(value).trim();
+  };
+
+  return (
+    normalize(form.value.fullname) !== normalize(user.value.fullname) ||
+    normalize(form.value.phoneNumber) !== normalize(user.value.phoneNumber) ||
+    normalize(form.value.telegramLink) !== normalize(user.value.telegramLink)
+  );
+});
+
+// Load profile
 onMounted(async () => {
   try {
     const token = localStorage.getItem("token");
+    if (!token) {
+      showBaseToast("សូមចូលគណនីជាមុន", "error");
+      return;
+    }
+
     const res = await fetch(
       "https://ant-g2-landf.ti.linkpc.net/api/v1/auth/profile",
       {
         headers: { Authorization: `Bearer ${token}` },
       },
     );
+
     const json = await res.json();
-    if (json.result) {
+
+    if (json.result && json.data) {
       user.value = json.data;
-      Object.assign(form.value, json.data);
+
+      // Explicitly reset form with fallback to empty string
+      form.value = {
+        fullname: json.data.fullname || "",
+        phoneNumber: json.data.phoneNumber || "",
+        telegramLink: json.data.telegramLink || "",
+        avatar: json.data.avatar || "",
+      };
+    } else {
+      showBaseToast("មិនអាចផ្ទុកព័ត៌មានប្រវត្តិរូបបានទេ", "error");
     }
   } catch (err) {
-    console.error(err);
+    console.error("Profile load error:", err);
+    showBaseToast("មានបញ្ហាក្នុងការភ្ជាប់ម៉ាស៊ីនមេ", "error");
   }
 });
 
+// Avatar Upload
 const onAvatarChange = async (e) => {
-  const file = e.target.files[0];
+  const file = e.target.files?.[0];
   if (!file) return;
+
   try {
     const token = localStorage.getItem("token");
     const formData = new FormData();
     formData.append("avatar", file);
+
     const res = await fetch(
       "https://ant-g2-landf.ti.linkpc.net/api/v1/auth/profile/avatar",
       {
@@ -261,46 +362,87 @@ const onAvatarChange = async (e) => {
         body: formData,
       },
     );
+
     const json = await res.json();
-    if (!res.ok) throw new Error();
+    if (!res.ok) throw new Error(json.message || "Upload failed");
+
     user.value.avatar = json.data.avatar;
     form.value.avatar = json.data.avatar;
-    showBaseToast("របូបភាពត្រូវបានផ្លាស់ប្តូរ 🎉");
+
+    showBaseToast("រូបភាពត្រូវបានផ្លាស់ប្តូរជោគជ័យ 🎉");
   } catch (err) {
-    showBaseToast("មិនអាចផ្លាស់ប្តូររូបភាពបានទេ", "error");
+    console.error(err);
+    showBaseToast("មិនអាចផ្ទុករូបភាពបានទេ", "error");
   }
 };
+
+// Delete Avatar
+const showConfirmPopup = ref(false);
+let confirmAction = null;
 
 const deleteAvatar = () => {
   confirmAction = async () => {
     try {
       const token = localStorage.getItem("token");
-      await fetch(
+      const res = await fetch(
         "https://ant-g2-landf.ti.linkpc.net/api/v1/auth/profile/avatar",
         {
           method: "DELETE",
           headers: { Authorization: `Bearer ${token}` },
         },
       );
-      form.value.avatar = "";
+
+      if (!res.ok) throw new Error();
+
       user.value.avatar = "";
-      showBaseToast("របូបភាពត្រូវបានលុបចេញ 🗑️");
-    } catch (err) {
-      showBaseToast("បរាជ័យក្នុងការលុប", "error");
+      form.value.avatar = "";
+      showBaseToast("រូបភាពត្រូវបានលុបចេញ 🗑️");
+    } catch {
+      showBaseToast("បរាជ័យក្នុងការលុបរូបភាព", "error");
     }
   };
+
   showConfirmPopup.value = true;
 };
 
+const confirmYes = async () => {
+  showConfirmPopup.value = false;
+  if (confirmAction) await confirmAction();
+  confirmAction = null;
+};
+
+// Update Profile
 const updateProfile = async () => {
+  // Re-validate before submit
+  validateFullname();
+  validatePhone();
+  validateTelegram();
+
+  if (!isFormValid.value) {
+    showBaseToast("សូមបំពេញព័ត៌មានឲ្យត្រឹមត្រូវ", "error");
+    return;
+  }
+
+  if (!isDirty.value) {
+    showBaseToast("មិនមានការផ្លាស់ប្តូរអ្វីទេ", "info");
+    return;
+  }
+
   loading.value = true;
+
   try {
     const token = localStorage.getItem("token");
     const payload = {
-      fullname: form.value.fullname,
-      phoneNumber: form.value.phoneNumber,
-      telegramLink: form.value.telegramLink,
+      fullname: form.value.fullname.trim(),
     };
+
+    if (form.value.phoneNumber?.trim()) {
+      payload.phoneNumber = form.value.phoneNumber.trim();
+    }
+    if (form.value.telegramLink?.trim()) {
+      payload.telegramLink = form.value.telegramLink.trim();
+    }
+
     const res = await fetch(
       "https://ant-g2-landf.ti.linkpc.net/api/v1/auth/profile",
       {
@@ -312,17 +454,29 @@ const updateProfile = async () => {
         body: JSON.stringify(payload),
       },
     );
-    if (!res.ok) throw new Error();
-    user.value = { ...user.value, ...payload };
-    showBaseToast("ព័ត៌មានត្រូវបានរក្សាទុក 🎉");
+
+    if (!res.ok) {
+      const err = await res.json();
+      throw new Error(err.message || "Update failed");
+    }
+
+    // Update local user data
+    user.value = {
+      ...user.value,
+      fullname: payload.fullname,
+      phoneNumber: payload.phoneNumber || user.value.phoneNumber,
+      telegramLink: payload.telegramLink || user.value.telegramLink,
+    };
+
+    showBaseToast("ព័ត៌មានត្រូវបានរក្សាទុកជោគជ័យ 🎉");
   } catch (err) {
-    showBaseToast("បរាជ័យក្នុងការរក្សាទុក", "error");
+    console.error(err);
+    showBaseToast("មិនអាចរក្សាទុកបានទេ សូមព្យាយាមម្តងទៀត", "error");
   } finally {
     loading.value = false;
   }
 };
 </script>
-
 <style scoped>
 @import url("https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@300;400;600;700&family=Koh+Santepheap:wght@700&display=swap");
 

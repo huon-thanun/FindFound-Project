@@ -39,18 +39,7 @@
 
               <div
                 class="d-flex flex-wrap gap-2 justify-content-center justify-content-md-start"
-              >
-                <span class="badge-status-premium">
-                  {{
-                    user.status === "ACTIVATED"
-                      ? "អ្នកគ្រប់គ្រងប្រព័ន្ធ"
-                      : "មិនទាន់ដំណើរការ"
-                  }}
-                </span>
-                <button class="btn-edit-profile">
-                  <i class="bi bi-pencil-square me-2"></i> កែប្រែព័ត៌មាន
-                </button>
-              </div>
+              ></div>
             </div>
           </div>
         </div>
@@ -58,7 +47,7 @@
 
       <div class="container-fluid px-lg-5 content-overlap">
         <div class="row g-4">
-          <div class="col-lg-8" data-aos="fade-up">
+          <div class="col-lg-12" data-aos="fade-up">
             <ProfileTabs class="mb-4" @tab-change="handleTabChange" />
 
             <div class="main-details-card mb-4 shadow-sm">
@@ -242,7 +231,7 @@ onMounted(async () => {
 .main-details-card {
   background: white;
   border-radius: 32px;
-  padding: 45px;
+  padding: 48px;
   border: 1px solid rgba(124, 58, 237, 0.05);
 }
 

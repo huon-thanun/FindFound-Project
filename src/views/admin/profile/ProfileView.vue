@@ -47,9 +47,6 @@
                       : "មិនទាន់ដំណើរការ"
                   }}
                 </span>
-                <button class="btn-edit-profile">
-                  <i class="bi bi-pencil-square me-2"></i> កែប្រែព័ត៌មាន
-                </button>
               </div>
             </div>
           </div>

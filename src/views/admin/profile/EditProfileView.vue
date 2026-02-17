@@ -62,7 +62,7 @@
 
       <div class="container-fluid px-lg-5 content-overlap">
         <div class="row g-4">
-          <div class="col-lg-8" data-aos="fade-up">
+          <div class="col-lg-12" data-aos="fade-up">
             <!-- <ProfileTabs class="mb-4" /> -->
             <ProfileTabsAdmin class="mb-4" />
 
@@ -152,12 +152,6 @@
                   </button>
                 </div>
               </div>
-            </div>
-          </div>
-
-          <div class="col-lg-4" data-aos="fade-left">
-            <div class="sidebar-sticky">
-              <ProfileSide :user="user" :skills="skills" />
             </div>
           </div>
         </div>

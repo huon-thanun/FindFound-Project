@@ -76,6 +76,13 @@ onMounted(async () => {
 
     statCards.value = [
       {
+        title: "អ្នកប្រើថ្មីក្នុងខែនេះ",
+        value: newThisMonth,
+        icon: "bi-person-plus",
+        trend: getTrend(),
+        secondary: "អ្នកប្រើថ្មីខែនេះ",
+      },
+      {
         title: "អ្នកប្រើប្រាស់សរុប",
         value: totalUsers,
         icon: "bi-people",
@@ -95,13 +102,6 @@ onMounted(async () => {
         icon: "bi-person-x",
         trend: getTrend(),
         secondary: "អ្នកប្រើប្រាស់អសកម្ម",
-      },
-      {
-        title: "អ្នកប្រើថ្មីក្នុងខែនេះ",
-        value: newThisMonth,
-        icon: "bi-person-plus",
-        trend: getTrend(),
-        secondary: "អ្នកប្រើថ្មីខែនេះ",
       },
     ];
   } catch (err) {
@@ -226,7 +226,7 @@ const getCardStyle = (index) => {
 
 .trend-down {
   background: rgba(239, 68, 68, 0.2);
-  color: #ef4444;
+  color: #fff;
   border: 1px solid rgba(239, 68, 68, 0.45);
 }
 

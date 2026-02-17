@@ -46,15 +46,7 @@
               <p class="text-muted fs-5 mb-3">{{ user.email }}</p>
               <div
                 class="d-flex flex-wrap gap-2 justify-content-center justify-content-md-start"
-              >
-                <span class="badge-status-premium">
-                  {{
-                    user.status === "ACTIVATED"
-                      ? "អ្នកគ្រប់គ្រងប្រព័ន្ធ"
-                      : "មិនទាន់ដំណើរការ"
-                  }}
-                </span>
-              </div>
+              ></div>
             </div>
           </div>
         </div>
@@ -106,7 +98,13 @@
     </div>
 
     <!-- Message Toast -->
-    <BaseToast v-model="showToast" :message="toastMessage" :theme="toastTheme" :icon="toastIcon" :duration="3000" />
+    <BaseToast
+      v-model="showToast"
+      :message="toastMessage"
+      :theme="toastTheme"
+      :icon="toastIcon"
+      :duration="3000"
+    />
   </ProfileLayout>
 </template>
 
