@@ -4,7 +4,7 @@
       <ProfileHeader :user="user" />
     </template>
 
-    <!-- Hero always visible – placeholder + fallback immediately -->
+    <!-- Hero always visible -->
     <section class="hero-lavender">
       <div class="container-fluid px-lg-5">
         <div class="row align-items-center pt-5 pb-5">
@@ -28,7 +28,7 @@
                 id="avatarInput"
                 class="d-none"
                 @change="onAvatarChange"
-                accept="image/*"
+                accept="image/jpeg,image/png,image/gif"
               />
             </div>
           </div>
@@ -64,7 +64,7 @@
     <div class="container-fluid px-lg-5 content-overlap">
       <div class="row g-4">
         <div class="col-lg-12" data-aos="fade-up">
-          <ProfileTabsAdmin />
+          <ProfileTabsAdmin class="mb-4" />
 
           <div class="main-details-card mb-4 shadow-sm">
             <div class="card-header-clean mb-4">
@@ -74,7 +74,6 @@
               </h5>
             </div>
 
-            <!-- Loading only inside the card – same style as profile.vue -->
             <div v-if="loading" class="loading-inside">
               <div class="custom-loader"></div>
               <p class="mt-4 khmer-font text-purple-accent">
@@ -178,7 +177,6 @@
           </div>
         </div>
 
-        <!-- Sidebar always visible -->
         <div class="col-lg-4" data-aos="fade-left">
           <div class="sidebar-sticky">
             <ProfileSide :user="user" :skills="skills" />
@@ -223,8 +221,8 @@
 <script setup>
 import { ref, onMounted, computed } from "vue";
 import ProfileHeader from "@/components/profile/ProfileHeader.vue";
-import BaseToast from "@/components/base/BaseToast.vue";
 import ProfileTabsAdmin from "@/components/profile/ProfileTabsAdmin.vue";
+import BaseToast from "@/components/base/BaseToast.vue";
 
 const user = ref(null);
 const form = ref({
@@ -302,6 +300,10 @@ const isDirty = computed(() => {
   );
 });
 
+// File upload validation constants
+const MAX_AVATAR_SIZE = 2 * 1024 * 1024; // 2MB (change to your API limit)
+const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/gif"];
+
 // Load profile
 onMounted(async () => {
   loading.value = true;
@@ -336,11 +338,25 @@ onMounted(async () => {
   }
 });
 
-// Avatar Upload
+// Avatar Upload with validation
 const onAvatarChange = async (e) => {
   const file = e.target.files?.[0];
   if (!file) return;
 
+  // 1. Check file type
+  if (!ALLOWED_TYPES.includes(file.type)) {
+    showBaseToast("សូមជ្រើសរើសរូបភាព JPG, PNG ឬ GIF ប៉ុណ្ណោះ", "error");
+    return;
+  }
+
+  // 2. Check file size (client-side)
+  if (file.size > MAX_AVATAR_SIZE) {
+    const mb = (MAX_AVATAR_SIZE / 1024 / 1024).toFixed(1);
+    showBaseToast(`ទំហំរូបភាពមិនអាចលើសពី ${mb} MB`, "error");
+    return;
+  }
+
+  // Show preview immediately
   previewAvatar.value = URL.createObjectURL(file);
 
   try {
@@ -358,16 +374,22 @@ const onAvatarChange = async (e) => {
     );
 
     const json = await res.json();
-    if (!res.ok) throw new Error(json.message || "Upload failed");
+
+    if (!res.ok) {
+      if (res.status === 413) {
+        throw new Error(`រូបភាពធំពេក (Payload Too Large)`);
+      }
+      throw new Error(json.message || "Upload failed");
+    }
 
     user.value.avatar = json.data.avatar;
     form.value.avatar = json.data.avatar;
     previewAvatar.value = json.data.avatar;
-    showBaseToast("រូបភាពត្រូវបានផ្លាស់ប្តូរជោគជ័យ 🎉");
+    showBaseToast("រូបភាពត្រូវបានផ្លាស់ប្តូរជោគជ័យ 🎉", "success");
   } catch (err) {
     console.error(err);
-    showBaseToast("មិនអាចផ្ទុករូបភាពបានទេ", "error");
-    previewAvatar.value = form.value.avatar;
+    showBaseToast(err.message || "មិនអាចផ្ទុករូបភាពបានទេ", "error");
+    previewAvatar.value = form.value.avatar || user.value?.avatar;
   }
 };
 
@@ -392,8 +414,8 @@ const deleteAvatar = () => {
       user.value.avatar = "";
       form.value.avatar = "";
       previewAvatar.value = null;
-      showBaseToast("រូបភាពត្រូវបានលុបចេញ 🗑️");
-    } catch {
+      showBaseToast("រូបភាពត្រូវបានលុបចេញ 🗑️", "success");
+    } catch (err) {
       showBaseToast("បរាជ័យក្នុងការលុបរូបភាព", "error");
     }
   };
@@ -409,7 +431,6 @@ const confirmYes = async () => {
 
 // Update Profile
 const updateProfile = async () => {
-  // Re-validate
   validateFullname();
   validatePhone();
   validateTelegram();
@@ -432,12 +453,10 @@ const updateProfile = async () => {
       fullname: form.value.fullname.trim(),
     };
 
-    if (form.value.phoneNumber?.trim()) {
+    if (form.value.phoneNumber?.trim())
       payload.phoneNumber = form.value.phoneNumber.trim();
-    }
-    if (form.value.telegramLink?.trim()) {
+    if (form.value.telegramLink?.trim())
       payload.telegramLink = form.value.telegramLink.trim();
-    }
 
     const res = await fetch(
       "https://ant-g2-landf.ti.linkpc.net/api/v1/auth/profile",
@@ -457,10 +476,13 @@ const updateProfile = async () => {
     }
 
     user.value = { ...user.value, ...payload };
-    showBaseToast("ព័ត៌មានត្រូវបានរក្សាទុកជោគជ័យ 🎉");
+    showBaseToast("ព័ត៌មានត្រូវបានរក្សាទុកជោគជ័យ 🎉", "success");
   } catch (err) {
     console.error(err);
-    showBaseToast("មិនអាចរក្សាទុកបានទេ សូមព្យាយាមម្តងទៀត", "error");
+    showBaseToast(
+      err.message || "មិនអាចរក្សាទុកបានទេ សូមព្យាយាមម្តងទៀត",
+      "error",
+    );
   } finally {
     saving.value = false;
   }
@@ -469,6 +491,17 @@ const updateProfile = async () => {
 
 <style scoped>
 @import url("https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@300;400;600;700&family=Koh+Santepheap:wght@700&display=swap");
+
+.loading-inside {
+  min-height: 400px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 100px 20px;
+}
+
+/* ... rest of your styles remain unchanged ... */
 
 /* Your original styles + loading-inside to match profile view */
 .loading-inside {
