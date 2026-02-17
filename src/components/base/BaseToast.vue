@@ -72,7 +72,7 @@ onBeforeUnmount(() => clearTimer())
 <style scoped>
 .ff-toast {
     position: fixed;
-    top: 20px;
+    bottom: 20px;
     right: 20px;
     z-index: 1100;
     min-width: 280px;
@@ -120,15 +120,21 @@ onBeforeUnmount(() => clearTimer())
 }
 
 .ff-toast--success .ff-toast__inner {
-    border-left: 4px solid var(--success);
+    background: #10b981;
+    color: white;
+    border-left: none;
 }
 
 .ff-toast--danger .ff-toast__inner {
-    border-left: 4px solid var(--danger);
+    background: #ef4444;
+    color: white;
+    border-left: none;
 }
 
 .ff-toast--warning .ff-toast__inner {
-    border-left: 4px solid var(--warning);
+    background: #f59e0b;
+    color: white;
+    border-left: none;
 }
 
 .toast-fade-enter-active,
@@ -137,13 +143,13 @@ onBeforeUnmount(() => clearTimer())
 }
 
 .toast-fade-enter-from {
-    opacity: 0;
-    transform: translateY(-8px) scale(0.98);
+    opacity: 0.5;
+    transform: translateX(20px) scale(0.98);
 }
 
 .toast-fade-leave-to {
-    opacity: 0;
-    transform: translateY(-8px) scale(0.98);
+    opacity: 0.5;
+    transform: translateX(20px) scale(0.98);
 }
 </style>
 

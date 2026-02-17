@@ -62,47 +62,14 @@
       </p>
     </div>
 
-    <!-- SUCCESS MODAL -->
-    <BaseModal
-      :isClose="showSuccessModal"
-      title="ការផ្ទៀងផ្ទាត់បានជោគជ័យ 🎉"
-      icon="check-circle"
-      theme="success"
-      :closable="false"
-    >
-      <template #body>
-        <p class="verify-desc">
-          គណនីរបស់អ្នកត្រូវបានផ្ទៀងផ្ទាត់រួចរាល់<br />
-          កំពុងនាំអ្នកទៅកាន់ទំព័រចូលគណនី…
-        </p>
-      </template>
-    </BaseModal>
-
-    <!-- ERROR MODAL -->
-    <BaseModal :isClose="showErrorModal" :closable="false" theme="custom">
-      <template #body>
-        <div class="error-modal">
-          <!-- ICON -->
-          <div class="error-icon">✕</div>
-
-          <!-- TITLE -->
-          <h3 class="error-title">មានបញ្ហា!</h3>
-
-          <!-- MESSAGE -->
-          <p class="error-message">
-            {{
-              errorMessage ||
-              "លេខកូដដែលអ្នកបានបញ្ចូលមិនត្រឹមត្រូវ។ សូមព្យាយាមម្តងទៀត។"
-            }}
-          </p>
-
-          <!-- BUTTON -->
-          <button class="error-btn" @click="showErrorModal = false">
-            ព្យាយាមម្តងទៀត
-          </button>
-        </div>
-      </template>
-    </BaseModal>
+    <!-- Toast Notification -->
+    <BaseToast
+      v-model="showToast"
+      :message="toastMessage"
+      :theme="toastTheme"
+      :icon="toastIcon"
+      :duration="toastDuration"
+    />
   </div>
 </template>
 
@@ -117,6 +84,7 @@ import {
 } from "vue";
 import { useRouter } from "vue-router";
 import api from "@/api/api";
+import BaseToast from "@/components/base/BaseToast.vue";
 
 // ===== STATE =====
 const router = useRouter();
@@ -130,9 +98,12 @@ const remainingTime = ref(300);
 let timer = null;
 const expiredShown = ref(false);
 
-const showSuccessModal = ref(false);
-const showErrorModal = ref(false);
-const errorMessage = ref("");
+// Toast configuration
+const showToast = ref(false);
+const toastMessage = ref("");
+const toastTheme = ref("success");
+const toastIcon = ref("check-circle");
+const toastDuration = ref(3000);
 
 // ===== COMPUTED =====
 const formattedTime = computed(() => {
@@ -163,6 +134,14 @@ onBeforeUnmount(() => {
 });
 
 // ===== METHODS =====
+function showToastMessage(message, theme = "success", icon = "check-circle", duration = 3000) {
+  toastMessage.value = message;
+  toastTheme.value = theme;
+  toastIcon.value = icon;
+  toastDuration.value = duration;
+  showToast.value = true;
+}
+
 function startCountdown() {
   clearInterval(timer);
   expiredShown.value = false;
@@ -177,7 +156,7 @@ function startCountdown() {
       if (!expiredShown.value) {
         expiredShown.value = true;
         nextTick(() => {
-          showToastMessage("លេខកូដបានផុតកំណត់ សូមផ្ញើម្តងទៀត", "error");
+          showToastMessage("លេខកូដបានផុតកំណត់ សូមផ្ញើម្តងទៀត", "warning", "exclamation-triangle");
         });
       }
     }
@@ -217,9 +196,7 @@ async function verifyOTP() {
   const otp = otpDigits.join("");
 
   if (otp.length !== 6) {
-    errorMessage.value = "សូមបញ្ចូលលេខកូដទាំង ៦ ខ្ទង់។";
-    showErrorModal.value = true;
-    showToastMessage(errorMessage.value, "error");
+    showToastMessage("សូមបញ្ចូលលេខកូដទាំង ៦ ខ្ទង់។", "danger", "x-lg");
     return;
   }
 
@@ -233,7 +210,8 @@ async function verifyOTP() {
 
     loading.value = false;
     verified.value = true;
-    showSuccessModal.value = true;
+    
+    showToastMessage("ការផ្ទៀងផ្ទាត់បានជោគជ័យ! កំពុងនាំអ្នកទៅកាន់ទំព័រចូលគណនី…", "success", "check-circle");
 
     setTimeout(() => {
       localStorage.removeItem("otp_email");
@@ -242,24 +220,21 @@ async function verifyOTP() {
   } catch (err) {
     loading.value = false;
     const serverMsg = err.response?.data?.message || "";
+    let errorMsg = "";
 
     if (
       serverMsg.includes("Invalid") ||
       serverMsg.includes("invalid") ||
       serverMsg.includes("OTP")
     ) {
-      errorMessage.value =
-        "លេខកូដដែលអ្នកបានបញ្ចូលមិនត្រឹមត្រូវ។ សូមព្យាយាមម្តងទៀត។";
+      errorMsg = "លេខកូដដែលអ្នកបានបញ្ចូលមិនត្រឹមត្រូវ។ សូមព្យាយាមម្តងទៀត។";
     } else if (serverMsg.includes("expired")) {
-      errorMessage.value = "លេខកូដបានផុតកំណត់។ សូមផ្ញើលេខកូដម្តងទៀត។";
+      errorMsg = "លេខកូដបានផុតកំណត់។ សូមផ្ញើលេខកូដម្តងទៀត។";
     } else {
-      errorMessage.value = "មានបញ្ហាមួយកើតឡើង។ សូមព្យាយាមម្តងទៀត។";
+      errorMsg = "មានបញ្ហាមួយកើតឡើង។ សូមព្យាយាមម្តងទៀត។";
     }
 
-    showErrorModal.value = true;
-
-    showErrorModal.value = true;
-  
+    showToastMessage(errorMsg, "danger", "x-lg");
   }
 }
 
@@ -274,8 +249,10 @@ async function resendOTP() {
     remainingTime.value = 300;
     startCountdown();
     
-  } catch {
-  
+    showToastMessage("លេខកូដត្រូវបានផ្ញើម្តងទៀតទៅកាន់អ៊ីមែលរបស់អ្នក", "success", "check-circle");
+  } catch (err) {
+    const errorMsg = err.response?.data?.message || "មិនអាចផ្ញើលេខកូដម្តងទៀតបានទេ។ សូមព្យាយាមម្តងទៀត។";
+    showToastMessage(errorMsg, "danger", "x-lg");
   } finally {
     loading.value = false;
   }
@@ -356,6 +333,7 @@ h2 {
   font-weight: 600;
   cursor: pointer;
   transition: transform 0.15s ease, box-shadow 0.2s ease;
+  width: 100%;
 }
 
 .btn:hover:not(:disabled) {
@@ -370,68 +348,20 @@ h2 {
   color: #ffffff;       
   background: linear-gradient(135deg, #8c31e8, #742adb);
 }
+
 .resend {
   margin-top: 1.2rem;
   font-size: 0.85rem;
   color: #6b7280;
 }
 
-.error-modal {
-   text-align: center;
-  padding: 0 8px;
-}
-
-/* ICON */
-.error-icon {
-  width: 72px;
-  height: 72px;
-  margin-left: 150px;  
-  margin-top: -50px;
-  margin-bottom: 50px;
-  border-radius: 50%;
-  background: rgba(239, 68, 68, 0.15);
-  color: #ef4444;
-  font-size: 34px;
-  font-weight: bold;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 0 0 14px rgba(239, 68, 68, 0.08);
-}
-
-
-/* TITLE */
-.error-title {
-  font-size: 1.3rem;
-  font-weight: 700;
-  color: #1f2937;
-  margin-bottom: 14px; 
-}
-
-
-/* MESSAGE */
-.error-message {
-  font-size: 0.96rem;
-  color: #6b7280;
-  line-height: 1.85; 
-  margin-bottom: 28px; 
-}
-
-
-/* BUTTON */
-.error-btn {
-  width: 100%;
-  padding: 15px;
-  border-radius: 16px;
-  border: none;
-  background: linear-gradient(135deg, #8c31e8, #742adb);
-  color: #fff;
-  font-size: 0.96rem;
+.resend a {
+  color: #8c31e8;
   font-weight: 600;
-  cursor: pointer;
+  text-decoration: none;
 }
 
-.error-btn:hover {
-  opacity: 0.95;
+.resend a:hover {
+  text-decoration: underline;
 }
 </style>
