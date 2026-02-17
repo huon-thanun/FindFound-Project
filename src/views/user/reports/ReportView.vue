@@ -1,19 +1,30 @@
 <template>
   <div class="container py-4">
-    <div class="d-flex justify-content-between flex-wrap mb-3 align-items-center">
+    <div
+      class="d-flex justify-content-between flex-wrap mb-3 align-items-center"
+    >
       <div>
         <h2>ការរាយការណ៍</h2>
         <p>រុករក និងមើលវត្ថុបាត់បង់ និងវត្ថុដែលបានរកឃើញទាំងអស់នៅក្នុងសហគមន៍</p>
       </div>
 
-      <BaseButton variant="primary" icon="file-earmark-plus" @click="btnHandleToCreatePage">
+      <BaseButton
+        variant="primary"
+        icon="file-earmark-plus"
+        @click="btnHandleToCreatePage"
+      >
         បង្កើតការរាយការណ៍
       </BaseButton>
     </div>
     <div class="card mb-3 shadow border-color">
       <div class="card-body row">
         <div class="col-xxl-12">
-          <BaseInput class="w-100" v-model="search" type="text" placeholder="ស្វែងរក ការរាយការណ៍..." />
+          <BaseInput
+            class="w-100"
+            v-model="search"
+            type="text"
+            placeholder="ស្វែងរក ការរាយការណ៍..."
+          />
         </div>
         <!-- CATEGORY -->
         <div class="col-xxl-8 mt-2">
@@ -28,41 +39,78 @@
             </option>
           </select> -->
           <div class="row">
-            <div class="col-xxl-5" style=" flex-wrap: nowrap;">
-              <BaseSelect class="w-100" v-model="cateValue" :items="categoryStore.categories" textField="ប្រភេទនៃការរាយការណ៍ទំាងអស់"
-                labelField="name" valueField="id" />
+            <div class="col-xxl-5" style="flex-wrap: nowrap">
+              <BaseSelect
+                class="w-100"
+                v-model="cateValue"
+                :items="categoryStore.categories"
+                textField="ប្រភេទនៃការរាយការណ៍ទំាងអស់"
+                labelField="name"
+                valueField="id"
+              />
             </div>
           </div>
         </div>
         <div class="col-xxl-4 mt-1 text-end">
-          <BaseButton icon="stars" variant="outline_primary" @click="clearFilter">
+          <BaseButton
+            icon="stars"
+            variant="outline_primary"
+            @click="clearFilter"
+          >
             សម្អាតការតម្រៀប
           </BaseButton>
         </div>
       </div>
     </div>
-    <div class="mt-3 mb-5 align-items-center d-flex justify-content-between flex-wrap">
+    <div
+      class="mt-3 mb-5 align-items-center d-flex justify-content-between flex-wrap"
+    >
       <div class="btn-group bg-btn-group my-1">
-        <button class="btn-filter" :class="{ active: activeFilter === '' }" @click="btnFilterAllReport">
+        <button
+          class="btn-filter"
+          :class="{ active: activeFilter === '' }"
+          @click="btnFilterAllReport"
+        >
           ទាំងអស់
         </button>
 
-        <button class="btn-filter" :class="{ active: activeFilter === '1' }" @click="btnFilterReportType('1')">
+        <button
+          class="btn-filter"
+          :class="{ active: activeFilter === '1' }"
+          @click="btnFilterReportType('1')"
+        >
           បាត់
         </button>
 
-        <button class="btn-filter" :class="{ active: activeFilter === '2' }" @click="btnFilterReportType('2')">
+        <button
+          class="btn-filter"
+          :class="{ active: activeFilter === '2' }"
+          @click="btnFilterReportType('2')"
+        >
           រកឃើញ
         </button>
       </div>
       <div class="d-flex gap-2 align-items-center my-1">
         <div class="mt-2" style="width: 150px">
-          <BaseSelect class="w-100" v-model="sortDir" :items="sortDirData" labelField="name" valueField="id" />
+          <BaseSelect
+            class="w-100"
+            v-model="sortDir"
+            :items="sortDirData"
+            labelField="name"
+            valueField="id"
+          />
         </div>
       </div>
     </div>
-    <SectionPublicReports :page="1" :perPage="20" :search="search" :reportTypeId="typeValue" :categoryId="cateValue?.id"
-      :sortDir="sortDir"></SectionPublicReports>
+    <SectionPublicReports
+      :page="1"
+      :perPage="20"
+      :search="search"
+      :isSearching="isSearching"
+      :reportTypeId="typeValue"
+      :categoryId="cateValue?.id"
+      :sortDir="sortDir"
+    ></SectionPublicReports>
   </div>
 </template>
 <script setup>
@@ -86,6 +134,8 @@ const sortDirData = reactive([
   { id: "ASC", name: "ចាស់បំផុត" },
 ]);
 const sortDir = ref(sortDirData[0]);
+
+const isSearching = ref(false);
 onMounted(async () => {
   try {
     await Promise.all([categoryStore.fetchCategories()]);
@@ -94,8 +144,11 @@ onMounted(async () => {
     console.log(cateValue.value);
     // default active
     activeFilter.value = "";
+    isSearching.value = true;
   } catch (error) {
     console.error(error);
+  } finally {
+    isSearching.value = false;
   }
 });
 const btnFilterAllReport = async () => {

@@ -30,7 +30,7 @@
         :class="{ active: activeLink === 'report' }"
         @click.prevent="setActive('report')"
       >
-        របាយការណ៍
+        ការរាយការណ៍
       </router-link>
 
       <router-link
@@ -39,7 +39,7 @@
         :class="{ active: activeLink === 'category' }"
         @click.prevent="setActive('category')"
       >
-        ប្រភេទរបាយការណ៍
+        ប្រភេទ
       </router-link>
 
       <router-link
@@ -145,7 +145,7 @@
           <ul class="navbar-nav navbar-nav-custom">
             <li class="nav-item">
               <router-link
-                :to="{name: 'home'}"
+                :to="{ name: 'home' }"
                 class="nav-link-custom"
                 :class="{ active: activeLink === 'home' }"
                 @click.prevent="setActive('home')"
@@ -161,7 +161,7 @@
                 :class="{ active: activeLink === 'reports' }"
                 @click.prevent="setActive('reports')"
               >
-                របាយការណ៍
+                ការរាយការណ៍
               </router-link>
             </li>
 
@@ -172,7 +172,7 @@
                 :class="{ active: activeLink === 'categories' }"
                 @click.prevent="setActive('categories')"
               >
-                ប្រភេទរបាយការណ៍
+                ប្រភេទ
               </router-link>
             </li>
 
@@ -189,7 +189,7 @@
 
             <li class="nav-item">
               <router-link
-                :to="{name: 'contact_us'}"
+                :to="{ name: 'contact_us' }"
                 class="nav-link-custom"
                 :class="{ active: activeLink === 'contact' }"
                 @click.prevent="setActive('contact')"
@@ -257,7 +257,7 @@
                 @click.prevent="setActive('reports')"
               >
                 <i class="bi bi-file-earmark-text"></i>
-                <span>របាយការណ៍របស់ខ្ញុំ</span>
+                <span>ការរាយការណ៍របស់ខ្ញុំ</span>
               </router-link>
 
               <router-link
@@ -668,7 +668,7 @@ body {
 
 /* Underline From Center */
 .nav-link-custom {
-  color:#181212;
+  color: #181212;
   text-decoration: none;
   font-size: 1rem;
   font-weight: 400;

@@ -162,9 +162,11 @@
               <i class="bi bi-telegram me-3 fs-4 text-muted"></i>
               <div>
                 <small class="text-muted d-block">Telegram</small>
-                <span class="fw-bold">
-                  {{ reportStore.report.contactInformation?.telegramLink }}
-                </span>
+                <a :href="reportStore.report.contactInformation?.telegramLink">
+                  <span class="fw-bold">
+                    {{ reportStore.report.contactInformation?.telegramLink }}
+                  </span>
+                </a>
               </div>
             </div>
 

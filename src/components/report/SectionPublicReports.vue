@@ -33,32 +33,43 @@
       v-for="report in reportStore.publicReports"
       :key="report.id"
     >
-      <BaseCard
-        :category="report.category"
-        :reportType="report.reportType"
-        :eventDate="report.eventDate"
-        :title="report.title"
-        :location="report.locationText"
-        btnTitle="ព័ត៌មានលម្អិត"
-        @onClick="btnHandleReportDetail(report.id)"
+      <router-link
+        style="text-decoration: none"
+        :to="{ name: 'report-detail-user', params: { id: report.id } }"
       >
-        <template #image>
-          <div class="image">
-            <img
-              :src="
-                report.reportImages && report.reportImages.length > 0
-                  ? report.reportImages[0].name
-                  : defaultImage
-              "
-            />
-          </div>
-        </template>
-      </BaseCard>
+        <BaseCard
+          :category="report.category"
+          :reportType="report.reportType"
+          :eventDate="report.eventDate"
+          :title="report.title"
+          :location="report.locationText"
+          btnTitle="ព័ត៌មានលម្អិត"
+          @onClick="btnHandleReportDetail(report.id)"
+        >
+          <template #image>
+            <div class="image">
+              <img
+                :src="
+                  report.reportImages && report.reportImages.length > 0
+                    ? report.reportImages[0].name
+                    : defaultImage
+                "
+              />
+            </div>
+          </template>
+        </BaseCard>
+      </router-link>
     </div>
     <div
       v-if="hasMore && !reportStore.isLoadingPublicReports"
       class="col-12 text-center"
-      :class="{ 'd-none': !hasLoadMoreBtn }"
+      :class="{
+        'd-none':
+          !hasLoadMoreBtn ||
+          isSearching ||
+          reportStore.publicReports.length >=
+            reportStore.metaPublicReports?.totalItems,
+      }"
     >
       <BaseButton
         variant="primary"
@@ -100,6 +111,10 @@ const props = defineProps({
   hasLoadMoreBtn: {
     type: Boolean,
     default: true,
+  },
+  isSearching: {
+    type: Boolean,
+    default: false,
   },
   page: {
     type: Number,
