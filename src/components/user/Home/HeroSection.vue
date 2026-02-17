@@ -45,7 +45,7 @@
 
 .hero-section {
   position: relative;
-  padding: 150px 0 150px;
+  padding: 100px 0 100px;
   background: linear-gradient(
     135deg,
     #f5f0ff 0%,
@@ -130,7 +130,7 @@
   overflow: hidden;
   border-radius: 20px;
   box-shadow: 0 15px 40px rgba(124, 58, 237, 0.1);
-  background: white;
+  /* background: white; */
   transition: transform 0.4s ease;
 }
 
