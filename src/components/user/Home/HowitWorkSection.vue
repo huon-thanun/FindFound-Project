@@ -22,7 +22,6 @@
         <div class="col-md-4" data-aos="fade-up" data-aos-delay="100">
           <div class="modern-step-card text-center">
             <div class="step-icon-wrapper mb-4">
-              <div class="step-number shadow-lg">១</div>
               <div class="step-bg-icon shadow-sm">
                 <i class="bi bi-megaphone"></i>
               </div>
@@ -38,7 +37,6 @@
         <div class="col-md-4" data-aos="fade-up" data-aos-delay="200">
           <div class="modern-step-card text-center featured-step">
             <div class="step-icon-wrapper mb-4">
-              <div class="step-number shadow-lg">២</div>
               <div class="step-bg-icon shadow-sm">
                 <i class="bi bi-search"></i>
               </div>
@@ -54,7 +52,6 @@
         <div class="col-md-4" data-aos="fade-up" data-aos-delay="300">
           <div class="modern-step-card text-center">
             <div class="step-icon-wrapper mb-4">
-              <div class="step-number shadow-lg">៣</div>
               <div class="step-bg-icon shadow-sm">
                 <i class="bi bi-hand-thumbs-up"></i>
               </div>

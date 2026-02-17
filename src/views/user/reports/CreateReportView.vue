@@ -898,7 +898,6 @@ const handleUploadImg = () => {
         .header-page {
             position: relative;
             width: 100%;
-            max-width: 1440px;
             background: linear-gradient(135deg, #f8f2ff 0%, #f0e8ff 50%, #e8deff 100%);;
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
