@@ -328,10 +328,10 @@ const btnHandleReportDetail = (reportId) => {
 .image-selection-display .image-selection:nth-child(1) {
   border-top-left-radius: 12px;
 }
-.image-selection-display .image-selection:hover {
-  /* transform: translate(-2px, -3px); */
-  outline: 1px solid red;
-}
+/*.image-selection-display .image-selection:hover {
+  /* transform: translate(-2px, -3px); 
+  outline: 1px solid red;    
+}*/
 .current-img-display {
   overflow: hidden;
   border-top-right-radius: 12px;

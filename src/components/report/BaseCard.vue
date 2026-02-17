@@ -8,7 +8,8 @@
         class="report-type tag-box-shadow-out"
         :class="{ found: reportType.id == 2, lost: reportType.id == 1 }"
       >
-        {{ reportType.name }}
+        <span v-if="reportType.name === 'LOST'"> បាត់ </span>
+        <span v-else-if="reportType.name === 'FOUND'"> រកឃើញ </span>
       </div>
     </div>
     <div class="content-box">
@@ -47,12 +48,12 @@ import BaseButton from "../base/BaseButton.vue";
 const props = defineProps({
   category: {
     type: Object,
-    default: { id: 0, name: "Unknown" },
+    default: { id: 0, name: "មិនស្គាល់" },
   },
   reportType: {
     type: Object,
     default: "-",
-    default: { id: 0, name: "Null" },
+    default: { id: 0, name: "មិនមានប្រភេទ" },
   },
   eventDate: {
     type: String,
@@ -60,16 +61,16 @@ const props = defineProps({
   },
   title: {
     type: String,
-    default: "No Title",
+    default: "មិនមានចំណងជើង",
     required: true,
   },
   location: {
     type: String,
-    default: "No Location",
+    default: "មិនមានទីតាំង",
   },
   btnTitle: {
     type: String,
-    default: "Button",
+    default: "ប៊ូតុង",
   },
 });
 const emits = defineEmits(["onClick"]);
