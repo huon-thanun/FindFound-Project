@@ -6,9 +6,9 @@
 
     <div class="container py-5">
       <div class="text-center mb-5 pb-lg-4">
-        <span class="text-overline mb-2">ចូលរួមក្នុងសហគមន៍យើង</span>
+        <span class="badge-mini text-overline mb-2">ចូលរួមក្នុងសហគមន៍យើង</span>
         <h2 class="display-5 fw-bold khmer-title text-purple-dark">
-          អំពី <span class="text-highlight">គោលបំណង</span> របស់យើង
+          <span class="text-highlight">គោលបំណង</span> អំពីសហគមន៍របស់យើង
         </h2>
         <p class="khmer-body text-muted mx-auto mt-3" style="max-width: 650px">
           យើងផ្តល់ជូនលើសពីសេវាកម្មស្វែងរក។ វេទិកានេះគឺជាទីកន្លែងដែល ទំនុកចិត្ត
@@ -21,8 +21,8 @@
         <div class="col-lg-6">
           <div class="image-premium-wrapper">
             <img
-              src="https://i.pinimg.com/1200x/c0/76/f5/c076f5e99914587b7b33d4c81dd463cb.jpg"
-              class="img-main"
+              src="../../../assets/images/home/home1.png"
+              class="img-main object-fit-cover" height="400px"
               alt="Community Connection"
             />
           </div>
@@ -38,15 +38,11 @@
             </p>
 
             <div class="feature-list">
-              <div class="f-item">
-                <div class="f-icon"><i class="bi bi-patch-check"></i></div>
-                <span class="khmer-body-bold"
-                  >ប្រព័ន្ធផ្ទៀងផ្ទាត់ច្បាស់លាស់</span
-                >
+              <div class="f-item mb-3">
+                <div class="f-icon"><i class="bi bi-patch-check"></i> ប្រព័ន្ធផ្ទៀងផ្ទាត់ច្បាស់លាស់</div>
               </div>
               <div class="f-item">
-                <div class="f-icon"><i class="bi bi-lightning-charge"></i></div>
-                <span class="khmer-body-bold">ជូនដំណឹងរហ័សបំផុត</span>
+                <div class="f-icon"><i class="bi bi-lightning-charge"></i> ជូនដំណឹងរហ័សបំផុត</div>
               </div>
             </div>
 
@@ -125,10 +121,7 @@ const values = [
 /* --- IMAGE WRAPPER --- */
 .image-premium-wrapper {
   position: relative;
-  padding: 15px;
-  background: rgba(99, 102, 241, 0.03);
   border-radius: 40px;
-  border: 1px solid rgba(99, 102, 241, 0.1);
 }
 
 .img-main {
@@ -153,8 +146,8 @@ const values = [
 }
 
 .card-clean-purple:hover {
-  border-color: #6366f1;
-  background: #6366f1;
+  border-color: var(--primary-color);
+  background: var(--primary-color);
   box-shadow: 0 20px 25px -5px rgba(99, 102, 241, 0.2);
   transform: translateY(-8px);
 }
@@ -185,7 +178,7 @@ const values = [
 
 /* --- BUTTON --- */
 .btn-premium-purple {
-  background: #1e1b4b; /* Deep Navy */
+  background: var(--primary-color); /* Deep Navy */
   color: white;
   border: none;
   padding: 16px 32px;
@@ -199,7 +192,8 @@ const values = [
 }
 
 .btn-premium-purple:hover {
-  background: #6366f1;
+  background: var(--primary-color);
+  opacity: 0.8;
   box-shadow: 0 10px 15px -3px rgba(99, 102, 241, 0.3);
   transform: translateX(5px);
 }
@@ -217,5 +211,16 @@ const values = [
     transparent 70%
   );
   pointer-events: none;
+}
+.badge-mini {
+  display: inline-block;
+  padding: 6px 16px;
+  background: rgba(59, 30, 84, 0.1);
+  color: #3b1e54;
+  border-radius: 50px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 </style>

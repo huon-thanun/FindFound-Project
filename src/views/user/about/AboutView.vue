@@ -210,7 +210,7 @@ onMounted(() => {
 <template>
   <div class="about-page">
     <!-- Hero Banner -->
-<section class="hero-section">
+    <section class="hero-section">
       <div class="hero-bg"></div>
 
       <div class="floating-shapes">
@@ -222,27 +222,36 @@ onMounted(() => {
       <div class="container position-relative">
         <div class="row align-items-center pt-5 g-5 py-lg-6">
           <!-- Text Column -->
-          <div class="col-lg-7 py-5 px-5 m-0 hero-text-col" data-aos="fade-right">
+          <div
+            class="col-lg-7 py-5 px-5 m-0 hero-text-col"
+            data-aos="fade-right"
+          >
             <div class="badge-modern mb-4">
               <i class="bi bi-people-fill me-2"></i>
               អំពីពួកយើង
             </div>
             <h1 class="hero-title">
-             ស្វែងយល់អំពី <span class="gradient-text">ពួកយើង</span>
+              ស្វែងយល់អំពី <span class="gradient-text">ពួកយើង</span>
               <br class="d-none d-md-block" />
               និងបេសកកម្មរបស់យើង
             </h1>
             <p class="hero-subtitle">
-              យើងជាក្រុមអ្នកអភិវឌ្ឍន៍វ័យក្មេងដែលចង់ប្រើបច្ចេកវិទ្យាដើម្បីជួយសហគមន៍ និងធ្វើឱ្យការស្វែងរកវត្ថុបាត់បង់កាន់តែងាយស្រួល។
+              យើងជាក្រុមអ្នកអភិវឌ្ឍន៍វ័យក្មេងដែលចង់ប្រើបច្ចេកវិទ្យាដើម្បីជួយសហគមន៍
+              និងធ្វើឱ្យការស្វែងរកវត្ថុបាត់បង់កាន់តែងាយស្រួល។
             </p>
           </div>
 
           <!-- Illustration Column -->
-          <div class="col-lg-5 hero-illustration d-flex justify-content-center m-0 p-0" data-aos="fade-left"
-            data-aos-delay="200">
+          <div
+            class="col-lg-5 hero-illustration d-flex justify-content-center m-0 p-0"
+            data-aos="fade-left"
+            data-aos-delay="200"
+          >
             <img
               src="../../../assets/images/about/hero-banner.png"
-              alt="Contact Us Illustration" class="hero-img m-0 img-fluid" />
+              alt="Contact Us Illustration"
+              class="hero-img m-0 img-fluid"
+            />
           </div>
         </div>
       </div>
@@ -495,9 +504,11 @@ onMounted(() => {
 .hero-bg {
   position: absolute;
   inset: 0;
-  background: radial-gradient(circle at 30% 70%,
-      rgba(168, 85, 247, 0.08) 0%,
-      transparent 60%);
+  background: radial-gradient(
+    circle at 30% 70%,
+    rgba(168, 85, 247, 0.08) 0%,
+    transparent 60%
+  );
   pointer-events: none;
 }
 
@@ -536,7 +547,6 @@ onMounted(() => {
 }
 
 @keyframes float-slow {
-
   0%,
   100% {
     transform: translate(0, 0) rotate(0deg);
