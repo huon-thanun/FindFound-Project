@@ -1,7 +1,7 @@
 <template>
   <div class="main-contact">
     <!-- Hero Banner -->
-    <section class="hero-section">
+     <section class="hero-section">
       <div class="hero-bg"></div>
 
       <div class="floating-shapes">
@@ -11,9 +11,9 @@
       </div>
 
       <div class="container position-relative">
-        <div class="row align-items-center g-5 py-5 py-lg-6">
+        <div class="row align-items-center pt-5 g-5 py-lg-6">
           <!-- Text Column -->
-          <div class="col-lg-6 hero-text-col" data-aos="fade-right">
+          <div class="col-lg-7 py-5 px-5 m-0 hero-text-col" data-aos="fade-right">
             <div class="badge-modern mb-4">
               <i class="bi bi-chat-dots-fill me-2"></i>
               ទំនាក់ទំនង
@@ -21,25 +21,20 @@
             <h1 class="hero-title">
               ទាក់ទងមក <span class="gradient-text">ពួកយើង</span>
               <br class="d-none d-md-block" />
-              យើងរីករាយជួយអ្នកគ្រប់ពេលវេលា
+              យើងរីករាយនិងជួយអ្នក
             </h1>
             <p class="hero-subtitle">
-              ផ្ញើសារមកយើងឥឡូវនេះ — យើងនឹងឆ្លើយតបឆាប់បំផុត និងវិជ្ជាជីវៈបំផុត។
-              សេវាកម្ម 24/7 • សុវត្ថិភាពខ្ពស់ • ឆ្លើយតបក្នុងរយៈពេលខ្លី
+              ផ្ញើសារមកយើងឥឡូវនេះ យើងនឹងឆ្លើយតបយ៉ាងឆាប់រហ័សបំផុត។
+              សេវាកម្ម 24/7 សុវត្ថិភាពខ្ពស់ ឆ្លើយតបក្នុងរយៈពេលខ្លី។
             </p>
           </div>
 
           <!-- Illustration Column -->
-          <div
-            class="col-lg-6 hero-illustration"
-            data-aos="fade-left"
-            data-aos-delay="200"
-          >
+          <div class="col-lg-5 hero-illustration d-flex justify-content-center m-0 p-0" data-aos="fade-left"
+            data-aos-delay="200">
             <img
-              src="../../../assets/images/contact/hero-banner_removebg.png"
-              alt="Contact Us Illustration"
-              class="hero-img img-fluid"
-            />
+              src="../../../assets/images/contact/hero-banner.png"
+              alt="Contact Us Illustration" class="hero-img m-0 img-fluid" />
           </div>
         </div>
       </div>
@@ -231,7 +226,7 @@
           <a
             href="https://www.google.com/maps/search/?api=1&query=Street+313%2C+Phnom+Penh%2C+Cambodia"
             target="_blank"
-            class="btn btn-outline-primary btn-lg px-5 py-3"
+            class="btn goToMap btn-lg px-5 py-3"
           >
             បើកនៅក្នុង Google Maps <i class="bi bi-box-arrow-up-right ms-2"></i>
           </a>
@@ -284,17 +279,15 @@ const handleSubmit = async () => {
   overflow: hidden;
   border-radius: 0 0 60px 60px;
   /* padding: 100px 0 180px; */
-  margin: 0 0 120px;
+  margin: 0 0 60px;
 }
 
 .hero-bg {
   position: absolute;
   inset: 0;
-  background: radial-gradient(
-    circle at 30% 70%,
-    rgba(168, 85, 247, 0.08) 0%,
-    transparent 60%
-  );
+  background: radial-gradient(circle at 30% 70%,
+      rgba(168, 85, 247, 0.08) 0%,
+      transparent 60%);
   pointer-events: none;
 }
 
@@ -314,6 +307,7 @@ const handleSubmit = async () => {
   left: -20%;
   animation-delay: 0s;
 }
+
 .shape-2 {
   width: 560px;
   height: 560px;
@@ -322,6 +316,7 @@ const handleSubmit = async () => {
   animation-delay: 25s;
   border-radius: 48% 52% 55% 45%;
 }
+
 .shape-3 {
   width: 360px;
   height: 360px;
@@ -331,25 +326,29 @@ const handleSubmit = async () => {
 }
 
 @keyframes float-slow {
+
   0%,
   100% {
     transform: translate(0, 0) rotate(0deg);
   }
+
   25% {
     transform: translate(60px, -80px) rotate(5deg);
   }
+
   50% {
     transform: translate(-70px, 90px) rotate(-6deg);
   }
+
   75% {
     transform: translate(80px, 60px) rotate(4deg);
   }
 }
 
 .hero-title {
-  font-size: clamp(2.6rem, 6vw, 4.2rem);
+  font-size: clamp(2.6rem, 6vw, 4rem);
   font-weight: 800;
-  line-height: 1.08;
+  line-height: 1.3;
   margin-bottom: 1.5rem;
 }
 
@@ -382,7 +381,7 @@ const handleSubmit = async () => {
 }
 
 .hero-img {
-  max-width: 110%;
+  max-width: 100%;
   margin-left: -10%;
   filter: drop-shadow(0 30px 70px rgba(0, 0, 0, 0.16)) brightness(1.03);
   transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -529,6 +528,15 @@ const handleSubmit = async () => {
   font-size: clamp(2.2rem, 5vw, 3.2rem);
   font-weight: 800;
   color: #111;
+}
+.goToMap{
+  border: 1px solid var(--secondary-color);
+  color: var(--secondary-color);
+  transition: 0.2s;
+}
+.goToMap:hover{
+  background: var(--secondary-color);
+  color: white;
 }
 
 /* Responsive */
