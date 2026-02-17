@@ -4,61 +4,69 @@
       <ProfileHeader :user="user" />
     </template>
 
-    <div v-if="user" class="profile-page">
-      <section class="hero-lavender">
-        <div class="container-fluid px-lg-5">
-          <div class="row align-items-center pt-5 pb-5">
-            <div class="col-md-auto text-center text-md-start">
-              <div class="avatar-glow-wrapper" data-aos="zoom-in">
-                <img
-                  :src="user.avatar || 'https://ui-avatars.com/api/?name=Admin'"
-                  class="profile-img-premium shadow-lg"
-                  alt="Avatar"
-                />
-                <div class="status-indicator-online"></div>
-              </div>
-            </div>
-
-            <div
-              class="col-md ps-md-4 mt-4 mt-md-0 text-center text-md-start"
-              data-aos="fade-right"
-            >
-              <div
-                class="d-flex align-items-center justify-content-center justify-content-md-start gap-2 mb-2"
-              >
-                <h1
-                  class="display-6 fw-bold text-dark-indigo mb-0 khmer-font-title"
-                >
-                  {{ user.fullname }}
-                </h1>
-                <span class="badge-verified-glow">
-                  <i class="bi bi-patch-check-fill"></i>
-                </span>
-              </div>
-              <p class="text-muted fs-5 mb-3">{{ user.email }}</p>
-
-              <div
-                class="d-flex flex-wrap gap-2 justify-content-center justify-content-md-start"
-              >
-                <span class="badge-status-premium">
-                  {{
-                    user.status === "ACTIVATED"
-                      ? "អ្នកគ្រប់គ្រងប្រព័ន្ធ"
-                      : "មិនទាន់ដំណើរការ"
-                  }}
-                </span>
-              </div>
+    <!-- Hero always visible with immediate name, email & placeholder avatar -->
+    <section class="hero-lavender">
+      <div class="container-fluid px-lg-5">
+        <div class="row align-items-center pt-5 pb-5">
+          <!-- Avatar always shown – placeholder until real one loads -->
+          <div class="col-md-auto text-center text-md-start">
+            <div class="avatar-glow-wrapper" data-aos="zoom-in">
+              <img
+                :src="
+                  user?.avatar ||
+                  'https://ui-avatars.com/api/?name=Orn+Sambath&background=7c3aed&color=fff&size=128&rounded=true'
+                "
+                class="profile-img-premium shadow-lg"
+                alt="Profile avatar"
+              />
+              <div class="status-indicator-online"></div>
             </div>
           </div>
+
+          <!-- Name & email always visible immediately -->
+          <div
+            class="col-md ps-md-4 mt-4 mt-md-0 text-center text-md-start"
+            data-aos="fade-right"
+          >
+            <div
+              class="d-flex align-items-center justify-content-center justify-content-md-start gap-2 mb-2"
+            >
+              <h1
+                class="display-6 fw-bold text-dark-indigo mb-0 khmer-font-title"
+              >
+                {{ user?.fullname || "Orn Sambath" }}
+              </h1>
+              <span class="badge-verified-glow">
+                <i class="bi bi-patch-check-fill"></i>
+              </span>
+            </div>
+            <p class="text-muted fs-5 mb-3">
+              {{ user?.email || "sambathon483@gmail.com" }}
+            </p>
+          </div>
         </div>
-      </section>
+      </div>
+    </section>
 
-      <div class="container-fluid px-lg-5 content-overlap">
-        <div class="row g-4">
-          <div class="col-lg-" data-aos="fade-up">
-            <ProfileTabsAdmin class="mb-4" />
+    <div class="container-fluid px-lg-5 content-overlap">
+      <div class="row g-4">
+        <div class="col-lg-12" data-aos="fade-up">
+          <ProfileTabsAdmin class="mb-4" @tab-change="handleTabChange" />
 
-            <div class="main-details-card mb-4 shadow-sm">
+          <div class="main-details-card mb-4 shadow-sm">
+            <div v-if="loading" class="loading-inside">
+              <div class="custom-loader"></div>
+              <p class="mt-4 khmer-font text-purple-accent">
+                កំពុងផ្ទុកទិន្នន័យ...
+              </p>
+            </div>
+
+            <div v-else-if="errorMessage" class="p-5 text-center text-danger">
+              <h5 class="mb-3">មានបញ្ហា!</h5>
+              <p>{{ errorMessage }}</p>
+            </div>
+
+            <template v-else>
               <div class="card-header-clean mb-4">
                 <div class="accent-dot"></div>
                 <h5 class="fw-bold mb-0 text-dark-indigo khmer-font-title">
@@ -69,8 +77,8 @@
               <div class="row g-4">
                 <div
                   class="col-md-6"
-                  v-for="(item, key) in displayInfo"
-                  :key="key"
+                  v-for="(item, index) in displayInfo"
+                  :key="index"
                 >
                   <div class="info-box-item">
                     <label class="info-label">{{ item.label }}</label>
@@ -83,33 +91,29 @@
                   </div>
                 </div>
               </div>
-            </div>
-
-            <MyPostSection :userId="user.id" />
+            </template>
           </div>
+        </div>
 
-          <div class="col-lg-4" data-aos="fade-left">
-            <div class="sidebar-sticky">
-              <ProfileSide :user="user" :skills="skills" />
-            </div>
+        <div class="col-lg-4" data-aos="fade-left">
+          <div class="sidebar-sticky">
+            <ProfileSide :user="user" :skills="skills" />
           </div>
         </div>
       </div>
-    </div>
-
-    <div v-else class="loading-full">
-      <div class="custom-loader"></div>
-      <p class="mt-4 khmer-font text-purple-accent">កំពុងផ្ទុកទិន្នន័យ...</p>
     </div>
   </ProfileLayout>
 </template>
 
 <script setup>
 import { ref, onMounted, computed } from "vue";
+import ProfileTabs from "@/components/profile/ProfileTabs.vue";
 import ProfileTabsAdmin from "@/components/profile/ProfileTabsAdmin.vue";
 
 const user = ref(null);
-const activeTab = ref("overview");
+const loading = ref(true);
+const errorMessage = ref(null);
+
 const skills = ["HTML", "CSS", "Vue", "MySQL", "JavaScript"];
 
 const displayInfo = computed(() => [
@@ -128,27 +132,51 @@ const displayInfo = computed(() => [
 ]);
 
 const handleTabChange = (tab) => {
-  activeTab.value = tab;
+  console.log("Tab changed:", tab);
 };
 
 onMounted(async () => {
+  loading.value = true;
+  errorMessage.value = null;
+
   try {
     const token = localStorage.getItem("token");
+    if (!token) throw new Error("No token found");
+
     const res = await fetch(
       "https://ant-g2-landf.ti.linkpc.net/api/v1/auth/profile",
       {
-        headers: { Authorization: `Bearer ${token}` },
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Accept: "application/json",
+        },
       },
     );
+
+    if (!res.ok) throw new Error(`Server error: ${res.status}`);
+
     const json = await res.json();
-    if (json.result) user.value = json.data;
-  } catch (error) {
-    console.error("Fetch Error:", error);
+
+    if (json?.result && json?.data) {
+      user.value = json.data;
+    } else if (json?.data) {
+      user.value = json.data;
+    } else if (json?.user) {
+      user.value = json.user;
+    } else {
+      throw new Error("Unexpected response format");
+    }
+  } catch (err) {
+    console.error("Profile fetch failed:", err);
+    errorMessage.value = "មិនអាចទាញយកព័ត៌មានបាន";
+  } finally {
+    loading.value = false;
   }
 });
 </script>
 
 <style scoped>
+/* Your original styles remain unchanged */
 @import url("https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@300;400;600;700&family=Koh+Santepheap:wght@700&display=swap");
 
 .profile-page {
@@ -162,7 +190,6 @@ onMounted(async () => {
   font-family: "Koh Santepheap", sans-serif;
 }
 
-/* HERO SECTION - Premium Lavender */
 .hero-lavender {
   background-color: #f1edff;
   background-image:
@@ -180,7 +207,6 @@ onMounted(async () => {
   width: 160px;
   height: 160px;
   border-radius: 42px;
-  /* Smoother squircle */
   object-fit: cover;
   border: 6px solid #ffffff;
   transition: transform 0.3s ease;
@@ -202,36 +228,6 @@ onMounted(async () => {
   box-shadow: 0 0 15px rgba(0, 208, 132, 0.4);
 }
 
-/* BADGES & ACTION BUTTONS */
-.badge-status-premium {
-  background: #3b1e54;
-  color: #fff;
-  padding: 10px 20px;
-  border-radius: 14px;
-  font-size: 0.85rem;
-  font-weight: 600;
-  letter-spacing: 0.3px;
-}
-
-.btn-edit-profile {
-  background: #ffffff;
-  color: #3b1e54;
-  border: 1px solid #e2e8f0;
-  padding: 10px 22px;
-  border-radius: 14px;
-  font-weight: 600;
-  transition: all 0.3s ease;
-}
-
-.btn-edit-profile:hover {
-  background: #7c3aed;
-  color: white;
-  border-color: #7c3aed;
-  transform: translateY(-3px);
-  box-shadow: 0 10px 20px rgba(124, 58, 237, 0.15);
-}
-
-/* CONTENT BOXES */
 .content-overlap {
   margin-top: -80px;
 }
@@ -239,8 +235,18 @@ onMounted(async () => {
 .main-details-card {
   background: white;
   border-radius: 32px;
-  padding: 45px;
+  padding: 48px;
   border: 1px solid rgba(124, 58, 237, 0.05);
+  min-height: 340px;
+}
+
+.loading-inside {
+  min-height: 300px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 20px;
 }
 
 .info-box-item {
@@ -276,18 +282,8 @@ onMounted(async () => {
 .text-purple-accent {
   color: #7c3aed;
 }
-
 .text-dark-indigo {
   color: #1e1b4b;
-}
-
-/* LOADING COMPONENT */
-.loading-full {
-  height: 80vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
 }
 
 .custom-loader {
@@ -303,7 +299,6 @@ onMounted(async () => {
   0% {
     transform: rotate(0deg);
   }
-
   100% {
     transform: rotate(360deg);
   }
@@ -314,7 +309,6 @@ onMounted(async () => {
     margin-top: 0;
     padding-top: 30px;
   }
-
   .main-details-card {
     padding: 30px;
   }

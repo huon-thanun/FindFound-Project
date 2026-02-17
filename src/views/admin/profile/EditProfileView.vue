@@ -4,176 +4,199 @@
       <ProfileHeader :user="user" />
     </template>
 
-    <div v-if="!user" class="loading-full">
-      <div class="custom-loader"></div>
-      <p class="mt-4 khmer-font text-purple-accent">កំពុងផ្ទុកទិន្នន័យ...</p>
-    </div>
-
-    <div v-else class="profile-page">
-      <section class="hero-lavender">
-        <div class="container-fluid px-lg-5">
-          <div class="row align-items-center pt-5 pb-5">
-            <div class="col-md-auto text-center text-md-start">
-              <div class="avatar-glow-wrapper" data-aos="zoom-in">
-                <img
-                  :src="
-                    form.avatar ||
-                    user.avatar ||
-                    `https://ui-avatars.com/api/?name=${form.fullname}`
-                  "
-                  class="profile-img-premium shadow-lg"
-                  alt="Avatar"
-                />
-                <label for="avatarInput" class="avatar-edit-badge">
-                  <i class="bi bi-camera-fill"></i>
-                </label>
-                <input
-                  type="file"
-                  id="avatarInput"
-                  class="d-none"
-                  @change="onAvatarChange"
-                  accept="image/*"
-                />
-              </div>
+    <!-- Hero always visible – placeholder + fallback immediately -->
+    <section class="hero-lavender">
+      <div class="container-fluid px-lg-5">
+        <div class="row align-items-center pt-5 pb-5">
+          <div class="col-md-auto text-center text-md-start">
+            <div class="avatar-glow-wrapper" data-aos="zoom-in">
+              <img
+                :src="
+                  previewAvatar ||
+                  form.avatar ||
+                  user?.avatar ||
+                  `https://ui-avatars.com/api/?name=${form.fullname || 'Orn Sambath'}&background=7c3aed&color=fff&size=128&rounded=true`
+                "
+                class="profile-img-premium shadow-lg"
+                alt="Avatar"
+              />
+              <label for="avatarInput" class="avatar-edit-badge">
+                <i class="bi bi-camera-fill"></i>
+              </label>
+              <input
+                type="file"
+                id="avatarInput"
+                class="d-none"
+                @change="onAvatarChange"
+                accept="image/*"
+              />
             </div>
+          </div>
+
+          <div
+            class="col-md ps-md-4 mt-4 mt-md-0 text-center text-md-start"
+            data-aos="fade-right"
+          >
+            <h1
+              class="display-6 fw-bold text-dark-indigo mb-1 khmer-font-title"
+            >
+              {{ form.fullname || user?.fullname || "Orn Sambath" }}
+            </h1>
+            <p class="text-muted fs-5 mb-3">
+              {{ form.email || user?.email || "sambathon483@gmail.com" }}
+            </p>
 
             <div
-              class="col-md ps-md-4 mt-4 mt-md-0 text-center text-md-start"
-              data-aos="fade-right"
+              class="d-flex flex-wrap gap-2 justify-content-center justify-content-md-start"
             >
-              <h1
-                class="display-6 fw-bold text-dark-indigo mb-1 khmer-font-title"
+              <button
+                class="btn-delete-simple"
+                @click="showConfirmPopup = true"
               >
-                {{ user.fullname }}
-              </h1>
-              <p class="text-muted fs-5 mb-3">{{ user.email }}</p>
+                <i class="bi bi-trash3 me-2"></i> លុបរូបភាពប្រើប្រាស់
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
 
-              <div
-                class="d-flex flex-wrap gap-2 justify-content-center justify-content-md-start"
-              >
-                <button class="btn-delete-simple" @click="deleteAvatar">
-                  <i class="bi bi-trash3 me-2"></i> លុបរូបភាពប្រើប្រាស់
+    <div class="container-fluid px-lg-5 content-overlap">
+      <div class="row g-4">
+        <div class="col-lg-12" data-aos="fade-up">
+          <ProfileTabsAdmin />
+
+          <div class="main-details-card mb-4 shadow-sm">
+            <div class="card-header-clean mb-4">
+              <div class="accent-dot"></div>
+              <h5 class="fw-bold mb-0 text-dark-indigo khmer-font-title">
+                កែប្រែព័ត៌មានផ្ទាល់ខ្លួន
+              </h5>
+            </div>
+
+            <!-- Loading only inside the card – same style as profile.vue -->
+            <div v-if="loading" class="loading-inside">
+              <div class="custom-loader"></div>
+              <p class="mt-4 khmer-font text-purple-accent">
+                កំពុងផ្ទុកទិន្នន័យ...
+              </p>
+            </div>
+
+            <div v-else class="row g-4">
+              <div class="col-md-6">
+                <div class="info-box-item-input">
+                  <label class="info-label">ឈ្មោះពេញ *</label>
+                  <div class="input-with-icon">
+                    <i class="bi bi-person text-purple-accent"></i>
+                    <input
+                      v-model="form.fullname"
+                      @input="validateFullname"
+                      type="text"
+                      class="clean-input"
+                      :class="{ 'is-invalid': errors.fullname }"
+                      placeholder="ឈ្មោះពេញ"
+                    />
+                  </div>
+                  <small v-if="errors.fullname" class="text-danger">{{
+                    errors.fullname
+                  }}</small>
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <div class="info-box-item-input disabled-box">
+                  <label class="info-label"
+                    >អាសយដ្ឋានអ៊ីមែល (មិនអាចប្តូរបាន)</label
+                  >
+                  <div class="input-with-icon">
+                    <i class="bi bi-envelope text-muted"></i>
+                    <input
+                      v-model="form.email"
+                      type="email"
+                      class="clean-input"
+                      disabled
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <div class="info-box-item-input">
+                  <label class="info-label">លេខទូរស័ព្ទ</label>
+                  <div class="input-with-icon">
+                    <i class="bi bi-phone text-purple-accent"></i>
+                    <input
+                      v-model="form.phoneNumber"
+                      @input="validatePhone"
+                      type="text"
+                      class="clean-input"
+                      :class="{ 'is-invalid': errors.phoneNumber }"
+                      placeholder="012345678"
+                    />
+                  </div>
+                  <small v-if="errors.phoneNumber" class="text-danger">{{
+                    errors.phoneNumber
+                  }}</small>
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <div class="info-box-item-input">
+                  <label class="info-label">តំណភ្ជាប់ Telegram</label>
+                  <div class="input-with-icon">
+                    <i class="bi bi-send text-purple-accent"></i>
+                    <input
+                      v-model="form.telegramLink"
+                      @input="validateTelegram"
+                      type="text"
+                      class="clean-input"
+                      :class="{ 'is-invalid': errors.telegramLink }"
+                      placeholder="https://t.me/username"
+                    />
+                  </div>
+                  <small v-if="errors.telegramLink" class="text-danger">{{
+                    errors.telegramLink
+                  }}</small>
+                </div>
+              </div>
+
+              <div class="col-12 mt-4">
+                <button
+                  @click="updateProfile"
+                  class="btn-save-premium"
+                  :disabled="saving || !isFormValid || !isDirty"
+                >
+                  <span
+                    v-if="saving"
+                    class="spinner-border spinner-border-sm me-2"
+                  ></span>
+                  <i v-else class="bi bi-cloud-arrow-up-fill me-2"></i>
+                  រក្សាទុក
                 </button>
               </div>
             </div>
           </div>
         </div>
-      </section>
 
-      <div class="container-fluid px-lg-5 content-overlap">
-        <div class="row g-4">
-          <div class="col-lg-12" data-aos="fade-up">
-            <!-- <ProfileTabs class="mb-4" /> -->
-            <ProfileTabsAdmin class="mb-4" />
-
-            <div class="main-details-card mb-4 shadow-sm">
-              <div class="card-header-clean mb-4">
-                <div class="accent-dot"></div>
-                <h5 class="fw-bold mb-0 text-dark-indigo khmer-font-title">
-                  កែប្រែព័ត៌មានផ្ទាល់ខ្លួន
-                </h5>
-              </div>
-
-              <div class="row g-4">
-                <div class="col-md-6">
-                  <div class="info-box-item-input">
-                    <label class="info-label">ឈ្មោះពេញ</label>
-                    <div class="input-with-icon">
-                      <i class="bi bi-person text-purple-accent"></i>
-                      <input
-                        v-model="form.fullname"
-                        type="text"
-                        class="clean-input"
-                        placeholder="ឈ្មោះពេញ"
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                <div class="col-md-6">
-                  <div class="info-box-item-input disabled-box">
-                    <label class="info-label"
-                      >អាសយដ្ឋានអ៊ីមែល (មិនអាចប្តូរបាន)</label
-                    >
-                    <div class="input-with-icon">
-                      <i class="bi bi-envelope text-muted"></i>
-                      <input
-                        :value="user.email"
-                        type="email"
-                        class="clean-input"
-                        disabled
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                <div class="col-md-6">
-                  <div class="info-box-item-input">
-                    <label class="info-label">លេខទូរស័ព្ទ</label>
-                    <div class="input-with-icon">
-                      <i class="bi bi-phone text-purple-accent"></i>
-                      <input
-                        v-model="form.phoneNumber"
-                        type="text"
-                        class="clean-input"
-                        placeholder="បញ្ចូលលេខទូរស័ព្ទ"
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                <div class="col-md-6">
-                  <div class="info-box-item-input">
-                    <label class="info-label">តំណភ្ជាប់ Telegram</label>
-                    <div class="input-with-icon">
-                      <i class="bi bi-send text-purple-accent"></i>
-                      <input
-                        v-model="form.telegramLink"
-                        type="text"
-                        class="clean-input"
-                        placeholder="ឧទាហរណ៍: https://t.me/username"
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                <div class="col-12 mt-4">
-                  <button
-                    @click="updateProfile"
-                    class="btn-save-premium"
-                    :disabled="loading"
-                  >
-                    <span
-                      v-if="loading"
-                      class="spinner-border spinner-border-sm me-2"
-                    ></span>
-                    <i v-else class="bi bi-cloud-arrow-up-fill me-2"></i>
-                    រក្សាទុកការផ្លាស់ប្តូរ
-                  </button>
-                </div>
-              </div>
-            </div>
+        <!-- Sidebar always visible -->
+        <div class="col-lg-4" data-aos="fade-left">
+          <div class="sidebar-sticky">
+            <ProfileSide :user="user" :skills="skills" />
           </div>
         </div>
       </div>
     </div>
 
-    <div v-if="showPopup" class="popup-backdrop">
-      <div class="popup-card shadow-lg animate-zoom">
-        <div
-          class="popup-icon"
-          :class="popupType === 'success' ? 'text-success' : 'text-danger'"
-        >
-          <i v-if="popupType === 'success'" class="bi bi-check-circle-fill"></i>
-          <i v-else class="bi bi-exclamation-circle-fill"></i>
-        </div>
-        <h5 class="fw-bold">
-          {{ popupType === "success" ? "ជោគជ័យ!" : "បរាជ័យ!" }}
-        </h5>
-        <p class="text-muted mb-0">{{ popupMessage }}</p>
-      </div>
-    </div>
+    <!-- Toast -->
+    <BaseToast
+      v-model="showToast"
+      :message="toastMessage"
+      :theme="toastTheme"
+      :icon="toastIcon"
+      :duration="3000"
+    />
 
+    <!-- Confirm Delete Avatar -->
     <div v-if="showConfirmPopup" class="popup-backdrop">
       <div class="popup-card animate-zoom">
         <div class="popup-icon text-warning">
@@ -198,65 +221,133 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, computed } from "vue";
 import ProfileHeader from "@/components/profile/ProfileHeader.vue";
+import BaseToast from "@/components/base/BaseToast.vue";
 import ProfileTabsAdmin from "@/components/profile/ProfileTabsAdmin.vue";
 
 const user = ref(null);
-const skills = ["HTML", "CSS", "Vue", "MySQL", "JavaScript"];
 const form = ref({
-  fullname: "",
-  email: "",
+  fullname: "Orn Sambath",
+  email: "sambathon483@gmail.com",
   phoneNumber: "",
   telegramLink: "",
   avatar: "",
 });
-const loading = ref(false);
 
-// Popup logic
-const showPopup = ref(false);
-const popupMessage = ref("");
-const popupType = ref("success");
-const showPopupMessage = (msg, type = "success") => {
-  popupMessage.value = msg;
-  popupType.value = type;
-  showPopup.value = true;
-  setTimeout(() => (showPopup.value = false), 2500);
+const previewAvatar = ref(null);
+const loading = ref(true);
+const saving = ref(false);
+
+// Toast
+const showToast = ref(false);
+const toastMessage = ref("");
+const toastTheme = ref("success");
+const toastIcon = ref("check-circle");
+
+const showBaseToast = (message, theme = "success") => {
+  toastMessage.value = message;
+  toastTheme.value = theme;
+  toastIcon.value = theme === "success" ? "check-circle" : "x-circle";
+  showToast.value = true;
 };
 
-const showConfirmPopup = ref(false);
-let confirmAction = null;
-const confirmYes = async () => {
-  showConfirmPopup.value = false;
-  if (confirmAction) await confirmAction();
+// Validation
+const errors = ref({
+  fullname: "",
+  phoneNumber: "",
+  telegramLink: "",
+});
+
+const validateFullname = () => {
+  errors.value.fullname = !form.value.fullname.trim()
+    ? "សូមបញ្ចូលឈ្មោះពេញ"
+    : "";
 };
 
+const validatePhone = () => {
+  const phone = form.value.phoneNumber?.trim();
+  errors.value.phoneNumber =
+    phone && !/^[0-9]{8,12}$/.test(phone)
+      ? "លេខទូរស័ព្ទមិនត្រឹមត្រូវ (៨-១២ ខ្ទង់)"
+      : "";
+};
+
+const validateTelegram = () => {
+  const link = form.value.telegramLink?.trim();
+  errors.value.telegramLink =
+    link && !link.startsWith("https://t.me/")
+      ? "តំណ Telegram ត្រូវចាប់ផ្តើមដោយ https://t.me/"
+      : "";
+};
+
+const isFormValid = computed(() => {
+  return (
+    !errors.value.fullname &&
+    !errors.value.phoneNumber &&
+    !errors.value.telegramLink &&
+    form.value.fullname.trim() !== ""
+  );
+});
+
+const isDirty = computed(() => {
+  if (!user.value) return false;
+
+  const normalize = (value) => (value == null ? "" : String(value).trim());
+
+  return (
+    normalize(form.value.fullname) !== normalize(user.value.fullname) ||
+    normalize(form.value.phoneNumber) !== normalize(user.value.phoneNumber) ||
+    normalize(form.value.telegramLink) !== normalize(user.value.telegramLink)
+  );
+});
+
+// Load profile
 onMounted(async () => {
+  loading.value = true;
   try {
     const token = localStorage.getItem("token");
+    if (!token) {
+      showBaseToast("សូមចូលគណនីជាមុន", "error");
+      return;
+    }
+
     const res = await fetch(
       "https://ant-g2-landf.ti.linkpc.net/api/v1/auth/profile",
       {
         headers: { Authorization: `Bearer ${token}` },
       },
     );
+
     const json = await res.json();
-    if (json.result) {
+
+    if (json.result && json.data) {
       user.value = json.data;
       Object.assign(form.value, json.data);
+      previewAvatar.value = json.data.avatar;
+    } else {
+      showBaseToast("មិនអាចផ្ទុកព័ត៌មានប្រវត្តិរូបបានទេ", "error");
     }
   } catch (err) {
-    console.error(err);
+    console.error("Profile load error:", err);
+    showBaseToast("មានបញ្ហាក្នុងការភ្ជាប់ម៉ាស៊ីនមេ", "error");
+  } finally {
+    loading.value = false;
   }
 });
 
+// Avatar Upload
 const onAvatarChange = async (e) => {
-  const file = e.target.files[0];
+  const file = e.target.files?.[0];
   if (!file) return;
+
+  previewAvatar.value = URL.createObjectURL(file);
+
   try {
     const token = localStorage.getItem("token");
     const formData = new FormData();
     formData.append("avatar", file);
+
     const res = await fetch(
       "https://ant-g2-landf.ti.linkpc.net/api/v1/auth/profile/avatar",
       {
@@ -265,46 +356,89 @@ const onAvatarChange = async (e) => {
         body: formData,
       },
     );
+
     const json = await res.json();
-    if (!res.ok) throw new Error();
+    if (!res.ok) throw new Error(json.message || "Upload failed");
+
     user.value.avatar = json.data.avatar;
     form.value.avatar = json.data.avatar;
-    showPopupMessage("រូបភាពត្រូវបានផ្លាស់ប្តូរ 🎉");
+    previewAvatar.value = json.data.avatar;
+    showBaseToast("រូបភាពត្រូវបានផ្លាស់ប្តូរជោគជ័យ 🎉");
   } catch (err) {
-    showPopupMessage("មិនអាចផ្លាស់ប្តូររូបភាពបានទេ", "error");
+    console.error(err);
+    showBaseToast("មិនអាចផ្ទុករូបភាពបានទេ", "error");
+    previewAvatar.value = form.value.avatar;
   }
 };
+
+// Delete Avatar
+const showConfirmPopup = ref(false);
+let confirmAction = null;
 
 const deleteAvatar = () => {
   confirmAction = async () => {
     try {
       const token = localStorage.getItem("token");
-      await fetch(
+      const res = await fetch(
         "https://ant-g2-landf.ti.linkpc.net/api/v1/auth/profile/avatar",
         {
           method: "DELETE",
           headers: { Authorization: `Bearer ${token}` },
         },
       );
-      form.value.avatar = "";
+
+      if (!res.ok) throw new Error();
+
       user.value.avatar = "";
-      showPopupMessage("រូបភាពត្រូវបានលុបចេញ 🗑️");
-    } catch (err) {
-      showPopupMessage("បរាជ័យក្នុងការលុប", "error");
+      form.value.avatar = "";
+      previewAvatar.value = null;
+      showBaseToast("រូបភាពត្រូវបានលុបចេញ 🗑️");
+    } catch {
+      showBaseToast("បរាជ័យក្នុងការលុបរូបភាព", "error");
     }
   };
+
   showConfirmPopup.value = true;
 };
 
+const confirmYes = async () => {
+  showConfirmPopup.value = false;
+  if (confirmAction) await confirmAction();
+  confirmAction = null;
+};
+
+// Update Profile
 const updateProfile = async () => {
-  loading.value = true;
+  // Re-validate
+  validateFullname();
+  validatePhone();
+  validateTelegram();
+
+  if (!isFormValid.value) {
+    showBaseToast("សូមបំពេញព័ត៌មានឲ្យត្រឹមត្រូវ", "error");
+    return;
+  }
+
+  if (!isDirty.value) {
+    showBaseToast("មិនមានការផ្លាស់ប្តូរអ្វីទេ", "info");
+    return;
+  }
+
+  saving.value = true;
+
   try {
     const token = localStorage.getItem("token");
     const payload = {
-      fullname: form.value.fullname,
-      phoneNumber: form.value.phoneNumber,
-      telegramLink: form.value.telegramLink,
+      fullname: form.value.fullname.trim(),
     };
+
+    if (form.value.phoneNumber?.trim()) {
+      payload.phoneNumber = form.value.phoneNumber.trim();
+    }
+    if (form.value.telegramLink?.trim()) {
+      payload.telegramLink = form.value.telegramLink.trim();
+    }
+
     const res = await fetch(
       "https://ant-g2-landf.ti.linkpc.net/api/v1/auth/profile",
       {
@@ -316,19 +450,37 @@ const updateProfile = async () => {
         body: JSON.stringify(payload),
       },
     );
-    if (!res.ok) throw new Error();
+
+    if (!res.ok) {
+      const err = await res.json();
+      throw new Error(err.message || "Update failed");
+    }
+
     user.value = { ...user.value, ...payload };
-    showPopupMessage("ព័ត៌មានត្រូវបានរក្សាទុក 🎉");
+    showBaseToast("ព័ត៌មានត្រូវបានរក្សាទុកជោគជ័យ 🎉");
   } catch (err) {
-    showPopupMessage("បរាជ័យក្នុងការរក្សាទុក", "error");
+    console.error(err);
+    showBaseToast("មិនអាចរក្សាទុកបានទេ សូមព្យាយាមម្តងទៀត", "error");
   } finally {
-    loading.value = false;
+    saving.value = false;
   }
 };
 </script>
 
 <style scoped>
 @import url("https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@300;400;600;700&family=Koh+Santepheap:wght@700&display=swap");
+
+/* Your original styles + loading-inside to match profile view */
+.loading-inside {
+  min-height: 400px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 100px 20px;
+}
+
+/* ... keep all your other styles (hero, inputs, buttons, popups, etc.) ... */
 
 .profile-page {
   font-family: "Kantumruy Pro", sans-serif;
