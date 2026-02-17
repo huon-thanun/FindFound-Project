@@ -1,4 +1,5 @@
 <template>
+  <div>
   <div class="sidebar col-lg-3" :class="!isSidebarOpen ? '' : 'closed'">
     <!-- Logo Section -->
     <div class="logo-section opacity-0">
@@ -344,6 +345,7 @@
       </template>
     </BaseModal>
   </nav>
+   </div>
 </template>
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from "vue";
