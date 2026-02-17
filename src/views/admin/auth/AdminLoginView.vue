@@ -145,7 +145,7 @@
 
           <!-- ERROR MESSAGE -->
           <div v-if="auth.error" class="alert-error">
-            {{ auth.error }}
+            លើស​ពេល​កំណត់
           </div>
 
          

@@ -7,7 +7,12 @@
           មើល និងគ្រប់គ្រងការរាយការណ៍បាត់បង់ និងរើសបានទាំងអស់
         </p>
       </div>
-      <BaseButton class="d-none" icon="person-plus" variant="primary" @click="showCreateModal = true">
+      <BaseButton
+        class="d-none"
+        icon="person-plus"
+        variant="primary"
+        @click="showCreateModal = true"
+      >
         បង្កើតអ្នកប្រើប្រាស់
       </BaseButton>
     </div>
@@ -18,27 +23,54 @@
     <div class="card mb-3 shadow border-color">
       <div class="card-body row">
         <div class="col-xxl-12">
-          <BaseInput class="w-100" v-model="search" type="text" placeholder="ស្វែងរករបាយការណ៍..." />
+          <BaseInput
+            class="w-100"
+            v-model="search"
+            type="text"
+            placeholder="ស្វែងរករបាយការណ៍..."
+          />
         </div>
         <div class="col-xxl-8 mt-2">
           <div class="row">
-            <div class="col-lg-6 col-xxl-3" style="flex-wrap: nowrap;">
-              <BaseSelect class="w-100 text-nowrap" v-model="typeValue" :items="reportTypeOptions"
-                textField="ប្រភេទទាំងអស់" labelField="khName" valueField="id" />
+            <div class="col-lg-6 col-xxl-3" style="flex-wrap: nowrap">
+              <BaseSelect
+                class="w-100 text-nowrap"
+                v-model="typeValue"
+                :items="reportTypeOptions"
+                textField="ប្រភេទទាំងអស់"
+                labelField="khName"
+                valueField="id"
+              />
             </div>
-            <div class="col-lg-6 col-xxl-4" style=" flex-wrap: nowrap;">
-              <BaseSelect class="w-100 text-nowrap" v-model="statusValue" :items="allStatus" textField="ស្ថានភាពទាំងអស់"
-                labelField="title" valueField="value" />
+            <div class="col-lg-6 col-xxl-4" style="flex-wrap: nowrap">
+              <BaseSelect
+                class="w-100 text-nowrap"
+                v-model="statusValue"
+                :items="allStatus"
+                textField="ស្ថានភាពទាំងអស់"
+                labelField="title"
+                valueField="value"
+              />
             </div>
-            <div class=" col-xxl-5" style=" flex-wrap: nowrap;">
-              <BaseSelect class="w-100 text-nowrap" v-model="cateValue" :items="categoryStore.categories"
-                textField="ប្រភេទទាំងអស់" labelField="name" valueField="id" />
+            <div class="col-xxl-5" style="flex-wrap: nowrap">
+              <BaseSelect
+                class="w-100 text-nowrap"
+                v-model="cateValue"
+                :items="categoryStore.categories"
+                textField="ប្រភេទទាំងអស់"
+                labelField="name"
+                valueField="id"
+              />
             </div>
           </div>
         </div>
         <!-- CLEAR FILTER -->
         <div class="col-xxl-4 mt-1 text-end">
-          <BaseButton variant="outline_primary" icon="stars" @click="clearFilter">
+          <BaseButton
+            variant="outline_primary"
+            icon="stars"
+            @click="clearFilter"
+          >
             សម្អាតការតម្រៀប
           </BaseButton>
         </div>
@@ -47,13 +79,20 @@
 
     <div class="col-12 mt-4" v-if="reportStore.isLoadingGetAllReport">
       <div class="row g-3">
-        <div v-for="n in 4" :key="`skeleton-${n}`" class="col-12 col-md-6 col-xl-4 col-xxl-3">
+        <div
+          v-for="n in 4"
+          :key="`skeleton-${n}`"
+          class="col-12 col-md-6 col-xl-4 col-xxl-3"
+        >
           <BaseSkeleton />
         </div>
       </div>
     </div>
 
-    <div v-else-if="reportStore.allReports.length <= 0" class="my-3 col-12 center2">
+    <div
+      v-else-if="reportStore.allReports.length <= 0"
+      class="my-3 col-12 center2"
+    >
       <div class="w-100 d-flex flex-column align-items-center p-3 text-muted">
         <i class="bi bi-exclamation-circle" style="font-size: 35px"></i>
         <h3 class="m-0">មិនមានរបាយការណ៍ទេ</h3>
@@ -62,70 +101,95 @@
     <!-- REPORT LIST -->
 
     <div v-else class="col-12 mt-4">
-      <div class="row g-3">
-        <div class="col-12 col-md-6 col-xl-4 col-xxl-3" v-for="report in reportStore.allReports" :key="report.id">
-          <BaseReportCard class="border-color pb-0" height="500px">
+      <div class="row g-4">
+        <div
+          class="col-12 col-md-6 col-xl-4 col-xxl-3"
+          v-for="report in reportStore.allReports"
+          :key="report.id"
+        >
+          <BaseReportCard class="border-color rounded-4 pb-0">
             <template #image>
-              <div class="image">
-                <img :src="report.reportImages && report.reportImages.length > 0
-                  ? report.reportImages[0].name
-                  : defaultImage
-                  " :alt="report.title || 'រូបភាពរបាយការណ៍'" />
+              <div class="image rounded-top-4">
+                <img
+                  class="rounded-top-4"
+                  :src="
+                    report.reportImages && report.reportImages.length > 0
+                      ? report.reportImages[0].name
+                      : defaultImage
+                  "
+                  :alt="report.title || 'រូបភាពរបាយការណ៍'"
+                />
               </div>
-              <span class="category-tag tag-box-shadow-in">{{ report.category.name }}</span>
+              <span class="category-tag tag-box-shadow-in">{{
+                report.category.name
+              }}</span>
             </template>
 
-            <div>
-              <div class="d-flex gap-2 my-2">
-                <span class="status" :class="report.reportType.name.toLowerCase()">
+            <div class="px-4 py-2 text-center">
+                <small>
+                  <i class="bi text-danger bi-geo-alt-fill"></i>
+                  {{ report.locationText }}
+                </small>
+              <h5 class="card-title py-1 pt-2">{{ report.title }}</h5>
+
+              <!-- Status Badges -->
+              <div class="status-group">
+                <span
+                  class="status-badge"
+                  :class="report.reportType.name.toLowerCase()"
+                >
+                  <i
+                    :class="
+                      report.reportType.name === 'LOST'
+                        ? 'bi-exclamation-triangle'
+                        : 'bi-check-circle'
+                    "
+                  ></i>
                   {{ getReportTypeKh(report.reportType.name) }}
                 </span>
-                <span class="status" :class="report.status.toLowerCase()">
+                <span class="status-badge" :class="report.status.toLowerCase()">
+                  <i
+                    :class="{
+                      'bi-lightning': report.status === 'ACTIVE',
+                      'bi-check2-all': report.status === 'RESOLVED',
+                      'bi-eye-slash': report.status === 'HIDDEN',
+                    }"
+                  ></i>
                   {{ getStatusKh(report.status) }}
                 </span>
               </div>
 
-              <h5 class="card-title mt-3">{{ report.title }}</h5>
-
               <ul class="item-list mt-2">
-                <!-- <li class="fs-6 ">
-                  <small><i class="bi bi-file-earmark-text"></i>
-                    {{ report.category.name }}</small>
-                </li> -->
-                <!-- <div> -->
-                <li class="fs-6">
                   <small>
-                    <i class="bi bi-geo-alt-fill"></i>
-                    {{ report.locationText }}
-                  </small>
-                </li>
-                <li class="fs-6">
-                  <small>
-                    <i class="bi bi-calendar2"></i>
+                    <i class="bi text-primary bi-calendar2"></i>
                     {{ formatDate(report.createdAt) }}
                   </small>
-                </li>
-                <!-- </div> -->
               </ul>
 
-              <div class="button-group">
-                <BaseButton :icon="isLoading === report.id ? '' : 'arrow-right'" variant="primary w-100" @click="fetchReportDetail(report.id)"
-                  :isLoading="isLoading === report.id">
-                  <!-- <i class="bi bi-arrow-right me-2"></i> -->
+              <div class="button-group pt-0 border-0">
+                <BaseButton
+                class="base"
+                  :icon="isLoading === report.id ? '' : 'eye'"
+                  variant="primary w-100"
+                  @click="fetchReportDetail(report.id)"
+                  :isLoading="isLoading === report.id"
+                >
                   <span>មើលលម្អិត</span>
                 </BaseButton>
               </div>
 
-              <div class="row">
-                <div class="col-lg-12 col-xxl-6">
-                  <span class="d-block mt-2 py-1" style="font-size: 16px">
-                    រាយការណ៍ដោយ៖
-                  </span>
+              <div class="reporter">
+                <div class="reporter-avatar">
+                  <img
+                    :src="report.reporter.avatar || defaultAvatar"
+                    :alt="report.reporter.fullname"
+                  />
                 </div>
-                <div class="col-lg-12 col-xxl-6">
-                  <span class="d-block mt-2 text-end py-1" style="font-size: 16px">
-                    <strong>{{ report.reporter.fullname }}</strong>
-                  </span>
+                <div class="reporter-info">
+                  <span class="reporter-label text-start">បង្ហោះដោយ</span>
+                  <span class="reporter-name">{{
+                    report.reporter.fullname
+                  }}</span>
                 </div>
               </div>
             </div>
@@ -138,8 +202,15 @@
 
     <!-- pagination -->
 
-    <div v-if="reportStore.meta?.totalPages > 1" class="d-flex gap-2 justify-content-center my-3">
-      <BaseButton variant="danger" @click="PreviousPage" :disabled="!reportStore.meta?.hasPreviousPage">
+    <div
+      v-if="reportStore.meta?.totalPages > 1"
+      class="d-flex gap-2 justify-content-center my-3"
+    >
+      <BaseButton
+        variant="danger"
+        @click="PreviousPage"
+        :disabled="!reportStore.meta?.hasPreviousPage"
+      >
         មុន
       </BaseButton>
 
@@ -152,7 +223,11 @@
         {{ p }}
       </BaseButton> -->
 
-      <BaseButton variant="primary" @click="nextPage" :disabled="!reportStore.meta?.hasNextPage">
+      <BaseButton
+        variant="primary"
+        @click="nextPage"
+        :disabled="!reportStore.meta?.hasNextPage"
+      >
         បន្ទាប់
       </BaseButton>
     </div>
@@ -207,9 +282,9 @@ const getStatusKh = (status) => {
 };
 
 const reportTypeOptions = computed(() => {
-  return reportStore.allReportType.map(type => ({
+  return reportStore.allReportType.map((type) => ({
     ...type,
-    khName: REPORT_TYPE_KH[type.name] || type.name
+    khName: REPORT_TYPE_KH[type.name] || type.name,
   }));
 });
 
@@ -225,7 +300,6 @@ const fetchReports = async () => {
     sortDir: "desc",
     reportType: typeValue.value?.id,
     categoryId: cateValue.value?.id,
-
   });
   console.log("PAGE:", page.value);
   console.log("META:", reportStore.meta);
@@ -344,28 +418,53 @@ const clearFilter = () => {
 /* .desc {
   height: 63px;
 } */
+.base{
+  transition: 0.1s !important;
+  transform: translate(0) !important;
+}
+.base:hover{
+  border: 2px solid white;
+  transition: 0.3s;
+}
+
+.card {
+  height: auto !important;
+}
 .desc .card-text {
   color: rgba(128, 128, 128, 0.679);
 }
 
 .border-color {
-  border-color: var(--tertiary-color);
+  border: none;
+  padding: 0 !important;
+  transform: 0.3s !important;
 }
 
 .image {
   width: 100%;
   height: 200px;
+  overflow: hidden;
+  transition: 0.3s;
+  
+}
+.border-color:hover .image img {
+  transform: scale(1.1);
+  transition: 0.3s;
+  filter: brightness(0.9);
 }
 
 .image img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  transition: 0.3s;
 }
 
 .item-list {
   list-style-type: none;
   padding: 0;
+  display: flex;
+  justify-content: center;
 }
 
 .item-list li {
@@ -386,12 +485,15 @@ const clearFilter = () => {
 
 .button-group {
   padding: 15px 0;
-  width: 100%;
-  display: flex;
-  flex-wrap: wrap;
-  border-top: 1px solid rgb(78, 78, 78);
-  border-bottom: 1px solid rgb(78, 78, 78);
-  column-gap: 8px;
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%,-60%);
+  visibility: hidden;
+}
+.border-color:hover .button-group{
+  visibility: visible;
+  transition: 0.3s !important;
 }
 
 .text-clamp-2 {
@@ -437,15 +539,14 @@ const clearFilter = () => {
 }
 
 .tag-box-shadow-in {
-  box-shadow:
-    rgb(204, 219, 232) 3px 3px 6px 0px inset,
+  box-shadow: rgb(204, 219, 232) 3px 3px 6px 0px inset,
     rgba(255, 255, 255, 0.5) -3px -3px 6px 1px inset;
 }
 
 .category-tag {
   position: absolute;
-  top: 20px;
-  right: 20px;
+  top: 15px;
+  left: 15px;
   background: rgba(255, 255, 255, 0.95);
   padding: 5px 12px;
   border-radius: 8px;
@@ -456,5 +557,97 @@ const clearFilter = () => {
 
 .spinner-color {
   color: var(--primary-color);
+}
+
+/* Reporter */
+.reporter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid #e2e8f0;
+}
+
+.reporter-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 40px;
+  overflow: hidden;
+  border: 2px solid white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.reporter-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.reporter-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.reporter-label {
+  font-size: 0.7rem;
+  color: #94a3b8;
+}
+
+.reporter-name {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.status-group {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.3rem 0.8rem;
+  border-radius: 30px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  background: #f1f5f9;
+  color: #475569;
+  border: 1px solid #e2e8f0;
+}
+
+.status-badge.lost {
+  background: #fee2e2;
+  color: #dc2626;
+  border-color: #fecaca;
+}
+
+.status-badge.found {
+  background: #dcfce7;
+  color: #16a34a;
+  border-color: #bbf7d0;
+}
+
+.status-badge.active {
+  background: #dbeafe;
+  color: #2563eb;
+  border-color: #bfdbfe;
+}
+
+.status-badge.resolved {
+  background: #f3e8ff;
+  color: #9333ea;
+  border-color: #e9d5ff;
+}
+
+.status-badge.hidden {
+  background: #f1f5f9;
+  color: #64748b;
+  border-color: #cbd5e1;
 }
 </style>
