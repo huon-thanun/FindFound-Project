@@ -163,21 +163,8 @@
       </div>
     </div>
 
-    <div v-if="showPopup" class="popup-backdrop">
-      <div class="popup-card shadow-lg animate-zoom">
-        <div
-          class="popup-icon"
-          :class="popupType === 'success' ? 'text-success' : 'text-danger'"
-        >
-          <i v-if="popupType === 'success'" class="bi bi-check-circle-fill"></i>
-          <i v-else class="bi bi-exclamation-circle-fill"></i>
-        </div>
-        <h5 class="fw-bold">
-          {{ popupType === "success" ? "ជោគជ័យ!" : "បរាជ័យ!" }}
-        </h5>
-        <p class="text-muted mb-0">{{ popupMessage }}</p>
-      </div>
-    </div>
+    <!-- Message Toast -->
+    <BaseToast v-model="showToast" :message="toastMessage" :theme="toastTheme" :icon="toastIcon" :duration="3000" />
 
     <div v-if="showConfirmPopup" class="popup-backdrop">
       <div class="popup-card animate-zoom">
@@ -206,6 +193,8 @@
 import { ref, onMounted } from "vue";
 import ProfileTabs from "@/components/profile/ProfileTabs.vue";
 import ProfileHeader from "@/components/profile/ProfileHeader.vue";
+import ProfileSide from "@/components/profile/ProfileSide.vue";
+import BaseToast from "@/components/base/BaseToast.vue";
 
 const user = ref(null);
 const skills = ["HTML", "CSS", "Vue", "MySQL", "JavaScript"];
@@ -218,15 +207,17 @@ const form = ref({
 });
 const loading = ref(false);
 
-// Popup logic
-const showPopup = ref(false);
-const popupMessage = ref("");
-const popupType = ref("success");
-const showPopupMessage = (msg, type = "success") => {
-  popupMessage.value = msg;
-  popupType.value = type;
-  showPopup.value = true;
-  setTimeout(() => (showPopup.value = false), 2500);
+// Toast
+const showToast = ref(false);
+const toastMessage = ref("");
+const toastTheme = ref("success");
+const toastIcon = ref("check-circle");
+
+const showBaseToast = (message, theme = "success") => {
+  toastMessage.value = message;
+  toastTheme.value = theme;
+  toastIcon.value = theme === "success" ? "check-circle" : "x-circle";
+  showToast.value = true;
 };
 
 const showConfirmPopup = ref(false);
@@ -274,9 +265,9 @@ const onAvatarChange = async (e) => {
     if (!res.ok) throw new Error();
     user.value.avatar = json.data.avatar;
     form.value.avatar = json.data.avatar;
-    showPopupMessage("រូបភាពត្រូវបានផ្លាស់ប្តូរ 🎉");
+    showBaseToast("របូបភាពត្រូវបានផ្លាស់ប្តូរ 🎉");
   } catch (err) {
-    showPopupMessage("មិនអាចផ្លាស់ប្តូររូបភាពបានទេ", "error");
+    showBaseToast("មិនអាចផ្លាស់ប្តូររូបភាពបានទេ", "error");
   }
 };
 
@@ -293,9 +284,9 @@ const deleteAvatar = () => {
       );
       form.value.avatar = "";
       user.value.avatar = "";
-      showPopupMessage("រូបភាពត្រូវបានលុបចេញ 🗑️");
+      showBaseToast("របូបភាពត្រូវបានលុបចេញ 🗑️");
     } catch (err) {
-      showPopupMessage("បរាជ័យក្នុងការលុប", "error");
+      showBaseToast("បរាជ័យក្នុងការលុប", "error");
     }
   };
   showConfirmPopup.value = true;
@@ -323,9 +314,9 @@ const updateProfile = async () => {
     );
     if (!res.ok) throw new Error();
     user.value = { ...user.value, ...payload };
-    showPopupMessage("ព័ត៌មានត្រូវបានរក្សាទុក 🎉");
+    showBaseToast("ព័ត៌មានត្រូវបានរក្សាទុក 🎉");
   } catch (err) {
-    showPopupMessage("បរាជ័យក្នុងការរក្សាទុក", "error");
+    showBaseToast("បរាជ័យក្នុងការរក្សាទុក", "error");
   } finally {
     loading.value = false;
   }

@@ -30,7 +30,11 @@
           <i class="bi bi-arrow-right"></i>
           {{ btnTitle }}
         </button> -->
-        <base-button icon="arrow-right" @click="handleActionButton">
+        <base-button
+          class="w-100"
+          icon="arrow-right"
+          @click="handleActionButton"
+        >
           {{ btnTitle }}
         </base-button>
       </div>

@@ -37,9 +37,9 @@
                 <div class="col-6 col-md-4 col-lg-2 p-0">
                     <h3>តំណភ្ជាប់</h3>
                     <ul>
-                        <li><router-link to="">LinkedIn</router-link></li>
-                        <li><router-link to="">Facebook</router-link></li>
-                        <li><router-link to="">Tik Tok</router-link></li>
+                        <li><a href="https://www.linkedin.com/">LinkedIn</a></li>
+                        <li><a href="https://www.facebook.com/">Facebook</a></li>
+                        <li><a href="https://web.telegram.org/">Telegram</a></li>
                     </ul>
                 </div>
 

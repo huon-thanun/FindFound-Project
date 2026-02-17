@@ -163,7 +163,6 @@ onMounted(() => {
     <section class="hero-section">
       <div class="hero-bg"></div>
 
-      <!-- Very subtle floating shapes -->
       <div class="floating-shapes">
         <div class="shape shape-1"></div>
         <div class="shape shape-2"></div>
@@ -171,40 +170,42 @@ onMounted(() => {
       </div>
 
       <div class="container position-relative">
-        <div class="row align-items-center g-5">
+        <div class="row align-items-center pt-5 g-5 py-lg-6">
           <!-- Text Column -->
-          <div class="col-lg-6 hero-text-col" data-aos="fade-right">
+          <div
+            class="col-lg-7 py-5 px-5 m-0 hero-text-col"
+            data-aos="fade-right"
+          >
             <div class="badge-modern mb-4">
               <i class="bi bi-people-fill me-2"></i>
               អំពីពួកយើង
             </div>
             <h1 class="hero-title">
-              ស្វែងយល់បន្ថែមអំពី <span class="gradient-text">FindFound</span>
+              ស្វែងយល់អំពី <span class="gradient-text">ពួកយើង</span>
               <br class="d-none d-md-block" />
-              ក្រុមការងារនិងបេសកកម្មរបស់យើង
+              និងបេសកកម្មរបស់យើង
             </h1>
             <p class="hero-subtitle">
               យើងជាក្រុមអ្នកអភិវឌ្ឍន៍វ័យក្មេងដែលចង់ប្រើបច្ចេកវិទ្យាដើម្បីជួយសហគមន៍
-              និងធ្វើឱ្យការស្វែងរកវត្ថុបាត់បង់កាន់តែងាយស្រួលសម្រាប់គ្រប់គ្នា។
+              និងធ្វើឱ្យការស្វែងរកវត្ថុបាត់បង់កាន់តែងាយស្រួល។
             </p>
           </div>
 
           <!-- Illustration Column -->
           <div
-            class="col-lg-6 hero-illustration"
+            class="col-lg-5 hero-illustration d-flex justify-content-center m-0 p-0"
             data-aos="fade-left"
             data-aos-delay="200"
           >
             <img
-              src="../../../assets/images/about/hero-banner_removebg.png"
-              alt="About Us Illustration"
-              class="hero-img"
+              src="../../../assets/images/about/hero-banner.png"
+              alt="Contact Us Illustration"
+              class="hero-img m-0 img-fluid"
             />
           </div>
         </div>
       </div>
     </section>
-
     <!-- MISSION -->
     <section class="section col-8 mx-auto">
       <div class="container">
@@ -393,68 +394,67 @@ onMounted(() => {
 /* ===== MODERN CONTACT US HERO ===== */
 
 /* ── Hero ── (shorter height) ── */
+@import url("https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@300;400;500;600;700;800&display=swap");
+
+.main-contact {
+  font-family: "Kantumruy Pro", system-ui, sans-serif;
+  background: #fdfaff;
+  color: #0f0f0f;
+}
+
+/* ── Hero ── */
 .hero-section {
   position: relative;
-  background: linear-gradient(
-    135deg,
-    #f5f0ff 0%,
-    #efe8ff 35%,
-    #e6d9ff 65%,
-    #d9ccff 100%
-  );
-  color: #111111;
+  background: linear-gradient(135deg, #f8f2ff 0%, #f0e8ff 50%, #e8deff 100%);
   overflow: hidden;
-  border-radius: 0 0 80px 80px;
+  border-radius: 0 0 60px 60px;
+  /* padding: 100px 0 180px; */
+  margin: 0 0 20px;
 }
 
 .hero-bg {
   position: absolute;
   inset: 0;
   background: radial-gradient(
-    ellipse at 40% 60%,
-    rgba(165, 180, 252, 0.06) 0%,
-    transparent 70%
+    circle at 30% 70%,
+    rgba(168, 85, 247, 0.08) 0%,
+    transparent 60%
   );
-  opacity: 0.92;
-}
-
-.floating-shapes {
-  position: absolute;
-  inset: 0;
   pointer-events: none;
-  z-index: 0;
 }
 
-.shape {
+.floating-shapes .shape {
   position: absolute;
-  background: rgba(139, 92, 246, 0.025);
-  backdrop-filter: blur(30px);
+  background: rgba(139, 92, 246, 0.04);
+  backdrop-filter: blur(40px);
+  border: 1px solid rgba(139, 92, 246, 0.08);
   border-radius: 50%;
-  animation: float-slow 50s infinite ease-in-out;
-  pointer-events: none;
+  animation: float-slow 80s infinite ease-in-out;
 }
 
 .shape-1 {
-  width: 380px;
-  height: 380px;
-  top: -20%;
-  left: -25%;
+  width: 420px;
+  height: 420px;
+  top: -15%;
+  left: -20%;
   animation-delay: 0s;
 }
+
 .shape-2 {
-  width: 500px;
-  height: 500px;
-  bottom: -30%;
-  right: -30%;
-  animation-delay: 20s;
-  border-radius: 60% 40% 55% 45%;
+  width: 560px;
+  height: 560px;
+  bottom: -25%;
+  right: -25%;
+  animation-delay: 25s;
+  border-radius: 48% 52% 55% 45%;
 }
+
 .shape-3 {
-  width: 320px;
-  height: 320px;
-  top: 60%;
-  left: -10%;
-  animation-delay: 35s;
+  width: 360px;
+  height: 360px;
+  top: 55%;
+  left: -12%;
+  animation-delay: 45s;
 }
 
 @keyframes float-slow {
@@ -462,70 +462,64 @@ onMounted(() => {
   100% {
     transform: translate(0, 0) rotate(0deg);
   }
-  25% {
-    transform: translate(40px, -60px) rotate(4deg);
-  }
-  50% {
-    transform: translate(-50px, 70px) rotate(-4deg);
-  }
-  75% {
-    transform: translate(60px, 50px) rotate(3deg);
-  }
-}
 
-/* Text on top */
-.hero-text-col,
-.hero-title,
-.hero-subtitle,
-.badge-modern {
-  position: relative;
-  z-index: 2;
+  25% {
+    transform: translate(60px, -80px) rotate(5deg);
+  }
+
+  50% {
+    transform: translate(-70px, 90px) rotate(-6deg);
+  }
+
+  75% {
+    transform: translate(80px, 60px) rotate(4deg);
+  }
 }
 
 .hero-title {
-  font-size: 3.8rem; /* Slightly smaller for better proportion */
+  font-size: clamp(2.6rem, 6vw, 4rem);
   font-weight: 800;
-  line-height: 1.1;
-  margin-bottom: 1.4rem;
-  color: #111111;
+  line-height: 1.3;
+  margin-bottom: 1.5rem;
 }
 
 .gradient-text {
-  background: linear-gradient(to right, #8b5cf6, #a78bfa, #c4b5fd);
+  background: linear-gradient(90deg, #7c3aed, #a78bfa, #c4b5fd);
   -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
 }
 
 .hero-subtitle {
-  font-size: 1.3rem;
-  color: #222222;
-  max-width: 560px;
+  font-size: clamp(1.15rem, 2.5vw, 1.35rem);
+  color: #222;
+  max-width: 580px;
   line-height: 1.7;
+  opacity: 0.95;
 }
 
 .badge-modern {
-  background: rgba(139, 92, 246, 0.12);
-  backdrop-filter: blur(14px);
-  border: 1px solid rgba(139, 92, 246, 0.22);
-  padding: 12px 28px;
-  border-radius: 60px;
-  font-size: 1.05rem;
-  color: #111111;
+  display: inline-flex;
+  align-items: center;
+  background: rgba(139, 92, 246, 0.14);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(139, 92, 246, 0.24);
+  padding: 0.75rem 1.8rem;
+  border-radius: 50rem;
+  font-weight: 600;
+  color: #111;
+  font-size: 1.1rem;
 }
 
-/* Hero image (large but fits shorter height) */
-.hero-illustration .hero-img {
-  width: 130%; /* Still big, but not overflowing */
-  max-width: none;
-  height: auto;
-  margin-left: -15%;
-  filter: drop-shadow(0 35px 80px rgba(0, 0, 0, 0.18)) brightness(1.04);
-  border-radius: 40px;
-  transition: all 0.7s ease;
+.hero-img {
+  max-width: 100%;
+  margin-left: -10%;
+  filter: drop-shadow(0 30px 70px rgba(0, 0, 0, 0.16)) brightness(1.03);
+  transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .hero-illustration:hover .hero-img {
-  transform: scale(1.08) translateY(-20px);
+  transform: scale(1.06) translateY(-15px);
 }
 
 /* ===== STATS ===== */
