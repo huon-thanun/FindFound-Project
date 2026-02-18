@@ -1,26 +1,6 @@
 <template>
   <div class="admin-layout">
-    <!-- Hamburger – only on mobile when sidebar closed -->
-    <button
-      v-if="!isDesktop && !showSidebar"
-      class="hamburger-btn d-lg-none"
-      @click="showSidebar = true"
-      aria-label="Open menu"
-    >
-      <span></span>
-      <span></span>
-      <span></span>
-    </button>
-
-    <!-- Overlay backdrop (mobile only) -->
-    <div
-      v-if="showSidebar && !isDesktop"
-      class="sidebar-overlay d-lg-none"
-      @click="showSidebar = false"
-    ></div>
-
-    <!-- Sidebar -->
-    <Sidebar :isOpen="showSidebar" @close="showSidebar = false" />
+    <Sidebar class="d-none d-xl-block" :isOpen="showSidebar" @close="showSidebar = false" />
 
     <!-- Main content -->
     <div class="main-content">
@@ -69,8 +49,10 @@ onUnmounted(() => {
   position: relative;
 }
 
-/* Main content – full width on mobile, shifted only on desktop */
-.main-content {
+.main-container {
+  /* Match the 280px width of your sidebar */
+  margin-left: 300px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -95,6 +77,7 @@ onUnmounted(() => {
 .content-area {
   padding: 1.5rem 1rem;
   flex: 1;
+  padding: 0;
 }
 
 /* ── Hamburger Button (mobile only) ──────────────────────────── */
@@ -143,6 +126,12 @@ onUnmounted(() => {
   background: rgba(15, 23, 42, 0.45);
   backdrop-filter: blur(4px);
   z-index: 999;
-  transition: opacity 0.35s ease;
+}
+
+/* Responsive: Reset margins for mobile */
+@media (max-width: 1200px) {
+  .main-container {
+    margin-left: 0 !important;
+  }
 }
 </style>

@@ -72,7 +72,7 @@ onBeforeUnmount(() => clearTimer())
 <style scoped>
 .ff-toast {
     position: fixed;
-    bottom: 20px;
+    top: 20px;
     right: 20px;
     z-index: 1100;
     min-width: 280px;

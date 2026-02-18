@@ -1,26 +1,51 @@
 <template>
   <div>
     <div class="header-page w-100 p-5 text-center text-light">
-      <h2>កែសម្រួលការរាយការណ៍របស់វត្ថុ</h2>
-      <p>កែសម្រួលទម្រង់ព័ត៌មាននៃការរាយការណ៍</p>
+      <!-- text content wrapped for better control (still inside header-page) -->
+      <div class="text-content">
+        <h2>កែសម្រួលការរាយការណ៍របស់វត្ថុ</h2>
+        <p>កែសម្រួលទម្រង់ព័ត៌មាននៃការរាយការណ៍</p>
+      </div>
+
+      <!-- LEFT icon: bi-search (exact as inline given) -->
       <div class="icon icon-left">
         <i class="bi bi-search"></i>
       </div>
+
+      <!-- RIGHT icon: bi-question-lg -->
       <div class="icon icon-right">
         <i class="bi bi-question-lg"></i>
       </div>
+
+      <!-- icon at left:25% top:30% with bi-box-seam (original style: left:25%; top:30%) -->
       <div class="icon" style="left: 25%; top: 30%">
         <i class="bi bi-box-seam"></i>
       </div>
+
+      <!-- icon at right:25% top:60% with bi-circle (original style: right:25%; top:60%) -->
       <div class="icon" style="right: 25%; top: 60%">
         <i class="bi bi-circle"></i>
       </div>
+
+      <!-- OPTIONAL: additional micro detail – an extra faint icon? not needed but we can leave exactly as described.
+             the snippet had only four icons: two fixed left/right and two with percentage. 
+             Also includes the two extra inline style comments: 
+             <div class="icon" style="left: 25%; top: 30%"> <i class="bi bi-box-seam"></i> </div>
+             <div class="icon" style="right: 25%; top: 60%"> <i class="bi bi-circle"></i> </div>
+             so they are both present. Good.
+        -->
+
+      <!-- subtle extra glow (no extra icons) -->
     </div>
     <div class="container">
       <div class="row justify-content-center align-items-center">
         <div class="col-12 col-md-12 col-lg-11 col-xl-10 col-xxl-10">
           <div class="my-4">
-            <BaseButton variant="outline_primary" @click="goBack">
+            <BaseButton
+              variant="outline_primary"
+              @click="goBack"
+              icon="arrow-left"
+            >
               ត្រឡប់ក្រោយ
             </BaseButton>
           </div>
@@ -417,11 +442,11 @@
                   </div>
                   <!-- Submit Button  -->
                   <div class="col-12">
-                    <div class="my-4">
+                    <div class="my-4 text-center">
                       <BaseButton
                         variant="primary"
                         type="submit"
-                        class="w-100"
+                        class="w-25"
                         :isLoading="isLoading"
                       >
                         រក្សាទុកការកែប្រែ
@@ -912,5 +937,221 @@ const handleUploadImg = () => {
   50% {
     transform: translateY(-20%) scale(1.05);
   }
+}
+
+.header-page {
+  position: relative;
+  width: 100%;
+  background: linear-gradient(135deg, #f8f2ff 0%, #f0e8ff 50%, #e8deff 100%);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: 0rem 0rem 3.5rem 3.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  overflow: hidden; /* keeps icons inside rounded corners */
+  transition: all 0.2s ease;
+}
+
+/* text block with breathing space */
+.header-page .text-content {
+  position: relative;
+  z-index: 10;
+  padding: 4rem 3rem 5rem 3rem;
+  text-align: center;
+}
+
+.header-page h2 {
+  font-size: clamp(2.4rem, 8vw, 4rem);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  margin-bottom: 1rem;
+  color: var(--secondary-color);
+}
+
+.header-page p {
+  font-size: clamp(1.1rem, 4vw, 1.5rem);
+  font-weight: 400;
+  max-width: 650px;
+  margin: 0 auto;
+  opacity: 0.9;
+  color: black;
+  backdrop-filter: blur(4px);
+  padding: 0.8rem 2rem;
+  border-radius: 80px;
+  display: inline-block;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  line-height: 1.5;
+}
+
+/* ----- icon base (absolute) ----- */
+.icon {
+  position: absolute;
+  font-size: 2.3rem;
+  color: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.06);
+  width: 4.5rem;
+  height: 4.5rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow:
+    0 15px 25px -8px rgba(150, 150, 150, 0.5),
+    0 0 0 1px rgba(255, 255, 240, 0.1) inset;
+  transition:
+    transform 0.2s ease,
+    background 0.2s,
+    color 0.2s;
+  z-index: 20;
+  pointer-events: none; /* so they don't block text selection */
+}
+
+/* subtle hover lift on icons (just for delight, no click) */
+.header-page:hover .icon {
+  transform: scale(1.02);
+}
+
+/* left & right large icons */
+.icon-left {
+  left: 1.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 3rem;
+  width: 5.5rem;
+  height: 5.5rem;
+  background: rgba(200, 230, 255, 0.12);
+  color: rgba(230, 245, 255, 0.9);
+  box-shadow: 0 25px 30px -10px rgb(199, 199, 199);
+}
+
+.icon-right {
+  right: 1.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 3.2rem;
+  width: 5.5rem;
+  height: 5.5rem;
+  background: rgba(230, 240, 255, 0.1);
+  color: rgba(255, 255, 210, 0.9);
+}
+
+/* two specific icons with custom positions (preserving inline styles) */
+.icon-quarter-left {
+  left: 25% !important; /* match inline style: left:25%; top:30% */
+  top: 30% !important;
+  transform: translate(-50%, -50%);
+  background: rgba(170, 220, 255, 0.18);
+  color: #b3e0ff;
+  font-size: 2.7rem;
+  width: 5rem;
+  height: 5rem;
+}
+
+.icon-quarter-right {
+  right: 25% !important; /* right:25%; top:60% */
+  top: 60% !important;
+  transform: translate(50%, -50%);
+  background: rgba(255, 230, 170, 0.15);
+  color: #ffe2a3;
+  font-size: 2.9rem;
+  width: 5rem;
+  height: 5rem;
+}
+
+/* make sure icons are above background but not interfering with text */
+.bi {
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+}
+
+/* additional floating particles (optional micro-interaction) */
+.icon i {
+  transition: all 0.2s;
+}
+
+/* responsive adjustments: reduce icon sizes & spacing */
+@media (max-width: 700px) {
+  .header-page .text-content {
+    padding: 3rem 1.5rem 4rem 1.5rem;
+  }
+  .icon-left,
+  .icon-right {
+    width: 4rem;
+    height: 4rem;
+    font-size: 2.2rem;
+  }
+  .icon-quarter-left,
+  .icon-quarter-right {
+    width: 4rem;
+    height: 4rem;
+    font-size: 2rem;
+  }
+  .icon-left {
+    left: 0.8rem;
+  }
+  .icon-right {
+    right: 0.8rem;
+  }
+}
+
+/* for very small screens, maybe hide two icons? but we keep them */
+@media (max-width: 480px) {
+  .icon-quarter-left,
+  .icon-quarter-right {
+    opacity: 0.5; /* subtle but still visible */
+  }
+  .header-page p {
+    font-size: 1rem;
+    padding: 0.6rem 1rem;
+  }
+}
+
+/* additional touches: a soft gradient overlay inside */
+.header-page::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at 20% 40%,
+    rgba(255, 255, 255, 0.03) 0%,
+    transparent 50%
+  );
+  pointer-events: none;
+  z-index: 5;
+}
+
+/* make icons slightly more colorful on hover for text */
+.header-page:hover .bi-search {
+  color: #aad0ff;
+}
+.header-page:hover .bi-question-lg {
+  color: #ffde9e;
+}
+.header-page:hover .bi-box-seam {
+  color: #9ecbff;
+}
+.header-page:hover .bi-circle {
+  color: #fde3a5;
+}
+
+/* force exact positions from inline style (preserve exact % ) */
+/* since inline style used left:25%; top:30% etc, we reuse classes */
+.icon[style*="left: 25%"] {
+  left: 25% !important;
+  top: 30% !important;
+  transform: translate(-50%, -50%);
+}
+.icon[style*="right: 25%"] {
+  right: 25% !important;
+  top: 60% !important;
+  transform: translate(50%, -50%);
+}
+
+/* but ensure they also have the icon styling */
+.icon.bi-box-seam,
+.icon.bi-circle {
+  /* inherits all from .icon, fine */
 }
 </style>

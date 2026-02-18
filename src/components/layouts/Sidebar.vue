@@ -1,19 +1,5 @@
 <template>
-  <!-- Hamburger Button (only on mobile) -->
-  <button
-    v-if="!isDesktop"
-    class="hamburger-btn d-lg-none"
-    @click="toggleSidebar"
-    :class="{ active: isOpen }"
-    aria-label="Toggle sidebar"
-  >
-    <span></span>
-    <span></span>
-    <span></span>
-  </button>
-
-  <!-- Sidebar -->
-  <div class="sidebar" :class="{ 'mobile-open': isOpen && !isDesktop }">
+  <div class="sidebar d-none d-xl-flex">
     <!-- Logo -->
     <div class="brand-header">
       <div class="large-logo-box">
@@ -48,7 +34,7 @@
         exact
       >
         <div class="icon-box"><i class="bi bi-bookmark-star-fill"></i></div>
-        <span>ប្រភេទរបាយការណ៍</span>
+        <span>ប្រភេទការបង្ហោះ</span>
       </router-link>
 
       <router-link
@@ -57,26 +43,46 @@
         exact
       >
         <div class="icon-box"><i class="bi bi-file-earmark-text-fill"></i></div>
-        <span>របាយការណ៍</span>
+        <span>ការបង្ហោះ</span>
       </router-link>
     </nav>
 
     <!-- Footer -->
-    <div class="sidebar-footer">
+    <div class="sidebar-footer pt-4 border-top">
       <button class="action-btn security" @click="goToSecurity">
-        <i class="bi bi-shield-lock"></i> ការកំណត់សុវត្ថិភាព
+        <i class="bi bi-gear"></i> ការកំណត់
+      </button>
+    </div>
+    <div class="sidebar-footer border-0">
+     <button class="btn action-btn logout" @click="openLogoutModal">
+        <i class="bi bi-box-arrow-right"></i> ចាកចេញ
       </button>
     </div>
 
-    <!-- Close button on mobile -->
-    <button
-      v-if="isOpen && !isDesktop"
-      class="close-sidebar d-lg-none"
-      @click="closeSidebar"
-      aria-label="Close sidebar"
-    >
-      <i class="bi bi-x-lg"></i>
-    </button>
+    <!-- Logout Modal -->
+<!-- Logout Modal -->
+  <BaseModal
+    v-if="showLogoutModal"
+    title="ចាកចេញពីគណនី"
+    icon="exclamation-triangle"
+    theme="danger"
+    :isClose="showLogoutModal"
+    @closeModal="closeLogoutModal"
+  >
+    <template #body>
+      <p class="khmer-font text-center mb-0">តើអ្នកពិតជាចង់ចាកចេញមែនទេ?</p>
+    </template>
+    <template #btnClose>
+      <BaseButton variant="cancel" class="col-6" @click="closeLogoutModal">
+        បោះបង់
+      </BaseButton>
+    </template>
+    <template #btnActive>
+      <BaseButton variant="danger" class="col-6" @click="logout">
+        បញ្ជាក់
+      </BaseButton>
+    </template>
+  </BaseModal>
   </div>
 
   <!-- Backdrop overlay on mobile when sidebar is open -->
@@ -119,7 +125,9 @@
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from "vue";
 import { useRouter } from "vue-router";
+import { useAuthStore } from "@/stores/authStore";
 
+const auth = useAuthStore();
 const router = useRouter();
 const showLogoutModal = ref(false);
 const isOpen = ref(false); // Start closed on mobile
@@ -136,12 +144,23 @@ const closeSidebar = () => {
   isOpen.value = false;
 };
 
+const closeLogoutModal = () => {
+  showLogoutModal.value = false;
+};
+
+const logout = () => {
+  localStorage.clear();
+  auth.logout();
+  router.push("/admin/login");
+};
 /* Go to Profile Security page */
 function goToSecurity() {
   router.push({ name: "admin.profile.security" });
 }
+function openLogoutModal() {
+  showLogoutModal.value = true;
+}
 
-/* Logout */
 function handleLogout() {
   localStorage.removeItem("token");
   localStorage.removeItem("user");
@@ -289,7 +308,7 @@ onUnmounted(() => {
 
 .large-logo-box {
   width: 100%;
-  height: 200px;
+  height: 100px; /* Very large logo area – adjust to 180–260px if needed */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -298,7 +317,7 @@ onUnmounted(() => {
 
 .brand-logo {
   max-width: 100%;
-  max-height: 100%;
+  height: 200px;
   object-fit: contain;
   transition: transform 0.28s ease;
 }
@@ -366,8 +385,7 @@ onUnmounted(() => {
 }
 
 .sidebar-footer {
-  padding: 24px 20px 40px;
-  border-top: 1px solid #f1f5f9;
+  padding: 5px 20px 10px;
 }
 
 .action-btn {

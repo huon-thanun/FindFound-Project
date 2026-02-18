@@ -1,7 +1,7 @@
 <template>
   <div class="mb-3">
     <label class="form-label" style="display: block; text-align: start">
-      {{ label }}
+      {{ label }} <span class="text-danger">{{ unOptional ? '*' : ''}}</span>
     </label>
     <div v-if="type === 'file'">
       <BaseButton
@@ -37,24 +37,33 @@
       </div>
     </div>
 
-    <input
-      v-else
-      class="form-control"
-      :class="{ 'is-invalid': error }"
-      :type="type"
-      :placeholder="placeholder"
-      :disabled="disabled"
-      :value="modelValue"
-      @input="onInput"
-      @blur="onBlur"
-    />
+    <div v-else class="position-relative">
+      <input
+        class="form-control pe-5"
+        :class="{ 'is-invalid': error }"
+        :type="computedType"
+        :placeholder="placeholder"
+        :disabled="disabled"
+        :value="modelValue"
+        @input="onInput"
+        @blur="onBlur"
+      />
 
+      <!-- Eye Icon -->
+      <i
+        v-if="type === 'password'"
+        class="bi position-absolute top-50 end-0 translate-middle-y me-3 cursor-pointer"
+        :class="showPassword ? 'bi-eye-slash' : 'bi-eye'"
+        @click="togglePassword"
+      ></i>
+      <div v-if="error" class="invalid-feedback" style="text-align: start">{{ error }}</div>
+    </div>
     <div v-if="error" class="invalid-feedback" style="text-align: start">{{ error }}</div>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import BaseButton from './BaseButton.vue';
 const fileName = ref('');
 const shortFileName = ref('');
@@ -74,7 +83,7 @@ const onFileChange = (event) => {
   emit('update:modelValue', file);
 };
 
-defineProps({
+const props = defineProps({
   modelValue: { type: [String, Number, Object], default: '' },
   label: {
     type: String,
@@ -100,6 +109,10 @@ defineProps({
     type: String,
     default: '',
   },
+  unOptional: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 const emit = defineEmits(['update:modelValue', 'input', 'change']);
@@ -108,6 +121,19 @@ const onInput = (event) => {
   emit('update:modelValue', event.target.value);
   emit('input');
   emit('change');
+};
+
+const showPassword = ref(false);
+
+const computedType = computed(() => {
+  if (props.type === 'password') {
+    return showPassword.value ? 'text' : 'password';
+  }
+  return props.type;
+});
+
+const togglePassword = () => {
+  showPassword.value = !showPassword.value;
 };
 </script>
 
@@ -139,4 +165,13 @@ const onInput = (event) => {
   outline: none;
 }
 
+.cursor-pointer {
+  cursor: pointer;
+  font-size: 18px;
+  color: #6c757d;
+}
+
+.cursor-pointer:hover {
+  color: var(--primary-color);
+}
 </style>
