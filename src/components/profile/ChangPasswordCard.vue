@@ -13,9 +13,16 @@
       <label class="info-label">លេខសម្ងាត់បច្ចុប្បន្ន</label>
       <div class="input-with-icon">
         <i class="bi bi-shield-lock text-purple-accent"></i>
-        <input :type="showCurrentPassword ? 'text' : 'password'" v-model="currentPassword" class="clean-input"
-          placeholder="••••••••" />
-        <button @click="showCurrentPassword = !showCurrentPassword" class="btn-eye">
+        <input
+          :type="showCurrentPassword ? 'text' : 'password'"
+          v-model="currentPassword"
+          class="clean-input"
+          placeholder="••••••••"
+        />
+        <button
+          @click="showCurrentPassword = !showCurrentPassword"
+          class="btn-eye"
+        >
           <i :class="showCurrentPassword ? 'bi bi-eye-slash' : 'bi bi-eye'"></i>
         </button>
       </div>
@@ -26,8 +33,12 @@
       <label class="info-label">លេខសម្ងាត់ថ្មី</label>
       <div class="input-with-icon">
         <i class="bi bi-key text-purple-accent"></i>
-        <input :type="showNewPassword ? 'text' : 'password'" v-model="newPassword" class="clean-input"
-          placeholder="••••••••" />
+        <input
+          :type="showNewPassword ? 'text' : 'password'"
+          v-model="newPassword"
+          class="clean-input"
+          placeholder="••••••••"
+        />
         <button @click="showNewPassword = !showNewPassword" class="btn-eye">
           <i :class="showNewPassword ? 'bi bi-eye-slash' : 'bi bi-eye'"></i>
         </button>
@@ -36,18 +47,32 @@
 
     <!-- Password Strength Meter -->
     <div class="d-flex gap-1 mb-4">
-      <div v-for="i in 4" :key="i" class="pwd-meter" :class="{ active: newPassword.length > i * 2 }"></div>
+      <div
+        v-for="i in 4"
+        :key="i"
+        class="pwd-meter"
+        :class="{ active: newPassword.length > i * 2 }"
+      ></div>
     </div>
 
     <!-- Update Button -->
-    <button @click="updatePassword" class="btn-save-premium w-100"
-      :disabled="loading || !currentPassword || !newPassword">
+    <button
+      @click="updatePassword"
+      class="btn-save-premium w-100"
+      :disabled="loading || !currentPassword || !newPassword"
+    >
       <span v-if="loading" class="spinner-border spinner-border-sm me-2"></span>
-      ធ្វើបច្ចុប្បន្នភាព
+      ប្តូរលេខសម្ងាត់
     </button>
 
     <!-- Message Toast -->
-    <BaseToast v-model="showToast" :message="toastMessage" :theme="toastTheme" :icon="toastIcon" :duration="3000" />
+    <BaseToast
+      v-model="showToast"
+      :message="toastMessage"
+      :theme="toastTheme"
+      :icon="toastIcon"
+      :duration="3000"
+    />
   </div>
 </template>
 

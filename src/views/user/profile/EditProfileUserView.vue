@@ -1,306 +1,361 @@
 <template>
-  <ProfileLayout>
-    <template #header>
-      <ProfileHeader :user="user" />
-    </template>
+  <div class="row g-4">
+    <div class="col-lg-12" data-aos="fade-up">
+      <!-- Use Admin Tabs -->
+      <ProfileTabsAdmin class="mb-4" />
 
-    <div v-if="!user" class="loading-full">
-      <div class="custom-loader"></div>
-      <p class="mt-4 khmer-font text-purple-accent">កំពុងផ្ទុកទិន្នន័យ...</p>
-    </div>
+      <div class="main-details-card mb-4 shadow-sm">
+        <div class="card-header-clean mb-4">
+          <div class="accent-dot"></div>
+          <h5 class="fw-bold mb-0 text-dark-indigo khmer-font-title">
+            កែប្រែព័ត៌មានអ្នកគ្រប់គ្រង
+          </h5>
+          <small class="text-muted d-block mt-1">
+            គណនីអ្នកគ្រប់គ្រង (Admin Profile)
+          </small>
+        </div>
 
-    <div v-else class="profile-page">
-      <section class="hero-lavender">
-        <div class="container-fluid px-lg-5">
-          <div class="row align-items-center pt-5 pb-5">
-            <div class="col-md-auto text-center text-md-start">
-              <div class="avatar-glow-wrapper" data-aos="zoom-in">
-                <img
-                  :src="
-                    form.avatar ||
-                    user.avatar ||
-                    `https://ui-avatars.com/api/?name=${form.fullname}`
-                  "
-                  class="profile-img-premium shadow-lg"
-                  alt="Avatar"
-                />
-                <label for="avatarInput" class="avatar-edit-badge">
-                  <i class="bi bi-camera-fill"></i>
-                </label>
-                <input
-                  type="file"
-                  id="avatarInput"
-                  class="d-none"
-                  @change="onAvatarChange"
-                  accept="image/*"
-                />
-              </div>
-            </div>
+        <div v-if="loading" class="loading-inside">
+          <div class="custom-loader"></div>
+          <p class="mt-4 khmer-font text-purple-accent">
+            កំពុងផ្ទុកទិន្នន័យ...
+          </p>
+        </div>
 
-            <div
-              class="col-md ps-md-4 mt-4 mt-md-0 text-center text-md-start"
-              data-aos="fade-right"
-            >
-              <h1
-                class="display-6 fw-bold text-dark-indigo mb-1 khmer-font-title"
-              >
-                {{ user.fullname }}
-              </h1>
-              <p class="text-muted fs-5 mb-3">{{ user.email }}</p>
-
+        <div v-else class="row g-4">
+          <!-- Fullname -->
+          <div class="col-md-6">
+            <div class="info-box-item-input">
+              <label class="info-label">ឈ្មោះពេញ *</label>
               <div
-                class="d-flex flex-wrap gap-2 justify-content-center justify-content-md-start"
+                class="input-with-icon"
+                :class="{ 'is-invalid': errors.fullname }"
               >
-                <button class="btn-delete-simple" @click="deleteAvatar">
-                  <i class="bi bi-trash3 me-2"></i> លុបរូបភាពប្រើប្រាស់
-                </button>
+                <i class="bi bi-person text-purple-accent"></i>
+                <input
+                  v-model.trim="form.fullname"
+                  @input="validateFullname"
+                  type="text"
+                  class="clean-input"
+                  placeholder="ឈ្មោះពេញ"
+                />
+              </div>
+              <small v-if="errors.fullname" class="text-danger error-text">
+                {{ errors.fullname }}
+              </small>
+            </div>
+          </div>
+
+          <!-- Email (disabled) -->
+          <div class="col-md-6">
+            <div class="info-box-item-input disabled-box">
+              <label class="info-label">អាសយដ្ឋានអ៊ីមែល (មិនអាចប្តូរបាន)</label>
+              <div class="input-with-icon">
+                <i class="bi bi-envelope text-muted"></i>
+                <input
+                  v-model="form.email"
+                  type="email"
+                  class="clean-input"
+                  disabled
+                />
               </div>
             </div>
           </div>
-        </div>
-      </section>
 
-      <div class="container-fluid px-lg-5 content-overlap">
-        <div class="row g-4">
-          <div class="col-lg-8" data-aos="fade-up">
-            <ProfileTabs class="mb-4" />
-
-            <div class="main-details-card mb-4 shadow-sm">
-              <div class="card-header-clean mb-4">
-                <div class="accent-dot"></div>
-                <h5 class="fw-bold mb-0 text-dark-indigo khmer-font-title">
-                  កែប្រែព័ត៌មានផ្ទាល់ខ្លួន
-                </h5>
+          <!-- Phone -->
+          <div class="col-md-6">
+            <div class="info-box-item-input">
+              <label class="info-label">លេខទូរស័ព្ទ</label>
+              <div
+                class="input-with-icon"
+                :class="{ 'is-invalid': errors.phoneNumber }"
+              >
+                <i class="bi bi-phone text-purple-accent"></i>
+                <input
+                  v-model.trim="form.phoneNumber"
+                  @input="validatePhone"
+                  type="tel"
+                  class="clean-input"
+                  placeholder="012 345 678"
+                />
               </div>
+              <small v-if="errors.phoneNumber" class="text-danger error-text">
+                {{ errors.phoneNumber }}
+              </small>
+            </div>
+          </div>
 
-              <div class="row g-4">
-                <div class="col-md-6">
-                  <div class="info-box-item-input">
-                    <label class="info-label">ឈ្មោះពេញ</label>
-                    <div class="input-with-icon">
-                      <i class="bi bi-person text-purple-accent"></i>
-                      <input
-                        v-model="form.fullname"
-                        type="text"
-                        class="clean-input"
-                        placeholder="ឈ្មោះពេញ"
-                      />
-                    </div>
-                  </div>
-                </div>
+          <!-- Telegram -->
+          <div class="col-md-6">
+            <div class="info-box-item-input">
+              <label class="info-label">តំណភ្ជាប់ Telegram</label>
+              <div
+                class="input-with-icon"
+                :class="{ 'is-invalid': errors.telegramLink }"
+              >
+                <i class="bi bi-send text-purple-accent"></i>
+                <input
+                  v-model.trim="form.telegramLink"
+                  @input="validateTelegram"
+                  type="url"
+                  class="clean-input"
+                  placeholder="https://t.me/yourusername"
+                />
+              </div>
+              <small v-if="errors.telegramLink" class="text-danger error-text">
+                {{ errors.telegramLink }}
+              </small>
+            </div>
+          </div>
 
-                <div class="col-md-6">
-                  <div class="info-box-item-input disabled-box">
-                    <label class="info-label"
-                      >អាសយដ្ឋានអ៊ីមែល (មិនអាចប្តូរបាន)</label
-                    >
-                    <div class="input-with-icon">
-                      <i class="bi bi-envelope text-muted"></i>
-                      <input
-                        :value="user.email"
-                        type="email"
-                        class="clean-input"
-                        disabled
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                <div class="col-md-6">
-                  <div class="info-box-item-input">
-                    <label class="info-label">លេខទូរស័ព្ទ</label>
-                    <div class="input-with-icon">
-                      <i class="bi bi-phone text-purple-accent"></i>
-                      <input
-                        v-model="form.phoneNumber"
-                        type="text"
-                        class="clean-input"
-                        placeholder="បញ្ចូលលេខទូរស័ព្ទ"
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                <div class="col-md-6">
-                  <div class="info-box-item-input">
-                    <label class="info-label">តំណភ្ជាប់ Telegram</label>
-                    <div class="input-with-icon">
-                      <i class="bi bi-send text-purple-accent"></i>
-                      <input
-                        v-model="form.telegramLink"
-                        type="text"
-                        class="clean-input"
-                        placeholder="ឧទាហរណ៍: https://t.me/username"
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                <div class="col-12 mt-4">
-                  <button
-                    @click="updateProfile"
-                    class="btn-save-premium"
-                    :disabled="loading"
+          <!-- ── Admin Only Fields ────────────────────────────────────── -->
+          <div v-if="isAdmin" class="col-12 mt-4 border-top pt-4">
+            <h6 class="fw-bold text-danger mb-3">
+              ព័ត៌មានអ្នកគ្រប់គ្រង (Admin Only)
+            </h6>
+            <div class="row g-4">
+              <!-- Role -->
+              <div class="col-md-6">
+                <div class="info-box-item-input">
+                  <label class="info-label text-danger">ឋានៈ / Role *</label>
+                  <div
+                    class="input-with-icon"
+                    :class="{ 'is-invalid': errors.role }"
                   >
-                    <span
-                      v-if="loading"
-                      class="spinner-border spinner-border-sm me-2"
-                    ></span>
-                    <i v-else class="bi bi-cloud-arrow-up-fill me-2"></i>
-                    រក្សាទុកការផ្លាស់ប្តូរ
-                  </button>
+                    <i class="bi bi-shield-lock text-danger"></i>
+                    <select
+                      v-model="form.role"
+                      @change="validateRole"
+                      class="clean-input"
+                    >
+                      <option value="user">User</option>
+                      <option value="moderator">Moderator</option>
+                      <option value="admin">Admin</option>
+                      <option value="superadmin">Super Admin</option>
+                    </select>
+                  </div>
+                  <small v-if="errors.role" class="text-danger error-text">
+                    {{ errors.role }}
+                  </small>
+                </div>
+              </div>
+
+              <!-- Status -->
+              <div class="col-md-6">
+                <div class="info-box-item-input">
+                  <label class="info-label text-danger">ស្ថានភាពគណនី</label>
+                  <div class="input-with-icon">
+                    <i class="bi bi-toggle-on text-danger"></i>
+                    <select v-model="form.status" class="clean-input">
+                      <option value="active">សកម្ម (Active)</option>
+                      <option value="suspended">ផ្អាក (Suspended)</option>
+                      <option value="banned">ហាមឃាត់ (Banned)</option>
+                    </select>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
 
-          <div class="col-lg-4" data-aos="fade-left">
-            <div class="sidebar-sticky">
-              <ProfileSide :user="user" :skills="skills" />
-            </div>
+          <div class="col-12 mt-5">
+            <button
+              @click="updateProfile"
+              class="btn-save-premium"
+              :disabled="saving || !isFormValid || !isFormDirty"
+            >
+              <span
+                v-if="saving"
+                class="spinner-border spinner-border-sm me-2"
+              ></span>
+              <i v-else class="bi bi-cloud-arrow-up-fill me-2"></i>
+              រក្សាទុក (Admin)
+            </button>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Message Toast -->
-    <BaseToast v-model="showToast" :message="toastMessage" :theme="toastTheme" :icon="toastIcon" :duration="3000" />
-
-    <div v-if="showConfirmPopup" class="popup-backdrop">
-      <div class="popup-card animate-zoom">
-        <div class="popup-icon text-warning">
-          <i class="bi bi-question-circle-fill"></i>
-        </div>
-        <h5 class="fw-bold">បញ្ជាក់ការលុប</h5>
-        <p class="text-muted">តើអ្នកពិតជាចង់លុបរូបភាពប្រើប្រាស់មែនទេ?</p>
-        <div class="d-flex justify-content-center gap-2 mt-4">
-          <button
-            class="btn btn-light px-4 rounded-3"
-            @click="showConfirmPopup = false"
-          >
-            បោះបង់
-          </button>
-          <button class="btn btn-danger px-4 rounded-3" @click="confirmYes">
-            លុបចេញ
-          </button>
-        </div>
-      </div>
-    </div>
-  </ProfileLayout>
+    <BaseToast
+      v-model="showToast"
+      :message="toastMessage"
+      :theme="toastTheme"
+      :icon="toastIcon"
+      :duration="3500"
+    />
+  </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
-import ProfileTabs from "@/components/profile/ProfileTabs.vue";
-import ProfileHeader from "@/components/profile/ProfileHeader.vue";
-import ProfileSide from "@/components/profile/ProfileSide.vue";
+import { ref, computed, inject, watch } from "vue";
+import ProfileTabsAdmin from "@/components/profile/ProfileTabsAdmin.vue";
 import BaseToast from "@/components/base/BaseToast.vue";
 
-const user = ref(null);
-const skills = ["HTML", "CSS", "Vue", "MySQL", "JavaScript"];
-const form = ref({
-  fullname: "",
-  email: "",
-  phoneNumber: "",
-  telegramLink: "",
-  avatar: "",
-});
-const loading = ref(false);
-
-// Toast
+// ── Toast ──────────────────────────────────────────────────────
 const showToast = ref(false);
 const toastMessage = ref("");
 const toastTheme = ref("success");
 const toastIcon = ref("check-circle");
 
-const showBaseToast = (message, theme = "success") => {
-  toastMessage.value = message;
+const showLocalToast = (msg, theme = "success") => {
+  toastMessage.value = msg;
   toastTheme.value = theme;
   toastIcon.value = theme === "success" ? "check-circle" : "x-circle";
   showToast.value = true;
 };
 
-const showConfirmPopup = ref(false);
-let confirmAction = null;
-const confirmYes = async () => {
-  showConfirmPopup.value = false;
-  if (confirmAction) await confirmAction();
-};
+// ── Data ───────────────────────────────────────────────────────
+const user = inject("profileUser");
 
-onMounted(async () => {
-  try {
-    const token = localStorage.getItem("token");
-    const res = await fetch(
-      "https://ant-g2-landf.ti.linkpc.net/api/v1/auth/profile",
-      {
-        headers: { Authorization: `Bearer ${token}` },
-      },
-    );
-    const json = await res.json();
-    if (json.result) {
-      user.value = json.data;
-      Object.assign(form.value, json.data);
-    }
-  } catch (err) {
-    console.error(err);
-  }
+const isAdmin = computed(() => {
+  const role = user?.value?.role?.toLowerCase?.() || "";
+  return role === "admin" || role === "superadmin";
 });
 
-const onAvatarChange = async (e) => {
-  const file = e.target.files[0];
-  if (!file) return;
-  try {
-    const token = localStorage.getItem("token");
-    const formData = new FormData();
-    formData.append("avatar", file);
-    const res = await fetch(
-      "https://ant-g2-landf.ti.linkpc.net/api/v1/auth/profile/avatar",
-      {
-        method: "PUT",
-        headers: { Authorization: `Bearer ${token}` },
-        body: formData,
-      },
-    );
-    const json = await res.json();
-    if (!res.ok) throw new Error();
-    user.value.avatar = json.data.avatar;
-    form.value.avatar = json.data.avatar;
-    showBaseToast("របូបភាពត្រូវបានផ្លាស់ប្តូរ 🎉");
-  } catch (err) {
-    showBaseToast("មិនអាចផ្លាស់ប្តូររូបភាពបានទេ", "error");
+const form = ref({
+  fullname: "",
+  email: "",
+  phoneNumber: "",
+  telegramLink: "",
+  role: "admin", // default for admin page
+  status: "active", // default
+});
+
+const loading = ref(true);
+const saving = ref(false);
+
+const errors = ref({
+  fullname: "",
+  phoneNumber: "",
+  telegramLink: "",
+  role: "",
+});
+
+// ── Validation ─────────────────────────────────────────────────
+const validateFullname = () => {
+  errors.value.fullname = !form.value.fullname.trim()
+    ? "សូមបញ្ចូលឈ្មោះពេញ"
+    : "";
+};
+
+const validatePhone = () => {
+  const phone = form.value.phoneNumber.trim();
+  if (!phone) {
+    errors.value.phoneNumber = "";
+    return;
   }
+  errors.value.phoneNumber = !/^[0-9]{8,12}$/.test(phone)
+    ? "លេខទូរស័ព្ទត្រូវមាន ៨-១២ ខ្ទង់ (គ្មានអក្សរ ឬកន្លះ)"
+    : "";
 };
 
-const deleteAvatar = () => {
-  confirmAction = async () => {
-    try {
-      const token = localStorage.getItem("token");
-      await fetch(
-        "https://ant-g2-landf.ti.linkpc.net/api/v1/auth/profile/avatar",
-        {
-          method: "DELETE",
-          headers: { Authorization: `Bearer ${token}` },
-        },
-      );
-      form.value.avatar = "";
-      user.value.avatar = "";
-      showBaseToast("របូបភាពត្រូវបានលុបចេញ 🗑️");
-    } catch (err) {
-      showBaseToast("បរាជ័យក្នុងការលុប", "error");
+const validateTelegram = () => {
+  const link = form.value.telegramLink.trim();
+  if (!link) {
+    errors.value.telegramLink = "";
+    return;
+  }
+  errors.value.telegramLink = !link.startsWith("https://t.me/")
+    ? "តំណ Telegram ត្រូវចាប់ផ្តើមដោយ https://t.me/"
+    : "";
+};
+
+const validateRole = () => {
+  errors.value.role = !form.value.role ? "សូមជ្រើសរើសឋានៈ" : "";
+};
+
+const isFormValid = computed(() => {
+  const baseValid =
+    !errors.value.fullname &&
+    !errors.value.phoneNumber &&
+    !errors.value.telegramLink &&
+    !!form.value.fullname.trim();
+
+  if (isAdmin.value) {
+    return baseValid && !!form.value.role;
+  }
+  return baseValid;
+});
+
+const isFormDirty = computed(() => {
+  if (!user?.value) return false;
+  const n = (v) => (v == null ? "" : String(v).trim());
+
+  let changed =
+    n(form.value.fullname) !== n(user.value.fullname) ||
+    n(form.value.phoneNumber) !== n(user.value.phoneNumber) ||
+    n(form.value.telegramLink) !== n(user.value.telegramLink);
+
+  if (isAdmin.value) {
+    changed =
+      changed ||
+      n(form.value.role) !== n(user.value.role) ||
+      n(form.value.status) !== n(user.value.status);
+  }
+
+  return changed;
+});
+
+// ── Load data ──────────────────────────────────────────────────
+watch(
+  () => user?.value,
+  (userData) => {
+    if (userData) {
+      form.value = {
+        fullname: userData.fullname || "",
+        email: userData.email || "",
+        phoneNumber: userData.phoneNumber || "",
+        telegramLink: userData.telegramLink || "",
+        role: userData.role || "admin",
+        status: userData.status || "active",
+      };
+      loading.value = false;
     }
-  };
-  showConfirmPopup.value = true;
-};
+  },
+  { immediate: true },
+);
 
+// ── Submit ─────────────────────────────────────────────────────
 const updateProfile = async () => {
-  loading.value = true;
+  validateFullname();
+  validatePhone();
+  validateTelegram();
+  if (isAdmin.value) validateRole();
+
+  if (!isFormValid.value) {
+    showLocalToast("សូមបំពេញព័ត៌មានឲ្យត្រឹមត្រូវ", "error");
+    return;
+  }
+
+  if (!isFormDirty.value) {
+    showLocalToast("មិនមានការផ្លាស់ប្តូរអ្វីទេ", "info");
+    return;
+  }
+
+  saving.value = true;
+
   try {
     const token = localStorage.getItem("token");
+    if (!token) throw new Error("សូមចូលគណនីឡើងវិញ");
+
     const payload = {
-      fullname: form.value.fullname,
-      phoneNumber: form.value.phoneNumber,
-      telegramLink: form.value.telegramLink,
+      fullname: form.value.fullname.trim(),
     };
+
+    if (form.value.phoneNumber?.trim()) {
+      payload.phoneNumber = form.value.phoneNumber.trim();
+    }
+    if (form.value.telegramLink?.trim()) {
+      payload.telegramLink = form.value.telegramLink.trim();
+    }
+
+    // Admin-only fields
+    if (isAdmin.value) {
+      payload.role = form.value.role;
+      payload.status = form.value.status;
+    }
+
+    console.log("Sending admin profile update:", payload);
+
     const res = await fetch(
       "https://ant-g2-landf.ti.linkpc.net/api/v1/auth/profile",
       {
@@ -312,95 +367,45 @@ const updateProfile = async () => {
         body: JSON.stringify(payload),
       },
     );
-    if (!res.ok) throw new Error();
-    user.value = { ...user.value, ...payload };
-    showBaseToast("ព័ត៌មានត្រូវបានរក្សាទុក 🎉");
+
+    if (!res.ok) {
+      let errorDetail = `កំហុស ${res.status}`;
+      try {
+        const errData = await res.json();
+        console.error("Server error details:", errData);
+        errorDetail = errData.message || errData.error || errorDetail;
+      } catch {}
+      throw new Error(errorDetail);
+    }
+
+    // Update local user
+    if (user?.value) {
+      Object.assign(user.value, {
+        fullname: form.value.fullname,
+        phoneNumber: form.value.phoneNumber,
+        telegramLink: form.value.telegramLink,
+        ...(isAdmin.value && {
+          role: form.value.role,
+          status: form.value.status,
+        }),
+      });
+    }
+
+    showLocalToast("ព័ត៌មានអ្នកគ្រប់គ្រងត្រូវបានរក្សាទុកជោគជ័យ 🎉", "success");
   } catch (err) {
-    showBaseToast("បរាជ័យក្នុងការរក្សាទុក", "error");
+    console.error("Admin profile update failed:", err);
+    showLocalToast(
+      err.message || "មិនអាចរក្សាទុកបានទេ សូមព្យាយាមម្តងទៀត",
+      "error",
+    );
   } finally {
-    loading.value = false;
+    saving.value = false;
   }
 };
 </script>
 
 <style scoped>
-@import url("https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@300;400;600;700&family=Koh+Santepheap:wght@700&display=swap");
-
-.profile-page {
-  font-family: "Kantumruy Pro", sans-serif;
-  background-color: #f9f8ff;
-  min-height: 100vh;
-  padding-bottom: 80px;
-}
-
-.khmer-font-title {
-  font-family: "Koh Santepheap", sans-serif;
-}
-
-/* HERO SECTION - Premium Lavender */
-.hero-lavender {
-  background-color: #f1edff;
-  background-image:
-    radial-gradient(at 0% 0%, rgba(124, 58, 237, 0.08) 0, transparent 50%),
-    radial-gradient(at 50% 0%, rgba(59, 30, 84, 0.08) 0, transparent 50%);
-  padding-bottom: 120px;
-}
-
-.avatar-glow-wrapper {
-  position: relative;
-  display: inline-block;
-}
-
-.profile-img-premium {
-  width: 160px;
-  height: 160px;
-  border-radius: 42px;
-  object-fit: cover;
-  border: 6px solid #ffffff;
-}
-
-.avatar-edit-badge {
-  position: absolute;
-  bottom: 8px;
-  right: 8px;
-  background: #7c3aed;
-  color: white;
-  width: 38px;
-  height: 38px;
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  border: 4px solid #ffffff;
-  box-shadow: 0 4px 10px rgba(124, 58, 237, 0.3);
-  transition: 0.3s;
-}
-
-.avatar-edit-badge:hover {
-  transform: scale(1.1);
-  background: #3b1e54;
-}
-
-.btn-delete-simple {
-  background: transparent;
-  color: #dc3545;
-  border: 1px solid rgba(220, 53, 69, 0.2);
-  padding: 8px 20px;
-  border-radius: 12px;
-  font-weight: 600;
-  transition: 0.3s;
-}
-
-.btn-delete-simple:hover {
-  background: #fff5f5;
-  border-color: #dc3545;
-}
-
-/* CONTENT BOXES */
-.content-overlap {
-  margin-top: -80px;
-}
+/* ── Existing styles + admin tweaks ── */
 
 .main-details-card {
   background: white;
@@ -409,20 +414,6 @@ const updateProfile = async () => {
   border: 1px solid rgba(124, 58, 237, 0.05);
 }
 
-.card-header-clean {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.accent-dot {
-  width: 8px;
-  height: 8px;
-  background: #7c3aed;
-  border-radius: 50%;
-}
-
-/* INPUT INFO BOX STYLE */
 .info-box-item-input {
   background: #fcfaff;
   padding: 15px 24px;
@@ -431,40 +422,52 @@ const updateProfile = async () => {
   transition: all 0.3s ease;
 }
 
-.info-box-item-input:focus-within {
-  background: white;
-  border-color: #7c3aed;
-  box-shadow: 0 12px 24px rgba(124, 58, 237, 0.06);
-}
-
-.info-label {
-  font-size: 0.75rem;
-  color: #94a3b8;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  margin-bottom: 4px;
-  display: block;
-}
-
 .input-with-icon {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
+  padding: 12px 16px;
+  border: 2px solid transparent;
+  border-radius: 16px;
+  background: white;
+  transition: all 0.2s ease;
+}
+
+.input-with-icon:focus-within {
+  border-color: #7c3aed;
+  box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.12);
+}
+
+.input-with-icon.is-invalid {
+  border-color: #dc3545;
+  background: #fff5f5;
+  box-shadow: 0 0 0 4px rgba(220, 53, 69, 0.1);
 }
 
 .clean-input {
-  border: none;
+  border: none !important;
   background: transparent;
   width: 100%;
   font-weight: 600;
   color: #1e1b4b;
   outline: none;
+  font-size: 1rem;
 }
 
-.disabled-box {
-  background: #f1f1f1;
-  opacity: 0.8;
+.clean-input option {
+  background: white;
+  color: #1e1b4b;
+}
+
+.error-text {
+  font-size: 0.875rem;
+  margin-top: 6px;
+  display: block;
+}
+
+.disabled-box .input-with-icon {
+  background: #f8f9fa;
+  border-color: #e2e8f0;
 }
 
 .btn-save-premium {
@@ -475,22 +478,33 @@ const updateProfile = async () => {
   border-radius: 18px;
   font-weight: 700;
   border: none;
-  transition: 0.3s;
+  transition: all 0.3s;
 }
 
 .btn-save-premium:hover:not(:disabled) {
   background: #7c3aed;
-  transform: translateY(-3px);
-  box-shadow: 0 10px 20px rgba(124, 58, 237, 0.2);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(124, 58, 237, 0.25);
 }
 
-/* LOADING COMPONENT (Original Style) */
-.loading-full {
-  height: 80vh;
+.btn-save-premium:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* Admin field highlight */
+.info-box-item-input:has(.text-danger) {
+  border-left: 4px solid #dc3545;
+  background: rgba(220, 53, 69, 0.03);
+}
+
+.loading-inside {
+  min-height: 400px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  padding: 100px 20px;
 }
 
 .custom-loader {
@@ -506,71 +520,12 @@ const updateProfile = async () => {
   0% {
     transform: rotate(0deg);
   }
-
   100% {
     transform: rotate(360deg);
   }
 }
 
-/* POPUP UI */
-.popup-backdrop {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.3);
-  backdrop-filter: blur(4px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 9999;
-}
-
-.popup-card {
-  background: white;
-  padding: 40px;
-  border-radius: 32px;
-  text-align: center;
-  max-width: 400px;
-  width: 90%;
-}
-
-.popup-icon {
-  font-size: 3.5rem;
-  margin-bottom: 15px;
-}
-
-.animate-zoom {
-  animation: zoomIn 0.3s ease;
-}
-
-@keyframes zoomIn {
-  from {
-    opacity: 0;
-    transform: scale(0.8);
-  }
-
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-.text-purple-accent {
-  color: #7c3aed;
-}
-
-.text-dark-indigo {
-  color: #1e1b4b;
-}
-
 @media (max-width: 991px) {
-  .content-overlap {
-    margin-top: 0;
-    padding-top: 30px;
-  }
-
   .main-details-card {
     padding: 30px;
   }

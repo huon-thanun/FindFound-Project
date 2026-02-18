@@ -66,7 +66,7 @@
               <li>
                 <router-link
                   class="dropdown-item khmer-font"
-                  to="/admin/profile"
+                  :to="{ name: 'admin.profile' }"
                 >
                   <i class="bi bi-person-circle"></i>
                   គណនីផ្ទាល់ខ្លួន
@@ -75,7 +75,7 @@
               <li>
                 <router-link
                   class="dropdown-item khmer-font"
-                  to="/admin/profile-security"
+                  :to="{ name: 'admin.profile.security' }"
                 >
                   <i class="bi bi-gear"></i>
                   ការកំណត់

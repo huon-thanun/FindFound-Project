@@ -1,118 +1,184 @@
 <template>
-  <ProfileLayout>
-    <!-- HEADER -->
-    <template #header>
-      <ProfileHeader :user="user" />
-    </template>
+  <div class="row g-4">
+    <div class="col-lg-12" data-aos="fade-up">
+      <ProfileTabs class="mb-4" />
 
-    <!-- LOADING STATE -->
-    <div v-if="!user" class="loading-full">
-      <div class="custom-loader"></div>
-      <p class="mt-4 khmer-font text-purple-accent">កំពុងផ្ទុកទិន្នន័យ...</p>
-    </div>
-
-    <!-- PROFILE PAGE -->
-    <div v-else class="profile-page">
-      <section class="hero-lavender">
-        <!-- Avatar + Name -->
-        <div class="container-fluid px-lg-5">
-          <div class="row align-items-center pt-5 pb-5">
-            <div class="col-md-auto text-center text-md-start">
-              <div class="avatar-glow-wrapper" data-aos="zoom-in">
-                <img
-                  :src="user.avatar || 'https://ui-avatars.com/api/?name=Admin'"
-                  class="profile-img-premium shadow-lg"
-                  alt="Avatar"
-                />
-                <div class="status-indicator-online"></div>
-              </div>
-            </div>
-            <div
-              class="col-md ps-md-4 mt-4 mt-md-0 text-center text-md-start"
-              data-aos="fade-right"
-            >
-              <div
-                class="d-flex align-items-center justify-content-center justify-content-md-start gap-2 mb-2"
-              >
-                <h1
-                  class="display-6 fw-bold text-dark-indigo mb-0 khmer-font-title"
-                >
-                  {{ user.fullname }}
-                </h1>
-                <span class="badge-verified-glow"
-                  ><i class="bi bi-patch-check-fill"></i
-                ></span>
-              </div>
-              <p class="text-muted fs-5 mb-3">{{ user.email }}</p>
-              <div
-                class="d-flex flex-wrap gap-2 justify-content-center justify-content-md-start"
-              >
-                <span class="badge-status-premium">
-                  {{
-                    user.status === "ACTIVATED"
-                      ? "អ្នកគ្រប់គ្រងប្រព័ន្ធ"
-                      : "មិនទាន់ដំណើរការ"
-                  }}
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- CONTENT: Password + Email -->
-      <div class="container-fluid px-lg-5 content-overlap">
+      <div class="main-details-card mb-4 shadow-sm">
+        <!-- No loading here anymore – layout already fetched user -->
         <div class="row g-4">
-          <!-- LEFT: Password + Email -->
-          <div class="col-lg-12" data-aos="fade-up">
-            <ProfileTabs class="mb-4" />
-
-            <div class="row g-4">
-              <!-- PASSWORD -->
-              <div class="col-lg-6">
-                <ChangePasswordCard
-                  v-model:currentPassword="currentPassword"
-                  v-model:newPassword="newPassword"
-                  v-model:showCurrent="showCurrentPassword"
-                  v-model:showNew="showNewPassword"
-                  :loading="loadingPassword"
-                  @update="updatePassword"
-                />
-              </div>
-
-              <!-- EMAIL -->
-              <div class="col-lg-6">
-                <ChangeEmailCard
-                  v-model:newEmail="newEmail"
-                  v-model:password="emailPassword"
-                  v-model:showPassword="showEmailPassword"
-                  v-model:token="emailVerifyToken"
-                  v-model:requested="emailRequested"
-                  :loadingRequest="loadingEmail"
-                  :loadingVerify="loadingVerify"
-                  @request="requestEmailChange"
-                  @verify="verifyEmailChange"
-                />
-              </div>
-            </div>
+          <!-- PASSWORD -->
+          <div class="col-lg-6">
+            <ChangePasswordCard
+              v-model:currentPassword="currentPassword"
+              v-model:newPassword="newPassword"
+              v-model:showCurrent="showCurrentPassword"
+              v-model:showNew="showNewPassword"
+              :loading="loadingPassword"
+              @update="updatePassword"
+            />
           </div>
 
-          <!-- RIGHT: Sidebar -->
-          <div class="col-lg-4" data-aos="fade-left">
-            <ProfileSide :user="user" :skills="skills" />
+          <!-- EMAIL -->
+          <div class="col-lg-6">
+            <ChangeEmailCard
+              v-model:newEmail="newEmail"
+              v-model:password="emailPassword"
+              v-model:showPassword="showEmailPassword"
+              v-model:token="emailVerifyToken"
+              v-model:requested="emailRequested"
+              :loadingRequest="loadingEmail"
+              :loadingVerify="loadingVerify"
+              @request="requestEmailChange"
+              @verify="verifyEmailChange"
+            />
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Message Toast -->
-    <BaseToast v-model="showToast" :message="toastMessage" :theme="toastTheme" :icon="toastIcon" :duration="3000" />
-  </ProfileLayout>
+    <div class="col-lg-4" data-aos="fade-left">
+      <div class="sidebar-sticky">
+        <ProfileSide :user="sharedUser" :skills="skills" />
+      </div>
+    </div>
+
+    <BaseToast
+      v-model="showToast"
+      :message="toastMessage"
+      :theme="toastTheme"
+      :icon="toastIcon"
+      :duration="3000"
+    />
+  </div>
 </template>
 
+<script setup>
+import { ref, inject } from "vue";
+import ProfileTabs from "@/components/profile/ProfileTabs.vue";
+import BaseToast from "@/components/base/BaseToast.vue";
+import ChangePasswordCard from "@/components/profile/ChangPasswordCard.vue";
+import ChangeEmailCard from "@/components/profile/ChangeEmailCard.vue";
+
+const sharedUser = inject("profileUser"); // ← from ProfileLayout
+
+const skills = ["HTML", "CSS", "Vue", "MySQL", "JavaScript"];
+
+// Password states
+const currentPassword = ref("");
+const newPassword = ref("");
+const showCurrentPassword = ref(false);
+const showNewPassword = ref(false);
+const loadingPassword = ref(false);
+
+// Email states
+const newEmail = ref("");
+const emailPassword = ref("");
+const showEmailPassword = ref(false);
+const emailRequested = ref(false);
+const emailVerifyToken = ref("");
+const loadingEmail = ref(false);
+const loadingVerify = ref(false);
+
+// Toast
+const showToast = ref(false);
+const toastMessage = ref("");
+const toastTheme = ref("success");
+const toastIcon = ref("check-circle");
+
+const showBaseToast = (msg, theme = "success") => {
+  toastMessage.value = msg;
+  toastTheme.value = theme;
+  toastIcon.value = theme === "success" ? "check-circle" : "x-circle";
+  showToast.value = true;
+};
+
+// Update password (keep your logic, but use sharedUser.email after success if needed)
+const updatePassword = async () => {
+  loadingPassword.value = true;
+  try {
+    const token = localStorage.getItem("token");
+    const res = await fetch(
+      "https://ant-g2-landf.ti.linkpc.net/api/v1/auth/change-password",
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          currentPassword: currentPassword.value,
+          newPassword: newPassword.value,
+        }),
+      },
+    );
+
+    if (!res.ok) {
+      const err = await res.json();
+      throw new Error(err.message || "បរាជ័យក្នុងការប្តូរលេខសម្ងាត់");
+    }
+
+    showBaseToast("លេខសម្ងាត់បានប្តូរដោយជោគជ័យ! 🎉", "success");
+    currentPassword.value = "";
+    newPassword.value = "";
+    localStorage.removeItem("token");
+    setTimeout(() => (window.location.href = "/login"), 500);
+  } catch (err) {
+    showBaseToast(err.message || "មានបញ្ហា", "error");
+  } finally {
+    loadingPassword.value = false;
+  }
+};
+
+// Request & Verify email change – keep almost the same
+// After successful verify:
+const verifyEmailChange = async () => {
+  loadingVerify.value = true;
+  try {
+    const res = await fetch(
+      "https://ant-g2-landf.ti.linkpc.net/api/v1/auth/verify-change-email",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ token: emailVerifyToken.value.trim() }),
+      },
+    );
+
+    if (!res.ok) throw new Error();
+
+    // Update shared user email
+    if (sharedUser.value) {
+      sharedUser.value.email = newEmail.value;
+    }
+
+    emailRequested.value = false;
+    showBaseToast("អ៊ីមែលបានផ្ទៀងផ្ទាត់រួចរាល់! 🎉", "success");
+  } catch (err) {
+    showBaseToast("Token មិនត្រឹមត្រូវ", "error");
+  } finally {
+    loadingVerify.value = false;
+  }
+};
+</script>
+
 <style scoped>
-/* --- Fonts & Page --- */
-@import url("https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@300;400;600;700&family=Koh+Santepheap:wght@700&display=swap");
+/* Keep only security-specific styles here */
+/* Remove hero, layout, content-overlap, etc. – moved to ProfileLayout */
+
+.main-details-card {
+  background: white;
+  border-radius: 32px;
+  padding: 40px;
+  border: 1px solid rgba(124, 58, 237, 0.05);
+}
+
+.loading-inside {
+  min-height: 400px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 100px 20px;
+}
 
 .profile-page {
   font-family: "Kantumruy Pro", sans-serif;
@@ -376,144 +442,3 @@
   }
 }
 </style>
-<script setup>
-import { ref, onMounted } from "vue";
-import ProfileHeader from "@/components/profile/ProfileHeader.vue";
-import ProfileTabs from "@/components/profile/ProfileTabs.vue";
-import BaseToast from "@/components/base/BaseToast.vue";
-
-// Child components
-import ChangePasswordCard from "@/components/profile/ChangPasswordCard.vue";
-import ChangeEmailCard from "@/components/profile/ChangeEmailCard.vue";
-
-const user = ref(null);
-const skills = ["HTML", "CSS", "Vue", "MySQL", "JavaScript"];
-
-// Password
-const currentPassword = ref("");
-const newPassword = ref("");
-const showCurrentPassword = ref(false);
-const showNewPassword = ref(false);
-const loadingPassword = ref(false);
-
-// Email
-const newEmail = ref("");
-const emailPassword = ref("");
-const showEmailPassword = ref(false);
-const emailRequested = ref(false);
-const emailVerifyToken = ref("");
-const loadingEmail = ref(false);
-const loadingVerify = ref(false);
-
-// Toast
-const showToast = ref(false);
-const toastMessage = ref("");
-const toastTheme = ref("success");
-const toastIcon = ref("check-circle");
-
-const showBaseToast = (message, theme = "success") => {
-  toastMessage.value = message;
-  toastTheme.value = theme;
-  toastIcon.value = theme === "success" ? "check-circle" : "x-circle";
-  showToast.value = true;
-};
-
-// Fetch user
-onMounted(async () => {
-  try {
-    const token = localStorage.getItem("token");
-    const res = await fetch(
-      "https://ant-g2-landf.ti.linkpc.net/api/v1/auth/profile",
-      { headers: { Authorization: `Bearer ${token}` } },
-    );
-    const json = await res.json();
-    if (json.result) user.value = json.data;
-  } catch (err) {
-    console.error(err);
-  }
-});
-
-// Update password
-const updatePassword = async () => {
-  loadingPassword.value = true;
-  try {
-    const token = localStorage.getItem("token");
-    const res = await fetch(
-      "https://ant-g2-landf.ti.linkpc.net/api/v1/auth/change-password",
-      {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          currentPassword: currentPassword.value,
-          newPassword: newPassword.value,
-        }),
-      },
-    );
-    if (!res.ok) throw new Error("បរាជ័យក្នុងការប្តូរលេខសម្ងាត់");
-    showBaseToast("លេខសម្ងាត់បានប្តូរដោយជោគជ័យ! 🎉", "success");
-    currentPassword.value = "";
-    newPassword.value = "";
-    localStorage.removeItem("token");
-    setTimeout(() => (window.location.href = "/login"), 500);
-  } catch (err) {
-    showBaseToast(err.message, "error");
-  } finally {
-    loadingPassword.value = false;
-  }
-};
-
-// Request email change
-const requestEmailChange = async () => {
-  loadingEmail.value = true;
-  try {
-    const token = localStorage.getItem("token");
-    const res = await fetch(
-      "https://ant-g2-landf.ti.linkpc.net/api/v1/auth/change-email",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          newEmail: newEmail.value,
-          password: emailPassword.value,
-        }),
-      },
-    );
-    if (!res.ok) throw new Error();
-    emailRequested.value = true;
-    showBaseToast("Token ផ្ទៀងផ្ទាត់ត្រូវបានផ្ញើទៅអ៊ីមែលថ្មី! 📩", "success");
-  } catch (err) {
-    showBaseToast("មានបញ្ហាក្នុងការស្នើសុំ", "error");
-  } finally {
-    loadingEmail.value = false;
-  }
-};
-
-// Verify email change
-const verifyEmailChange = async () => {
-  loadingVerify.value = true;
-  try {
-    const res = await fetch(
-      "https://ant-g2-landf.ti.linkpc.net/api/v1/auth/verify-change-email",
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ token: emailVerifyToken.value.trim() }),
-      },
-    );
-    if (!res.ok) throw new Error();
-    user.value.email = newEmail.value;
-    emailRequested.value = false;
-    showBaseToast("អ៊ីមែលបានផ្ទៀងផ្ទាត់រួចរាល់! 🎉", "success");
-  } catch (err) {
-    showBaseToast("Token មិនត្រឹមត្រូវ", "error");
-  } finally {
-    loadingVerify.value = false;
-  }
-};
-</script>

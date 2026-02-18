@@ -84,16 +84,65 @@
     </template>
   </BaseModal>
   </div>
+
+  <!-- Backdrop overlay on mobile when sidebar is open -->
+  <div
+    v-if="isOpen && !isDesktop"
+    class="mobile-backdrop"
+    @click="closeSidebar"
+  ></div>
+
+  <!-- Logout Modal (unchanged) -->
+  <BaseModal
+    title="ចាកចេញពីគណនី"
+    icon="box-arrow-right"
+    theme="danger"
+    :isOpen="showLogoutModal"
+    @close="showLogoutModal = false"
+  >
+    <template #body>
+      <p class="text-center py-3">តើអ្នកពិតជាចង់ចាកចេញពីកម្មវិធីមែនទេ?</p>
+    </template>
+
+    <template #footer>
+      <div class="d-flex gap-3 justify-content-center">
+        <BaseButton
+          variant="outline-secondary"
+          class="col-5"
+          @click="showLogoutModal = false"
+        >
+          បោះបង់
+        </BaseButton>
+
+        <BaseButton variant="danger" class="col-5" @click="handleLogout">
+          បញ្ជាក់
+        </BaseButton>
+      </div>
+    </template>
+  </BaseModal>
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, computed, onMounted, onUnmounted } from "vue";
 import { useRouter } from "vue-router";
 import { useAuthStore } from "@/stores/authStore";
 
 const auth = useAuthStore();
 const router = useRouter();
 const showLogoutModal = ref(false);
+const isOpen = ref(false); // Start closed on mobile
+
+// Detect desktop vs mobile
+const isDesktop = computed(() => window.innerWidth >= 992);
+
+// Toggle sidebar (mobile only)
+const toggleSidebar = () => {
+  isOpen.value = !isOpen.value;
+};
+
+const closeSidebar = () => {
+  isOpen.value = false;
+};
 
 const closeLogoutModal = () => {
   showLogoutModal.value = false;
@@ -115,15 +164,45 @@ function openLogoutModal() {
 function handleLogout() {
   localStorage.removeItem("token");
   localStorage.removeItem("user");
-
   showLogoutModal.value = false;
   router.replace({ name: "login" });
 }
+
+// Close sidebar when clicking outside (mobile)
+const handleClickOutside = (event) => {
+  if (
+    isOpen.value &&
+    !event.target.closest(".sidebar") &&
+    !event.target.closest(".hamburger-btn")
+  ) {
+    closeSidebar();
+  }
+};
+
+onMounted(() => {
+  // Auto-close on mobile at start
+  if (!isDesktop.value) {
+    isOpen.value = false;
+  }
+  document.addEventListener("click", handleClickOutside);
+  window.addEventListener("resize", () => {
+    if (isDesktop.value) {
+      isOpen.value = true; // auto-open on desktop
+    } else {
+      isOpen.value = false; // auto-close on mobile resize
+    }
+  });
+});
+
+onUnmounted(() => {
+  document.removeEventListener("click", handleClickOutside);
+});
 </script>
 
 <style scoped>
+/* ── Sidebar Base ───────────────────────────────────────────── */
 .sidebar {
-  width: 300px; /* Slightly wider for big logo comfort */
+  width: 300px;
   height: 100vh;
   background: #ffffff;
   border-right: 1px solid #e2e8f0;
@@ -134,9 +213,93 @@ function handleLogout() {
   top: 0;
   z-index: 1000;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.04);
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Mobile: Slide in/out */
+@media (max-width: 991px) {
+  .sidebar {
+    transform: translateX(-100%);
+  }
+  .sidebar.mobile-open {
+    transform: translateX(0);
+  }
+}
+
+/* Hamburger Button */
+.hamburger-btn {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  z-index: 1100;
+  width: 48px;
+  height: 48px;
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.hamburger-btn span {
+  width: 24px;
+  height: 2.5px;
+  background: #64748b;
+  border-radius: 2px;
   transition: all 0.3s ease;
 }
 
+.hamburger-btn.active span:nth-child(1) {
+  transform: rotate(45deg) translate(5px, 5px);
+}
+.hamburger-btn.active span:nth-child(2) {
+  opacity: 0;
+  transform: translateX(-20px);
+}
+.hamburger-btn.active span:nth-child(3) {
+  transform: rotate(-45deg) translate(7px, -6px);
+}
+
+/* Backdrop overlay when sidebar open on mobile */
+.mobile-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(4px);
+  z-index: 999;
+  transition: opacity 0.35s ease;
+}
+
+/* Close button on mobile sidebar */
+.close-sidebar {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 40px;
+  height: 40px;
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+  border: none;
+  border-radius: 10px;
+  font-size: 1.4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.close-sidebar:hover {
+  background: rgba(239, 68, 68, 0.2);
+}
+
+/* ── Rest of your styles (unchanged) ────────────────────────── */
 .brand-header {
   display: flex;
   flex-direction: column;
@@ -149,7 +312,7 @@ function handleLogout() {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 0 32px; /* Side padding to prevent edge touching */
+  padding: 0 32px;
 }
 
 .brand-logo {
@@ -249,12 +412,4 @@ function handleLogout() {
   background: rgba(16, 185, 129, 0.09);
   color: #10b981;
 }
-
-.action-btn.logout {
-  background: rgba(239, 68, 68, 0.09);
-  color: #ef4444;
-}
-
-/* Mobile behavior (slide out) */
-
 </style>

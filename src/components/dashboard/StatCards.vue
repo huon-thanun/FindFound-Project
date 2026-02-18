@@ -1,41 +1,43 @@
 <template>
   <div class="row g-3 mb-5">
-    <div
-      v-for="(card, index) in statCards"
-      :key="index"
-      class="col-12 col-sm-6 col-lg-3"
-    >
+    <!-- Loading -->
+    <div v-if="loading" class="col-12 text-center py-5">
+      <div class="spinner-border text-primary"></div>
+      <p class="mt-3 text-muted">កំពុងទាញទិន្នន័យស្ថិតិ</p>
+    </div>
+
+    <!-- Error -->
+    <div v-else-if="error" class="col-12">
+      <div class="alert alert-danger text-center">
+        {{ error }}
+      </div>
+    </div>
+
+    <!-- Cards -->
+    <div v-else class="row g-3">
       <div
-        class="modern-stat-card"
-        :class="{ 'featured-card': index === 0 }"
-        :style="getCardStyle(index)"
+        v-for="(card, index) in statCards"
+        :key="index"
+        class="col-12 col-sm-6 col-lg-3"
       >
         <div
-          class="card-header d-flex justify-content-between align-items-center mb-4"
+          class="modern-stat-card"
+          :class="{ 'featured-card': index === 0 }"
+          :style="getCardStyle(index)"
         >
-          <div class="icon-wrapper">
-            <i :class="['bi', card.icon || 'bi-people']"></i>
+          <div class="card-header mb-4">
+            <div class="icon-wrapper">
+              <i :class="['bi', card.icon]"></i>
+            </div>
           </div>
-          <div
-            v-if="card.trend !== undefined"
-            class="trend-pill shadow-sm"
-            :class="card.trend >= 0 ? 'trend-up' : 'trend-down'"
-          >
-            <i
-              :class="
-                card.trend >= 0
-                  ? 'bi bi-arrow-up-short'
-                  : 'bi bi-arrow-down-short'
-              "
-            ></i>
-            {{ Math.abs(card.trend).toFixed(1) }}%
-          </div>
-        </div>
 
-        <div class="card-body">
-          <h5 class="card-title">{{ card.title }}</h5>
-          <div class="card-value">{{ card.value.toLocaleString("km-KH") }}</div>
-          <small class="secondary-label">{{ card.secondary }}</small>
+          <div class="card-body">
+            <h5 class="card-title">{{ card.title }}</h5>
+            <div class="card-value">
+              {{ card.value.toLocaleString("km-KH") }}
+            </div>
+            <small class="secondary-label">{{ card.secondary }}</small>
+          </div>
         </div>
       </div>
     </div>
@@ -45,78 +47,94 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import { useUserStore } from "@/stores/userStore";
+import { useReportStore } from "@/stores/reportStore";
 
 const userStore = useUserStore();
+const reportStore = useReportStore();
+
+const loading = ref(true);
+const error = ref(null);
 const statCards = ref([]);
 
 onMounted(async () => {
   try {
-    await userStore.fetchUsers({ page: 1, perPage: 100 });
+    loading.value = true;
 
-    const totalUsers = userStore.total || 0;
+    await Promise.all([
+      userStore.fetchUsers({ page: 1, perPage: 100 }),
+      reportStore.getAllReports({ _page: 1, _per_page: 1 }), // only need meta
+    ]);
 
-    const activeUsers = userStore.users.filter(
-      (u) => (u.status || "").toUpperCase() === "ACTIVATED",
+    // USERS
+    const users = userStore.users || [];
+    const totalUsers = userStore.total || users.length;
+
+    const activeUsers = users.filter((u) => u.status === "ACTIVATED").length;
+    const inactiveUsers = users.filter(
+      (u) => u.status === "DEACTIVATED",
     ).length;
 
-    const inactiveUsers = userStore.users.filter(
-      (u) => (u.status || "").toUpperCase() === "DEACTIVATED",
-    ).length;
-
-    const now = new Date();
-    const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
-
-    const newThisMonth = userStore.users.filter((u) => {
-      if (!u.registeredAt) return false;
-      const regDate = new Date(u.registeredAt);
-      return regDate >= startOfMonth;
-    }).length;
-
-    const getTrend = () => Math.round((Math.random() * 12 - 5) * 10) / 10;
+    // REPORTS (from API meta)
+    const totalReports = reportStore.meta?.totalItems || 0;
 
     statCards.value = [
       {
+        title: "របាយការណ៍សរុប",
+        value: totalReports,
+        icon: "bi-file-earmark-bar-graph-fill",
+        secondary: "របាយការណ៍ទាំងអស់",
+      },
+      {
         title: "អ្នកប្រើប្រាស់សរុប",
         value: totalUsers,
-        icon: "bi-people",
-        trend: getTrend(),
+        icon: "bi-people-fill",
         secondary: "សរុបអ្នកប្រើប្រាស់",
       },
       {
         title: "អ្នកប្រើប្រាស់សកម្ម",
         value: activeUsers,
-        icon: "bi-person-check",
-        trend: getTrend(),
+        icon: "bi-person-check-fill",
         secondary: "អ្នកប្រើប្រាស់សកម្ម",
       },
       {
         title: "អ្នកប្រើប្រាស់អសកម្ម",
         value: inactiveUsers,
-        icon: "bi-person-x",
-        trend: getTrend(),
+        icon: "bi-person-x-fill",
         secondary: "អ្នកប្រើប្រាស់អសកម្ម",
-      },
-      {
-        title: "អ្នកប្រើថ្មីក្នុងខែនេះ",
-        value: newThisMonth,
-        icon: "bi-person-plus",
-        trend: getTrend(),
-        secondary: "អ្នកប្រើថ្មីខែនេះ",
       },
     ];
   } catch (err) {
-    console.error("Failed to load user stats:", err);
+    console.error(err);
+    error.value = "មានបញ្ហាក្នុងការទាញទិន្នន័យស្ថិតិ";
+
     statCards.value = [
+      {
+        title: "របាយការណ៍សរុប",
+        value: 0,
+        icon: "bi-file-earmark-bar-graph-fill",
+        secondary: "",
+      },
       {
         title: "អ្នកប្រើប្រាស់សរុប",
         value: 0,
-        icon: "bi-people",
-        secondary: "មានបញ្ហា",
+        icon: "bi-people-fill",
+        secondary: "",
       },
-      { title: "អ្នកប្រើប្រាស់សកម្ម", value: 0, icon: "bi-person-check" },
-      { title: "អ្នកប្រើប្រាស់អសកម្ម", value: 0, icon: "bi-person-x" },
-      { title: "អ្នកប្រើថ្មីក្នុងខែនេះ", value: 0, icon: "bi-person-plus" },
+      {
+        title: "អ្នកប្រើប្រាស់សកម្ម",
+        value: 0,
+        icon: "bi-person-check-fill",
+        secondary: "",
+      },
+      {
+        title: "អ្នកប្រើប្រាស់អសកម្ម",
+        value: 0,
+        icon: "bi-person-x-fill",
+        secondary: "",
+      },
     ];
+  } finally {
+    loading.value = false;
   }
 });
 
@@ -185,6 +203,21 @@ const getCardStyle = (index) => {
   box-shadow: 0 28px 60px rgba(124, 58, 237, 0.48);
 }
 
+/* ────────────────────────────────────────────────
+   Make icon WHITE on the featured (purple) card
+───────────────────────────────────────────────── */
+.featured-card .icon-wrapper {
+  color: white !important;
+  background: rgba(255, 255, 255, 0.18) !important;
+  border-color: rgba(255, 255, 255, 0.4) !important;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25) !important;
+}
+
+.featured-card:hover .icon-wrapper {
+  background: rgba(255, 255, 255, 0.28) !important;
+  transform: scale(1.15);
+}
+
 .icon-wrapper {
   width: 64px;
   height: 64px;
@@ -206,6 +239,8 @@ const getCardStyle = (index) => {
   box-shadow: 0 10px 24px rgba(var(--accent-primary), 0.32);
 }
 
+/* ... the rest of your styles remain unchanged ... */
+
 .trend-pill {
   font-size: 0.85rem;
   font-weight: 700;
@@ -226,7 +261,7 @@ const getCardStyle = (index) => {
 
 .trend-down {
   background: rgba(239, 68, 68, 0.2);
-  color: #ef4444;
+  color: #fff;
   border: 1px solid rgba(239, 68, 68, 0.45);
 }
 

@@ -32,9 +32,7 @@
             width: 40%;
           "></div>
       </div>
-      <BaseButton class="d-none" icon="person-plus" variant="primary" @click="showCreateModal = true">
-        បង្កើតអ្នកប្រើប្រាស់
-      </BaseButton>
+      <p class="mt-3 text-muted">កំពុងទាញទិន្នន័យស្ថិតិ</p>
     </div>
 
     <!-- <div class="row"> -->
@@ -156,50 +154,31 @@
                 </div>
               </div>
             </div>
-          </BaseReportCard>
+          </div>
+          <div class="card-body">
+            <h5 class="card-title">{{ card.title }}</h5>
+            <div class="card-value">
+              {{ card.value.toLocaleString("km-KH") }}
+            </div>
+            <small class="secondary-label">{{ card.secondary }}</small>
+          </div>
         </div>
       </div>
     </div>
-    <!-- </div> -->
-    <!-- <div class="d-flex my-2 gap-2 justify-content-center"></div> -->
-
-    <!-- pagination -->
-
-    <div v-if="reportStore.meta?.totalPages > 1" class="d-flex gap-2 justify-content-center my-3">
-      <BaseButton variant="danger" @click="PreviousPage" :disabled="!reportStore.meta?.hasPreviousPage">
-        មុន
-      </BaseButton>
-
-      <!-- <BaseButton
-        v-for="p in visiblePages"
-        :key="p"
-        :variant="p === page ? 'primary' : 'cancel'"
-        @click="goToPage(p)"
-      >
-        {{ p }}
-      </BaseButton> -->
-
-      <BaseButton variant="primary" @click="nextPage" :disabled="!reportStore.meta?.hasNextPage">
-        បន្ទាប់
-      </BaseButton>
-    </div>
-
-    <ReportDetail v-model="showModal" :data="data" />
   </div>
 </template>
 <script setup>
-import { ref, onMounted, watch } from "vue";
-import BaseReportCard from "@/components/base/BaseReportCard.vue";
-import BaseSkeleton from "@/components/base/BaseSkeleton.vue";
-import { useCategoryStore } from "@/stores/categoryStore";
+import { ref, onMounted } from "vue";
+import { useUserStore } from "@/stores/userStore";
 import { useReportStore } from "@/stores/reportStore";
-import { formatDate } from "@/utils/formatDate";
 
-import ReportDetail from "./ReportDetail.vue";
-
-const categoryStore = useCategoryStore();
+const userStore = useUserStore();
 const reportStore = useReportStore();
 
+  const loading = ref(true);
+const error = ref(null);
+const isAuthError = ref(false);
+const statCards = ref([]);
 const defaultImage =
   "https://tse2.mm.bing.net/th/id/OIP.b8bpZyFwupiioDofQPXo_gAAAA?rs=1&pid=ImgDetMain&o=7&rm=3";
 
@@ -264,108 +243,106 @@ const fetchReports = async () => {
   });
 };
 onMounted(async () => {
+  loading.value = true;
+  error.value = null;
+  isAuthError.value = false;
+
   try {
     await Promise.all([
-      categoryStore.fetchCategories(),
-      reportStore.getAllReportType(),
-      fetchReports(),
+      userStore.fetchUsers({ page: 1, perPage: 100 }),
+      reportStore.getAllReports({ page: 1, perPage: 1 }), // ✅ correct
     ]);
-  } catch (err) {
-    console.error(err);
-  }
-});
 
-watch([search, cateValue, typeValue, statusValue], () => {
-  clearTimeout(timeout);
-  timeout = setTimeout(fetchReports, 500);
-});
-const showModal = ref(false);
-const data = ref({});
-const isLoading = ref(null);
-const fetchReportDetail = async (id) => {
-  try {
-    isLoading.value = id;
-    await reportStore.getReportById(id);
-    data.value = reportStore.report;
-    showModal.value = true;
+    const totalUsers = userStore.total || userStore.users?.length || 0;
+
+    const activeUsers =
+      userStore.users?.filter(
+        (u) => (u.status || "").toUpperCase() === "ACTIVATED",
+      ).length || 0;
+
+    const inactiveUsers =
+      userStore.users?.filter(
+        (u) => (u.status || "").toUpperCase() === "DEACTIVATED",
+      ).length || 0;
+
+    const meta = reportStore.meta || {};
+    const totalReports =
+      meta.totalItems ||
+      meta.total ||
+      meta.count ||
+      meta.pagination?.total ||
+      meta.pagination?.totalItems ||
+      reportStore.total ||
+      0;
+
+    statCards.value = [
+      {
+        title: "របាយការណ៍សរុប",
+        value: totalReports,
+        icon: "bi-file-earmark-bar-graph-fill",
+        secondary: "របាយការណ៍ទាំងអស់",
+      },
+      {
+        title: "អ្នកប្រើប្រាស់សរុប",
+        value: totalUsers,
+        icon: "bi-people-fill",
+        secondary: "សរុបអ្នកប្រើប្រាស់",
+      },
+      {
+        title: "អ្នកប្រើប្រាស់សកម្ម",
+        value: activeUsers,
+        icon: "bi-person-check-fill",
+        secondary: "អ្នកប្រើប្រាស់សកម្ម",
+      },
+      {
+        title: "អ្នកប្រើប្រាស់អសកម្ម",
+        value: inactiveUsers,
+        icon: "bi-person-x-fill",
+        secondary: "អ្នកប្រើប្រាស់អសកម្ម",
+      },
+    ];
   } catch (err) {
-    console.error(err);
+    console.error("Dashboard error:", err);
+
+    if (err.response?.status === 400 || err.response?.status === 401) {
+      error.value = "មិនអាចចូលប្រព័ន្ធបាន – សូមចូលឡើងវិញ";
+      isAuthError.value = true;
+    } else {
+      error.value = "មានបញ្ហាក្នុងការទាញទិន្នន័យ";
+    }
+
+    statCards.value = [
+      {
+        title: "របាយការណ៍សរុប",
+        value: 0,
+        icon: "bi-file-earmark-bar-graph-fill",
+        secondary: "",
+      },
+      {
+        title: "អ្នកប្រើប្រាស់សរុប",
+        value: 0,
+        icon: "bi-people-fill",
+        secondary: "",
+      },
+      {
+        title: "អ្នកប្រើប្រាស់សកម្ម",
+        value: 0,
+        icon: "bi-person-check-fill",
+        secondary: "",
+      },
+      {
+        title: "អ្នកប្រើប្រាស់អសកម្ម",
+        value: 0,
+        icon: "bi-person-x-fill",
+        secondary: "",
+      },
+    ];
   } finally {
-    isLoading.value = false;
+    loading.value = false;
   }
-};
-
-//pagination
-
-const pagesPerGroup = 4;
-const currentGroup = ref(1);
-
-import { computed } from "vue";
-import BaseButton from "@/components/base/BaseButton.vue";
-
-const totalPages = computed(() => reportStore.meta?.totalPages || 1);
-
-const visiblePages = computed(() => {
-  const start = (currentGroup.value - 1) * pagesPerGroup + 1;
-
-  const end = Math.min(start + pagesPerGroup - 1, totalPages.value);
-
-  const pages = [];
-  for (let i = start; i <= end; i++) {
-    pages.push(i);
-  }
-  return pages;
 });
-const goToPage = async (p) => {
-  if (p === page.value) return;
-
-  page.value = p;
-  await fetchReports();
-
-  // If clicked the last page in group → move to next group
-  const groupEnd = currentGroup.value * pagesPerGroup;
-  if (p === groupEnd && p < totalPages.value) {
-    currentGroup.value++;
-  }
-
-  // If clicked the first page in group → move to previous group
-  const groupStart = (currentGroup.value - 1) * pagesPerGroup + 1;
-  if (p === groupStart && p > 1) {
-    currentGroup.value--;
-  }
-};
-const nextPage = async () => {
-  if (!reportStore.meta?.hasNextPage) return;
-
-  page.value++;
-  await fetchReports();
-
-  const groupEnd = currentGroup.value * pagesPerGroup;
-  if (page.value > groupEnd) {
-    currentGroup.value++;
-  }
-};
-
-const PreviousPage = async () => {
-  if (!reportStore.meta?.hasPreviousPage) return;
-
-  page.value--;
-  await fetchReports();
-
-  const groupStart = (currentGroup.value - 1) * pagesPerGroup + 1;
-  if (page.value < groupStart) {
-    currentGroup.value--;
-  }
-};
-
-// Clear Filter
-const clearFilter = () => {
-  search.value = "";
-  typeValue.value = "";
-  statusValue.value = "";
-  cateValue.value = "";
-};
 </script>
+
 <style scoped>
 /* .desc {
   height: 63px;
