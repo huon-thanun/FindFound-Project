@@ -153,6 +153,14 @@
       </div>
     </div>
   </div>
+
+  <BaseToast
+    v-model="showToast"
+    :message="toastMessage"
+    :theme="toastTheme"
+    :icon="toastIcon"
+    :duration="3000"
+  />
 </template>
 
 <script setup>
@@ -160,6 +168,7 @@ import { reactive, ref, computed } from "vue";
 import { useRouter } from "vue-router";
 import { useAuthStore } from "@/stores/authStore";
 import logo from "@/assets/images/logo/logo.png";
+import BaseToast from "@/components/base/BaseToast.vue";
 
 const router = useRouter();
 const auth = useAuthStore();
@@ -206,14 +215,31 @@ const handleLogin = async () => {
     // ❗ HARD ADMIN CHECK
     if (auth.role !== "admin") {
       auth.logout(); // clear token
-      throw new Error("You are not authorized as admin");
+      throw new Error("អ្នក​មិន​មាន​អាជ្ញាប័ណ្ណ​ជា​អ្នកគ្រប់គ្រងទេ។ប");
     }
 
-    router.push("/admin/dashboard");
+    toastMessage.value = "ចូលគណនីបានជោគជ័យ 🎉";
+    toastTheme.value = "success";
+    toastIcon.value = "check-circle";
+    showToast.value = true;
+
+
+    setTimeout(() => {
+      router.push("/admin/dashboard");
+    }, 1200)
   } catch (err) {
     console.error(err);
+    toastMessage.value = auth.error || "ការចូលគណនីបរាជ័យ សូមពិនិត្យម្តងទៀត";
+    toastTheme.value = "danger";
+    toastIcon.value = "x-circle";
+    showToast.value = true;
   }
 };
+
+const showToast = ref(false);
+const toastMessage = ref("");
+const toastTheme = ref("primary");
+const toastIcon = ref("");
 
 </script>
 <style scoped>

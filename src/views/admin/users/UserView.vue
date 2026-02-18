@@ -1,16 +1,6 @@
 <template>
   <div class="p-3">
-    <!-- Success Alert -->
-    <div v-if="successMessage" class="alert alert-success alert-dismissible fade show mb-4" role="alert">
-      {{ successMessage }}
-      <button type="button" class="btn-close" @click="successMessage = ''"></button>
-    </div>
 
-    <!-- Error Alert -->
-    <div v-if="errorMessage" class="alert alert-danger alert-dismissible fade show mb-4" role="alert">
-      {{ errorMessage }}
-      <button type="button" class="btn-close" @click="errorMessage = ''"></button>
-    </div>
 
     <!-- Header -->
      <div class="admin-banner mb-4 rounded-4">
@@ -157,14 +147,14 @@
         <div v-if="selectedUser" class="user-modal-body">
           <div class="user-description">
             <p><b class="text-dark">ល.រ:</b> #{{ selectedUser?.id }}</p>
-          <p><b class="text-dark">ឈ្មោះ:</b> {{ selectedUser?.fullname }}</p>
-          <p><b class="text-dark">អុីមែល:</b> {{ selectedUser?.email }}</p>
-          <p><b class="text-dark">លេខទូរស័ព្ទ:</b> {{ selectedUser?.phoneNumber || '-' }}</p>
-          <p><b class="text-dark">ស្ថានភាព:</b><span class="badge ms-2 fw-normal"
-              :class="selectedUser.status === 'ACTIVATED' ? 'bg-success' : 'bg-danger'"> {{ selectedUser?.status
-              }}</span></p>
-          <p><b class="text-dark">តួនាទី:</b> {{ selectedUser?.role?.name }}</p>
-          <p><b class="text-dark">បានចុះឈ្មោះ:</b> {{ formatDate(selectedUser?.registeredAt) }}</p>
+            <p><b class="text-dark">ឈ្មោះ:</b> {{ selectedUser?.fullname }}</p>
+            <p><b class="text-dark">អុីមែល:</b> {{ selectedUser?.email }}</p>
+            <p><b class="text-dark">លេខទូរស័ព្ទ:</b> {{ selectedUser?.phoneNumber || '-' }}</p>
+            <p><b class="text-dark">ស្ថានភាព:</b><span class="badge ms-2 fw-normal"
+                :class="selectedUser.status === 'ACTIVATED' ? 'bg-success' : 'bg-danger'"> {{ selectedUser?.status
+                }}</span></p>
+            <p><b class="text-dark">តួនាទី:</b> {{ selectedUser?.role?.name }}</p>
+            <p><b class="text-dark">បានចុះឈ្មោះ:</b> {{ formatDate(selectedUser?.registeredAt) }}</p>
           </div>
         </div>
       </template>
@@ -217,20 +207,21 @@
     <BaseModal title="បង្កើតអ្នកប្រើប្រាស់" icon="person-plus" :theme="'primary'" :isClose="showCreateModal"
       @closeModal="showCreateModal = false">
       <template #body>
-        <BaseInput type="text" label="ឈ្មោះពេញ" placeholder="បញ្ចូឈ្មោះពេញ" v-model="newUser.fullname"
+        <BaseInput type="text" label="ឈ្មោះពេញ" unOptional placeholder="បញ្ចូឈ្មោះពេញ" v-model="newUser.fullname"
           :error="errors.fullname" />
-        <BaseInput type="email" label="អុីមែល" placeholder="បញ្ចូលអាសយដ្ឋានអុីមែល" v-model="newUser.email"
+        <BaseInput type="email" label="អុីមែល" unOptional placeholder="បញ្ចូលអាសយដ្ឋានអុីមែល" v-model="newUser.email"
           :error="errors.email" />
-        <BaseInput type="tel" label="លេខទូរស័ព្ទ" placeholder="បញ្ចូលលេខទូរស័ព្ទ" v-model="newUser.phoneNumber" />
+        <BaseInput type="tel" label="លេខទូរស័ព្ទ" unOptional placeholder="បញ្ចូលលេខទូរស័ព្ទ"
+          v-model="newUser.phoneNumber" :error="errors.phoneNumber" />
         <BaseInput type="text" label="តំណភ្ជាប់តេឡេក្រាម" placeholder="បញ្ចូលតំណភ្ជាប់តេឡេក្រាម"
-          v-model="newUser.telegramLink" />
-        <BaseInput type="password" label="ពាក្យសម្ងាត់" placeholder="បញ្ចូលពាក្យសម្ងាត់" v-model="newUser.password"
-          :error="errors.password" />
+          v-model="newUser.telegramLink" :error="errors.telegramLink" />
+        <BaseInput type="password" label="ពាក្យសម្ងាត់" unOptional placeholder="បញ្ចូលពាក្យសម្ងាត់"
+          v-model="newUser.password" :error="errors.password" />
 
         <BaseSelect :modelValue="roleOptions.find((o) => o.id === newUser.roleId?.id) ||
           newUser.roleId ||
           null
-          " :items="roleOptions" label="តួនាទី" textField="ជ្រើសរើសតួនាទី" labelField="name" valueField="id"
+          " :items="roleOptions" label="តួនាទី" unOptional textField="ជ្រើសរើសតួនាទី" labelField="name" valueField="id"
           @update:modelValue="(item) => (newUser.roleId = item)" :error="errors.roleId" />
       </template>
 
@@ -241,11 +232,15 @@
       </template>
 
       <template #btnActive>
-        <BaseButton icon="check-circle" variant="primary" @click="createUser">
+        <BaseButton :icon="isLoadingCreate ? '' : 'check-circle'" variant="primary" @click="createUser"
+          :isLoading="isLoadingCreate">
           បង្កើត
         </BaseButton>
       </template>
     </BaseModal>
+
+    <!-- Toast Notification -->
+    <BaseToast v-model="showToast" :message="toastMessage" :theme="toastTheme" :icon="toastIcon" :duration="3000" />
   </div>
 </template>
 
@@ -255,6 +250,9 @@ import { useUserStore } from '../../../stores/userStore';
 import BaseInput from '@/components/base/BaseInput.vue';
 import BaseSelect from '@/components/base/BaseSelect.vue';
 import BaseTableUserPage from '@/components/base/BaseTableUserPage.vue';
+import BaseButton from '@/components/base/BaseButton.vue';
+import BaseModal from '@/components/base/BaseModal.vue';
+import BaseToast from '@/components/base/BaseToast.vue';
 
 const store = useUserStore();
 
@@ -291,8 +289,13 @@ const selectedUser = ref(null);
 const showViewModal = ref(false);
 const showStatusModal = ref(false);
 const showCreateModal = ref(false);
-const successMessage = ref('');
-const errorMessage = ref('');
+const isLoadingCreate = ref(false);
+
+// Toast configuration
+const showToast = ref(false);
+const toastMessage = ref('');
+const toastTheme = ref('success');
+const toastIcon = ref('check-circle');
 
 const newUser = reactive({
   fullname: '',
@@ -336,10 +339,17 @@ const SORT_DIR_OPTIONS = [
 const formatDate = (d) => (d ? new Date(d).toLocaleString() : '-');
 
 const showSuccess = (message) => {
-  successMessage.value = message;
-  setTimeout(() => {
-    successMessage.value = '';
-  }, 3000);
+  toastMessage.value = message;
+  toastTheme.value = 'success';
+  toastIcon.value = 'check-circle';
+  showToast.value = true;
+};
+
+const showFieldError = (message) => {
+  toastMessage.value = message;
+  toastTheme.value = 'danger';
+  toastIcon.value = 'x-circle';
+  showToast.value = true;
 };
 
 const loadUsers = async () => {
@@ -378,6 +388,8 @@ const createUser = async () => {
   // Clear previous errors
   errors.fullname = '';
   errors.email = '';
+  errors.phoneNumber = '';
+  errors.telegramLink = '';
   errors.password = '';
   errors.roleId = '';
 
@@ -389,6 +401,14 @@ const createUser = async () => {
     errors.email = 'សូមបញ្ចូលអាសយដ្ខានអុីមែល';
   } else if (!isValidEmail(newUser.email)) {
     errors.email = 'អុីមែលមិនត្រីមត្រូវ';
+  }
+  if (!newUser.phoneNumber.trim()) {
+    errors.phoneNumber = 'សូមបញ្ចូលលេខទូរស័ព្ទ';
+  } else if (!/^\d{8,15}$/.test(newUser.phoneNumber.trim())) {
+    errors.phoneNumber = 'លេខទូរស័ព្ទត្រូវមានចន្លោះ 8-15 ខ្ទង់ និងមានតែលេខ';
+  }
+  if (newUser.telegramLink.trim() && !/^https?:\/\/(t\.me|telegram\.me)\/[a-zA-Z0-9_]+$/.test(newUser.telegramLink.trim())) {
+    errors.telegramLink = 'តំណភ្ជាប់តេឡេក្រាមមិនត្រឹមត្រូវ (ត្រូវមានទ្រង់ទ្រាយ https://t.me/username)';
   }
   if (!newUser.password.trim()) {
     errors.password = 'សូមបញ្ចូលពាក្យសម្ងាត់';
@@ -405,6 +425,8 @@ const createUser = async () => {
   }
 
   try {
+    isLoadingCreate.value = true;
+
     const payload = {
       fullname: newUser.fullname.trim(),
       email: newUser.email.trim(),
@@ -463,7 +485,9 @@ const createUser = async () => {
       errorMsg = err.message;
     }
 
-    errorMessage.value = errorMsg;
+    showFieldError(`បរាជ័យក្នុងការបង្កើតអ្នកប្រើប្រាស់, ${errorMsg ? `${errorMsg}` : ''}, សូមព្យាយាមម្តងទៀត`);
+  } finally {
+    isLoadingCreate.value = false;
   }
 };
 
@@ -571,15 +595,15 @@ onMounted(() => resetAndLoadUsers());
 }
 
 .user-modal-body {
-    text-align: left;
-    padding: 16px 0;
+  text-align: left;
+  padding: 16px 0;
 }
 
 .user-description {
-    background-color: rgba(59, 30, 84, 0.05);
-    border-left: 4px solid var(--primary-color);
-    padding: 16px;
-    border-radius: 8px;
+  background-color: rgba(59, 30, 84, 0.05);
+  border-left: 4px solid var(--primary-color);
+  padding: 16px;
+  border-radius: 8px;
 }
 
 /* Default (LG and up) */

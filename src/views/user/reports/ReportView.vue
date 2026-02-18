@@ -217,6 +217,8 @@ const btnHandleToCreatePage = () => {
 </script>
 
 <style scoped>
+  @import url("https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@300;400;500;600;700;800&display=swap");
+  
 .image {
   width: 100%;
   height: 230px;
@@ -331,7 +333,6 @@ const btnHandleToCreatePage = () => {
   border-color: var(--tertiary-color);
 }
 
-@import url("https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@300;400;500;600;700;800&display=swap");
 
 .main-contact {
   font-family: "Kantumruy Pro", system-ui, sans-serif;
