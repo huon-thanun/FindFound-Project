@@ -1,7 +1,7 @@
 <template>
   <div class="container py-5 min-vh-100">
     <header class="mb-5">
-      <h2 class="fw-bold">ការរាយការណ៍របស់ខ្ញុំ</h2>
+      <h2 class="fw-bold">ការបង្ហោះរបស់ខ្ញុំ</h2>
       <p class="text-muted">
         សូមស្វាគមន៍, ទាំងនេះជាការរាយការណ៍ទាំងអស់របស់អ្នក។
       </p>
@@ -93,7 +93,7 @@
     </div>
     <div class="card border-0 box-shadow p-4 mb-3">
       <div class="d-flex justify-content-between align-items-center mb-4">
-        <h5 class="fw-bold mb-0">ការរាយការណ៍</h5>
+        <h5 class="fw-bold mb-0">ការបង្ហោះ</h5>
         <!-- <button
           class="btn btn-dark px-4 py-2 rounded-3 fw-bold shadow-sm"
           @click="btnHandleCreateReport"
@@ -104,7 +104,7 @@
           variant="primary"
           icon="file-earmark-plus"
           @click="btnHandleCreateReport"
-          >បង្កើតការរាយការណ៍
+          >បង្កើតការការបង្ហោះ
         </BaseButton>
       </div>
       <div class="row g-3" v-if="reportStore.isLoadingGetOwnReports">
@@ -118,7 +118,7 @@
       >
         <div class="w-100 d-flex flex-column align-items-center p-3 text-muted">
           <i class="bi bi-exclamation-circle" style="font-size: 35px"></i>
-          <h3 class="m-0">រកមិនឃើញរបាយការណ៍</h3>
+          <h3 class="m-0">រកមិនឃើញការបង្ហោះ</h3>
         </div>
       </div>
       <div
@@ -678,16 +678,17 @@ const PreviousPage = async () => {
 /* ----------- */
 .bg-btn-group {
   padding: 5px;
-  background-color: rgba(226, 226, 226, 0.877);
-
-  border-radius: 12px;
+  background-color: var(--background-color);
+  border-radius: 10px;
 }
 
 .bg-btn-group .btn-filter {
   background-color: transparent;
   border: none;
+  padding: 6px 15px 4px;
   font-size: 16px;
-  border-radius: 5px;
+  border-radius: 6px;
+  color: black;
   cursor: pointer;
 }
 

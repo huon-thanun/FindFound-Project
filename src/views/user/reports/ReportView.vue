@@ -53,7 +53,9 @@
       >
         <div>
           <h2>ការបង្ហោះ</h2>
-          <p>រុករក និងមើលវត្ថុបាត់បង់ និងវត្ថុដែលបានរកឃើញទាំងអស់នៅក្នុងសហគមន៍</p>
+          <p>
+            រុករក និងមើលវត្ថុបាត់បង់ និងវត្ថុដែលបានរកឃើញទាំងអស់នៅក្នុងសហគមន៍
+          </p>
         </div>
 
         <BaseButton
@@ -61,7 +63,7 @@
           icon="file-earmark-plus"
           @click="btnHandleToCreatePage"
         >
-          បង្កើតការរាយការណ៍
+          បង្កើតការការបង្ហោះ
         </BaseButton>
       </div>
       <div class="card mb-3 shadow border-color">
@@ -236,8 +238,8 @@ const btnHandleToCreatePage = () => {
 </script>
 
 <style scoped>
-  @import url("https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@300;400;500;600;700;800&display=swap");
-  
+@import url("https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@300;400;500;600;700;800&display=swap");
+
 .image {
   width: 100%;
   height: 230px;
@@ -351,7 +353,6 @@ const btnHandleToCreatePage = () => {
 .border-color {
   border-color: var(--tertiary-color);
 }
-
 
 .main-contact {
   font-family: "Kantumruy Pro", system-ui, sans-serif;
