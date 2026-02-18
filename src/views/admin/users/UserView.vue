@@ -1,30 +1,44 @@
 <template>
   <div class="p-3">
-    <!-- Success Alert -->
-    <div v-if="successMessage" class="alert alert-success alert-dismissible fade show mb-4" role="alert">
-      {{ successMessage }}
-      <button type="button" class="btn-close" @click="successMessage = ''"></button>
-    </div>
 
-    <!-- Error Alert -->
-    <div v-if="errorMessage" class="alert alert-danger alert-dismissible fade show mb-4" role="alert">
-      {{ errorMessage }}
-      <button type="button" class="btn-close" @click="errorMessage = ''"></button>
-    </div>
 
     <!-- Header -->
-    <div class="d-flex justify-content-between align-items-center mb-3">
-      <div>
-        <h2 class="fw-bold">អ្នកប្រើប្រាស់</h2>
-        <p class="text-muted">បង្កើត និងគ្រប់គ្រងអ្នកប្រើប្រាស់</p>
-      </div>
-      <BaseButton icon="person-plus" variant="primary" @click="showCreateModal = true">
+     <div class="admin-banner mb-4 rounded-4">
+        <div class="banner-container">
+          <!-- icon: report / clip -->
+          <div class="banner-icon">
+            <i class="bi-person"></i>
+          </div>
+
+          <!-- main text group -->
+          <div class="banner-text">
+            <!-- exact h2 from prompt, plus small context badge -->
+            <h2 class="fw-bold">
+              អ្នកប្រើប្រាស់
+              <span class="badge-admin"><i class="bi bi-person-circle"
+                  style="font-size: 0.75rem; margin-right: 5px"></i>អ្នកគ្រប់គ្រង</span>
+            </h2>
+            <!-- exact paragraph, but we enhance it with a subtle khmer-friendly meta info -->
+            <p class="text-muted">
+              <i class="fas fa-eye" style="opacity: 0.7; font-size: 1rem"></i>
+              បង្កើត និងគ្រប់គ្រងអ្នកប្រើប្រាស់
+            </p>
+        </div>
+        <div>
+          <BaseButton icon="person-plus" variant="primary" @click="showCreateModal = true">
         បង្កើតអ្នកប្រើប្រាស់
       </BaseButton>
-      <!-- <BaseButton class="d-block d-md-none d-flex" icon="person-plus" variant="primary" @click="showCreateModal = true">
-        បង្កើត
-      </BaseButton> -->
-    </div>
+          </div>
+        </div>
+
+        <!-- very subtle divider line just for style (makes banner airy) -->
+        <div style="
+            margin-top: 0.8rem;
+            margin-left: calc(70px + 1.25rem);
+            border-bottom: 2px dashed rgba(86, 115, 150, 0.15);
+            width: 40%;
+          "></div>
+      </div>
 
     <!-- Filters -->
     <div class="card mb-3 shadow border-color">
@@ -133,14 +147,14 @@
         <div v-if="selectedUser" class="user-modal-body">
           <div class="user-description">
             <p><b class="text-dark">ល.រ:</b> #{{ selectedUser?.id }}</p>
-          <p><b class="text-dark">ឈ្មោះ:</b> {{ selectedUser?.fullname }}</p>
-          <p><b class="text-dark">អុីមែល:</b> {{ selectedUser?.email }}</p>
-          <p><b class="text-dark">លេខទូរស័ព្ទ:</b> {{ selectedUser?.phoneNumber || '-' }}</p>
-          <p><b class="text-dark">ស្ថានភាព:</b><span class="badge ms-2 fw-normal"
-              :class="selectedUser.status === 'ACTIVATED' ? 'bg-success' : 'bg-danger'"> {{ selectedUser?.status
-              }}</span></p>
-          <p><b class="text-dark">តួនាទី:</b> {{ selectedUser?.role?.name }}</p>
-          <p><b class="text-dark">បានចុះឈ្មោះ:</b> {{ formatDate(selectedUser?.registeredAt) }}</p>
+            <p><b class="text-dark">ឈ្មោះ:</b> {{ selectedUser?.fullname }}</p>
+            <p><b class="text-dark">អុីមែល:</b> {{ selectedUser?.email }}</p>
+            <p><b class="text-dark">លេខទូរស័ព្ទ:</b> {{ selectedUser?.phoneNumber || '-' }}</p>
+            <p><b class="text-dark">ស្ថានភាព:</b><span class="badge ms-2 fw-normal"
+                :class="selectedUser.status === 'ACTIVATED' ? 'bg-success' : 'bg-danger'"> {{ selectedUser?.status
+                }}</span></p>
+            <p><b class="text-dark">តួនាទី:</b> {{ selectedUser?.role?.name }}</p>
+            <p><b class="text-dark">បានចុះឈ្មោះ:</b> {{ formatDate(selectedUser?.registeredAt) }}</p>
           </div>
         </div>
       </template>
@@ -193,20 +207,21 @@
     <BaseModal title="បង្កើតអ្នកប្រើប្រាស់" icon="person-plus" :theme="'primary'" :isClose="showCreateModal"
       @closeModal="showCreateModal = false">
       <template #body>
-        <BaseInput type="text" label="ឈ្មោះពេញ" placeholder="បញ្ចូឈ្មោះពេញ" v-model="newUser.fullname"
+        <BaseInput type="text" label="ឈ្មោះពេញ" unOptional placeholder="បញ្ចូឈ្មោះពេញ" v-model="newUser.fullname"
           :error="errors.fullname" />
-        <BaseInput type="email" label="អុីមែល" placeholder="បញ្ចូលអាសយដ្ឋានអុីមែល" v-model="newUser.email"
+        <BaseInput type="email" label="អុីមែល" unOptional placeholder="បញ្ចូលអាសយដ្ឋានអុីមែល" v-model="newUser.email"
           :error="errors.email" />
-        <BaseInput type="tel" label="លេខទូរស័ព្ទ" placeholder="បញ្ចូលលេខទូរស័ព្ទ" v-model="newUser.phoneNumber" />
+        <BaseInput type="tel" label="លេខទូរស័ព្ទ" unOptional placeholder="បញ្ចូលលេខទូរស័ព្ទ"
+          v-model="newUser.phoneNumber" :error="errors.phoneNumber" />
         <BaseInput type="text" label="តំណភ្ជាប់តេឡេក្រាម" placeholder="បញ្ចូលតំណភ្ជាប់តេឡេក្រាម"
-          v-model="newUser.telegramLink" />
-        <BaseInput type="password" label="ពាក្យសម្ងាត់" placeholder="បញ្ចូលពាក្យសម្ងាត់" v-model="newUser.password"
-          :error="errors.password" />
+          v-model="newUser.telegramLink" :error="errors.telegramLink" />
+        <BaseInput type="password" label="ពាក្យសម្ងាត់" unOptional placeholder="បញ្ចូលពាក្យសម្ងាត់"
+          v-model="newUser.password" :error="errors.password" />
 
         <BaseSelect :modelValue="roleOptions.find((o) => o.id === newUser.roleId?.id) ||
           newUser.roleId ||
           null
-          " :items="roleOptions" label="តួនាទី" textField="ជ្រើសរើសតួនាទី" labelField="name" valueField="id"
+          " :items="roleOptions" label="តួនាទី" unOptional textField="ជ្រើសរើសតួនាទី" labelField="name" valueField="id"
           @update:modelValue="(item) => (newUser.roleId = item)" :error="errors.roleId" />
       </template>
 
@@ -217,11 +232,15 @@
       </template>
 
       <template #btnActive>
-        <BaseButton icon="check-circle" variant="primary" @click="createUser">
+        <BaseButton :icon="isLoadingCreate ? '' : 'check-circle'" variant="primary" @click="createUser"
+          :isLoading="isLoadingCreate">
           បង្កើត
         </BaseButton>
       </template>
     </BaseModal>
+
+    <!-- Toast Notification -->
+    <BaseToast v-model="showToast" :message="toastMessage" :theme="toastTheme" :icon="toastIcon" :duration="3000" />
   </div>
 </template>
 
@@ -231,6 +250,9 @@ import { useUserStore } from '../../../stores/userStore';
 import BaseInput from '@/components/base/BaseInput.vue';
 import BaseSelect from '@/components/base/BaseSelect.vue';
 import BaseTableUserPage from '@/components/base/BaseTableUserPage.vue';
+import BaseButton from '@/components/base/BaseButton.vue';
+import BaseModal from '@/components/base/BaseModal.vue';
+import BaseToast from '@/components/base/BaseToast.vue';
 
 const store = useUserStore();
 
@@ -267,8 +289,13 @@ const selectedUser = ref(null);
 const showViewModal = ref(false);
 const showStatusModal = ref(false);
 const showCreateModal = ref(false);
-const successMessage = ref('');
-const errorMessage = ref('');
+const isLoadingCreate = ref(false);
+
+// Toast configuration
+const showToast = ref(false);
+const toastMessage = ref('');
+const toastTheme = ref('success');
+const toastIcon = ref('check-circle');
 
 const newUser = reactive({
   fullname: '',
@@ -312,10 +339,17 @@ const SORT_DIR_OPTIONS = [
 const formatDate = (d) => (d ? new Date(d).toLocaleString() : '-');
 
 const showSuccess = (message) => {
-  successMessage.value = message;
-  setTimeout(() => {
-    successMessage.value = '';
-  }, 3000);
+  toastMessage.value = message;
+  toastTheme.value = 'success';
+  toastIcon.value = 'check-circle';
+  showToast.value = true;
+};
+
+const showFieldError = (message) => {
+  toastMessage.value = message;
+  toastTheme.value = 'danger';
+  toastIcon.value = 'x-circle';
+  showToast.value = true;
 };
 
 const loadUsers = async () => {
@@ -354,6 +388,8 @@ const createUser = async () => {
   // Clear previous errors
   errors.fullname = '';
   errors.email = '';
+  errors.phoneNumber = '';
+  errors.telegramLink = '';
   errors.password = '';
   errors.roleId = '';
 
@@ -365,6 +401,14 @@ const createUser = async () => {
     errors.email = 'សូមបញ្ចូលអាសយដ្ខានអុីមែល';
   } else if (!isValidEmail(newUser.email)) {
     errors.email = 'អុីមែលមិនត្រីមត្រូវ';
+  }
+  if (!newUser.phoneNumber.trim()) {
+    errors.phoneNumber = 'សូមបញ្ចូលលេខទូរស័ព្ទ';
+  } else if (!/^\d{8,15}$/.test(newUser.phoneNumber.trim())) {
+    errors.phoneNumber = 'លេខទូរស័ព្ទត្រូវមានចន្លោះ 8-15 ខ្ទង់ និងមានតែលេខ';
+  }
+  if (newUser.telegramLink.trim() && !/^https?:\/\/(t\.me|telegram\.me)\/[a-zA-Z0-9_]+$/.test(newUser.telegramLink.trim())) {
+    errors.telegramLink = 'តំណភ្ជាប់តេឡេក្រាមមិនត្រឹមត្រូវ (ត្រូវមានទ្រង់ទ្រាយ https://t.me/username)';
   }
   if (!newUser.password.trim()) {
     errors.password = 'សូមបញ្ចូលពាក្យសម្ងាត់';
@@ -381,6 +425,8 @@ const createUser = async () => {
   }
 
   try {
+    isLoadingCreate.value = true;
+
     const payload = {
       fullname: newUser.fullname.trim(),
       email: newUser.email.trim(),
@@ -439,7 +485,9 @@ const createUser = async () => {
       errorMsg = err.message;
     }
 
-    errorMessage.value = errorMsg;
+    showFieldError(`បរាជ័យក្នុងការបង្កើតអ្នកប្រើប្រាស់, ${errorMsg ? `${errorMsg}` : ''}, សូមព្យាយាមម្តងទៀត`);
+  } finally {
+    isLoadingCreate.value = false;
   }
 };
 
@@ -547,15 +595,15 @@ onMounted(() => resetAndLoadUsers());
 }
 
 .user-modal-body {
-    text-align: left;
-    padding: 16px 0;
+  text-align: left;
+  padding: 16px 0;
 }
 
 .user-description {
-    background-color: rgba(59, 30, 84, 0.05);
-    border-left: 4px solid var(--primary-color);
-    padding: 16px;
-    border-radius: 8px;
+  background-color: rgba(59, 30, 84, 0.05);
+  border-left: 4px solid var(--primary-color);
+  padding: 16px;
+  border-radius: 8px;
 }
 
 /* Default (LG and up) */
@@ -604,5 +652,192 @@ onMounted(() => resetAndLoadUsers());
   align-items: center;
   justify-content: center;
   z-index: 10;
+}
+/* main card – admin header banner */
+.admin-banner {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.85);
+  background-image: url('../../../assets/images/background/user.png');
+  background-position: center -200px;
+  background-repeat: no-repeat;
+  background-size: cover;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  padding: 2rem 2.5rem;
+  border-top: 5px solid var(--secondary-color);
+  box-shadow: 0 0px 20px -12px rgba(0, 20, 40, 0.25),
+    inset 0 1px 2px rgba(255, 255, 255, 0.8);
+  transition: all 0.2s ease;
+}
+
+/* inner flex layout: icon group + text */
+.banner-container {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  flex-wrap: wrap;
+}
+
+/* left side icon – subtle report / clipboard */
+.banner-icon {
+  background: var(--secondary-color);
+  color: white;
+  width: 70px;
+  height: 70px;
+  border-radius: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.2rem;
+  box-shadow: 0 10px 18px -6px rgba(20, 35, 70, 0.5);
+  border: 2px solid rgba(255, 255, 255, 0.25);
+}
+
+/* text block */
+.banner-text {
+  flex: 1;
+}
+
+/* main heading – exactly as given */
+.banner-text h2.fw-bold {
+  font-size: 2.4rem;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  color: #0b1a33;
+  margin-bottom: 0.3rem;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.4rem 0.8rem;
+}
+
+/* optional subtle badge for admin context */
+.badge-admin {
+  background: rgba(20, 53, 90, 0.1);
+  padding: 0.3rem 1rem;
+  border-radius: 60px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #1e3b5c;
+  border: 1px solid rgba(20, 53, 90, 0.2);
+  letter-spacing: 0.02rem;
+  margin-left: 0.25rem;
+  backdrop-filter: blur(4px);
+}
+
+/* secondary text exactly as provided */
+.banner-text p.text-muted {
+  font-size: 1.18rem;
+  color: #48607c !important;
+  /* override muted with accessible soft navy */
+  font-weight: 400;
+  line-height: 1.5;
+  max-width: 700px;
+  margin-bottom: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+/* little khmer style accent – a separating dash with decorative element */
+.text-muted .separator {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  background: #8aa0bc;
+  border-radius: 50%;
+  margin: 0 0.5rem;
+  opacity: 0.6;
+}
+
+/* additional stats chips for admin overview – keeps banner airy but functional */
+.banner-meta {
+  display: flex;
+  gap: 1.2rem;
+  margin-top: 1.2rem;
+  flex-wrap: wrap;
+}
+
+.meta-chip {
+  background: rgba(230, 240, 255, 0.7);
+  border-radius: 40px;
+  padding: 0.4rem 1.4rem 0.4rem 1rem;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #1f3b58;
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  box-shadow: 0 4px 10px -6px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.meta-chip i {
+  color: #2f4d73;
+  font-size: 0.9rem;
+  opacity: 0.8;
+}
+
+.meta-chip span {
+  font-weight: 600;
+  color: #0b2642;
+  margin-right: 2px;
+}
+
+/* responsive touch */
+@media (max-width: 550px) {
+  .admin-banner {
+    padding: 1.5rem 1.5rem;
+    border-radius: 2rem;
+  }
+
+  .banner-icon {
+    width: 55px;
+    height: 55px;
+    font-size: 1.8rem;
+    border-radius: 22px;
+  }
+
+  .banner-text h2.fw-bold {
+    font-size: 2rem;
+  }
+
+  .banner-text p.text-muted {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 420px) {
+  .banner-container {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .banner-icon {
+    align-self: flex-start;
+  }
+}
+
+/* small flourish: micro reflection line */
+.admin-banner {
+  position: relative;
+  isolation: isolate;
+}
+
+.admin-banner::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 0% 10%,
+      rgba(255, 255, 255, 0.4) 0%,
+      transparent 50%);
+  pointer-events: none;
+  border-radius: inherit;
+  z-index: -1;
 }
 </style>

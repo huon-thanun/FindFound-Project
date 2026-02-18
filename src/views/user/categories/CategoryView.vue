@@ -57,7 +57,7 @@
                         <i class="bi bi-search text-muted me-2 ms-3"></i>
                         <input type="text" v-model="searchQuery"
                             class="form-control border-0 rounded-pill position-absolute ps-5 bg-transparent h-100 w-100 khmer-font"
-                            placeholder="ស្វែងរកប្រភេទ..." />
+                            placeholder="ស្វែងរកប្រភេទវត្ថុ..." />
                     </div>
                 </div>
             </div>
@@ -170,17 +170,21 @@ const filteredCategories = computed(() => {
     );
 });
 
-// Map category names to appropriate icons
 const getCategoryIcon = (categoryName) => {
     const iconMap = {
-        ឯកសារ: "bi-file-earmark",
-        សម្ភារៈអេឡិចត្រូនិច: "bi-phone",
-        អលង្ការ: "bi-gem",
-        ម៉ាកផ្សេងទៀត: "bi-bag",
-        សក្ខី: "bi-wallet2",
-        កីឡា: "bi-bicycle",
-        សៀវភៅ: "bi-book",
-        សូត្របាច់: "bi-shopper",
+        "ឯកសារ": "bi-file-earmark-text",
+        "សម្ភារៈអេឡិចត្រូនិច": "bi-laptop",
+        "គ្រឿងអលង្ការ": "bi-gem",
+        "កាបូប និងកាបូបលុយ": "bi-handbag",
+        "សម្ភារៈកីឡា": "bi-trophy",
+        "គ្រឿង និងសម្ភារៈផ្ទះ": "bi-house-door",
+        "សុខភាពនិងសម្រស់": "bi-heart-pulse",
+        "សម្លៀកបំពាក់": "bi-person-badge",
+        "សៀវភៅ និងឯកសារសិក្សា": "bi-book",
+        "សត្វចិញ្ចឹម": "bi-heart",
+        "សោ និងសម្ភារៈតូចៗ": "bi-key",
+        "ឧបករណ៍កីឡា": "bi-bicycle",
+        "ផ្សេងៗ": "bi-grid"
     };
 
     return iconMap[categoryName] || "bi-box";
@@ -217,6 +221,8 @@ const navigateToGallery = () => {
 </script>
 
 <style scoped>
+@import url("https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@300;400;500;600;700;800&display=swap");
+
 .ca .form-control {
     outline: none;
     box-shadow: none;
@@ -354,7 +360,7 @@ const navigateToGallery = () => {
     font-size: 14px;
     line-height: 1.6;
 }
-@import url("https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@300;400;500;600;700;800&display=swap");
+
 
 .main-contact {
   font-family: "Kantumruy Pro", system-ui, sans-serif;

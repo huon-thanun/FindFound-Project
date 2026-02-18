@@ -4,7 +4,7 @@
       v-if="label"
       class="form-label"
       style="display: block; text-align: start"
-      >{{ label }}</label
+      >{{ label }} <span class="text-danger">{{ unOptional ? '*' : '' }}</span></label
     >
     <div class="dropdown">
       <!-- Selected value -->
@@ -61,6 +61,10 @@ const props = defineProps({
   labelField: { type: String, default: 'name' },
   valueField: { type: String, default: 'id' },
   error: { type: String, default: '' },
+  unOptional: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 /* ---------------- EMIT ---------------- */

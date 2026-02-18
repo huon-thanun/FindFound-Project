@@ -200,7 +200,7 @@ onMounted(() => {
             <img
               src="../../../assets/images/about/hero-banner.png"
               alt="Contact Us Illustration"
-              class="hero-img m-0 img-fluid"
+              class="hero-img m-0 img-fluid h-100"
             />
           </div>
         </div>
@@ -386,6 +386,8 @@ onMounted(() => {
 </template>
 
 <style scoped>
+@import url("https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@300;400;500;600;700;800&display=swap");
+
 /* ===== PAGE ===== */
 .about-page {
   background: linear-gradient(135deg, #f4f7ff, #eef1ff);
@@ -394,7 +396,6 @@ onMounted(() => {
 /* ===== MODERN CONTACT US HERO ===== */
 
 /* ── Hero ── (shorter height) ── */
-@import url("https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@300;400;500;600;700;800&display=swap");
 
 .main-contact {
   font-family: "Kantumruy Pro", system-ui, sans-serif;

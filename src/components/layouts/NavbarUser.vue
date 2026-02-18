@@ -31,7 +31,7 @@
         :class="{ active: activeLink === 'report' }"
         @click.prevent="setActive('report')"
       >
-        ការរាយការណ៍
+        ការបង្ហោះ
       </router-link>
 
       <router-link
@@ -71,7 +71,7 @@
           variant="secondary"
           @click="goLogin"
         >
-          ចូលចូលគណនី
+          ចូលគណនី
         </base-button>
         <base-button
           class="handle-btn"
@@ -162,7 +162,7 @@
                 :class="{ active: activeLink === 'reports' }"
                 @click.prevent="setActive('reports')"
               >
-                ការរាយការណ៍
+                ការបង្ហោះ
               </router-link>
             </li>
 
@@ -258,7 +258,7 @@
                 @click.prevent="setActive('reports')"
               >
                 <i class="bi bi-file-earmark-text"></i>
-                <span>ការរាយការណ៍របស់ខ្ញុំ</span>
+                <span>ការបង្ហោះរបស់ខ្ញុំ</span>
               </router-link>
 
               <router-link
@@ -650,11 +650,13 @@ body {
   );
 
   color: transparent;
-
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
-  position: sticky;
+  position: fixed;  /* Changed from sticky to fixed */
   top: 0;
+  left: 0;          /* You may want to add this */
+  width: 100%;      /* And this to ensure full width */
   z-index: 100;
+
 }
 
 .navbar-brand-custom {

@@ -149,7 +149,7 @@
 
           <!-- ERROR MESSAGE -->
           <div v-if="auth.error" class="alert-error">
-            {{ auth.error }}
+            អ៊ីមែល ឬពាក្យសម្ងាត់មិនត្រឹមត្រូវ
           </div>
 
           <!-- DIVIDER -->
@@ -170,6 +170,14 @@
       </div>
     </div>
   </div>
+
+  <BaseToast
+    v-model="showToast"
+    :message="toastMessage"
+    :theme="toastTheme"
+    :icon="toastIcon"
+    :duration="3000"
+  />
 </template>
 
 <script setup>
@@ -177,6 +185,7 @@ import { reactive, computed, ref} from "vue";
 import { useRouter, useRoute } from "vue-router";
 import { useAuthStore } from "@/stores/authStore";
 import logo from "@/assets/images/logo/logo.png";
+import BaseToast from "@/components/base/BaseToast.vue";
 
 const router = useRouter();
 const route = useRoute();
@@ -215,6 +224,30 @@ const isFormValid = computed(() => {
 const isAdminLogin = computed(() => route.meta.isAdminLogin === true);
 
 /* ================= LOGIN ================= */
+// const handleLogin = async () => {
+//   touched.email = true;
+//   touched.password = true;
+
+//   if (!isFormValid.value) return;
+
+//   try {
+//     await auth.login(form);
+
+//     if (auth.isAdmin) {
+//       router.push("/admin/dashboard");
+//     } else {
+//       router.replace("/");
+//     }
+//   } catch (err) {
+//     console.error(err);
+//   }
+// };
+
+const showToast = ref(false);
+const toastMessage = ref("");
+const toastTheme = ref("primary");
+const toastIcon = ref("");
+
 const handleLogin = async () => {
   touched.email = true;
   touched.password = true;
@@ -224,13 +257,25 @@ const handleLogin = async () => {
   try {
     await auth.login(form);
 
-    if (auth.isAdmin) {
-      router.push("/admin/dashboard");
-    } else {
-      router.replace("/");
-    }
+    toastMessage.value = "ចូលគណនីបានជោគជ័យ 🎉";
+    toastTheme.value = "success";
+    toastIcon.value = "check-circle";
+    showToast.value = true;
+
+    setTimeout(() => {
+      if (auth.isAdmin) {
+        router.push("/admin/dashboard");
+      } else {
+        router.replace("/");
+      }
+    }, 1200);
+
   } catch (err) {
-    console.error(err);
+
+    toastMessage.value = auth.error || "ការចូលគណនីបរាជ័យ សូមពិនិត្យម្តងទៀត";
+    toastTheme.value = "danger";
+    toastIcon.value = "x-circle";
+    showToast.value = true;
   }
 };
 

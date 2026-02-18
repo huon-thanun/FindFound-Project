@@ -18,10 +18,10 @@
           >
             <div class="badge-modern mb-4">
               <i class="bi bi-flag-fill me-2"></i>
-              រាយការណ៍ពីបញ្ហា
+              បង្ហោះពីបញ្ហា
             </div>
             <h1 class="hero-title">
-              រាយការណ៍ <span class="gradient-text">វត្ថុបាត់</span>
+              បង្ហោះ <span class="gradient-text">វត្ថុបាត់</span>
               <br class="d-none d-md-block" />
               ឬរកឃើញនៅលើគេហទំព័រ
             </h1>
@@ -52,10 +52,8 @@
         class="d-flex justify-content-between flex-wrap mb-3 align-items-center"
       >
         <div>
-          <h2>ការរាយការណ៍</h2>
-          <p>
-            រុករក និងមើលវត្ថុបាត់បង់ និងវត្ថុដែលបានរកឃើញទាំងអស់នៅក្នុងសហគមន៍
-          </p>
+          <h2>ការបង្ហោះ</h2>
+          <p>រុករក និងមើលវត្ថុបាត់បង់ និងវត្ថុដែលបានរកឃើញទាំងអស់នៅក្នុងសហគមន៍</p>
         </div>
 
         <BaseButton
@@ -238,6 +236,8 @@ const btnHandleToCreatePage = () => {
 </script>
 
 <style scoped>
+  @import url("https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@300;400;500;600;700;800&display=swap");
+  
 .image {
   width: 100%;
   height: 230px;
@@ -260,8 +260,7 @@ const btnHandleToCreatePage = () => {
 } */
 .bg-btn-group {
   padding: 5px;
-  /* background-color: var(--primary-color); */
-  background-color: rgba(226, 226, 226, 0.877);
+  background-color: var(--background-color);
   border-radius: 10px;
 }
 
@@ -271,7 +270,7 @@ const btnHandleToCreatePage = () => {
   padding: 6px 15px 4px;
   font-size: 16px;
   border-radius: 6px;
-  color: white;
+  color: black;
   cursor: pointer;
 }
 
@@ -353,7 +352,6 @@ const btnHandleToCreatePage = () => {
   border-color: var(--tertiary-color);
 }
 
-@import url("https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@300;400;500;600;700;800&display=swap");
 
 .main-contact {
   font-family: "Kantumruy Pro", system-ui, sans-serif;
