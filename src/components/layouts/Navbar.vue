@@ -375,7 +375,7 @@ onUnmounted(() => {
 }
 
 .sidebar{
-  display: block !important;
+  display: flex !important;
   position: absolute !important;
   right: 0 !important;
   top: 0 !important;

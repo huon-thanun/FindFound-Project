@@ -34,7 +34,7 @@
         exact
       >
         <div class="icon-box"><i class="bi bi-bookmark-star-fill"></i></div>
-        <span>ប្រភេទរបាយការណ៍</span>
+        <span>ប្រភេទការបង្ហោះ</span>
       </router-link>
 
       <router-link

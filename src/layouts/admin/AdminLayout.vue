@@ -48,6 +48,7 @@ const handleToggleSidebar = () => {
 .content-area {
   padding: 1.5rem;
   flex: 1;
+  padding: 0;
 }
 
 /* Mobile Sidebar Overlay */
