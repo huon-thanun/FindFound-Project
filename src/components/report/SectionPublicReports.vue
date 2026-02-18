@@ -9,14 +9,15 @@
         <span class="visually-hidden">Loading...</span>
       </div>
     </div> -->
-    <div
-      class="col-12 col-md-6 col-lg-6 col-xl-4 col-xxl-3 mb-3"
-      v-for="n in 4"
-      :key="'sk-' + n"
-      v-if="reportStore.isLoadingPublicReports"
-    >
-      <BaseCardSkeleton />
-    </div>
+    <template v-if="reportStore.isLoadingPublicReports">
+      <div
+        class="col-12 col-md-6 col-lg-6 col-xl-4 col-xxl-3 mb-3"
+        v-for="n in 4"
+        :key="'sk-' + n"
+      >
+        <BaseCardSkeleton />
+      </div>
+    </template>
     <!-- Not found  -->
     <div
       v-else-if="reportStore.publicReports.length <= 0"
