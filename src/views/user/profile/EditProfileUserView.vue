@@ -2,7 +2,8 @@
   <div class="row g-4">
     <div class="col-lg-12" data-aos="fade-up">
       <!-- Use Admin Tabs -->
-      <ProfileTabsAdmin class="mb-4" />
+      <!-- <ProfileTabsAdmin class="mb-4" /> -->
+      <ProfileTabs></ProfileTabs>
 
       <div class="main-details-card mb-4 shadow-sm">
         <div class="card-header-clean mb-4">
@@ -189,6 +190,7 @@
 import { ref, computed, inject, watch } from "vue";
 import ProfileTabsAdmin from "@/components/profile/ProfileTabsAdmin.vue";
 import BaseToast from "@/components/base/BaseToast.vue";
+import ProfileTabs from "@/components/profile/ProfileTabs.vue";
 
 // ── Toast ──────────────────────────────────────────────────────
 const showToast = ref(false);
