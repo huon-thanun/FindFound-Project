@@ -1,161 +1,3 @@
-<script setup>
-// import Member from "@/components/about/member.vue";
-import MemberSection from "@/components/user/about/MemberSection.vue";
-import TestimonialsSection from "@/components/user/about/TestimonialsSection.vue";
-import { ref, onMounted } from "vue";
-import person1Img from "@/assets/images/about/feedback/person1.png";
-import person2Img from "@/assets/images/about/feedback/person2.png";
-import person3Img from "@/assets/images/about/feedback/person3.png";
-import person4Img from "@/assets/images/about/feedback/person4.png";
-import person5Img from "@/assets/images/about/feedback/person5.png";
-import person6Img from "@/assets/images/about/feedback/person6.png";
-import person7Img from "@/assets/images/about/feedback/person7.png";
-import person8Img from "@/assets/images/about/feedback/person8.png";
-
-const features = [
-  {
-    icon: "bi-geo",
-    title: "គោលដៅ",
-    desc: "បង្កើតវេទិកាដែលងាយស្រួលប្រើប្រាស់សម្រាប់ការស្វែងរកវត្ថុបាត់បង់។",
-  },
-  {
-    icon: "bi-lock",
-    title: "សុវត្ថិភាព",
-    desc: "ការពារទិន្នន័យរបស់អ្នកប្រើប្រាស់ជាមួយប្រព័ន្ធសុវត្ថិភាពខ្ពស់។",
-  },
-  {
-    icon: "bi-lightning-charge",
-    title: "លឿន",
-    desc: "ប្រព័ន្ធឆ្លើយតបរហ័ស និងអាចប្រើបានគ្រប់ពេលវេលា។",
-  },
-  {
-    icon: "bi-person-raised-hand",
-    title: "សហគមន៍",
-    desc: "បង្កើតសហគមន៍ដែលជួយគ្នាទៅវិញទៅមក។",
-  },
-];
-
-const stats = ref([
-  { number: "0", target: 500, label: "អ្នកប្រើប្រាស់", suffix: "+" },
-  { number: "0", target: 300, label: "វត្ថុបានរកឃើញ", suffix: "+" },
-  { number: "0", target: 95, label: "អត្រាជោគជ័យ", suffix: "%" },
-  { number: "0", target: 24, label: "សេវាកម្ម", suffix: "/7" },
-]);
-
-// In your <script setup> – replace the testimonials array with this:
-const testimonials = [
-  {
-    name: "សុខ ចាន់ថា",
-    role: "អ្នកប្រើប្រាស់",
-    avatar: person1Img,
-    text: "FindFound ជួយខ្ញុំរកកាបូបដែលបាត់បង់មកវិញបានយ៉ាងរហ័ស។ សេវាកម្មល្អណាស់!",
-  },
-  {
-    name: "ពេជ្រ សុភា",
-    role: "អ្នកប្រើប្រាស់",
-    avatar: person8Img,
-    text: "ប្រព័ន្ធងាយស្រួលប្រើប្រាស់ និងមានប្រសិទ្ធភាព។ សូមអរគុណក្រុមការងារ!",
-  },
-  {
-    name: "វិចិត្រា មករា",
-    role: "អ្នកប្រើប្រាស់",
-    avatar: person3Img,
-    text: "គេហទំព័រដ៏ល្អមួយសម្រាប់ការស្វែងរកវត្ថុបាត់បង់។ ខ្ញុំពេញចិត្តណាស់!",
-  },
-  {
-    name: "លី សុវណ្ណ",
-    role: "អ្នកប្រើប្រាស់",
-    avatar: person4Img,
-    text: "ខ្ញុំអាចប្រកាសវត្ថុបាត់បង់បានយ៉ាងងាយស្រួល ហើយទទួលបានការឆ្លើយតបលឿន។",
-  },
-  {
-    name: "ចាន់ ដារ៉ា",
-    role: "អ្នកប្រើប្រាស់",
-    avatar: person5Img,
-    text: "FindFound ជួយភ្ជាប់អ្នកបាត់វត្ថុ និងអ្នកឃើញវត្ថុបានល្អណាស់។",
-  },
-  {
-    name: "មុំ ស្រីនាង",
-    role: "អ្នកប្រើប្រាស់",
-    avatar: person6Img,
-    text: "UI ស្អាត ប្រើងាយ និងមានប្រយោជន៍ខ្លាំងសម្រាប់សង្គម។",
-  },
-  {
-    name: "ហេង វិសាល",
-    role: "អ្នកប្រើប្រាស់",
-    avatar: person7Img,
-    text: "សេវាកម្មនេះជួយសន្សំពេលវេលា និងកាត់បន្ថយការព្រួយបារម្ភបានច្រើន។",
-  },
-];
-// Core values
-const values = [
-  {
-    icon: "bi-lightbulb",
-    title: "ភាពច្នៃប្រឌិត",
-    desc: "យើងតែងតែស្វែងរកដំណោះស្រាយថ្មីៗ និងច្នៃប្រឌិត",
-  },
-  {
-    icon: "bi-mortarboard",
-    title: "ការរៀនសូត្រ",
-    desc: "យើងជឿជាក់លើការរៀនសូត្រ និងការអភិវឌ្ឍន៍ជាបន្ត",
-  },
-  {
-    icon: "bi-star",
-    title: "គុណភាព",
-    desc: "យើងប្តេជ្ញាផ្តល់សេវាកម្មដែលមានគុណភាពខ្ពស់",
-  },
-  {
-    icon: "bi-heart",
-    title: "ការយកចិត្តទុកដាក់",
-    desc: "យើងយកចិត្តទុកដាក់ចំពោះអ្នកប្រើប្រាស់គ្រប់រូប",
-  },
-];
-
-// Technologies used
-const technologies = [
-  {
-    name: "Javascript",
-    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg",
-  },
-  {
-    name: "Vue.js",
-    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vuejs/vuejs-original.svg",
-  },
-  {
-    name: "Bootstrap",
-    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/bootstrap/bootstrap-original.svg",
-  },
-  {
-    name: "Github",
-    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg",
-  },
-  {
-    name: "Figma",
-    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/figma/figma-original.svg",
-  },
-];
-
-// Animated counter
-const animateCounter = () => {
-  stats.value.forEach((stat, index) => {
-    let current = 0;
-    const increment = stat.target / 50;
-    const timer = setInterval(() => {
-      current += increment;
-      if (current >= stat.target) {
-        stat.number = stat.target;
-        clearInterval(timer);
-      } else {
-        stat.number = Math.floor(current);
-      }
-    }, 30);
-  });
-};
-
-onMounted(() => {
-  animateCounter();
-});
-</script>
 
 <template>
   <div class="about-page">
@@ -384,6 +226,166 @@ onMounted(() => {
     </section>
   </div>
 </template>
+
+<script setup>
+// import Member from "@/components/about/member.vue";
+import MemberSection from "@/components/user/about/MemberSection.vue";
+import TestimonialsSection from "@/components/user/about/TestimonialsSection.vue";
+import { ref, onMounted } from "vue";
+import person1Img from "@/assets/images/about/feedback/person1.png";
+import person2Img from "@/assets/images/about/feedback/person2.png";
+import person3Img from "@/assets/images/about/feedback/person3.png";
+import person4Img from "@/assets/images/about/feedback/person4.png";
+import person5Img from "@/assets/images/about/feedback/person5.png";
+import person6Img from "@/assets/images/about/feedback/person6.png";
+import person7Img from "@/assets/images/about/feedback/person7.png";
+import person8Img from "@/assets/images/about/feedback/person8.png";
+
+const features = [
+  {
+    icon: "bi-geo",
+    title: "គោលដៅ",
+    desc: "បង្កើតវេទិកាដែលងាយស្រួលប្រើប្រាស់សម្រាប់ការស្វែងរកវត្ថុបាត់បង់។",
+  },
+  {
+    icon: "bi-lock",
+    title: "សុវត្ថិភាព",
+    desc: "ការពារទិន្នន័យរបស់អ្នកប្រើប្រាស់ជាមួយប្រព័ន្ធសុវត្ថិភាពខ្ពស់។",
+  },
+  {
+    icon: "bi-lightning-charge",
+    title: "លឿន",
+    desc: "ប្រព័ន្ធឆ្លើយតបរហ័ស និងអាចប្រើបានគ្រប់ពេលវេលា។",
+  },
+  {
+    icon: "bi-person-raised-hand",
+    title: "សហគមន៍",
+    desc: "បង្កើតសហគមន៍ដែលជួយគ្នាទៅវិញទៅមក។",
+  },
+];
+
+const stats = ref([
+  { number: "0", target: 500, label: "អ្នកប្រើប្រាស់", suffix: "+" },
+  { number: "0", target: 300, label: "វត្ថុបានរកឃើញ", suffix: "+" },
+  { number: "0", target: 95, label: "អត្រាជោគជ័យ", suffix: "%" },
+  { number: "0", target: 24, label: "សេវាកម្ម", suffix: "/7" },
+]);
+
+// In your <script setup> – replace the testimonials array with this:
+const testimonials = [
+  {
+    name: "សុខ ចាន់ថា",
+    role: "អ្នកប្រើប្រាស់",
+    avatar: person1Img,
+    text: "FindFound ជួយខ្ញុំរកកាបូបដែលបាត់បង់មកវិញបានយ៉ាងរហ័ស។ សេវាកម្មល្អណាស់!",
+  },
+  {
+    name: "ពេជ្រ សុភា",
+    role: "អ្នកប្រើប្រាស់",
+    avatar: person8Img,
+    text: "ប្រព័ន្ធងាយស្រួលប្រើប្រាស់ និងមានប្រសិទ្ធភាព។ សូមអរគុណក្រុមការងារ!",
+  },
+  {
+    name: "វិចិត្រា មករា",
+    role: "អ្នកប្រើប្រាស់",
+    avatar: person3Img,
+    text: "គេហទំព័រដ៏ល្អមួយសម្រាប់ការស្វែងរកវត្ថុបាត់បង់។ ខ្ញុំពេញចិត្តណាស់!",
+  },
+  {
+    name: "លី សុវណ្ណ",
+    role: "អ្នកប្រើប្រាស់",
+    avatar: person4Img,
+    text: "ខ្ញុំអាចប្រកាសវត្ថុបាត់បង់បានយ៉ាងងាយស្រួល ហើយទទួលបានការឆ្លើយតបលឿន។",
+  },
+  {
+    name: "ចាន់ ដារ៉ា",
+    role: "អ្នកប្រើប្រាស់",
+    avatar: person5Img,
+    text: "FindFound ជួយភ្ជាប់អ្នកបាត់វត្ថុ និងអ្នកឃើញវត្ថុបានល្អណាស់។",
+  },
+  {
+    name: "មុំ ស្រីនាង",
+    role: "អ្នកប្រើប្រាស់",
+    avatar: person6Img,
+    text: "UI ស្អាត ប្រើងាយ និងមានប្រយោជន៍ខ្លាំងសម្រាប់សង្គម។",
+  },
+  {
+    name: "ហេង វិសាល",
+    role: "អ្នកប្រើប្រាស់",
+    avatar: person7Img,
+    text: "សេវាកម្មនេះជួយសន្សំពេលវេលា និងកាត់បន្ថយការព្រួយបារម្ភបានច្រើន។",
+  },
+];
+// Core values
+const values = [
+  {
+    icon: "bi-lightbulb",
+    title: "ភាពច្នៃប្រឌិត",
+    desc: "យើងតែងតែស្វែងរកដំណោះស្រាយថ្មីៗ និងច្នៃប្រឌិត",
+  },
+  {
+    icon: "bi-mortarboard",
+    title: "ការរៀនសូត្រ",
+    desc: "យើងជឿជាក់លើការរៀនសូត្រ និងការអភិវឌ្ឍន៍ជាបន្ត",
+  },
+  {
+    icon: "bi-star",
+    title: "គុណភាព",
+    desc: "យើងប្តេជ្ញាផ្តល់សេវាកម្មដែលមានគុណភាពខ្ពស់",
+  },
+  {
+    icon: "bi-heart",
+    title: "ការយកចិត្តទុកដាក់",
+    desc: "យើងយកចិត្តទុកដាក់ចំពោះអ្នកប្រើប្រាស់គ្រប់រូប",
+  },
+];
+
+// Technologies used
+const technologies = [
+  {
+    name: "Javascript",
+    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg",
+  },
+  {
+    name: "Vue.js",
+    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vuejs/vuejs-original.svg",
+  },
+  {
+    name: "Bootstrap",
+    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/bootstrap/bootstrap-original.svg",
+  },
+  {
+    name: "Github",
+    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg",
+  },
+  {
+    name: "Figma",
+    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/figma/figma-original.svg",
+  },
+];
+
+// Animated counter
+const animateCounter = () => {
+  stats.value.forEach((stat, index) => {
+    let current = 0;
+    const increment = stat.target / 50;
+    const timer = setInterval(() => {
+      current += increment;
+      if (current >= stat.target) {
+        stat.number = stat.target;
+        clearInterval(timer);
+      } else {
+        stat.number = Math.floor(current);
+      }
+    }, 30);
+  });
+};
+
+onMounted(() => {
+  animateCounter();
+});
+</script>
+
 
 <style scoped>
 @import url("https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@300;400;500;600;700;800&display=swap");
