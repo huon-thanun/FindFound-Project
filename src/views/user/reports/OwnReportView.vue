@@ -679,19 +679,21 @@ const PreviousPage = async () => {
 .bg-btn-group {
   padding: 5px;
   background-color: rgba(226, 226, 226, 0.877);
-  border-radius: 20px;
+
+  border-radius: 12px;
 }
 
 .bg-btn-group .btn-filter {
   background-color: transparent;
   border: none;
   font-size: 16px;
-  border-radius: 15px;
+  border-radius: 5px;
   cursor: pointer;
 }
 
 .bg-btn-group .btn-filter.Active {
   background-color: #ffffff;
+  box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
 }
 /* .btn-action-group {
   /* border: 1px solid red; 

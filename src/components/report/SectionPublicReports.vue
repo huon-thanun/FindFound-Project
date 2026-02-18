@@ -24,7 +24,7 @@
     >
       <div class="w-100 d-flex flex-column align-items-center p-3 text-muted">
         <i class="bi bi-exclamation-circle" style="font-size: 35px"></i>
-        <h3 class="m-0">មិនមាន​ របាយការណ៍</h3>
+        <h3 class="m-0">មិនមាន​ការរាយការណ៍</h3>
       </div>
     </div>
     <div

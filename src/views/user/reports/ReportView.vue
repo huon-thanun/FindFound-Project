@@ -12,7 +12,10 @@
       <div class="container position-relative">
         <div class="row align-items-center pt-5 g-5 py-lg-6">
           <!-- Text Column -->
-          <div class="col-lg-7 py-5 px-5 m-0 hero-text-col" data-aos="fade-right">
+          <div
+            class="col-lg-7 py-5 px-5 m-0 hero-text-col"
+            data-aos="fade-right"
+          >
             <div class="badge-modern mb-4">
               <i class="bi bi-flag-fill me-2"></i>
               បង្ហោះពីបញ្ហា
@@ -23,37 +26,53 @@
               ឬរកឃើញនៅលើគេហទំព័រ
             </h1>
             <p class="hero-subtitle">
-              ជួយរក្សាសហគមន៍យើងអោយមានសុវត្ថិភាព។ ប្រសិនបើអ្នកបាត់បង់វត្ថុ ឬរកឃើញវត្ថុអ្វីមួយ
-              សូមរាយការណ៍មកយើងខ្ញុំឥឡូវនេះ។
+              ជួយរក្សាសហគមន៍យើងអោយមានសុវត្ថិភាព។ ប្រសិនបើអ្នកបាត់បង់វត្ថុ
+              ឬរកឃើញវត្ថុអ្វីមួយ សូមរាយការណ៍មកយើងខ្ញុំឥឡូវនេះ។
             </p>
           </div>
 
           <!-- Illustration Column -->
-          <div class="col-lg-5 hero-illustration d-flex justify-content-center m-0 p-0" data-aos="fade-left"
-            data-aos-delay="200">
+          <div
+            class="col-lg-5 hero-illustration d-flex justify-content-center m-0 p-0"
+            data-aos="fade-left"
+            data-aos-delay="200"
+          >
             <img
               src="../../../assets/images/report/Flat vector illustration of two people meeting and (2)-Photoroom (1).png"
-              alt="Contact Us Illustration" class="hero-img m-0 img-fluid" />
+              alt="Contact Us Illustration"
+              class="hero-img m-0 img-fluid"
+            />
           </div>
         </div>
       </div>
     </section>
     <div class="container py-4">
       <!-- Hero Banner -->
-      <div class="d-flex justify-content-between flex-wrap mb-3 align-items-center">
+      <div
+        class="d-flex justify-content-between flex-wrap mb-3 align-items-center"
+      >
         <div>
           <h2>ការបង្ហោះ</h2>
           <p>រុករក និងមើលវត្ថុបាត់បង់ និងវត្ថុដែលបានរកឃើញទាំងអស់នៅក្នុងសហគមន៍</p>
         </div>
 
-        <BaseButton variant="primary" icon="file-earmark-plus" @click="btnHandleToCreatePage">
+        <BaseButton
+          variant="primary"
+          icon="file-earmark-plus"
+          @click="btnHandleToCreatePage"
+        >
           បង្កើតការរាយការណ៍
         </BaseButton>
       </div>
       <div class="card mb-3 shadow border-color">
         <div class="card-body row">
           <div class="col-xxl-12">
-            <BaseInput class="w-100" v-model="search" type="text" placeholder="ស្វែងរក ការរាយការណ៍..." />
+            <BaseInput
+              class="w-100"
+              v-model="search"
+              type="text"
+              placeholder="ស្វែងរក ការរាយការណ៍..."
+            />
           </div>
           <!-- CATEGORY -->
           <div class="col-xxl-8 mt-2">
@@ -67,80 +86,80 @@
               {{ category.name }}
             </option>
           </select> -->
-          <div class="row">
-            <div class="col-xxl-5" style="flex-wrap: nowrap">
-              <BaseSelect
-                class="w-100"
-                v-model="cateValue"
-                :items="categoryStore.categories"
-                textField="ប្រភេទនៃការរាយការណ៍ទំាងអស់"
-                labelField="name"
-                valueField="id"
-              />
+            <div class="row">
+              <div class="col-xxl-5" style="flex-wrap: nowrap">
+                <BaseSelect
+                  class="w-100"
+                  v-model="cateValue"
+                  :items="categoryStore.categories"
+                  textField="ប្រភេទនៃការរាយការណ៍ទំាងអស់"
+                  labelField="name"
+                  valueField="id"
+                />
+              </div>
             </div>
           </div>
+          <div class="col-xxl-4 mt-1 text-end">
+            <BaseButton
+              icon="stars"
+              variant="outline_primary"
+              @click="clearFilter"
+            >
+              សម្អាតការតម្រៀប
+            </BaseButton>
+          </div>
         </div>
-        <div class="col-xxl-4 mt-1 text-end">
-          <BaseButton
-            icon="stars"
-            variant="outline_primary"
-            @click="clearFilter"
+      </div>
+      <div
+        class="mt-3 mb-5 align-items-center d-flex justify-content-between flex-wrap"
+      >
+        <div class="btn-group bg-btn-group my-1">
+          <button
+            class="btn-filter"
+            :class="{ active: activeFilter === '' }"
+            @click="btnFilterAllReport"
           >
-            សម្អាតការតម្រៀប
-          </BaseButton>
+            ទាំងអស់
+          </button>
+
+          <button
+            class="btn-filter"
+            :class="{ active: activeFilter === '1' }"
+            @click="btnFilterReportType('1')"
+          >
+            បាត់
+          </button>
+
+          <button
+            class="btn-filter"
+            :class="{ active: activeFilter === '2' }"
+            @click="btnFilterReportType('2')"
+          >
+            រកឃើញ
+          </button>
+        </div>
+        <div class="d-flex gap-2 align-items-center my-1">
+          <div class="mt-2" style="width: 150px">
+            <BaseSelect
+              class="w-100"
+              v-model="sortDir"
+              :items="sortDirData"
+              labelField="name"
+              valueField="id"
+            />
+          </div>
         </div>
       </div>
+      <SectionPublicReports
+        :page="1"
+        :perPage="20"
+        :search="search"
+        :isSearching="isSearching"
+        :reportTypeId="typeValue"
+        :categoryId="cateValue?.id"
+        :sortDir="sortDir"
+      ></SectionPublicReports>
     </div>
-    <div
-      class="mt-3 mb-5 align-items-center d-flex justify-content-between flex-wrap"
-    >
-      <div class="btn-group bg-btn-group my-1">
-        <button
-          class="btn-filter"
-          :class="{ active: activeFilter === '' }"
-          @click="btnFilterAllReport"
-        >
-          ទាំងអស់
-        </button>
-
-        <button
-          class="btn-filter"
-          :class="{ active: activeFilter === '1' }"
-          @click="btnFilterReportType('1')"
-        >
-          បាត់
-        </button>
-
-        <button
-          class="btn-filter"
-          :class="{ active: activeFilter === '2' }"
-          @click="btnFilterReportType('2')"
-        >
-          រកឃើញ
-        </button>
-      </div>
-      <div class="d-flex gap-2 align-items-center my-1">
-        <div class="mt-2" style="width: 150px">
-          <BaseSelect
-            class="w-100"
-            v-model="sortDir"
-            :items="sortDirData"
-            labelField="name"
-            valueField="id"
-          />
-        </div>
-      </div>
-    </div>
-    <SectionPublicReports
-      :page="1"
-      :perPage="20"
-      :search="search"
-      :isSearching="isSearching"
-      :reportTypeId="typeValue"
-      :categoryId="cateValue?.id"
-      :sortDir="sortDir"
-    ></SectionPublicReports>
-  </div>
   </div>
 </template>
 <script setup>
@@ -257,7 +276,7 @@ const btnHandleToCreatePage = () => {
 
 .bg-btn-group .btn-filter.active {
   background-color: white;
-  color: var(--secondary-color)
+  color: var(--secondary-color);
 }
 
 .tag {
@@ -353,9 +372,11 @@ const btnHandleToCreatePage = () => {
 .hero-bg {
   position: absolute;
   inset: 0;
-  background: radial-gradient(circle at 30% 70%,
-      rgba(168, 85, 247, 0.08) 0%,
-      transparent 60%);
+  background: radial-gradient(
+    circle at 30% 70%,
+    rgba(168, 85, 247, 0.08) 0%,
+    transparent 60%
+  );
   pointer-events: none;
 }
 
@@ -394,7 +415,6 @@ const btnHandleToCreatePage = () => {
 }
 
 @keyframes float-slow {
-
   0%,
   100% {
     transform: translate(0, 0) rotate(0deg);
