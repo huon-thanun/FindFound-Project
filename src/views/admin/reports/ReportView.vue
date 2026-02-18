@@ -13,8 +13,13 @@
             <!-- exact h2 from prompt, plus small context badge -->
             <h2 class="fw-bold">
               ការបង្ហោះ
-              <span class="badge-admin"><i class="bi bi-sticky"
-                  style="font-size: 0.75rem; margin-right: 5px"></i>អ្នកគ្រប់គ្រង</span>
+              <span class="badge-admin"
+                ><i
+                  class="bi bi-sticky"
+                  style="font-size: 0.75rem; margin-right: 5px"
+                ></i
+                >អ្នកគ្រប់គ្រង</span
+              >
             </h2>
             <!-- exact paragraph, but we enhance it with a subtle khmer-friendly meta info -->
             <p class="text-muted">
@@ -25,14 +30,23 @@
         </div>
 
         <!-- very subtle divider line just for style (makes banner airy) -->
-        <div style="
+        <div
+          style="
             margin-top: 0.8rem;
             margin-left: calc(70px + 1.25rem);
             border-bottom: 2px dashed rgba(86, 115, 150, 0.15);
             width: 40%;
-          "></div>
+          "
+        ></div>
       </div>
-      <p class="mt-3 text-muted">កំពុងទាញទិន្នន័យស្ថិតិ</p>
+      <BaseButton
+        class="d-none"
+        icon="person-plus"
+        variant="primary"
+        @click="showCreateModal = true"
+      >
+        បង្កើតអ្នកប្រើប្រាស់
+      </BaseButton>
     </div>
 
     <!-- <div class="row"> -->
@@ -41,27 +55,54 @@
     <div class="card mb-3 shadow border-color">
       <div class="card-body row">
         <div class="col-xxl-12">
-          <BaseInput class="w-100" v-model="search" type="text" placeholder="ស្វែងរករបាយការណ៍..." />
+          <BaseInput
+            class="w-100"
+            v-model="search"
+            type="text"
+            placeholder="ស្វែងរករបាយការណ៍..."
+          />
         </div>
         <div class="col-xxl-8 mt-2">
           <div class="row">
             <div class="col-lg-6 col-xxl-3" style="flex-wrap: nowrap">
-              <BaseSelect class="w-100 text-nowrap" v-model="typeValue" :items="reportTypeOptions"
-                textField="ប្រភេទទាំងអស់" labelField="khName" valueField="id" />
+              <BaseSelect
+                class="w-100 text-nowrap"
+                v-model="typeValue"
+                :items="reportTypeOptions"
+                textField="ប្រភេទទាំងអស់"
+                labelField="khName"
+                valueField="id"
+              />
             </div>
             <div class="col-lg-6 col-xxl-4" style="flex-wrap: nowrap">
-              <BaseSelect class="w-100 text-nowrap" v-model="statusValue" :items="allStatus" textField="ស្ថានភាពទាំងអស់"
-                labelField="title" valueField="value" />
+              <BaseSelect
+                class="w-100 text-nowrap"
+                v-model="statusValue"
+                :items="allStatus"
+                textField="ស្ថានភាពទាំងអស់"
+                labelField="title"
+                valueField="value"
+              />
             </div>
             <div class="col-xxl-5" style="flex-wrap: nowrap">
-              <BaseSelect class="w-100 text-nowrap" v-model="cateValue" :items="categoryStore.categories"
-                textField="ប្រភេទទាំងអស់" labelField="name" valueField="id" />
+              <BaseSelect
+                class="w-100 text-nowrap"
+                v-model="cateValue"
+                :items="categoryStore.categories"
+                textField="ប្រភេទទាំងអស់"
+                labelField="name"
+                valueField="id"
+              />
             </div>
           </div>
         </div>
         <!-- CLEAR FILTER -->
         <div class="col-xxl-4 mt-1 text-end">
-          <BaseButton variant="outline_primary" icon="stars" @click="clearFilter">
+          <BaseButton
+            variant="outline_primary"
+            icon="stars"
+            @click="clearFilter"
+          >
             សម្អាតការតម្រៀប
           </BaseButton>
         </div>
@@ -70,34 +111,50 @@
 
     <div class="col-12 mt-4" v-if="reportStore.isLoadingGetAllReport">
       <div class="row g-3">
-        <div v-for="n in 4" :key="`skeleton-${n}`" class="col-12 col-md-6 col-xl-4 col-xxl-3">
+        <div
+          v-for="n in 4"
+          :key="`skeleton-${n}`"
+          class="col-12 col-md-6 col-xl-4 col-xxl-3"
+        >
           <BaseSkeleton />
         </div>
       </div>
     </div>
 
-    <div v-else-if="reportStore.allReports.length <= 0" class="my-3 col-12 center2">
+    <div
+      v-else-if="reportStore.allReports.length <= 0"
+      class="my-3 col-12 center2"
+    >
       <div class="w-100 d-flex flex-column align-items-center p-3 text-muted">
         <i class="bi bi-exclamation-circle" style="font-size: 35px"></i>
-        <h3 class="m-0">មិនមានរបាយការណ៍ទេ</h3>
+        <h3 class="m-0">មិនមានការបង្ហោះទេ</h3>
       </div>
     </div>
     <!-- REPORT LIST -->
 
     <div v-else class="col-12 mt-4">
       <div class="row g-4">
-        <div class="col-12 col-md-6 col-xl-4 col-xxl-3" v-for="report in reportStore.allReports" :key="report.id">
+        <div
+          class="col-12 col-md-6 col-xl-4 col-xxl-3"
+          v-for="report in reportStore.allReports"
+          :key="report.id"
+        >
           <BaseReportCard class="border-color rounded-4 pb-0">
             <template #image>
               <div class="image rounded-top-4">
-                <img class="rounded-top-4" :src="report.reportImages && report.reportImages.length > 0
-                    ? report.reportImages[0].name
-                    : defaultImage
-                  " :alt="report.title || 'រូបភាពរបាយការណ៍'" />
+                <img
+                  class="rounded-top-4"
+                  :src="
+                    report.reportImages && report.reportImages.length > 0
+                      ? report.reportImages[0].name
+                      : defaultImage
+                  "
+                  :alt="report.title || 'រូបភាពរបាយការណ៍'"
+                />
               </div>
               <span class="category-tag tag-box-shadow-in">{{
                 report.category.name
-                }}</span>
+              }}</span>
             </template>
 
             <div class="px-4 py-2 text-center">
@@ -109,19 +166,27 @@
 
               <!-- Status Badges -->
               <div class="status-group">
-                <span class="status-badge" :class="report.reportType.name.toLowerCase()">
-                  <i :class="report.reportType.name === 'LOST'
-                      ? 'bi-exclamation-triangle'
-                      : 'bi-check-circle'
-                    "></i>
+                <span
+                  class="status-badge"
+                  :class="report.reportType.name.toLowerCase()"
+                >
+                  <i
+                    :class="
+                      report.reportType.name === 'LOST'
+                        ? 'bi-exclamation-triangle'
+                        : 'bi-check-circle'
+                    "
+                  ></i>
                   {{ getReportTypeKh(report.reportType.name) }}
                 </span>
                 <span class="status-badge" :class="report.status.toLowerCase()">
-                  <i :class="{
-                    'bi-lightning': report.status === 'ACTIVE',
-                    'bi-check2-all': report.status === 'RESOLVED',
-                    'bi-eye-slash': report.status === 'HIDDEN',
-                  }"></i>
+                  <i
+                    :class="{
+                      'bi-lightning': report.status === 'ACTIVE',
+                      'bi-check2-all': report.status === 'RESOLVED',
+                      'bi-eye-slash': report.status === 'HIDDEN',
+                    }"
+                  ></i>
                   {{ getStatusKh(report.status) }}
                 </span>
               </div>
@@ -134,51 +199,91 @@
               </ul>
 
               <div class="button-group pt-0 border-0">
-                <BaseButton class="base" :icon="isLoading === report.id ? '' : 'eye'" variant="primary w-100"
-                  @click="fetchReportDetail(report.id)">
-                  <span v-if="isLoading" class="spinner-border me-2 spinner-border-sm"></span>
-<i v-else-if="icon" :class="`fas fa-${icon}`"></i>
+                <BaseButton
+                  class="base"
+                  :icon="isLoading === report.id ? '' : 'eye'"
+                  variant="primary w-100"
+                  @click="fetchReportDetail(report.id)"
+                >
+                  <span
+                    v-if="isLoading"
+                    class="spinner-border me-2 spinner-border-sm"
+                  ></span>
+                  <i v-else-if="icon" :class="`fas fa-${icon}`"></i>
                   <span>មើលលម្អិត</span>
                 </BaseButton>
               </div>
 
               <div class="reporter">
                 <div class="reporter-avatar">
-                  <img :src="report.reporter.avatar || defaultAvatar" :alt="report.reporter.fullname" />
+                  <img
+                    :src="report.reporter.avatar || defaultAvatar"
+                    :alt="report.reporter.fullname"
+                  />
                 </div>
                 <div class="reporter-info">
                   <span class="reporter-label text-start">បង្ហោះដោយ</span>
                   <span class="reporter-name">{{
                     report.reporter.fullname
-                    }}</span>
+                  }}</span>
                 </div>
               </div>
             </div>
-          </div>
-          <div class="card-body">
-            <h5 class="card-title">{{ card.title }}</h5>
-            <div class="card-value">
-              {{ card.value.toLocaleString("km-KH") }}
-            </div>
-            <small class="secondary-label">{{ card.secondary }}</small>
-          </div>
+          </BaseReportCard>
         </div>
       </div>
     </div>
+    <!-- </div> -->
+    <!-- <div class="d-flex my-2 gap-2 justify-content-center"></div> -->
+
+    <!-- pagination -->
+
+    <div
+      v-if="reportStore.meta?.totalPages > 1"
+      class="d-flex gap-2 justify-content-center my-3"
+    >
+      <BaseButton
+        variant="danger"
+        @click="PreviousPage"
+        :disabled="!reportStore.meta?.hasPreviousPage"
+      >
+        មុន
+      </BaseButton>
+
+      <!-- <BaseButton
+        v-for="p in visiblePages"
+        :key="p"
+        :variant="p === page ? 'primary' : 'cancel'"
+        @click="goToPage(p)"
+      >
+        {{ p }}
+      </BaseButton> -->
+
+      <BaseButton
+        variant="primary"
+        @click="nextPage"
+        :disabled="!reportStore.meta?.hasNextPage"
+      >
+        បន្ទាប់
+      </BaseButton>
+    </div>
+
+    <ReportDetail v-model="showModal" :data="data" />
   </div>
 </template>
 <script setup>
-import { ref, onMounted } from "vue";
-import { useUserStore } from "@/stores/userStore";
+import { ref, onMounted, watch } from "vue";
+import BaseReportCard from "@/components/base/BaseReportCard.vue";
+import BaseSkeleton from "@/components/base/BaseSkeleton.vue";
+import { useCategoryStore } from "@/stores/categoryStore";
 import { useReportStore } from "@/stores/reportStore";
+import { formatDate } from "@/utils/formatDate";
 
-const userStore = useUserStore();
+import ReportDetail from "./ReportDetail.vue";
+
+const categoryStore = useCategoryStore();
 const reportStore = useReportStore();
 
-  const loading = ref(true);
-const error = ref(null);
-const isAuthError = ref(false);
-const statCards = ref([]);
 const defaultImage =
   "https://tse2.mm.bing.net/th/id/OIP.b8bpZyFwupiioDofQPXo_gAAAA?rs=1&pid=ImgDetMain&o=7&rm=3";
 
@@ -243,106 +348,108 @@ const fetchReports = async () => {
   });
 };
 onMounted(async () => {
-  loading.value = true;
-  error.value = null;
-  isAuthError.value = false;
-
   try {
     await Promise.all([
-      userStore.fetchUsers({ page: 1, perPage: 100 }),
-      reportStore.getAllReports({ page: 1, perPage: 1 }), // ✅ correct
+      categoryStore.fetchCategories(),
+      reportStore.getAllReportType(),
+      fetchReports(),
     ]);
-
-    const totalUsers = userStore.total || userStore.users?.length || 0;
-
-    const activeUsers =
-      userStore.users?.filter(
-        (u) => (u.status || "").toUpperCase() === "ACTIVATED",
-      ).length || 0;
-
-    const inactiveUsers =
-      userStore.users?.filter(
-        (u) => (u.status || "").toUpperCase() === "DEACTIVATED",
-      ).length || 0;
-
-    const meta = reportStore.meta || {};
-    const totalReports =
-      meta.totalItems ||
-      meta.total ||
-      meta.count ||
-      meta.pagination?.total ||
-      meta.pagination?.totalItems ||
-      reportStore.total ||
-      0;
-
-    statCards.value = [
-      {
-        title: "របាយការណ៍សរុប",
-        value: totalReports,
-        icon: "bi-file-earmark-bar-graph-fill",
-        secondary: "របាយការណ៍ទាំងអស់",
-      },
-      {
-        title: "អ្នកប្រើប្រាស់សរុប",
-        value: totalUsers,
-        icon: "bi-people-fill",
-        secondary: "សរុបអ្នកប្រើប្រាស់",
-      },
-      {
-        title: "អ្នកប្រើប្រាស់សកម្ម",
-        value: activeUsers,
-        icon: "bi-person-check-fill",
-        secondary: "អ្នកប្រើប្រាស់សកម្ម",
-      },
-      {
-        title: "អ្នកប្រើប្រាស់អសកម្ម",
-        value: inactiveUsers,
-        icon: "bi-person-x-fill",
-        secondary: "អ្នកប្រើប្រាស់អសកម្ម",
-      },
-    ];
   } catch (err) {
-    console.error("Dashboard error:", err);
-
-    if (err.response?.status === 400 || err.response?.status === 401) {
-      error.value = "មិនអាចចូលប្រព័ន្ធបាន – សូមចូលឡើងវិញ";
-      isAuthError.value = true;
-    } else {
-      error.value = "មានបញ្ហាក្នុងការទាញទិន្នន័យ";
-    }
-
-    statCards.value = [
-      {
-        title: "របាយការណ៍សរុប",
-        value: 0,
-        icon: "bi-file-earmark-bar-graph-fill",
-        secondary: "",
-      },
-      {
-        title: "អ្នកប្រើប្រាស់សរុប",
-        value: 0,
-        icon: "bi-people-fill",
-        secondary: "",
-      },
-      {
-        title: "អ្នកប្រើប្រាស់សកម្ម",
-        value: 0,
-        icon: "bi-person-check-fill",
-        secondary: "",
-      },
-      {
-        title: "អ្នកប្រើប្រាស់អសកម្ម",
-        value: 0,
-        icon: "bi-person-x-fill",
-        secondary: "",
-      },
-    ];
-  } finally {
-    loading.value = false;
+    console.error(err);
   }
 });
-</script>
 
+watch([search, cateValue, typeValue, statusValue], () => {
+  clearTimeout(timeout);
+  timeout = setTimeout(fetchReports, 500);
+});
+const showModal = ref(false);
+const data = ref({});
+const isLoading = ref(null);
+const fetchReportDetail = async (id) => {
+  try {
+    isLoading.value = id;
+    await reportStore.getReportById(id);
+    data.value = reportStore.report;
+    showModal.value = true;
+  } catch (err) {
+    console.error(err);
+  } finally {
+    isLoading.value = false;
+  }
+};
+
+//pagination
+
+const pagesPerGroup = 4;
+const currentGroup = ref(1);
+
+import { computed } from "vue";
+import BaseButton from "@/components/base/BaseButton.vue";
+
+const totalPages = computed(() => reportStore.meta?.totalPages || 1);
+
+const visiblePages = computed(() => {
+  const start = (currentGroup.value - 1) * pagesPerGroup + 1;
+
+  const end = Math.min(start + pagesPerGroup - 1, totalPages.value);
+
+  const pages = [];
+  for (let i = start; i <= end; i++) {
+    pages.push(i);
+  }
+  return pages;
+});
+const goToPage = async (p) => {
+  if (p === page.value) return;
+
+  page.value = p;
+  await fetchReports();
+
+  // If clicked the last page in group → move to next group
+  const groupEnd = currentGroup.value * pagesPerGroup;
+  if (p === groupEnd && p < totalPages.value) {
+    currentGroup.value++;
+  }
+
+  // If clicked the first page in group → move to previous group
+  const groupStart = (currentGroup.value - 1) * pagesPerGroup + 1;
+  if (p === groupStart && p > 1) {
+    currentGroup.value--;
+  }
+};
+const nextPage = async () => {
+  if (!reportStore.meta?.hasNextPage) return;
+
+  page.value++;
+  await fetchReports();
+
+  const groupEnd = currentGroup.value * pagesPerGroup;
+  if (page.value > groupEnd) {
+    currentGroup.value++;
+  }
+};
+
+const PreviousPage = async () => {
+  if (!reportStore.meta?.hasPreviousPage) return;
+
+  page.value--;
+  await fetchReports();
+
+  const groupStart = (currentGroup.value - 1) * pagesPerGroup + 1;
+  if (page.value < groupStart) {
+    currentGroup.value--;
+  }
+};
+
+// Clear Filter
+const clearFilter = () => {
+  search.value = "";
+  typeValue.value = "";
+  statusValue.value = "";
+  cateValue.value = "";
+};
+</script>
 <style scoped>
 /* .desc {
   height: 63px;
@@ -472,7 +579,8 @@ onMounted(async () => {
 }
 
 .tag-box-shadow-in {
-  box-shadow: rgb(204, 219, 232) 3px 3px 6px 0px inset,
+  box-shadow:
+    rgb(204, 219, 232) 3px 3px 6px 0px inset,
     rgba(255, 255, 255, 0.5) -3px -3px 6px 1px inset;
 }
 
@@ -496,7 +604,7 @@ onMounted(async () => {
 .reporter {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: start;
   gap: 0.75rem;
   padding-top: 0.75rem;
   border-top: 1px solid #e2e8f0;
@@ -588,15 +696,16 @@ onMounted(async () => {
 .admin-banner {
   width: 100%;
   background: rgba(255, 255, 255, 0.85);
-  background-image: url('../../../assets/images/background/report.png');
-  background-position: center -480px ;
+  background-image: url("../../../assets/images/background/report.png");
+  background-position: center -480px;
   background-size: cover;
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border: 1px solid rgba(255, 255, 255, 0.7);
   padding: 2rem 2.5rem;
   border-top: 5px solid var(--secondary-color);
-  box-shadow: 0 0px 20px -12px rgba(0, 20, 40, 0.25),
+  box-shadow:
+    0 0px 20px -12px rgba(0, 20, 40, 0.25),
     inset 0 1px 2px rgba(255, 255, 255, 0.8);
   transition: all 0.2s ease;
 }
@@ -763,9 +872,11 @@ onMounted(async () => {
   content: "";
   position: absolute;
   inset: 0;
-  background: radial-gradient(circle at 0% 10%,
-      rgba(255, 255, 255, 0.4) 0%,
-      transparent 50%);
+  background: radial-gradient(
+    circle at 0% 10%,
+    rgba(255, 255, 255, 0.4) 0%,
+    transparent 50%
+  );
   pointer-events: none;
   border-radius: inherit;
   z-index: -1;

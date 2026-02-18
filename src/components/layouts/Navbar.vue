@@ -1,5 +1,8 @@
 <template>
-  <SidebarAdmin class="sidebar" :class="!isSidebarOpen ? '' : 'closed'"></SidebarAdmin>
+  <SidebarAdmin
+    class="sidebar"
+    :class="!isSidebarOpen ? '' : 'closed'"
+  ></SidebarAdmin>
   <nav class="navbar-top">
     <div
       class="nav-glass-container ps-xl-4 ps-0 d-flex justify-content-between align-items-center"
@@ -20,7 +23,7 @@
       </div>
 
       <div class="d-xl-none">
-        <img src="../../assets/images/logo/logo.png" height="200px" alt="">
+        <img src="../../assets/images/logo/logo.png" height="200px" alt="" />
       </div>
 
       <!-- Right: Notification + Profile Dropdown -->
@@ -95,7 +98,10 @@
             </ul>
           </div>
         </div>
-        <base-button @click="toggleSidebar" class="d-block d-xl-none" variant="primary"
+        <base-button
+          @click="toggleSidebar"
+          class="d-block d-xl-none"
+          variant="primary"
           ><i :class="isSidebarOpen ? 'bi bi-list' : 'bi bi-x-lg'"></i>
         </base-button>
       </div>
@@ -115,12 +121,23 @@
       <p class="khmer-font text-center mb-0">តើអ្នកពិតជាចង់ចាកចេញមែនទេ?</p>
     </template>
     <template #btnClose>
-      <BaseButton variant="cancel" icon="x-circle" class="col-6" @click="closeLogoutModal">
+      <BaseButton
+        variant="cancel"
+        icon="x-circle"
+        class="col-6"
+        @click="closeLogoutModal"
+      >
         បោះបង់
       </BaseButton>
     </template>
     <template #btnActive>
-      <BaseButton variant="danger" :isLoading="auth.loading" icon="box-arrow-left" class="col-6" @click="logout">
+      <BaseButton
+        variant="danger"
+        :isLoading="auth.loading"
+        icon="box-arrow-right"
+        class="col-6"
+        @click="logout"
+      >
         បញ្ជាក់
       </BaseButton>
     </template>
@@ -133,7 +150,7 @@ import { useRouter } from "vue-router";
 import { useAuthStore } from "@/stores/authStore";
 import SidebarAdmin from "./Sidebar.vue";
 
-const isSidebarOpen = ref(true); 
+const isSidebarOpen = ref(true);
 const toggleSidebar = () => {
   if (window.innerWidth < 1200) {
     isSidebarOpen.value = !isSidebarOpen.value;
@@ -170,7 +187,6 @@ const admin = computed(() => ({
 }));
 
 // ── Functions ────────────────────────────────────────────────
-
 
 const toggleDropdown = (e) => {
   e.stopPropagation();
@@ -224,7 +240,7 @@ onUnmounted(() => {
   height: 100px;
   position: sticky;
   max-width: 100%;
-   padding: 10px 15px;
+  padding: 10px 15px;
   top: 0;
   z-index: 999;
   background: #f8fafc;
@@ -374,7 +390,7 @@ onUnmounted(() => {
   transform: rotate(-45deg) translate(7px, -6px);
 }
 
-.sidebar{
+.sidebar {
   display: flex !important;
   position: absolute !important;
   right: 0 !important;

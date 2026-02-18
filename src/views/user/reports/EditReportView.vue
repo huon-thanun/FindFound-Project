@@ -863,7 +863,7 @@ const handleUploadImg = () => {
 .form-select-custom {
   font-size: 16px;
   padding: 10px;
-  background-color: #eee;
+  /* background-color: #eee; */
 }
 .form-control-custom:focus,
 .form-select-custom:focus {

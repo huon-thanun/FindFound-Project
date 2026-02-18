@@ -34,7 +34,7 @@
         exact
       >
         <div class="icon-box"><i class="bi bi-bookmark-star-fill"></i></div>
-        <span>ប្រភេទការបង្ហោះ</span>
+        <span>ប្រភេទវត្ថុ</span>
       </router-link>
 
       <router-link
@@ -54,35 +54,35 @@
       </button>
     </div>
     <div class="sidebar-footer border-0">
-     <button class="btn action-btn logout" @click="openLogoutModal">
+      <button class="btn action-btn logout" @click="openLogoutModal">
         <i class="bi bi-box-arrow-right"></i> ចាកចេញ
       </button>
     </div>
 
     <!-- Logout Modal -->
-<!-- Logout Modal -->
-  <BaseModal
-    v-if="showLogoutModal"
-    title="ចាកចេញពីគណនី"
-    icon="exclamation-triangle"
-    theme="danger"
-    :isClose="showLogoutModal"
-    @closeModal="closeLogoutModal"
-  >
-    <template #body>
-      <p class="khmer-font text-center mb-0">តើអ្នកពិតជាចង់ចាកចេញមែនទេ?</p>
-    </template>
-    <template #btnClose>
-      <BaseButton variant="cancel" class="col-6" @click="closeLogoutModal">
-        បោះបង់
-      </BaseButton>
-    </template>
-    <template #btnActive>
-      <BaseButton variant="danger" class="col-6" @click="logout">
-        បញ្ជាក់
-      </BaseButton>
-    </template>
-  </BaseModal>
+    <!-- Logout Modal -->
+    <BaseModal
+      v-if="showLogoutModal"
+      title="ចាកចេញពីគណនី"
+      icon="exclamation-triangle"
+      theme="danger"
+      :isClose="showLogoutModal"
+      @closeModal="closeLogoutModal"
+    >
+      <template #body>
+        <p class="khmer-font text-center mb-0">តើអ្នកពិតជាចង់ចាកចេញមែនទេ?</p>
+      </template>
+      <template #btnClose>
+        <BaseButton variant="cancel" class="col-6" @click="closeLogoutModal">
+          បោះបង់
+        </BaseButton>
+      </template>
+      <template #btnActive>
+        <BaseButton variant="danger" class="col-6" @click="logout">
+          បញ្ជាក់
+        </BaseButton>
+      </template>
+    </BaseModal>
   </div>
 
   <!-- Backdrop overlay on mobile when sidebar is open -->
@@ -411,5 +411,9 @@ onUnmounted(() => {
 .action-btn.security {
   background: rgba(16, 185, 129, 0.09);
   color: #10b981;
+}
+.action-btn.logout {
+  background: rgba(185, 16, 16, 0.09);
+  color: #ef4444;
 }
 </style>
