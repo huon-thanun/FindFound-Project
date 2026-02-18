@@ -200,7 +200,7 @@ onMounted(() => {
             <img
               src="../../../assets/images/about/hero-banner.png"
               alt="Contact Us Illustration"
-              class="hero-img m-0 img-fluid"
+              class="hero-img m-0 img-fluid h-100"
             />
           </div>
         </div>

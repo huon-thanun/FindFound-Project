@@ -1,10 +1,11 @@
 <template>
+  <SidebarAdmin class="sidebar" :class="!isSidebarOpen ? '' : 'closed'"></SidebarAdmin>
   <nav class="navbar-top">
     <div
-      class="nav-glass-container d-flex justify-content-between align-items-center"
+      class="nav-glass-container ps-xl-4 ps-0 d-flex justify-content-between align-items-center"
     >
       <!-- Left: Toggle + Welcome -->
-      <div class="d-flex align-items-center gap-3">
+      <div class="d-flex align-items-center d-none d-xl-block gap-3">
         <div class="welcome-box d-none d-lg-flex align-items-center gap-3">
           <div class="sparkle-icon">
             <i class="bi bi-stars"></i>
@@ -16,6 +17,10 @@
             </h2>
           </div>
         </div>
+      </div>
+
+      <div class="d-xl-none">
+        <img src="../../assets/images/logo/logo.png" height="200px" alt="">
       </div>
 
       <!-- Right: Notification + Profile Dropdown -->
@@ -43,7 +48,7 @@
                 <div class="online-status"></div>
               </div>
 
-              <div class="user-meta d-none d-lg-block">
+              <div class="user-meta d-none d-xl-block">
                 <span class="name">{{ admin.fullname }}</span>
               </div>
 
@@ -90,6 +95,9 @@
             </ul>
           </div>
         </div>
+        <base-button @click="toggleSidebar" class="d-block d-xl-none" variant="primary"
+          ><i :class="isSidebarOpen ? 'bi bi-list' : 'bi bi-x-lg'"></i>
+        </base-button>
       </div>
     </div>
   </nav>
@@ -125,6 +133,29 @@ import { useRouter } from "vue-router";
 import { useAuthStore } from "@/stores/authStore";
 import SidebarAdmin from "./Sidebar.vue";
 
+const isSidebarOpen = ref(true); 
+const toggleSidebar = () => {
+  if (window.innerWidth < 1200) {
+    isSidebarOpen.value = !isSidebarOpen.value;
+  }
+};
+/* Auto control by screen size */
+const handleResize = () => {
+  if (window.innerWidth >= 1100) {
+    isSidebarOpen.value = true; // FORCE OPEN
+  }
+};
+onMounted(() => {
+  // run once on load
+  handleResize();
+
+  // listen resize
+  window.addEventListener("resize", handleResize);
+});
+
+onUnmounted(() => {
+  window.removeEventListener("resize", handleResize);
+});
 const auth = useAuthStore();
 const router = useRouter();
 
@@ -139,9 +170,7 @@ const admin = computed(() => ({
 }));
 
 // ── Functions ────────────────────────────────────────────────
-const toggleSidebar = () => {
-  isOpen.value = !isOpen.value;
-};
+
 
 const toggleDropdown = (e) => {
   e.stopPropagation();
@@ -192,8 +221,10 @@ onUnmounted(() => {
 <style scoped>
 /* ── Navbar Base ───────────────────────────────────────────── */
 .navbar-top {
-  height: 90px;
+  height: 100px;
   position: sticky;
+  max-width: 100%;
+   padding: 10px 15px;
   top: 0;
   z-index: 999;
   background: #f8fafc;
@@ -211,9 +242,6 @@ onUnmounted(() => {
 }
 
 /* Full width on all screens – no forced offset */
-.navbar-top {
-  width: 100%;
-}
 
 /* ── Profile Pill & Dropdown ───────────────────────────────── */
 .profile-pill {
@@ -346,10 +374,14 @@ onUnmounted(() => {
   transform: rotate(-45deg) translate(7px, -6px);
 }
 
+.sidebar{
+  display: flex !important;
+  position: absolute !important;
+  right: 0 !important;
+  top: 0 !important;
+}
 /* ── Responsive ────────────────────────────────────────────── */
-@media (min-width: 992px) {
-  .navbar-top {
-    padding: 10px 30px;
-  }
+.sidebar.closed {
+  transform: translateX(-300px);
 }
 </style>

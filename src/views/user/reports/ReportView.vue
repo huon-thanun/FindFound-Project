@@ -15,10 +15,10 @@
           <div class="col-lg-7 py-5 px-5 m-0 hero-text-col" data-aos="fade-right">
             <div class="badge-modern mb-4">
               <i class="bi bi-flag-fill me-2"></i>
-              រាយការណ៍ពីបញ្ហា
+              បង្ហោះពីបញ្ហា
             </div>
             <h1 class="hero-title">
-              រាយការណ៍ <span class="gradient-text">វត្ថុបាត់</span>
+              បង្ហោះ <span class="gradient-text">វត្ថុបាត់</span>
               <br class="d-none d-md-block" />
               ឬរកឃើញនៅលើគេហទំព័រ
             </h1>
@@ -42,7 +42,7 @@
       <!-- Hero Banner -->
       <div class="d-flex justify-content-between flex-wrap mb-3 align-items-center">
         <div>
-          <h2>ការរាយការណ៍</h2>
+          <h2>ការបង្ហោះ</h2>
           <p>រុករក និងមើលវត្ថុបាត់បង់ និងវត្ថុដែលបានរកឃើញទាំងអស់នៅក្នុងសហគមន៍</p>
         </div>
 
@@ -239,7 +239,7 @@ const btnHandleToCreatePage = () => {
 } */
 .bg-btn-group {
   padding: 5px;
-  background-color: var(--primary-color);
+  background-color: var(--background-color);
   border-radius: 10px;
 }
 
@@ -249,7 +249,7 @@ const btnHandleToCreatePage = () => {
   padding: 6px 15px 4px;
   font-size: 16px;
   border-radius: 6px;
-  color: white;
+  color: black;
   cursor: pointer;
 }
 
