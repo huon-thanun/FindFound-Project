@@ -54,7 +54,7 @@
 
 <script setup>
 import sambathImg from "@/assets/images/members/sambath.JPG";
-import leakhenaImg from "@/assets/images/members/leakhena.JPG";
+import leakhenaImg from "@/assets/images/members/leakhena.PNG";
 import visalImg from "@/assets/images/members/visal.JPG";
 import lorchhorImg from "@/assets/images/members/lochhor.JPG";
 import menghourImg from "@/assets/images/members/menghour.JPG";

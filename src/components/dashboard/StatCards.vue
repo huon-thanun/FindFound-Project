@@ -2,9 +2,7 @@
   <div class="row g-3 mb-5">
     <!-- Loading -->
     <div v-if="loading" class="col-12 text-center py-5">
-      <div class="spinner-border text-primary" role="status">
-        <span class="visually-hidden">កំពុងផ្ទុក...</span>
-      </div>
+      <div class="spinner-border text-primary"></div>
       <p class="mt-3 text-muted">កំពុងទាញទិន្នន័យស្ថិតិ</p>
     </div>
 
@@ -27,13 +25,12 @@
           :class="{ 'featured-card': index === 0 }"
           :style="getCardStyle(index)"
         >
-          <div
-            class="card-header d-flex justify-content-between align-items-center mb-4"
-          >
+          <div class="card-header mb-4">
             <div class="icon-wrapper">
               <i :class="['bi', card.icon]"></i>
             </div>
           </div>
+
           <div class="card-body">
             <h5 class="card-title">{{ card.title }}</h5>
             <div class="card-value">
@@ -60,29 +57,24 @@ const error = ref(null);
 const statCards = ref([]);
 
 onMounted(async () => {
-  loading.value = true;
-  error.value = null;
-
   try {
+    loading.value = true;
+
     await Promise.all([
       userStore.fetchUsers({ page: 1, perPage: 100 }),
-      reportStore.getAllReports({ page: 1, per_page: 1 }), // minimal request – just need totalItems
+      reportStore.getAllReports({ _page: 1, _per_page: 1 }), // only need meta
     ]);
 
-    // User stats (only from first 100 users)
-    const totalUsers = userStore.total || userStore.users?.length || 0;
+    // USERS
+    const users = userStore.users || [];
+    const totalUsers = userStore.total || users.length;
 
-    const activeUsers =
-      userStore.users?.filter(
-        (u) => (u.status || "").toUpperCase() === "ACTIVATED",
-      ).length || 0;
+    const activeUsers = users.filter((u) => u.status === "ACTIVATED").length;
+    const inactiveUsers = users.filter(
+      (u) => u.status === "DEACTIVATED",
+    ).length;
 
-    const inactiveUsers =
-      userStore.users?.filter(
-        (u) => (u.status || "").toUpperCase() === "DEACTIVATED",
-      ).length || 0;
-
-    // Total reports – correct path from your API response
+    // REPORTS (from API meta)
     const totalReports = reportStore.meta?.totalItems || 0;
 
     statCards.value = [
@@ -112,7 +104,7 @@ onMounted(async () => {
       },
     ];
   } catch (err) {
-    console.error("Failed to load dashboard stats:", err);
+    console.error(err);
     error.value = "មានបញ្ហាក្នុងការទាញទិន្នន័យស្ថិតិ";
 
     statCards.value = [
@@ -120,11 +112,26 @@ onMounted(async () => {
         title: "របាយការណ៍សរុប",
         value: 0,
         icon: "bi-file-earmark-bar-graph-fill",
-        secondary: "មានបញ្ហា",
+        secondary: "",
       },
-      { title: "អ្នកប្រើប្រាស់សរុប", value: 0, icon: "bi-people-fill" },
-      { title: "អ្នកប្រើប្រាស់សកម្ម", value: 0, icon: "bi-person-check-fill" },
-      { title: "អ្នកប្រើប្រាស់អសកម្ម", value: 0, icon: "bi-person-x-fill" },
+      {
+        title: "អ្នកប្រើប្រាស់សរុប",
+        value: 0,
+        icon: "bi-people-fill",
+        secondary: "",
+      },
+      {
+        title: "អ្នកប្រើប្រាស់សកម្ម",
+        value: 0,
+        icon: "bi-person-check-fill",
+        secondary: "",
+      },
+      {
+        title: "អ្នកប្រើប្រាស់អសកម្ម",
+        value: 0,
+        icon: "bi-person-x-fill",
+        secondary: "",
+      },
     ];
   } finally {
     loading.value = false;

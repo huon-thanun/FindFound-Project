@@ -391,10 +391,6 @@ onMounted(() => {
   background: linear-gradient(135deg, #f4f7ff, #eef1ff);
   min-height: 100vh;
 }
-/* ===== MODERN CONTACT US HERO ===== */
-
-/* ── Hero ── (shorter height) ── */
-
 .main-contact {
   font-family: "Kantumruy Pro", system-ui, sans-serif;
   background: #fdfaff;
