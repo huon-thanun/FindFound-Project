@@ -19,6 +19,7 @@ import ProfileUserView from "@/views/user/profile/ProfileUserView.vue";
 import CreateReportView from "@/views/user/reports/CreateReportView.vue";
 import EditReportView from "@/views/user/reports/EditReportView.vue";
 import ReportDetailViewUser from "@/views/user/reports/ReportDetailView.vue";
+import ProfileLayout from "@/layouts/user/ProfileLayout.vue";
 
 /* ===== ADMIN VIEWS ===== */
 import AdminLoginView from "@/views/admin/auth/AdminLoginView.vue";
@@ -139,25 +140,33 @@ const router = createRouter({
           name: "item_detail",
           component: ItemDetailsView,
         },
+        // ========================== PROFILE ========================
         {
           path: "profile",
-          name: "user.profile",
-          component: ProfileUserView,
-          meta: { requiresAuth: true, role: "user" },
+          component: ProfileLayout, // ← persistent hero layout
+          redirect: { name: "user.profile" },
+          children: [
+            {
+              path: "",
+              name: "user.profile",
+              component: ProfileUserView,
+              meta: { requiresAuth: true, role: "user" },
+            },
+            {
+              path: "edit",
+              name: "user.profile.edit",
+              component: EditProfileUserView,
+              meta: { requiresAuth: true, role: "user" },
+            },
+            {
+              path: "security",
+              name: "user.profile.security",
+              component: ProfileUserSecurity,
+              meta: { requiresAuth: true, role: "user" },
+            },
+          ],
         },
-        {
-          path: "profile/edit",
-          name: "user.profile.edit",
-          component: EditProfileUserView,
-          meta: { requiresAuth: true, role: "user" },
-        },
-
-        {
-          path: "profile/security",
-          name: "user.profile.security",
-          component: ProfileUserSecurity,
-          meta: { requiresAuth: true, role: "user" },
-        },
+        // =========================== PROFILE [END]===================
         {
           path: "successstory",
           name: "successstory",
@@ -218,10 +227,10 @@ const router = createRouter({
           component: CategoryUser,
         },
         {
-          path: '/notfound',
-          name: 'notfound',
-          component: NotFound
-        }
+          path: "/notfound",
+          name: "notfound",
+          component: NotFound,
+        },
       ],
     },
 
@@ -242,18 +251,21 @@ const router = createRouter({
         },
         {
           path: "profile",
-          name: "admin.profile",
-          component: ProfileView,
-        },
-        {
-          path: "profile-edit",
-          name: "admin.profile.edit",
-          component: EditProfileView,
-        },
-        {
-          path: "profile-security",
-          name: "admin.profile.security",
-          component: ProfileSecurity,
+          component: ProfileLayout, // reuse the user one
+          redirect: { name: "admin.profile" },
+          children: [
+            { path: "", name: "admin.profile", component: ProfileView },
+            {
+              path: "edit",
+              name: "admin.profile.edit",
+              component: EditProfileView,
+            },
+            {
+              path: "security",
+              name: "admin.profile.security",
+              component: ProfileSecurity,
+            },
+          ],
         },
         {
           path: "categories",

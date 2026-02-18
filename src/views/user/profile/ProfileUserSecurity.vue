@@ -1,106 +1,44 @@
 <template>
-  <ProfileLayout>
-    <template #header>
-      <ProfileHeader :user="user" />
-    </template>
+  <div class="row g-4">
+    <div class="col-lg-12" data-aos="fade-up">
+      <ProfileTabs class="mb-4" />
 
-    <!-- Hero always visible – placeholder + fallback immediately -->
-    <section class="hero-lavender">
-      <div class="container-fluid px-lg-5">
-        <div class="row align-items-center pt-5 pb-5">
-          <div class="col-md-auto text-center text-md-start">
-            <div class="avatar-glow-wrapper" data-aos="zoom-in">
-              <img
-                :src="
-                  user?.avatar ||
-                  'https://ui-avatars.com/api/?name=Orn+Sambath&background=7c3aed&color=fff&size=128&rounded=true'
-                "
-                class="profile-img-premium shadow-lg"
-                alt="Avatar"
-              />
-              <div class="status-indicator-online"></div>
-            </div>
+      <div class="main-details-card mb-4 shadow-sm">
+        <!-- No loading here anymore – layout already fetched user -->
+        <div class="row g-4">
+          <!-- PASSWORD -->
+          <div class="col-lg-6">
+            <ChangePasswordCard
+              v-model:currentPassword="currentPassword"
+              v-model:newPassword="newPassword"
+              v-model:showCurrent="showCurrentPassword"
+              v-model:showNew="showNewPassword"
+              :loading="loadingPassword"
+              @update="updatePassword"
+            />
           </div>
 
-          <div
-            class="col-md ps-md-4 mt-4 mt-md-0 text-center text-md-start"
-            data-aos="fade-right"
-          >
-            <div
-              class="d-flex align-items-center justify-content-center justify-content-md-start gap-2 mb-2"
-            >
-              <h1
-                class="display-6 fw-bold text-dark-indigo mb-0 khmer-font-title"
-              >
-                {{ user?.fullname || "Orn Sambath" }}
-              </h1>
-              <span class="badge-verified-glow">
-                <i class="bi bi-patch-check-fill"></i>
-              </span>
-            </div>
-            <p class="text-muted fs-5 mb-3">
-              {{ user?.email || "sambathon483@gmail.com" }}
-            </p>
+          <!-- EMAIL -->
+          <div class="col-lg-6">
+            <ChangeEmailCard
+              v-model:newEmail="newEmail"
+              v-model:password="emailPassword"
+              v-model:showPassword="showEmailPassword"
+              v-model:token="emailVerifyToken"
+              v-model:requested="emailRequested"
+              :loadingRequest="loadingEmail"
+              :loadingVerify="loadingVerify"
+              @request="requestEmailChange"
+              @verify="verifyEmailChange"
+            />
           </div>
         </div>
       </div>
-    </section>
+    </div>
 
-    <div class="container-fluid px-lg-5 content-overlap">
-      <div class="row g-4">
-        <div class="col-lg-12" data-aos="fade-up">
-          <ProfileTabs class="mb-4" />
-
-          <div class="main-details-card mb-4 shadow-sm">
-            <!-- Loading only inside card – same as profile.vue -->
-            <div v-if="loading" class="loading-inside">
-              <div class="custom-loader"></div>
-              <p class="mt-4 khmer-font text-purple-accent">
-                កំពុងផ្ទុកទិន្នន័យ...
-              </p>
-            </div>
-
-            <div v-else-if="errorMessage" class="p-5 text-center text-danger">
-              <h5 class="mb-3">មានបញ្ហា!</h5>
-              <p>{{ errorMessage }}</p>
-            </div>
-
-            <div v-else class="row g-4">
-              <!-- PASSWORD -->
-              <div class="col-lg-6">
-                <ChangePasswordCard
-                  v-model:currentPassword="currentPassword"
-                  v-model:newPassword="newPassword"
-                  v-model:showCurrent="showCurrentPassword"
-                  v-model:showNew="showNewPassword"
-                  :loading="loadingPassword"
-                  @update="updatePassword"
-                />
-              </div>
-
-              <!-- EMAIL -->
-              <div class="col-lg-6">
-                <ChangeEmailCard
-                  v-model:newEmail="newEmail"
-                  v-model:password="emailPassword"
-                  v-model:showPassword="showEmailPassword"
-                  v-model:token="emailVerifyToken"
-                  v-model:requested="emailRequested"
-                  :loadingRequest="loadingEmail"
-                  :loadingVerify="loadingVerify"
-                  @request="requestEmailChange"
-                  @verify="verifyEmailChange"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-lg-4" data-aos="fade-left">
-          <div class="sidebar-sticky">
-            <ProfileSide :user="user" :skills="skills" />
-          </div>
-        </div>
+    <div class="col-lg-4" data-aos="fade-left">
+      <div class="sidebar-sticky">
+        <ProfileSide :user="sharedUser" :skills="skills" />
       </div>
     </div>
 
@@ -111,31 +49,28 @@
       :icon="toastIcon"
       :duration="3000"
     />
-  </ProfileLayout>
+  </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
-import ProfileHeader from "@/components/profile/ProfileHeader.vue";
+import { ref, inject } from "vue";
 import ProfileTabs from "@/components/profile/ProfileTabs.vue";
 import BaseToast from "@/components/base/BaseToast.vue";
 import ChangePasswordCard from "@/components/profile/ChangPasswordCard.vue";
 import ChangeEmailCard from "@/components/profile/ChangeEmailCard.vue";
 
-const user = ref(null);
-const loading = ref(true);
-const errorMessage = ref(null);
+const sharedUser = inject("profileUser"); // ← from ProfileLayout
 
 const skills = ["HTML", "CSS", "Vue", "MySQL", "JavaScript"];
 
-// Password
+// Password states
 const currentPassword = ref("");
 const newPassword = ref("");
 const showCurrentPassword = ref(false);
 const showNewPassword = ref(false);
 const loadingPassword = ref(false);
 
-// Email
+// Email states
 const newEmail = ref("");
 const emailPassword = ref("");
 const showEmailPassword = ref(false);
@@ -157,39 +92,7 @@ const showBaseToast = (msg, theme = "success") => {
   showToast.value = true;
 };
 
-onMounted(async () => {
-  loading.value = true;
-  errorMessage.value = null;
-
-  try {
-    const token = localStorage.getItem("token");
-    if (!token) throw new Error("No token found");
-
-    const res = await fetch(
-      "https://ant-g2-landf.ti.linkpc.net/api/v1/auth/profile",
-      {
-        headers: { Authorization: `Bearer ${token}` },
-      },
-    );
-
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-
-    const json = await res.json();
-    if (json.result) {
-      user.value = json.data;
-    } else {
-      throw new Error("No result");
-    }
-  } catch (err) {
-    console.error("Profile fetch failed:", err);
-    errorMessage.value = "មិនអាចទាញយកព័ត៌មានបាន";
-    showBaseToast("មានបញ្ហាក្នុងការភ្ជាប់ម៉ាស៊ីនមេ", "error");
-  } finally {
-    loading.value = false;
-  }
-});
-
-// Update password
+// Update password (keep your logic, but use sharedUser.email after success if needed)
 const updatePassword = async () => {
   loadingPassword.value = true;
   try {
@@ -209,7 +112,10 @@ const updatePassword = async () => {
       },
     );
 
-    if (!res.ok) throw new Error("បរាជ័យក្នុងការប្តូរលេខសម្ងាត់");
+    if (!res.ok) {
+      const err = await res.json();
+      throw new Error(err.message || "បរាជ័យក្នុងការប្តូរលេខសម្ងាត់");
+    }
 
     showBaseToast("លេខសម្ងាត់បានប្តូរដោយជោគជ័យ! 🎉", "success");
     currentPassword.value = "";
@@ -223,38 +129,8 @@ const updatePassword = async () => {
   }
 };
 
-// Request email change
-const requestEmailChange = async () => {
-  loadingEmail.value = true;
-  try {
-    const token = localStorage.getItem("token");
-    const res = await fetch(
-      "https://ant-g2-landf.ti.linkpc.net/api/v1/auth/change-email",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          newEmail: newEmail.value,
-          password: emailPassword.value,
-        }),
-      },
-    );
-
-    if (!res.ok) throw new Error();
-
-    emailRequested.value = true;
-    showBaseToast("Token ផ្ទៀងផ្ទាត់ត្រូវបានផ្ញើទៅអ៊ីមែលថ្មី! 📩", "success");
-  } catch (err) {
-    showBaseToast("មានបញ្ហាក្នុងការស្នើសុំ", "error");
-  } finally {
-    loadingEmail.value = false;
-  }
-};
-
-// Verify email change
+// Request & Verify email change – keep almost the same
+// After successful verify:
 const verifyEmailChange = async () => {
   loadingVerify.value = true;
   try {
@@ -269,7 +145,11 @@ const verifyEmailChange = async () => {
 
     if (!res.ok) throw new Error();
 
-    user.value.email = newEmail.value;
+    // Update shared user email
+    if (sharedUser.value) {
+      sharedUser.value.email = newEmail.value;
+    }
+
     emailRequested.value = false;
     showBaseToast("អ៊ីមែលបានផ្ទៀងផ្ទាត់រួចរាល់! 🎉", "success");
   } catch (err) {
@@ -281,7 +161,16 @@ const verifyEmailChange = async () => {
 </script>
 
 <style scoped>
-/* Your original styles + loading-inside */
+/* Keep only security-specific styles here */
+/* Remove hero, layout, content-overlap, etc. – moved to ProfileLayout */
+
+.main-details-card {
+  background: white;
+  border-radius: 32px;
+  padding: 40px;
+  border: 1px solid rgba(124, 58, 237, 0.05);
+}
+
 .loading-inside {
   min-height: 400px;
   display: flex;
@@ -290,20 +179,6 @@ const verifyEmailChange = async () => {
   justify-content: center;
   padding: 100px 20px;
 }
-
-/* Your original styles + loading-inside to match profile.vue */
-.loading-inside {
-  min-height: 400px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 100px 20px;
-}
-
-/* ... keep all your other styles (hero, inputs, buttons, etc.) ... */
-
-/* --- Fonts & Page --- */
 
 .profile-page {
   font-family: "Kantumruy Pro", sans-serif;
