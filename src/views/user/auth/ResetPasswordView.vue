@@ -27,23 +27,103 @@
       <form @submit.prevent="handleReset">
         <!-- New Password -->
         <label>ពាក្យសម្ងាត់ថ្មី</label>
-        <input
-          type="password"
-          v-model="password"
-          placeholder="បញ្ចូលពាក្យសម្ងាត់ថ្មី"
-          @input="clearError('password')"
-        />
-        <p v-if="errors.password" class="error">{{ errors.password }}</p>
+        <div class="password-input">
+          <input
+            :type="showPassword ? 'text' : 'password'"
+            v-model="password"
+            placeholder="បញ្ចូលពាក្យសម្ងាត់ថ្មី"
+            @input="clearError('password')"
+          />
+
+          <span class="eye" @click="showPassword = !showPassword">
+            <!-- Eye -->
+            <svg
+              v-if="!showPassword"
+              xmlns="http://www.w3.org/2000/svg"
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+              <circle cx="12" cy="12" r="3" />
+            </svg>
+
+            <!-- Eye Off -->
+            <svg
+              v-else
+              xmlns="http://www.w3.org/2000/svg"
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path
+                d="M17.94 17.94A10.94 10.94 0 0 1 12 20C5 20 1 12 1 12a21.77 21.77 0 0 1 5.06-7.94"
+              />
+              <path d="M1 1l22 22" />
+              <path d="M9.53 9.53A3 3 0 0 0 12 15a3 3 0 0 0 2.47-5.47" />
+            </svg>
+          </span>
+        </div>
 
         <!-- Confirm Password -->
         <label>បញ្ជាក់ពាក្យសម្ងាត់</label>
-        <input
-          type="password"
-          v-model="confirm"
-          placeholder="បញ្ជាក់ពាក្យសម្ងាត់ម្តងទៀត"
-          @input="clearError('confirm')"
-        />
-        <p v-if="errors.confirm" class="error">{{ errors.confirm }}</p>
+        <div class="password-input">
+          <input
+            :type="showConfirm ? 'text' : 'password'"
+            v-model="confirm"
+            placeholder="បញ្ជាក់ពាក្យសម្ងាត់ម្តងទៀត"
+            @input="clearError('confirm')"
+          />
+
+          <span class="eye" @click="showConfirm = !showConfirm">
+            <!-- Eye -->
+            <svg
+              v-if="!showConfirm"
+              xmlns="http://www.w3.org/2000/svg"
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+              <circle cx="12" cy="12" r="3" />
+            </svg>
+
+            <!-- Eye Off -->
+            <svg
+              v-else
+              xmlns="http://www.w3.org/2000/svg"
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path
+                d="M17.94 17.94A10.94 10.94 0 0 1 12 20C5 20 1 12 1 12a21.77 21.77 0 0 1 5.06-7.94"
+              />
+              <path d="M1 1l22 22" />
+              <path d="M9.53 9.53A3 3 0 0 0 12 15a3 3 0 0 0 2.47-5.47" />
+            </svg>
+          </span>
+        </div>
 
         <!-- General API Error -->
         <p v-if="errors.general" class="error">{{ errors.general }}</p>
@@ -71,10 +151,15 @@ import { useRoute, useRouter } from "vue-router";
 const route = useRoute();
 const router = useRouter();
 
+const showPassword = ref(false);
+const showConfirm = ref(false);
+
 const password = ref("");
 const confirm = ref("");
+
 const success = ref("");
 const loading = ref(false);
+
 
 // Error object for inline validation
 const errors = reactive({
@@ -296,4 +381,30 @@ button:disabled {
   text-decoration: none;
   text-align: center;
 }
+.password-input {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.password-input input {
+  width: 100%;
+  padding-right: 2.5rem;
+}
+
+.eye {
+  position: absolute;
+  right: 0.8rem;
+  cursor: pointer;
+  color: #7c3aed;
+  display: flex;
+  align-items: center;
+  opacity: 0.7;
+  transition: opacity 0.2s ease;
+}
+
+.eye:hover {
+  opacity: 1;
+}
+
 </style>
