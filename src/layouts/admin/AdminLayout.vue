@@ -1,12 +1,6 @@
 <template>
   <div class="admin-layout">
-    <div
-      v-if="showSidebar"
-      class="sidebar-overlay d-lg-none"
-      @click="showSidebar = false"
-    ></div>
-
-    <Sidebar :isOpen="showSidebar" @close="showSidebar = false" />
+    <Sidebar class="d-none d-xl-block" :isOpen="showSidebar" @close="showSidebar = false" />
 
     <div class="main-container" :class="{ 'sidebar-collapsed': !showSidebar }">
       <Navbar @toggleSidebar="handleToggleSidebar" />
@@ -39,7 +33,7 @@ const handleToggleSidebar = () => {
 
 .main-container {
   /* Match the 280px width of your sidebar */
-  margin-left: 280px;
+  margin-left: 300px;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   min-height: 100vh;
   display: flex;
@@ -54,6 +48,7 @@ const handleToggleSidebar = () => {
 .content-area {
   padding: 1.5rem;
   flex: 1;
+  padding: 0;
 }
 
 /* Mobile Sidebar Overlay */
@@ -69,7 +64,7 @@ const handleToggleSidebar = () => {
 }
 
 /* Responsive: Reset margins for mobile */
-@media (max-width: 992px) {
+@media (max-width: 1200px) {
   .main-container {
     margin-left: 0 !important;
   }

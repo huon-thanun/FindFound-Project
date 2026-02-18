@@ -149,7 +149,7 @@
 
           <!-- ERROR MESSAGE -->
           <div v-if="auth.error" class="alert-error">
-            {{ auth.error }}
+            អ៊ីមែល ឬពាក្យសម្ងាត់មិនត្រឹមត្រូវ
           </div>
 
           <!-- DIVIDER -->

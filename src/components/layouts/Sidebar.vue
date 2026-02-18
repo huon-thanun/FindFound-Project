@@ -1,5 +1,5 @@
 <template>
-  <div class="sidebar d-none d-lg-flex">
+  <div class="sidebar d-none d-xl-flex">
     <!-- Logo -->
     <div class="brand-header">
       <div class="large-logo-box">
@@ -34,7 +34,7 @@
         exact
       >
         <div class="icon-box"><i class="bi bi-bookmark-star-fill"></i></div>
-        <span>ប្រភេទរបាយការណ៍</span>
+        <span>ប្រភេទការបង្ហោះ</span>
       </router-link>
 
       <router-link
@@ -43,61 +43,75 @@
         exact
       >
         <div class="icon-box"><i class="bi bi-file-earmark-text-fill"></i></div>
-        <span>របាយការណ៍</span>
+        <span>ការបង្ហោះ</span>
       </router-link>
     </nav>
 
     <!-- Footer -->
-    <div class="sidebar-footer">
+    <div class="sidebar-footer pt-4 border-top">
       <button class="action-btn security" @click="goToSecurity">
-        <i class="bi bi-shield-lock"></i> ការកំណត់សុវត្ថិភាព
+        <i class="bi bi-gear"></i> ការកំណត់
+      </button>
+    </div>
+    <div class="sidebar-footer border-0">
+     <button class="btn action-btn logout" @click="openLogoutModal">
+        <i class="bi bi-box-arrow-right"></i> ចាកចេញ
       </button>
     </div>
 
     <!-- Logout Modal -->
-    <BaseModal
-      title="ចាកចេញពីគណនី"
-      icon="box-arrow-right"
-      theme="danger"
-      :isOpen="showLogoutModal"
-      @close="showLogoutModal = false"
-    >
-      <template #body>
-        <p class="text-center py-3">តើអ្នកពិតជាចង់ចាកចេញពីកម្មវិធីមែនទេ?</p>
-      </template>
-
-      <template #footer>
-        <div class="d-flex gap-3 justify-content-center">
-          <BaseButton
-            variant="outline-secondary"
-            class="col-5"
-            @click="showLogoutModal = false"
-          >
-            បោះបង់
-          </BaseButton>
-
-          <BaseButton variant="danger" class="col-5" @click="handleLogout">
-            បញ្ជាក់
-          </BaseButton>
-        </div>
-      </template>
-    </BaseModal>
+<!-- Logout Modal -->
+  <BaseModal
+    v-if="showLogoutModal"
+    title="ចាកចេញពីគណនី"
+    icon="exclamation-triangle"
+    theme="danger"
+    :isClose="showLogoutModal"
+    @closeModal="closeLogoutModal"
+  >
+    <template #body>
+      <p class="khmer-font text-center mb-0">តើអ្នកពិតជាចង់ចាកចេញមែនទេ?</p>
+    </template>
+    <template #btnClose>
+      <BaseButton variant="cancel" class="col-6" @click="closeLogoutModal">
+        បោះបង់
+      </BaseButton>
+    </template>
+    <template #btnActive>
+      <BaseButton variant="danger" class="col-6" @click="logout">
+        បញ្ជាក់
+      </BaseButton>
+    </template>
+  </BaseModal>
   </div>
 </template>
 
 <script setup>
 import { ref } from "vue";
 import { useRouter } from "vue-router";
+import { useAuthStore } from "@/stores/authStore";
 
+const auth = useAuthStore();
 const router = useRouter();
 const showLogoutModal = ref(false);
 
+const closeLogoutModal = () => {
+  showLogoutModal.value = false;
+};
+
+const logout = () => {
+  localStorage.clear();
+  auth.logout();
+  router.push("/admin/login");
+};
 /* Go to Profile Security page */
 function goToSecurity() {
   router.push({ name: "admin.profile.security" });
 }
+function openLogoutModal() {
+  showLogoutModal.value = true;
+}
 
-/* Logout */
 function handleLogout() {
   localStorage.removeItem("token");
   localStorage.removeItem("user");
@@ -131,7 +145,7 @@ function handleLogout() {
 
 .large-logo-box {
   width: 100%;
-  height: 200px; /* Very large logo area – adjust to 180–260px if needed */
+  height: 100px; /* Very large logo area – adjust to 180–260px if needed */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -140,7 +154,7 @@ function handleLogout() {
 
 .brand-logo {
   max-width: 100%;
-  max-height: 100%;
+  height: 200px;
   object-fit: contain;
   transition: transform 0.28s ease;
 }
@@ -208,8 +222,7 @@ function handleLogout() {
 }
 
 .sidebar-footer {
-  padding: 24px 20px 40px;
-  border-top: 1px solid #f1f5f9;
+  padding: 5px 20px 10px;
 }
 
 .action-btn {
@@ -243,12 +256,5 @@ function handleLogout() {
 }
 
 /* Mobile behavior (slide out) */
-@media (max-width: 992px) {
-  .sidebar {
-    transform: translateX(-100%);
-  }
-  .sidebar.mobile-open {
-    transform: translateX(0);
-  }
-}
+
 </style>
