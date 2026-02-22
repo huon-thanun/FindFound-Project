@@ -176,7 +176,7 @@
           </div>
         </div>
         <div class="col-12 py-3">
-          <h2 class="fw-bold pb-2">របាយការណ៍ស្រដៀងគ្នា</h2>
+          <h2 class="fw-bold pb-2">ការបង្ហោះស្រដៀងគ្នា</h2>
           <div class="row">
             <div
               class="col-12"
@@ -186,7 +186,7 @@
                 class="w-100 d-flex flex-column align-items-center p-3 text-muted"
               >
                 <i class="bi bi-exclamation-circle" style="font-size: 35px"></i>
-                <h3 class="m-0">មិនមាន​ របាយការណ៍ស្រដៀងគ្នា</h3>
+                <h3 class="m-0">មិនមាន​ ការបង្ហោះស្រដៀងគ្នា</h3>
               </div>
             </div>
             <div
@@ -207,8 +207,8 @@
                   <div class="recommendation-image">
                     <img
                       :src="
-                        item.reportImages && item.reportImages.length > 0
-                          ? item.reportImages[0].name
+                        item.matchedReport?.reportImages?.length > 0
+                          ? item.matchedReport.reportImages[0]?.name
                           : defaultImage
                       "
                     />
